@@ -1,0 +1,51 @@
+<ion-header>
+
+  <ion-navbar color="dark">
+    <ion-title>{{'crud.add' | trans }} {{ 'literals.visit' | trans }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label> {{'literals.visitor' | trans }} </ion-label>
+      <ion-select [(ngModel)]="visitor.id" disabled="true">
+        <ion-option [value]="visitor.id">{{visitor.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label> {{'literals.status' | trans }} </ion-label>
+      <ion-select [(ngModel)]="visit.status">
+        <ion-option [value]="status" *ngFor="let status of statutes">{{ 'literals.' + status | trans }} </ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label> {{'literals.vehicle' | trans }} </ion-label>
+      <ion-select [(ngModel)]="visit.vehcicle_id">
+        <ion-option [value]="vehicle.id" *ngFor="let vehicle of api.vehicles">{{ vehicle.name }} </ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label> {{'literals.parking' | trans }} </ion-label>
+      <ion-select [(ngModel)]="visit.parking_id">
+        <ion-option [value]="parking.id" *ngFor="let parking of api.parkings">{{ parking.name }} </ion-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <button ion-button full color="secondary" icon-left (click)="create()">
+    <ion-icon name="add"></ion-icon>
+    {{'crud.add' | trans }} {{'literals.visit' | trans }}
+  </button>
+</ion-footer>

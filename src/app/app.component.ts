@@ -5,29 +5,42 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
-
+import { Storage } from '@ionic/storage';
+import { Api } from "../providers/api";
+import { Login } from "../pages/login/login";
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{ title: string, component: any, icon: string }>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public storage: Storage, public api: Api) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
+      { title: 'literals.visitors', component: HomePage, icon: "contacts" },
+      { title: 'literals.visits', component: ListPage, icon: "list" }
     ];
 
   }
 
   initializeApp() {
+    this.api.ready.then(() => {
+      if (this.api.user) {
+        this.rootPage = HomePage;
+        this.api.getData();
+        this.api.startEcho();
+      }
+      else {
+        this.rootPage = Login;
+      }
+    });
+
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -39,6 +52,12 @@ export class MyApp {
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+    this.rootPage = page.component
+    // this.nav.setRoot(page.component);
+  }
+  logout() {
+    this.api.user = null;
+    this.api.storage.clear();
+    this.rootPage = Login;
   }
 }

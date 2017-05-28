@@ -1,0 +1,35 @@
+<ion-content padding>
+  <div text-center>
+    <img src="/assets/logo-completo.png" style="height:85px">
+  </div>
+  <ion-list>
+    <ion-item>
+      <ion-label floating>Email</ion-label>
+      <ion-input type="email" [(ngModel)]="api.username"> </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Contraseña</ion-label>
+      <ion-input type="password" [(ngModel)]="api.password"></ion-input>
+    </ion-item>
+
+    <button style="margin-top:15px" full large ion-button color="secondary" icon-right (click)="login()">
+      Iniciar Sesion
+      <ion-icon name="log-in"></ion-icon>
+    </button>
+
+
+    <!--<button style="margin-top:15px" full ion-button icon-left (click)="loginWithFacebook()">
+      <ion-icon name="logo-facebook"></ion-icon>
+      Iniciar sesion con Facebook
+  </button>
+
+
+    <button style="margin-top:15px" full ion-button color="danger" icon-left (click)="loginWithGoogle()">
+    <ion-icon name="logo-googleplus"></ion-icon>
+    Iniciar sesion con Google
+  </button>-->
+
+
+
+  </ion-list>
+</ion-content>

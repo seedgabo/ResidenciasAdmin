@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Parkings</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <button ion-item *ngFor="let parking of api.parkings" (click)="park(parking)">
+        <h2> {{parking.name}} </h2>
+        <p *ngIf="parking.user"> {{parking.user.full_name}}</p>
+        <p *ngIf="!parking.user">Public</p>
+        <ion-icon  item-right [name]="parking.status == 'available' ? 'checkmark-circle' : 'close-circle'"
+          [color]="parking.status == 'available' ? 'success' : 'danger'"
+        ></ion-icon>
+    </button>
+  </ion-list>
+</ion-content>

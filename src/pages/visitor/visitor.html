@@ -1,0 +1,51 @@
+<ion-header>
+
+  <ion-navbar color="dark">
+    <ion-title *ngIf="visitor">{{ visitor.name }}</ion-title>
+    <ion-title *ngIf="!visitor">{{ 'crud.create' | trans }} {{ 'literals.visitor' | trans }}</ion-title>
+    <ion-buttons end>
+      <button ion-button clear icon-only (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label floating>{{'literals.name' | trans}}</ion-label>
+      <ion-input type="text" [(ngModel)]="visitor.name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{'literals.residence' | trans }}</ion-label>
+      <ion-select [(ngModel)]="visitor.residence_id">
+        <ion-option [value]="residence.id" *ngFor="let residence of api.residences">
+          {{residence.name}}
+        </ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>{{'literals.document' | trans }}</ion-label>
+      <ion-input type="number" [(ngModel)]="visitor.document"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{'literals.sex' | trans}}</ion-label>
+      <ion-select [(ngModel)]="visitor.sex">
+        <ion-option value="male">{{'literals.male' | trans}}</ion-option>
+        <ion-option value="female">{{'literals.female' | trans}}</ion-option>
+
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col><button [disabled]="!canSave()" ion-button color="secondary" block (click)="save()">{{'crud.save' | trans }}</button></ion-col>
+      <ion-col><button ion-button color="light" block (click)="dismiss()">{{'crud.cancel' | trans }}</button></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

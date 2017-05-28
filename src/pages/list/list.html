@@ -1,23 +1,30 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>List</ion-title>
+    <ion-title>{{'literals.visits' | trans}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only>
+          <ion-icon name="funnel"></ion-icon>
+        </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      <ion-icon [name]="item.icon" item-left></ion-icon>
-      {{item.title}}
-      <div class="item-note" item-right>
-        {{item.note}}
-      </div>
+  <ion-list *ngFor="let visit of api.visits">
+    <button ion-item (click)="actions(visit)">
+      <h2 *ngIf="visit.visitor">
+        {{visit.visitor.name }}
+        <br>
+        <span>{{visit.visitor.document}}</span>
+      </h2>
+      <p item-right>
+        {{ visit.created_at |amCalendar }} <br>
+        {{ 'literals.'+ visit.status | trans }}
+      </p>
     </button>
+
   </ion-list>
-  <div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem.title}}</b>
-  </div>
 </ion-content>

@@ -1,18 +1,39 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-title>{{ 'literals.visitors' | trans }} </ion-title>
   </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="null" [(ngModel)]="query"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
+<ion-content>
+  <ion-refresher (ionRefresh)="loadVisitors($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <button ion-item *ngFor="let visitor of getVisitors()" (click)="actions(visitor)">
+      <ion-avatar item-left>
+        <img *ngIf="visitor.image" [src]="visitor.image.url">
+      </ion-avatar>
+      <h2>
+        {{visitor.name}}
+      </h2>
+      <p>
+        {{ visitor.document }}
+      </p>
+      <p *ngIf="api.residences_collection[visitor.residence_id]" item-right>
+          {{api.residences_collection[visitor.residence_id].name}}
+      </p>
+    </button>
+  </ion-list>
 
-<ion-content padding>
-  <h3>Ionic Menu Starter</h3>
+  <ion-fab bottom right>
+    <button ion-fab (click)="visitorModal()">
+        <ion-icon name="person-add"></ion-icon>
+      </button>
+  </ion-fab>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
-
-  <button ion-button secondary menuToggle>Toggle Menu</button>
 </ion-content>
