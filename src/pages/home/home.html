@@ -16,7 +16,7 @@
   <ion-list>
     <button ion-item *ngFor="let visitor of getVisitors()" (click)="actions(visitor)">
       <ion-avatar item-left>
-        <img *ngIf="visitor.image" [src]="visitor.image.url">
+        <img [src]="visitor.image_url">
       </ion-avatar>
       <h2>
         {{visitor.name}}
