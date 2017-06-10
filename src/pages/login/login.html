@@ -4,6 +4,10 @@
   </div>
   <ion-list>
     <ion-item>
+      <ion-label floating>Domain</ion-label>
+      <ion-input type="url" [(ngModel)]="api.url"></ion-input>
+    </ion-item>
+    <ion-item>
       <ion-label floating>Email</ion-label>
       <ion-input type="email" [(ngModel)]="api.username"> </ion-input>
     </ion-item>
@@ -17,19 +21,15 @@
       <ion-icon name="log-in"></ion-icon>
     </button>
 
-
     <!--<button style="margin-top:15px" full ion-button icon-left (click)="loginWithFacebook()">
       <ion-icon name="logo-facebook"></ion-icon>
       Iniciar sesion con Facebook
   </button>
 
-
     <button style="margin-top:15px" full ion-button color="danger" icon-left (click)="loginWithGoogle()">
     <ion-icon name="logo-googleplus"></ion-icon>
     Iniciar sesion con Google
   </button>-->
-
-
 
   </ion-list>
 </ion-content>

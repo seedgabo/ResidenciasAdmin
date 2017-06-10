@@ -13,18 +13,17 @@
 </ion-header>
 
 <ion-content>
-  <ion-list *ngFor="let visit of api.visits">
-    <button ion-item (click)="actions(visit)">
+  <ion-list>
+    <button ion-item (click)="actions(visit)" *ngFor="let visit of api.visits">
       <h2 *ngIf="visit.visitor">
         {{visit.visitor.name }}
         <br>
         <span>{{visit.visitor.document}}</span>
       </h2>
-      <p item-right>
+      <span item-right>
         {{ visit.created_at |amCalendar }} <br>
         {{ 'literals.'+ visit.status | trans }}
-      </p>
+      </span>
     </button>
-
   </ion-list>
 </ion-content>

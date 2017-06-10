@@ -6,22 +6,19 @@ import 'rxjs/add/operator/map';
 import Echo from 'laravel-echo';
 declare var window: any;
 import Pusher from 'pusher-js';
-import { AlertController } from "ionic-angular";
+import { AlertController, ToastController } from "ionic-angular";
 window.Pusher = Pusher;
 
 @Injectable()
 export class Api {
+  sound: any;
   modules: any;
   settings: any;
   Echo: any;
-  url = "http://192.168.40.109/residencias/public/";
+  url = "http://192.168.80.20/residencias/public/";
   username = "seedgabo@gmail.com";
   password = "gab23gab";
   user;
-  resolve;
-  ready: Promise<any> = new Promise((resolve) => {
-    this.resolve = resolve;
-  });
   langs = {};
 
   residences_collection = {};
@@ -30,7 +27,12 @@ export class Api {
   vehicles = [];
   visitors = [];
   visits = [];
-  constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController) {
+  visits_approved = [];
+  resolve;
+  ready: Promise<any> = new Promise((resolve) => {
+    this.resolve = resolve;
+  });
+  constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController) {
     storage.ready().then(() => {
       storage.get('username').then(username => { this.username = username });
       storage.get('password').then(password => { this.password = password });
@@ -174,8 +176,7 @@ export class Api {
         key: '807bbfb3ca20f7bb886e',
         authEndpoint: this.url + 'broadcasting/auth',
         broadcaster: 'socket.io', // pusher o socket.io
-        // host: this.user.hostEcho || 'http://192.168.40.109:6001',
-        host: "http://192.168.40.109:6001",
+        host: this.user.hostEcho || 'http://192.168.40.20:6001',
         // encrypted: false,
         // cluster: 'eu',
         auth:
@@ -261,12 +262,18 @@ export class Api {
             }
           })
         })
+
         .listen('VisitCreated', (data) => {
           console.log("created vist:", data);
           this.zone.run(() => {
-            var visit = this.visits[this.visits.length] = data.visit;
+            this.visits.unshift(data.visit);
+            var visit = this.visits[0];
             if (data.visitor)
               visit.visitor = data.visitor;
+            if (visit.status == 'approved') {
+              this.visits_approved[this.visits_approved.length] = visit;
+              this.visitPreApproved(visit);
+            }
           })
         })
         .listen('VisitUpdated', (data) => {
@@ -276,9 +283,10 @@ export class Api {
           });
           this.zone.run(() => {
             if (visit_index > -1)
-              var visits = this.visits[visit_index] = data.visit;
+              var visit = this.visits[visit_index] = data.visit;
             else {
-              var visit = this.visits[this.visits.length] = data.visit;
+              this.visits.unshift(data.visit);
+              var visit = this.visits[0];
             }
             if (data.visitor) {
               visit.visitor = data.visitor;
@@ -296,6 +304,10 @@ export class Api {
             }
           })
         })
+
+        .listen('VisitConfirmed', (data) => {
+          this.VisitConfirmed(data.visit, data.visitor);
+        });
 
       this.Echo.private('App.User.' + this.user.id)
         .notification((notification) => {
@@ -340,6 +352,24 @@ export class Api {
     return value;
   }
 
+  visitPreApproved(visit) {
+    this.playSoundBeep();
+
+    this.alert.create({
+      title: this.trans('literals.visit') + " Pre " + this.trans('literals.approved_f'),
+      subTitle: this.trans('literals.visitor') + ': ' + visit.visitor.name,
+      message: visit.note,
+      buttons: ["OK"],
+    }).present();
+  }
+  VisitConfirmed(visit, visitor) {
+    this.alert.create({
+      title: this.trans('literals.visit') + " " + this.trans('literals.' + visit.status),
+      subTitle: this.trans('literals.visitor') + ': ' + visitor.name,
+      message: visit.note,
+      buttons: ["OK"],
+    }).present();
+  }
 
   private setHeaders() {
     let headers = new Headers();
@@ -365,6 +395,16 @@ export class Api {
     }
   }
 
+  playSoundNotfication() {
+    this.sound = new Audio('assets/sounds/notifcations.mp3');
+    this.sound.play();
+    return this.sound;
+  }
 
+  playSoundBeep() {
+    this.sound = new Audio('assets/sounds/beep.mp3');
+    this.sound.play();
+    return this.sound;
+  }
 
 }

@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ActionSheetController } from 'ionic-angular';
+import { NavController, NavParams, ActionSheetController, ModalController } from 'ionic-angular';
 import { Api } from "../../providers/api";
-
+import { VisitorPage } from "../visitor/visitor";
+import moment from 'moment';
 @Component({
   selector: 'page-list',
   templateUrl: 'list.html'
 })
 export class ListPage {
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public actionsheet: ActionSheetController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public actionsheet: ActionSheetController, public modal: ModalController) {
   }
 
   ionViewDidLoad() {
@@ -24,8 +25,9 @@ export class ListPage {
   }
 
   filters() {
-    return "&limit=500";
+    return "&order[id]=desc&limit=500";
   }
+
   actions(visit) {
     var buttons = [];
     if (visit.status == 'waiting for confirmation') {
@@ -64,13 +66,35 @@ export class ListPage {
     }).present();
   }
   approve(visit) {
-
+    this.api.put('visits/' + visit.id, { status: 'approved', departured_at: moment.utc().toString() })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
   departure(visit) {
+    this.api.put('visits/' + visit.id, { status: 'departured', departured_at: moment.utc().toString() })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+  editVisitor(visitor = null) {
+    this.modal.create(VisitorPage, { visitor: visitor }, { showBackdrop: true, enableBackdropDismiss: true }).present();
+  }
+  deleteVisit(visit) {
+    this.api.delete('visits/' + visit.id)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
 
   }
-  editVisitor(visitor) {
-  }
-  deleteVisit(visit) { }
 
 }

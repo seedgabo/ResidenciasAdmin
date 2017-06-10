@@ -13,22 +13,51 @@
   <ion-refresher (ionRefresh)="loadVisitors($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list>
-    <button ion-item *ngFor="let visitor of getVisitors()" (click)="actions(visitor)">
-      <ion-avatar item-left>
-        <img [src]="visitor.image_url">
-      </ion-avatar>
-      <h2>
-        {{visitor.name}}
-      </h2>
-      <p>
-        {{ visitor.document }}
-      </p>
-      <p *ngIf="api.residences_collection[visitor.residence_id]" item-right>
-          {{api.residences_collection[visitor.residence_id].name}}
-      </p>
-    </button>
-  </ion-list>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12 col-md>
+
+        <ion-card>
+          <ion-card-header>{{ 'literals.visitors' | trans }}</ion-card-header>
+          <ion-list>
+            <button ion-item *ngFor="let visitor of getVisitors()" (click)="actions(visitor)">
+                <ion-avatar item-left>
+                  <img [src]="visitor.image_url">
+                </ion-avatar>
+                <h2>
+                  {{visitor.name}}
+                </h2>
+                <p>
+                  {{ visitor.document }}
+                </p>
+                <p *ngIf="api.residences_collection[visitor.residence_id]" text-right>
+                    {{api.residences_collection[visitor.residence_id].name}}
+                </p>
+              </button>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+      <ion-col col-12 col-md>
+
+        <ion-card>
+          <ion-card-header> {{ 'literals.visits' | trans}} pre {{ 'literals.approveds_f' | trans}}</ion-card-header>
+          <ion-list>
+            <button ion-item *ngFor="let visit of api.visits_approved;let i= index" (click)="dismissPreApproved(visit,i)">
+              {{visit.visitor.name }}
+            <span>
+              {{visit.note}}
+            </span>
+              <p>
+                {{ visit.created_at | amCalendar }}
+              </p>
+          </button>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
 
   <ion-fab bottom right>
     <button ion-fab (click)="visitorModal()">

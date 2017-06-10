@@ -8,6 +8,7 @@ import { ListPage } from '../pages/list/list';
 import { Storage } from '@ionic/storage';
 import { Api } from "../providers/api";
 import { Login } from "../pages/login/login";
+import { ParkingsPage } from "../pages/parkings/parkings";
 @Component({
   templateUrl: 'app.html'
 })
@@ -24,7 +25,8 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'literals.visitors', component: HomePage, icon: "contacts" },
-      { title: 'literals.visits', component: ListPage, icon: "list" }
+      { title: 'literals.visits', component: ListPage, icon: "list" },
+      { title: 'literals.parkings', component: ParkingsPage, icon: "car" },
     ];
 
   }

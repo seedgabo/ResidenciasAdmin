@@ -31,8 +31,12 @@ export class HomePage {
       return this.api.visitors;
 
     return this.api.visitors.filter((visitor) => {
-      return visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1
-        || visitor.document.toLowerCase().indexOf(this.query.toLowerCase()) > -1
+      if (visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1
+        || visitor.document.toLowerCase().indexOf(this.query.toLowerCase()) > -1)
+        return true;
+      if (this.api.residences_collection[visitor.residence_id] && this.api.residences_collection[visitor.residence_id].name.toLowerCase().indexOf(this.query.toLowerCase()) > -1)
+        return true;
+      return false;
     });
   }
 
@@ -67,6 +71,7 @@ export class HomePage {
   visitorModal(visitor = null) {
     this.modal.create(VisitorPage, { visitor: visitor }, { showBackdrop: true, enableBackdropDismiss: true }).present();
   }
+
   delete(visitor) {
     this.api.delete('visitors/' + visitor.id).then((data) => {
       console.log(data);
@@ -78,6 +83,10 @@ export class HomePage {
   visitModal(visitor) {
     this.modal.create(VisitCreatorPage, { visitor: visitor }, { showBackdrop: true, enableBackdropDismiss: true }).present();
 
+  }
+
+  dismissPreApproved(visit, index) {
+    this.api.visits_approved.splice(index, 1);
   }
 
 }
