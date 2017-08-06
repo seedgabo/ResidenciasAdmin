@@ -15,7 +15,8 @@ export class Api {
   modules: any;
   settings: any;
   Echo: any;
-  url = "http://residenciasonline.com/residencias/public/";
+  // url = "http://residenciasonline.com/residencias/public/";
+  url = "http://localhost/residencias/public/";
   username = "seedgabo@gmail.com";
   password = "gab23gab";
   user;
