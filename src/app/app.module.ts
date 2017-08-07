@@ -16,7 +16,7 @@ import { VisitCreatorPage } from "../pages/visit-creator/visit-creator";
 import { IonicStorageModule } from '@ionic/storage';
 import { TransPipe } from "../pipes/trans/trans";
 import { MomentModule } from 'angular2-moment';
-
+import { CodePush } from "@ionic-native/code-push";
 @NgModule({
   declarations: [
     MyApp,
@@ -48,6 +48,7 @@ import { MomentModule } from 'angular2-moment';
   providers: [
     StatusBar,
     SplashScreen,
+    CodePush,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Api
   ]

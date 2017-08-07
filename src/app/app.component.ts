@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage';
 import { Api } from "../providers/api";
 import { Login } from "../pages/login/login";
 import { ParkingsPage } from "../pages/parkings/parkings";
+import { CodePush } from "@ionic-native/code-push";
 @Component({
   templateUrl: 'app.html'
 })
@@ -19,7 +20,7 @@ export class MyApp {
 
   pages: Array<{ title: string, component: any, icon: string }>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public storage: Storage, public api: Api) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -48,6 +49,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.codepush.sync({ updateDialog: false }).subscribe((data) => { console.log(data) }, console.warn)
     });
   }
 
