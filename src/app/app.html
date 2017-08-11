@@ -1,6 +1,6 @@
 <ion-split-pane>
 
-  <ion-menu [content]="content" *ngIf="api.user">
+  <ion-menu [content]="content">
     <ion-header>
       <ion-toolbar color="dark">
         <ion-title>Menu</ion-title>
@@ -11,16 +11,15 @@
       <ion-list>
         <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)" icon-left>
           <ion-icon [name]="p.icon"></ion-icon>
-         {{ p.title | trans }}
+         {{ api.trans(p.title) }}
       </button>
         <button menuClose ion-item (click)="logout()" icon-left>
           <ion-icon name="log-out"></ion-icon>
-          {{'literals.logout' | trans }}
+          {{ api.trans('literals.logout') }}
       </button>
 
       </ion-list>
     </ion-content>
-
   </ion-menu>
 
   <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -20,7 +20,7 @@ export class MyApp {
 
   pages: Array<{ title: string, component: any, icon: string }>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -38,8 +38,10 @@ export class MyApp {
         this.rootPage = HomePage;
         this.api.getData();
         this.api.startEcho();
+        this.menuCtrl.enable(true);
       }
       else {
+        this.menuCtrl.enable(false);
         this.rootPage = Login;
       }
     });
@@ -59,9 +61,12 @@ export class MyApp {
     this.rootPage = page.component
     // this.nav.setRoot(page.component);
   }
+
   logout() {
     this.api.user = null;
     this.api.storage.clear();
     this.rootPage = Login;
+    this.api.stopEcho();
+    this.menuCtrl.enable(false);
   }
 }

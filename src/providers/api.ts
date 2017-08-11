@@ -7,6 +7,7 @@ import Echo from 'laravel-echo';
 declare var window: any;
 import Pusher from 'pusher-js';
 import { AlertController, ToastController } from "ionic-angular";
+import langs from "../assets/langs";
 window.Pusher = Pusher;
 
 @Injectable()
@@ -14,13 +15,15 @@ export class Api {
   sound: any;
   modules: any;
   settings: any;
+  residence: any;
+  roles: any;
   Echo: any;
   url = "http://residenciasonline.com/residencias/public/";
   // url = "http://localhost/residencias/public/";
-  username = "seedgabo@gmail.com";
-  password = "gab23gab";
+  username = "";
+  password = "";
   user;
-  langs = {};
+  langs: any = langs;
 
   residences_collection = {};
   residences = [];
@@ -35,12 +38,11 @@ export class Api {
   });
   constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController) {
     storage.ready().then(() => {
-      storage.get('username').then(username => { this.username = username });
-      storage.get('password').then(password => { this.password = password });
       storage.get('modules').then(modules => { this.modules = modules });
       storage.get('settings').then(settings => { this.settings = settings });
+      storage.get('roles').then(roles => { this.roles = roles });
+      storage.get('residence').then(residence => { this.residence = residence });
       storage.get('langs').then(langs => { this.langs = langs; console.log(langs) });
-
       storage.get('user').then(user => {
         this.user = user
         this.resolve(user);
@@ -56,12 +58,14 @@ export class Api {
         .subscribe(data => {
           resolve(data);
           this.user = data.user;
-          this.settings = data.settings;
-          this.modules = data.modules;
+          this.residence = data.residence
+          this.modules = data.modules
+          this.roles = data.roles
+          this.settings = data.settings
           this.storage.set('user', data.user);
-          this.storage.set('username', this.username);
-          this.storage.set('password', this.password);
+          this.storage.set('residence', data.residence);
           this.storage.set('modules', this.modules);
+          this.storage.set('roles', this.roles);
           this.storage.set('settings', this.settings);
           this.getLang();
         }, error => {
@@ -186,7 +190,6 @@ export class Api {
           headers:
           {
             'Auth-Token': this.user.token,
-            'Authorization': "Basic " + btoa(this.username + ":" + this.password)
           }
         }
 
@@ -319,6 +322,7 @@ export class Api {
       // console.log(this.Echo);
     })
   }
+
   stopEcho() {
     this.Echo.leave('Application');
     this.Echo.leave('App.User.' + this.user.id);
