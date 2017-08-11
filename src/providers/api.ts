@@ -183,8 +183,6 @@ export class Api {
         authEndpoint: this.url + 'broadcasting/auth',
         broadcaster: 'socket.io', // pusher o socket.io
         host: this.user.hostEcho,
-        // encrypted: false,
-        // cluster: 'eu',
         auth:
         {
           headers:
@@ -269,7 +267,7 @@ export class Api {
         })
 
         .listen('VisitCreated', (data) => {
-          console.log("created vist:", data);
+          console.log("visit created:", data);
           this.zone.run(() => {
             this.visits.unshift(data.visit);
             var visit = this.visits[0];
@@ -277,12 +275,13 @@ export class Api {
               visit.visitor = data.visitor;
             if (visit.status == 'approved') {
               this.visits_approved[this.visits_approved.length] = visit;
+              this.storage.set('visits_approved', this.visits_approved);
               this.visitPreApproved(visit);
             }
           })
         })
         .listen('VisitUpdated', (data) => {
-          console.log("updated visit:", data);
+          console.log("visit updated:", data);
           var visit_index = this.visits.findIndex((visit) => {
             return visit.id === data.visit.id;
           });
@@ -299,7 +298,7 @@ export class Api {
           });
         })
         .listen('VisitDeleted', (data) => {
-          console.log("deleted visitor:", data);
+          console.log("visit deleted:", data);
           var visit = this.visits.findIndex((visit) => {
             return visit.id === data.visit.id;
           });
@@ -318,6 +317,17 @@ export class Api {
         .notification((notification) => {
           console.log(notification);
         });
+
+      this.Echo.join('App.Mobile')
+        .here((data) => {
+          console.log("here:", data);
+        })
+        .joining((data) => {
+          console.log("joining", data);
+        })
+        .leaving((data) => {
+          console.log("leaving", data);
+        })
 
       // console.log(this.Echo);
     })

@@ -15,6 +15,13 @@ export class HomePage {
     // this.loadVisitors();
   }
 
+  ionViewDidLoad() {
+    this.api.storage.get('visits_approved').then((visits_approved) => {
+      if (visits_approved)
+        this.api.visits_approved = visits_approved
+    });
+  }
+
   loadVisitors(rerfresher = null) {
     this.api.get('visitors?with[]=image').then((data: any) => {
       console.log(data);

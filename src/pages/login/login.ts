@@ -14,7 +14,6 @@ export class Login {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad Login');
   }
 
   login() {
