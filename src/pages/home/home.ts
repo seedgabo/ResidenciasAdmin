@@ -20,6 +20,7 @@ export class HomePage {
       if (visits_approved)
         this.api.visits_approved = visits_approved
     });
+    this.loadVisitors();
   }
 
   loadVisitors(rerfresher = null) {
