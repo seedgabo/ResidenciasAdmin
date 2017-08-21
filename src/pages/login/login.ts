@@ -10,10 +10,14 @@ import { Api } from "../../providers/api";
   templateUrl: 'login.html',
 })
 export class Login {
+  servers = {};
+  code = "";
+  ready = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public menuCtrl: MenuController) {
   }
 
   ionViewDidLoad() {
+    this.getServers();
   }
 
   login() {
@@ -57,6 +61,27 @@ export class Login {
         }
 
       });
+  }
+
+  verifyCode() {
+    if (this.servers[this.code] !== undefined) {
+      var server = this.servers[this.code]
+      this.api.url = server.url;
+      this.api.storage.set('url', server.url);
+    }
+  }
+  goBack() {
+    this.api.url = null;
+    this.api.storage.remove('url');
+  }
+  getServers() {
+    this.api.http.get('http://residenciasonline.com/residencias/public/servers.json')
+      .map(res => res.json())
+      .subscribe(data => {
+        this.servers = data
+        this.ready = true
+        console.log(this.servers);
+      }, (err) => { console.error(err) });
   }
   /*
   loginWithFacebook() {

@@ -1,27 +1,34 @@
 <ion-content padding>
-  <div text-center>
-    <img src="./assets/logo-completo.png" style="height:85px">
-  </div>
-  <ion-list>
-    <ion-item>
-      <ion-label floating>Url</ion-label>
-      <ion-input type="url" [(ngModel)]="api.url"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Email</ion-label>
-      <ion-input type="email" [(ngModel)]="api.username"> </ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Contraseña</ion-label>
-      <ion-input type="password" [(ngModel)]="api.password"></ion-input>
-    </ion-item>
+    <div text-center>
+        <img src="./assets/logo-completo.png" style="height:85px">
+    </div>
+    <div *ngIf="!api.url">
+        <input class="code" type="text" [(ngModel)]="code" placeholder="CODIGO" (input)="verifyCode()">
+    </div>
 
-    <button style="margin-top:15px" full large ion-button color="secondary" icon-right (click)="login()">
-      Iniciar Sesion
-      <ion-icon name="log-in"></ion-icon>
-    </button>
+    <ion-list *ngIf="api.url">
+        <!-- <ion-item>
+            <ion-label floating>Url</ion-label>
+            <ion-input type="url" [(ngModel)]="api.url"></ion-input>
+        </ion-item> -->
+        <ion-item>
+            <ion-label floating>Email</ion-label>
+            <ion-input type="email" [(ngModel)]="api.username"> </ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label floating>Contraseña</ion-label>
+            <ion-input type="password" [(ngModel)]="api.password"></ion-input>
+        </ion-item>
 
-    <!--<button style="margin-top:15px" full ion-button icon-left (click)="loginWithFacebook()">
+        <button style="margin-top:15px" full large ion-button color="secondary" icon-right (click)="login()">
+          Iniciar Sesion
+          <ion-icon name="log-in"></ion-icon>
+        </button>
+        <button ion-button clear full large color="primary" (click)="goBack()">
+          Volver
+        </button>
+
+        <!--<button style="margin-top:15px" full ion-button icon-left (click)="loginWithFacebook()">
       <ion-icon name="logo-facebook"></ion-icon>
       Iniciar sesion con Facebook
   </button>
@@ -31,5 +38,5 @@
     Iniciar sesion con Google
   </button>-->
 
-  </ion-list>
+    </ion-list>
 </ion-content>

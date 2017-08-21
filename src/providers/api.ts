@@ -18,7 +18,7 @@ export class Api {
   residence: any;
   roles: any;
   Echo: any;
-  url = "http://residenciasonline.com/residencias/public/";
+  url;
   // url = "http://localhost/residencias/public/";
   username = "";
   password = "";
@@ -38,6 +38,7 @@ export class Api {
   });
   constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController) {
     storage.ready().then(() => {
+      storage.get('url').then(url => { this.url = url });
       storage.get('modules').then(modules => { this.modules = modules });
       storage.get('settings').then(settings => { this.settings = settings });
       storage.get('roles').then(roles => { this.roles = roles });
