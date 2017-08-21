@@ -3,6 +3,7 @@ import { NavController, ActionSheetController, ModalController } from 'ionic-ang
 import { Api } from "../../providers/api";
 import { VisitorPage } from "../visitor/visitor";
 import { VisitCreatorPage } from "../visit-creator/visit-creator";
+import { VisitPage } from "../visit/visit";
 
 @Component({
   selector: 'page-home',
@@ -74,6 +75,15 @@ export class HomePage {
 
       ]
     }).present();
+  }
+
+  viewVisit(visit, index) {
+    this.navCtrl.push(VisitPage, {
+      visit: visit,
+      done: () => {
+        this.dismissPreApproved(visit, index)
+      }
+    });
   }
 
   visitorModal(visitor = null) {

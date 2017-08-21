@@ -65,6 +65,7 @@ export class ListPage {
       buttons: buttons
     }).present();
   }
+
   approve(visit) {
     this.api.put('visits/' + visit.id, { status: 'approved', departured_at: moment.utc().toString() })
       .then((data) => {
@@ -74,6 +75,7 @@ export class ListPage {
         console.error(err);
       });
   }
+
   departure(visit) {
     this.api.put('visits/' + visit.id, { status: 'departured', departured_at: moment.utc().toString() })
       .then((data) => {
@@ -83,9 +85,11 @@ export class ListPage {
         console.error(err);
       });
   }
+
   editVisitor(visitor = null) {
     this.modal.create(VisitorPage, { visitor: visitor }, { showBackdrop: true, enableBackdropDismiss: true }).present();
   }
+
   deleteVisit(visit) {
     this.api.delete('visits/' + visit.id)
       .then((data) => {
