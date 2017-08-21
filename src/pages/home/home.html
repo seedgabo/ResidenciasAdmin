@@ -53,6 +53,7 @@
                               <p>
                                 {{visit.note}}
                               </p>
+                              <small *ngIf="visit.user">{{'literals.user' | trans }}: {{visit.user.name}}</small>
                               <p>
                                 {{ visit.created_at | amCalendar }}
                               </p>
