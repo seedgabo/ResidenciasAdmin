@@ -1,19 +1,25 @@
 page-home {}
 
 .icon-primary {
-  ion-icon {
-    color: color($colors, 'primary');
-  }
+    ion-icon {
+        color: color($colors, 'primary');
+    }
 }
 
-.icon-secondary {
-  ion-icon {
-    color: color($colors, 'secondary');
-  }
+.icon-warning {
+    ion-icon {
+        color: color($colors, 'warning');
+    }
 }
 
 .icon-danger {
-  ion-icon {
-    color: color($colors, 'danger');
-  }
+    ion-icon {
+        color: color($colors, 'danger');
+    }
+}
+
+.icon-danger {
+    ion-icon {
+        color: color($colors, 'danger');
+    }
 }

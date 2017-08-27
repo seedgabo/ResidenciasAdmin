@@ -10,13 +10,13 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
+    <input type="file" name="filer" accept="image/*" (change)="readFile($event)" id="input-file" style="display:none;">
     <ion-refresher (ionRefresh)="loadVisitors($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <ion-grid>
         <ion-row>
             <ion-col col-12 col-md>
-
                 <ion-card>
                     <ion-card-header>{{ 'literals.visitors' | trans }}</ion-card-header>
                     <ion-list>
@@ -27,6 +27,9 @@
                 <h2>
                   {{visitor.name}}
                 </h2>
+                <h4 *ngIf="visitor.residence" >
+                  {{visitor.residence.name}}
+                </h4>
                 <p>
                   {{ visitor.document }}
                 </p>
@@ -43,7 +46,7 @@
                     <ion-list>
                         <ion-item-sliding *ngFor="let visit of api.visits_approved;let i= index">
                             <button ion-item (tap)="viewVisit(visit,i)">
-                              <ion-avatar item-left>
+                              <ion-avatar item-left (click)="askFile(visit.visitor);$event.stopPropagation()">
                                 <img [src]="visit.visitor.image_url">
                               </ion-avatar>
                               <span>

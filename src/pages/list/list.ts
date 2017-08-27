@@ -8,6 +8,8 @@ import moment from 'moment';
   templateUrl: 'list.html'
 })
 export class ListPage {
+  query = "";
+  visits = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public actionsheet: ActionSheetController, public modal: ModalController) {
   }
 
@@ -19,13 +21,36 @@ export class ListPage {
     this.api.get('visits?with[]=residence&with[]=user&with[]=vehicle&with[]=visitor' + this.filters()).then((data: any) => {
       console.log(data);
       this.api.visits = data;
+      this.filter()
     }).catch((err) => {
       console.error(err);
     });
   }
 
+  filter() {
+    if (this.query == "") {
+      return this.visits = this.api.visits.slice(0, 200);
+    }
+    var array = [];
+    for (var index = 0; index < this.api.visits.length; index++) {
+      var element = this.api.visits[index];
+      if (
+        (element.visitor && element.visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
+        (element.residence && element.residence.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
+        (element.user && element.user.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1)
+      )
+        array[array.length] = element;
+
+      if (array.length == 200) {
+        break;
+      }
+    }
+    console.log(array);
+    return this.visits = array;
+  }
+
   filters() {
-    return "&order[id]=desc&limit=500";
+    return "&order[id]=desc&limit=5000";
   }
 
   actions(visit) {
