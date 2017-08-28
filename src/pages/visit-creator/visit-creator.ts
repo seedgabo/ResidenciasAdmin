@@ -15,7 +15,7 @@ import { Api } from "../../providers/api";
 })
 export class VisitCreatorPage {
   visitor: any = {};
-  visit = {
+  visit: any = {
     status: "waiting for confirmation",
   }
   statutes = ['waiting for confirmation', 'approved', 'rejected', 'departured'];
