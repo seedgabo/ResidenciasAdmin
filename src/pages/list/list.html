@@ -1,29 +1,30 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <button ion-button menuToggle>
+    <ion-navbar color="primary">
+        <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{'literals.visits' | trans}}</ion-title>
-    <ion-buttons end>
-      <button ion-button icon-only>
-          <ion-icon name="funnel"></ion-icon>
-        </button>
-    </ion-buttons>
-  </ion-navbar>
+        <ion-title>{{'literals.visits' | trans}}</ion-title>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-searchbar [(ngModel)]="query" debounce="700" (ionInput)="filter()">
+        </ion-searchbar>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <button ion-item (click)="actions(visit)" *ngFor="let visit of api.visits">
+    <ion-list [virtualScroll]="visits">
+        <button ion-item (click)="actions(visit)" *virtualItem="let visit">
       <h2 *ngIf="visit.visitor">
         {{visit.visitor.name }}
         <br>
-        <span>{{visit.visitor.document}}</span>
+        <span *ngIf="visit.residence" >{{visit.residence.name}}</span>
+        <br>
+        <small>{{visit.visitor.document}}</small>
       </h2>
       <span item-right>
         {{ visit.created_at |amCalendar }} <br>
         {{ 'literals.'+ visit.status | trans }}
       </span>
     </button>
-  </ion-list>
+    </ion-list>
 </ion-content>

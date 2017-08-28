@@ -18,7 +18,7 @@ export class Api {
   residence: any;
   roles: any;
   Echo: any;
-  url = "http://residenciasonline.com/residencias/public/";
+  url;
   // url = "http://localhost/residencias/public/";
   username = "";
   password = "";
@@ -38,6 +38,7 @@ export class Api {
   });
   constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController) {
     storage.ready().then(() => {
+      storage.get('url').then(url => { this.url = url });
       storage.get('modules').then(modules => { this.modules = modules });
       storage.get('settings').then(settings => { this.settings = settings });
       storage.get('roles').then(roles => { this.roles = roles });
@@ -271,11 +272,13 @@ export class Api {
           this.zone.run(() => {
             this.visits.unshift(data.visit);
             var visit = this.visits[0];
-            if (data.visitor)
+            if (data.visitor) {
               visit.visitor = data.visitor;
+              visit.visitors = data.visitors;
+
+            }
+
             if (visit.status == 'approved') {
-              this.visits_approved[this.visits_approved.length] = visit;
-              this.storage.set('visits_approved', this.visits_approved);
               this.visitPreApproved(visit);
             }
           })
@@ -294,6 +297,7 @@ export class Api {
             }
             if (data.visitor) {
               visit.visitor = data.visitor;
+              visit.visitors = data.visitors;
             }
           });
         })
@@ -310,7 +314,7 @@ export class Api {
         })
 
         .listen('VisitConfirmed', (data) => {
-          this.VisitConfirmed(data.visit, data.visitor);
+          this.VisitConfirmed(data);
         });
 
       this.Echo.private('App.User.' + this.user.id)
@@ -370,19 +374,36 @@ export class Api {
 
   visitPreApproved(visit) {
     this.playSoundBeep();
-
-    this.alert.create({
+    var alert = this.alert.create({
       title: this.trans('literals.visit') + " Pre " + this.trans('literals.approved_f'),
       subTitle: this.trans('literals.visitor') + ': ' + visit.visitor.name,
       message: visit.note,
       buttons: ["OK"],
-    }).present();
+    })
+    alert.present();
+    this.get('visits/' + visit.id + "?with[]=visitor&with[]=visitors&with[]=vehicle&with[]=parking&with[]=user&with[]=residence")
+      .then((data: any) => {
+        this.visits_approved[this.visits_approved.length] = data;
+        this.storage.set('visits_approved', this.visits_approved);
+        if (data.visitors.length > 1) {
+          var text = this.trans('literals.visitors') + ': '
+          data.visitors.forEach(person => {
+            text += `${person.name}, `
+          });
+          alert.setSubTitle(text);
+        }
+
+      })
+      .catch(console.error)
   }
 
-  VisitConfirmed(visit, visitor) {
+  VisitConfirmed(data) {
+    var visit = data.visit;
+    visit.visitor = data.visitor;
+    visit.visitors = data.visitors;
     this.alert.create({
       title: this.trans('literals.visit') + " " + this.trans('literals.' + visit.status),
-      subTitle: this.trans('literals.visitor') + ': ' + visitor.name,
+      subTitle: this.trans('literals.visitor') + ': ' + visit.visitor.name,
       message: visit.note,
       buttons: ["OK"],
     }).present();

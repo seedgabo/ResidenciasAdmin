@@ -34,6 +34,6 @@ export class TransPipe implements PipeTransform {
         }
       }
     }
-    return value;
+    return value.replace('__.', '').replace('literals.', "");
   }
 }

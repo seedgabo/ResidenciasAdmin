@@ -1,32 +1,35 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <button ion-button menuToggle>
+    <ion-navbar color="primary">
+        <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{ 'literals.visitors' | trans }} </ion-title>
-  </ion-navbar>
-  <ion-toolbar>
-    <ion-searchbar (ionInput)="null" [(ngModel)]="query"></ion-searchbar>
-  </ion-toolbar>
+        <ion-title>{{ 'literals.visitors' | trans }} </ion-title>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-searchbar (ionInput)="null" [(ngModel)]="query"></ion-searchbar>
+    </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-refresher (ionRefresh)="loadVisitors($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-  <ion-grid>
-    <ion-row>
-      <ion-col col-12 col-md>
-
-        <ion-card>
-          <ion-card-header>{{ 'literals.visitors' | trans }}</ion-card-header>
-          <ion-list>
-            <button ion-item *ngFor="let visitor of getVisitors()" (click)="actions(visitor)">
+    <input type="file" name="filer" accept="image/*" (change)="readFile($event)" id="input-file" style="display:none;">
+    <ion-refresher (ionRefresh)="loadVisitors($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <ion-grid>
+        <ion-row>
+            <ion-col col-12 col-md>
+                <ion-card>
+                    <ion-card-header>{{ 'literals.visitors' | trans }}</ion-card-header>
+                    <ion-list>
+                        <button ion-item *ngFor="let visitor of getVisitors()" (click)="actions(visitor)">
                 <ion-avatar item-left>
                   <img [src]="visitor.image_url">
                 </ion-avatar>
                 <h2>
                   {{visitor.name}}
                 </h2>
+                <h4 *ngIf="visitor.residence" >
+                  {{visitor.residence.name}}
+                </h4>
                 <p>
                   {{ visitor.document }}
                 </p>
@@ -34,46 +37,49 @@
                     {{api.residences_collection[visitor.residence_id].name}}
                 </p>
               </button>
-          </ion-list>
-        </ion-card>
-      </ion-col>
-      <ion-col col-12 col-md>
+                    </ion-list>
+                </ion-card>
+            </ion-col>
+            <ion-col col-12 col-md>
+                <ion-card>
+                    <ion-card-header> {{ 'literals.visits' | trans }} pre {{ 'literals.approveds_f' | trans}}</ion-card-header>
+                    <ion-list>
+                        <ion-item-sliding *ngFor="let visit of api.visits_approved;let i= index">
+                            <button ion-item (tap)="viewVisit(visit,i)">
+                              <ion-avatar item-left (click)="askFile(visit.visitor);$event.stopPropagation()">
+                                <img [src]="visit.visitor.image_url">
+                              </ion-avatar>
+                              <span>
+                                {{visit.visitor.name }}
+                              </span>
+                              <span *ngIf="visit.visitors && visit.visitors.length > 1">{{'__.and others' | trans }} {{visit.visitors.length - 1}}</span>
+                              <p>
+                                {{visit.note}}
+                              </p>
+                              <small *ngIf="visit.user">{{'literals.user' | trans }}: {{visit.user.name}}</small>
+                              <p>
+                                {{ visit.created_at | amCalendar }}
+                              </p>
+                            </button>
+                            <ion-item-options side="right">
+                                <button ion-button color="secondary" (click)="dismissPreApproved(visit,i)">
+                              <ion-icon name="checkbox-outline"></ion-icon>
+                              {{ 'literals.done' | trans }}
+                            </button>
+                            </ion-item-options>
+                        </ion-item-sliding>
+                    </ion-list>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 
-        <ion-card>
-          <ion-card-header> {{ 'literals.visits' | trans }} pre {{ 'literals.approveds_f' | trans}}</ion-card-header>
-          <ion-list>
-            <ion-item-sliding *ngFor="let visit of api.visits_approved;let i= index">
-              <button ion-item>
-                <ion-avatar item-left>
-                  <img [src]="visit.visitor.image_url">
-                </ion-avatar>
-                {{visit.visitor.name }}
-                <span>
-                  {{visit.note}}
-                </span>
-                <p>
-                  {{ visit.created_at | amCalendar }}
-                </p>
-              </button>
-              <ion-item-options side="right">
-                <button ion-button color="secondary" (click)="dismissPreApproved(visit,i)">
-                  <ion-icon name="checkbox-outline"></ion-icon>
-                   {{ 'literals.done' | trans }}
-                </button>
-              </ion-item-options>
-            </ion-item-sliding>
-          </ion-list>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
 
 
-
-  <ion-fab bottom right>
-    <button ion-fab (click)="visitorModal()">
+    <ion-fab bottom right>
+        <button ion-fab (click)="visitorModal()">
         <ion-icon name="person-add"></ion-icon>
       </button>
-  </ion-fab>
+    </ion-fab>
 
 </ion-content>

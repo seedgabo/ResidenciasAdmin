@@ -17,6 +17,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { TransPipe } from "../pipes/trans/trans";
 import { MomentModule } from 'angular2-moment';
 import { CodePush } from "@ionic-native/code-push";
+import { VisitPage } from "../pages/visit/visit";
 @NgModule({
   declarations: [
     MyApp,
@@ -25,6 +26,7 @@ import { CodePush } from "@ionic-native/code-push";
     Login,
     ParkingsPage,
     VisitorPage,
+    VisitPage,
     VisitCreatorPage,
     TransPipe
   ],
@@ -43,6 +45,7 @@ import { CodePush } from "@ionic-native/code-push";
     Login,
     ParkingsPage,
     VisitorPage,
+    VisitPage,
     VisitCreatorPage,
   ],
   providers: [

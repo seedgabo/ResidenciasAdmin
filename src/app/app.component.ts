@@ -64,6 +64,8 @@ export class MyApp {
 
   logout() {
     this.api.user = null;
+    this.api.url = "";
+
     this.api.storage.clear();
     this.rootPage = Login;
     this.api.stopEcho();

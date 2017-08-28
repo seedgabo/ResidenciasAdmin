@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, ActionSheetController, ModalController } from 'ionic-angular';
+import { NavController, ActionSheetController, ModalController, ToastController } from 'ionic-angular';
 import { Api } from "../../providers/api";
 import { VisitorPage } from "../visitor/visitor";
 import { VisitCreatorPage } from "../visit-creator/visit-creator";
+import { VisitPage } from "../visit/visit";
 
 @Component({
   selector: 'page-home',
@@ -10,8 +11,8 @@ import { VisitCreatorPage } from "../visit-creator/visit-creator";
 })
 export class HomePage {
   query: string = "";
-
-  constructor(public navCtrl: NavController, public api: Api, public actionsheet: ActionSheetController, public modal: ModalController) {
+  visitor_image;
+  constructor(public navCtrl: NavController, public api: Api, public actionsheet: ActionSheetController, public modal: ModalController, public toast: ToastController) {
     // this.loadVisitors();
   }
 
@@ -20,10 +21,11 @@ export class HomePage {
       if (visits_approved)
         this.api.visits_approved = visits_approved
     });
+    this.loadVisitors();
   }
 
   loadVisitors(rerfresher = null) {
-    this.api.get('visitors?with[]=image').then((data: any) => {
+    this.api.get('visitors?with[]=residence&with[]=image').then((data: any) => {
       console.log(data);
       this.api.visitors = data;
       if (rerfresher) rerfresher.complete();
@@ -58,9 +60,15 @@ export class HomePage {
           handler: () => { this.visitModal(visitor) }
         },
         {
+          text: this.api.trans('crud.edit') + " " + this.api.trans('literals.image'),
+          icon: 'camera',
+          cssClass: 'icon-secondary',
+          handler: () => { this.askFile(visitor) }
+        },
+        {
           text: this.api.trans('crud.edit'),
           icon: 'create',
-          cssClass: 'icon-secondary',
+          cssClass: 'icon-warning',
           handler: () => { this.visitorModal(visitor) }
         },
         {
@@ -73,6 +81,15 @@ export class HomePage {
 
       ]
     }).present();
+  }
+
+  viewVisit(visit, index) {
+    this.navCtrl.push(VisitPage, {
+      visit: visit,
+      done: () => {
+        this.dismissPreApproved(visit, index)
+      }
+    });
   }
 
   visitorModal(visitor = null) {
@@ -94,6 +111,41 @@ export class HomePage {
 
   dismissPreApproved(visit, index) {
     this.api.visits_approved.splice(index, 1);
+  }
+
+
+
+  askFile(visitor) {
+    this.visitor_image = visitor;
+    var filer: any = document.querySelector("#input-file")
+    filer.click();
+  }
+
+  readFile(event) {
+    try {
+      var reader: any = new FileReader();
+      reader.readAsDataURL(event.target.files[0])
+      reader.onload = (result) => {
+        this.visitor_image.image_url = result.target.result;
+        this.uploadImage(this.visitor_image.id)
+      };
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  uploadImage(id) {
+    return this.api.post('images/upload/visitor/' + id, { image: this.visitor_image.image_url })
+      .then((data: any) => {
+        console.log(data);
+        this.visitor_image.image = data.image;
+        this.toast.create({
+          message: this.api.trans("literals.image") + " " + this.api.trans("crud.updated"),
+          duration: 1500,
+          showCloseButton: true,
+        }).present();
+      })
+      .catch(console.error)
   }
 
 }
