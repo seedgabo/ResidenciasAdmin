@@ -53,6 +53,9 @@
                                 {{visit.visitor.name }}
                               </span>
                               <span *ngIf="visit.visitors && visit.visitors.length > 1">{{'__.and others' | trans }} {{visit.visitors.length - 1}}</span>
+                              <p *ngIf="api.residences_collection[visit.residence_id]" text-left>
+                                  {{api.residences_collection[visit.residence_id].name}}
+                              </p>
                               <p>
                                 {{visit.note}}
                               </p>

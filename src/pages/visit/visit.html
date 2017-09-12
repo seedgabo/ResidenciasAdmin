@@ -1,108 +1,110 @@
 <ion-header>
-  <ion-navbar color="dark">
-    <ion-title>{{'literals.visit' | trans }} # {{visit.id}}</ion-title>
-  </ion-navbar>
+    <ion-navbar color="dark">
+        <ion-title>{{'literals.visit' | trans }} # {{visit.id}}</ion-title>
+    </ion-navbar>
 </ion-header>
 
 
 <ion-content>
-  <ion-card>
-    <ion-card-content>
-      <ion-list>
-        <div *ngIf="!(visit.visitors &&  visit.visitors.length > 1)">
-          <div text-center>
-            <img [src]="visit.visitor.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
-          </div>
-          <ion-item>
-            <ion-icon name="person"></ion-icon>
-            <b>{{'literals.visitor' | trans }}</b>
-            <span item-right>{{visit.visitor.name}}</span>
-          </ion-item>
-        </div>
-        <div *ngIf="visit.user">
-          <div text-center>
-            <img [src]="visit.user.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
-          </div>
-          <ion-item>
-            <ion-icon name="person"></ion-icon>
-            <b>{{'literals.user' | trans }}</b>
-            <span item-right>{{visit.user.name}}</span>
-          </ion-item>
+    <ion-card>
+        <ion-card-content>
+            <ion-list>
+                <div *ngIf="!(visit.visitors &&  visit.visitors.length > 1)">
+                    <div text-center>
+                        <img [src]="visit.visitor.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
+                    </div>
+                    <ion-item>
+                        <ion-icon name="person"></ion-icon>
+                        <b>{{'literals.visitor' | trans }}</b>
+                        <span item-right>{{visit.visitor.name}}</span>
+                    </ion-item>
+                </div>
+                <div *ngIf="visit.user">
+                    <div text-center>
+                        <img [src]="visit.user.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
+                    </div>
+                    <ion-item>
+                        <ion-icon name="person"></ion-icon>
+                        <b>{{'literals.user' | trans }}</b>
+                        <span item-right>{{visit.user.name}}</span>
+                    </ion-item>
+                </div>
+                <p *ngIf="api.residences_collection[visit.residence_id]" text-left>
+                    {{api.residences_collection[visit.residence_id].name}}
+                </p>
+                <div *ngIf="visit.visitors &&  visit.visitors.length > 1">
+                    <ion-list-header>{{'literals.visitors' | trans}}</ion-list-header>
+                    <ion-item *ngFor="let person of visit.visitors">
+                        <ion-avatar item-left>
+                            <img [src]="person.image_url" alt="">
+                        </ion-avatar>
+                        <ion-label>
+                            <span>{{person.name}}</span>
+                        </ion-label>
 
-        </div>
-        <div *ngIf="visit.visitors &&  visit.visitors.length > 1">
-          <ion-list-header>{{'literals.visitors' | trans}}</ion-list-header>
-          <ion-item *ngFor="let person of visit.visitors">
-            <ion-avatar item-left>
-              <img [src]="person.image_url" alt="">
-            </ion-avatar>
-            <ion-label>
-              <span>{{person.name}}</span>
-            </ion-label>
+                        <ion-select [(ngModel)]="person.pivot.status" *ngIf="person.pivot">
+                            <ion-option [disabled]="person.pivot.status == 'approved'" value="approved">{{'literals.approved' | trans }}</ion-option>
+                            <ion-option [disabled]="person.pivot.status == 'rejected'" value="rejected">{{'literals.rejected' | trans }}</ion-option>
+                            <ion-option [disabled]="person.pivot.status == 'waiting for confirmation'" value="waiting for confirmation">{{'literals.waiting for confirmation' | trans }}</ion-option>
+                        </ion-select>
+                    </ion-item>
+                </div>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
 
-            <ion-select [(ngModel)]="person.pivot.status" *ngIf="person.pivot">
-              <ion-option [disabled]="person.pivot.status == 'approved'" value="approved">{{'literals.approved' | trans }}</ion-option>
-              <ion-option [disabled]="person.pivot.status == 'rejected'" value="rejected">{{'literals.rejected' | trans }}</ion-option>
-              <ion-option [disabled]="person.pivot.status == 'waiting for confirmation'" value="waiting for confirmation">{{'literals.waiting for confirmation' | trans }}</ion-option>
-            </ion-select>
-          </ion-item>
-        </div>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>{{'literals.notes' | trans }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <p>{{visit.note}}</p>
+        </ion-card-content>
+    </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>{{'literals.notes' | trans }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>{{visit.note}}</p>
-    </ion-card-content>
-  </ion-card>
+    <ion-card *ngIf="visit.vehicle">
+        <ion-card-content>
+            <ion-list>
+                <ion-list-header>
+                    {{'literals.vehicle' | trans }}
+                </ion-list-header>
+                <ion-item>
+                    <ion-avatar item-left>
+                        <img [src]="visit.vehicle.image_url" alt="">
+                    </ion-avatar>
+                    <span>{{visit.vehicle.name}}</span>
+                </ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
 
-  <ion-card *ngIf="visit.vehicle">
-    <ion-card-content>
-      <ion-list>
-        <ion-list-header>
-          {{'literals.vehicle' | trans }}
-        </ion-list-header>
-        <ion-item>
-          <ion-avatar item-left>
-            <img [src]="visit.vehicle.image_url" alt="">
-          </ion-avatar>
-          <span>{{visit.vehicle.name}}</span>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card *ngIf="visit.parking">
-    <ion-card-content>
-      <ion-list>
-        <ion-list-header>
-          {{'literals.parking' | trans }}
-        </ion-list-header>
-        <ion-item>
-          <span>{{visit.parking.name}}</span>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+    <ion-card *ngIf="visit.parking">
+        <ion-card-content>
+            <ion-list>
+                <ion-list-header>
+                    {{'literals.parking' | trans }}
+                </ion-list-header>
+                <ion-item>
+                    <span>{{visit.parking.name}}</span>
+                </ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
 
 </ion-content>
 <ion-footer>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <button ion-button full color="secondary" (click)="done()">
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <button ion-button full color="secondary" (click)="done()">
             {{'__.marcar como listo' | trans }}
         </button>
-      </ion-col>
-      <ion-col>
-        <button ion-button full (click)="dismiss()">
+            </ion-col>
+            <ion-col>
+                <button ion-button full (click)="dismiss()">
             {{'crud.cancel' | trans }}
         </button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-footer>

@@ -36,9 +36,9 @@ export class Login {
         console.log(data);
         loading.dismiss();
         this.goTo()
+        this.api.getData();
         this.api.getLang();
         this.api.startEcho();
-        this.menuCtrl.enable(true);
       })
       .catch((err) => {
         console.error(err.error);

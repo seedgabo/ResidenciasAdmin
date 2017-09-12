@@ -38,10 +38,8 @@ export class MyApp {
         this.rootPage = HomePage;
         this.api.getData();
         this.api.startEcho();
-        this.menuCtrl.enable(true);
       }
       else {
-        this.menuCtrl.enable(false);
         this.rootPage = Login;
       }
     });
@@ -63,12 +61,10 @@ export class MyApp {
   }
 
   logout() {
+    this.api.storage.clear();
+    this.api.stopEcho();
+    this.rootPage = Login;
     this.api.user = null;
     this.api.url = "";
-
-    this.api.storage.clear();
-    this.rootPage = Login;
-    this.api.stopEcho();
-    this.menuCtrl.enable(false);
   }
 }
