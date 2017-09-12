@@ -1,8 +1,8 @@
 <ion-header>
 
     <ion-navbar color="dark">
-        <ion-title *ngIf="visitor">{{ visitor.name }}</ion-title>
-        <ion-title *ngIf="!visitor">{{ 'crud.create' | trans }} {{ 'literals.visitor' | trans }}</ion-title>
+        <ion-title *ngIf="visitor.id">{{ visitor.name }}</ion-title>
+        <ion-title *ngIf="!visitor.id">{{ 'crud.add' | trans }} {{ 'literals.visitor' | trans }}</ion-title>
         <ion-buttons end>
             <button ion-button clear icon-only (click)="dismiss()">
         <ion-icon name="close"></ion-icon>
@@ -23,7 +23,7 @@
             <ion-label floating>{{'literals.residence' | trans }}</ion-label>
             <ion-select [(ngModel)]="visitor.residence_id">
                 <ion-option [value]="residence.id" *ngFor="let residence of api.residences">
-                    {{residence.name}}
+                    {{ residence.name }}
                 </ion-option>
             </ion-select>
         </ion-item>

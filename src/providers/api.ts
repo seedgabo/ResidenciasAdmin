@@ -141,12 +141,14 @@ export class Api {
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
-          this.residences = data.residences;
           this.vehicles = data.vehicles;
           this.visitors = data.visitors;
           this.parkings = data.parking;
-          data.residences.forEach(res => {
-            this.residences_collection[res.id] = res;
+          this.get('residences').then((data: any) => {
+            this.residences = data;
+            data.forEach(res => {
+              this.residences_collection[res.id] = res;
+            });
           });
         }, error => {
           return reject(this.handleData(error));
