@@ -142,7 +142,6 @@ export class Api {
         .subscribe(data => {
           resolve(data);
           this.vehicles = data.vehicles;
-          this.visitors = data.visitors;
           this.parkings = data.parking;
           this.get('residences').then((data: any) => {
             this.residences = data;
