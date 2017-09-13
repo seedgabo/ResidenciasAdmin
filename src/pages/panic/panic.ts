@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
 import moment from 'moment';
+moment.locale("es");
 @Component({
   selector: 'page-panic',
   templateUrl: 'panic.html',
@@ -31,6 +32,8 @@ export class PanicPage {
   }
 
   close() {
+    if (this.navParams.get('sound'))
+      this.navParams.get('sound').pause()
     this.viewctrl.dismiss();
   }
 

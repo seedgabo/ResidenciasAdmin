@@ -320,7 +320,7 @@ export class Api {
         })
 
         .listen('Panic', (data) => {
-          console.log(data)
+          console.log("panic", data)
           this.handlePanic(data);
         })
 
@@ -417,6 +417,7 @@ export class Api {
   }
 
   handlePanic(data) {
+    data.sound = this.playSoundSOS();
     var modal = this.modal.create(PanicPage, data);
     modal.present();
   }
@@ -453,6 +454,12 @@ export class Api {
 
   playSoundBeep() {
     this.sound = new Audio('assets/sounds/beep.mp3');
+    this.sound.play();
+    return this.sound;
+  }
+
+  playSoundSOS() {
+    this.sound = new Audio('assets/sounds/sos.mp3');
     this.sound.play();
     return this.sound;
   }

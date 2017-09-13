@@ -7,7 +7,6 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
 <ion-content padding>
@@ -15,7 +14,7 @@
   <ion-list>
 
     <div *ngIf="user && user.image_url" text-center>
-      <img [src]="user.image_url" [alt]="user.name" class="avatar-panic">
+      <img [src]="user.image_url" [alt]="user.name" class="avatar-panic pulse">
     </div>
     <ion-item>
       <b>{{ 'literals.user' | trans }}</b>
@@ -32,7 +31,12 @@
       <span item-right>{{ location }}</span>
     </ion-item>
   </ion-list>
-  <p>
+  <p text-right>
     {{ datetime.format('llll') }}
   </p>
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <button full color="danger" (click)="close()" ion-button large class="pulse">{{'literals.ok' | trans }}</button>
+  </ion-toolbar>
+</ion-footer>
