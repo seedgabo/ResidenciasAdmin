@@ -1,3 +1,4 @@
+import { PanicPage } from './../pages/panic/panic';
 import { Injectable, NgZone } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { Storage } from '@ionic/storage';
