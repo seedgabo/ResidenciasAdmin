@@ -1,3 +1,4 @@
+import { PanicPage } from './../pages/panic/panic';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -28,6 +29,7 @@ import { VisitPage } from "../pages/visit/visit";
     VisitorPage,
     VisitPage,
     VisitCreatorPage,
+    PanicPage,
     TransPipe
   ],
   imports: [
@@ -47,6 +49,7 @@ import { VisitPage } from "../pages/visit/visit";
     VisitorPage,
     VisitPage,
     VisitCreatorPage,
+    PanicPage,
   ],
   providers: [
     StatusBar,

@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import Echo from 'laravel-echo';
 declare var window: any;
 import Pusher from 'pusher-js';
-import { AlertController, ToastController } from "ionic-angular";
+import { AlertController, ToastController, ModalController } from "ionic-angular";
 import langs from "../assets/langs";
 window.Pusher = Pusher;
 
@@ -36,7 +36,7 @@ export class Api {
   ready: Promise<any> = new Promise((resolve) => {
     this.resolve = resolve;
   });
-  constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController) {
+  constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController, public modal: ModalController) {
     storage.ready().then(() => {
       storage.get('url').then(url => { this.url = url });
       storage.get('modules').then(modules => { this.modules = modules });
@@ -316,7 +316,11 @@ export class Api {
 
         .listen('VisitConfirmed', (data) => {
           this.VisitConfirmed(data);
-        });
+        })
+
+        .listen('Panic', (data) => {
+          this.handlePanic(data);
+        })
 
       this.Echo.private('App.User.' + this.user.id)
         .notification((notification) => {
@@ -408,6 +412,11 @@ export class Api {
       message: visit.note,
       buttons: ["OK"],
     }).present();
+  }
+
+  handlePanic(data) {
+    var modal = this.modal.create(PanicPage, data);
+    modal.present();
   }
 
   private setHeaders() {
