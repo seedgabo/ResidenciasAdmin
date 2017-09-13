@@ -320,6 +320,7 @@ export class Api {
         })
 
         .listen('Panic', (data) => {
+          console.log(data)
           this.handlePanic(data);
         })
 

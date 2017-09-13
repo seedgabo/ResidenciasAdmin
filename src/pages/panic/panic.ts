@@ -21,7 +21,10 @@ export class PanicPage {
       this.location = navParams.get('location');
 
     if (navParams.get('datetime'))
-      this.datetime = moment.utc(navParams.get('datetime'));
+      this.datetime = moment.utc(navParams.get('datetime').date);
+    if (!this.datetime.isValid())
+      this.datetime = moment.utc();
+
   }
 
   ionViewDidLoad() {
