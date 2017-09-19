@@ -1,42 +1,42 @@
 <ion-header>
-  <ion-navbar color="danger">
-    <ion-title>{{ '__.SOS' | trans }}</ion-title>
-    <ion-buttons end>
-      <button ion-button icon-only (click)="close()">
+    <ion-navbar color="danger">
+        <ion-title>{{ '__.SOS' | trans }}</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="close()">
         <ion-icon name="close"></ion-icon>
       </button>
-    </ion-buttons>
-  </ion-navbar>
+        </ion-buttons>
+    </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h2>{{ '__.Hay una emergencia' | trans }}</h2>
-  <ion-list>
+    <h2>{{ '__.Hay una emergencia' | trans }}</h2>
+    <ion-list>
 
-    <div *ngIf="user && user.image_url" text-center>
-      <img [src]="user.image_url" [alt]="user.name" class="avatar-panic pulse">
-    </div>
-    <ion-item>
-      <b>{{ 'literals.user' | trans }}</b>
-      <h2 item-right>{{ user.name }}</h2>
-    </ion-item>
+        <div *ngIf="user && user.image_url" text-center>
+            <img [src]="user.image_url" [alt]="user.name" class="avatar-panic pulse">
+        </div>
+        <ion-item>
+            <b>{{ 'literals.user' | trans }}</b>
+            <h2 item-right>{{ user.name }}</h2>
+        </ion-item>
 
-    <ion-item>
-      <b>{{ 'literals.residence' | trans }}</b>
-      <h2 item-right>{{ residence.name }}</h2>
-    </ion-item>
+        <ion-item>
+            <b>{{ 'literals.residence' | trans }}</b>
+            <h2 item-right>{{ residence.name }}</h2>
+        </ion-item>
 
-    <ion-item *ngIf="location">
-      <b>{{ 'literals.location' | trans }}</b>
-      <span item-right>{{ location }}</span>
-    </ion-item>
-  </ion-list>
-  <p text-right>
-    {{ datetime.format('llll') }}
-  </p>
+        <ion-item *ngIf="location">
+            <b>{{ 'literals.location' | trans }}</b>
+            <span item-right>{{ location }}</span>
+        </ion-item>
+    </ion-list>
+    <p text-right>
+        {{ datetime.format('llll') }}
+    </p>
 </ion-content>
 <ion-footer>
-  <ion-toolbar>
-    <button full color="danger" (click)="close()" ion-button large class="pulse">{{'literals.ok' | trans }}</button>
-  </ion-toolbar>
+    <ion-toolbar>
+        <button full color="danger" (click)="close()" ion-button large class="pulse">{{'literals.ok' | trans }}</button>
+    </ion-toolbar>
 </ion-footer>
