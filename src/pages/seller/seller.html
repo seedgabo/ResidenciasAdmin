@@ -1,0 +1,80 @@
+<ion-header>
+
+    <ion-navbar color="primary">
+        <button ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>{{'__.Punto de Venta' | trans }}</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content no-padding>
+    <ion-item>
+        <ion-label inline>
+            {{'literals.residence' | trans }}
+        </ion-label>
+        <ion-select (ionChange)="getResidents()" [(ngModel)]="charge.residence_id">
+            <ion-option [value]="residence.id" *ngFor="let residence of residences">{{residence.name}}</ion-option>
+        </ion-select>
+    </ion-item>
+    <ion-item *ngIf="residents.length > 0">
+        <ion-label inline>
+            {{'literals.user' | trans }}
+        </ion-label>
+        <ion-select [(ngModel)]="charge.user_id">
+            <ion-option [value]="user.id" *ngFor="let user of residents">{{user.name}}</ion-option>
+        </ion-select>
+    </ion-item>
+
+    <ion-list>
+        <ion-grid *ngFor="let item of items; let i = index">
+            <ion-row>
+                <ion-col>
+                    <ion-item>
+                        <ion-input [placeholder]=" 'literals.concept' | trans"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col>
+                    <ion-item>
+                        <ion-input type="number" min="0" [placeholder]=" 'literals.amount' | trans"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col>
+                    <ion-item>
+                        <ion-input type="number" min="1" [placeholder]=" 'literals.quantity' | trans"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-1>
+                    <button ion-button color="danger" clear icon-only (click)="removeItem(i)">
+                      <ion-icon name="remove"></ion-icon>
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <ion-item>
+            <button (click)="addItem()" ion-fab small mini item-right>
+              <ion-icon name="add"></ion-icon>
+            </button>
+        </ion-item>
+    </ion-list>
+</ion-content>
+<ion-footer>
+    <ion-toolbar>
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <button ion-button full color="light">
+                      {{'literals.clear' | trans}}
+                    </button>
+                </ion-col>
+                <ion-col>
+                    <button ion-button full color="secondary">
+                      {{'literals.proccess' | trans}}
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-toolbar>
+</ion-footer>

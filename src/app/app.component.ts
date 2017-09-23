@@ -10,6 +10,7 @@ import { Api } from "../providers/api";
 import { Login } from "../pages/login/login";
 import { ParkingsPage } from "../pages/parkings/parkings";
 import { CodePush } from "@ionic-native/code-push";
+import { SellerPage } from '../pages/seller/seller';
 @Component({
   templateUrl: 'app.html'
 })
@@ -28,6 +29,7 @@ export class MyApp {
       { title: 'literals.visitors', component: HomePage, icon: "contacts" },
       { title: 'literals.visits', component: ListPage, icon: "list" },
       { title: 'literals.parkings', component: ParkingsPage, icon: "car" },
+      { title: 'Punto de Venta', component: SellerPage, icon: "cash" },
     ];
 
   }
