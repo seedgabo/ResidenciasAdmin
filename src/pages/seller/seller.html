@@ -33,17 +33,20 @@
             <ion-row>
                 <ion-col>
                     <ion-item>
-                        <ion-input [placeholder]=" 'literals.concept' | trans"></ion-input>
+                        <ion-label floating>{{'literals.concept' | trans}}</ion-label>
+                        <ion-input [(ngModel)]="item.concept" [placeholder]=" 'literals.concept' | trans"></ion-input>
                     </ion-item>
                 </ion-col>
                 <ion-col>
                     <ion-item>
-                        <ion-input type="number" min="0" [placeholder]=" 'literals.amount' | trans"></ion-input>
+                        <ion-label floating>{{'literals.amount' | trans}}</ion-label>
+                        <ion-input [(ngModel)]="item.amount" type="number" min="0" [placeholder]=" 'literals.amount' | trans"></ion-input>
                     </ion-item>
                 </ion-col>
                 <ion-col>
                     <ion-item>
-                        <ion-input type="number" min="1" [placeholder]=" 'literals.quantity' | trans"></ion-input>
+                        <ion-label floating>{{'literals.quantity' | trans}}</ion-label>
+                        <ion-input [(ngModel)]="item.quantity" type="number" min="1" [placeholder]=" 'literals.quantity' | trans"></ion-input>
                     </ion-item>
                 </ion-col>
                 <ion-col col-1>
@@ -65,12 +68,12 @@
         <ion-grid>
             <ion-row>
                 <ion-col>
-                    <button ion-button full color="light">
+                    <button ion-button full color="light" (click)="clear()">
                       {{'literals.clear' | trans}}
                     </button>
                 </ion-col>
                 <ion-col>
-                    <button ion-button full color="secondary">
+                    <button ion-button full color="secondary" (click)="proccess()" [disabled]="!canProccess()">
                       {{'literals.proccess' | trans}}
                     </button>
                 </ion-col>
