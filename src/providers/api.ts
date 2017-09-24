@@ -376,7 +376,7 @@ export class Api {
         value = value.replace(':' + k, args[k]);
       }
     }
-    return value;
+    return value.replace('__.', '').replace('literals.', '');
   }
 
   visitPreApproved(visit) {
