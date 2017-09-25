@@ -18,7 +18,7 @@
         <ion-row>
             <ion-col col-12 col-md>
                 <ion-card>
-                    <ion-card-header>{{ 'literals.visitors' | trans }}</ion-card-header>
+                    <ion-card-header>{{ api.trans('literals.visitors') }}</ion-card-header>
                     <ion-list>
                         <button ion-item *ngFor="let visitor of getVisitors()" (click)="actions(visitor)">
                 <ion-avatar item-left>
@@ -42,7 +42,7 @@
             </ion-col>
             <ion-col col-12 col-md>
                 <ion-card>
-                    <ion-card-header> {{ 'literals.visits' | trans }} pre {{ 'literals.approveds_f' | trans}}</ion-card-header>
+                    <ion-card-header> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-card-header>
                     <ion-list>
                         <ion-item-sliding *ngFor="let visit of api.visits_approved;let i= index">
                             <button ion-item (tap)="viewVisit(visit,i)">

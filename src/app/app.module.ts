@@ -13,12 +13,14 @@ import { Api } from "../providers/api";
 import { ParkingsPage } from "../pages/parkings/parkings";
 import { VisitorPage } from "../pages/visitor/visitor";
 import { VisitCreatorPage } from "../pages/visit-creator/visit-creator";
+import { ZonesAdminPage } from "../pages/zones-admin/zones-admin";
 
 import { IonicStorageModule } from '@ionic/storage';
 import { TransPipe } from "../pipes/trans/trans";
 import { MomentModule } from 'angular2-moment';
 import { CodePush } from "@ionic-native/code-push";
 import { VisitPage } from "../pages/visit/visit";
+import { SellerPage } from "../pages/seller/seller";
 @NgModule({
   declarations: [
     MyApp,
@@ -30,6 +32,8 @@ import { VisitPage } from "../pages/visit/visit";
     VisitPage,
     VisitCreatorPage,
     PanicPage,
+    SellerPage,
+    ZonesAdminPage,
     TransPipe
   ],
   imports: [
@@ -50,6 +54,8 @@ import { VisitPage } from "../pages/visit/visit";
     VisitPage,
     VisitCreatorPage,
     PanicPage,
+    SellerPage,
+    ZonesAdminPage
   ],
   providers: [
     StatusBar,

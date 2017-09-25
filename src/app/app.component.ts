@@ -10,6 +10,8 @@ import { Api } from "../providers/api";
 import { Login } from "../pages/login/login";
 import { ParkingsPage } from "../pages/parkings/parkings";
 import { CodePush } from "@ionic-native/code-push";
+import { SellerPage } from '../pages/seller/seller';
+import { ZonesAdminPage } from '../pages/zones-admin/zones-admin';
 @Component({
   templateUrl: 'app.html'
 })
@@ -19,7 +21,8 @@ export class MyApp {
   rootPage: any;
 
   pages: Array<{ title: string, component: any, icon: string }>;
-
+  SellerPage = SellerPage;
+  ZonesAdminPage = ZonesAdminPage;
   constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush) {
     this.initializeApp();
 
@@ -66,5 +69,23 @@ export class MyApp {
     this.rootPage = Login;
     this.api.user = null;
     this.api.url = "";
+  }
+  canAccounter() {
+    if (this.api.roles)
+      for (var i = 0; i < this.api.roles.length; i++) {
+        if (this.api.roles[i].name == 'Accounter' || this.api.roles[i].name == 'SuperAdmin') {
+          return true;
+        }
+      }
+    return false;
+  }
+  canZones() {
+    if (this.api.roles)
+      for (var i = 0; i < this.api.roles.length; i++) {
+        if (this.api.roles[i].name == 'Manage zones' || this.api.roles[i].name == 'SuperAdmin') {
+          return true;
+        }
+      }
+    return false;
   }
 }
