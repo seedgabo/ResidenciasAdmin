@@ -13,6 +13,7 @@ import { Api } from "../providers/api";
 import { ParkingsPage } from "../pages/parkings/parkings";
 import { VisitorPage } from "../pages/visitor/visitor";
 import { VisitCreatorPage } from "../pages/visit-creator/visit-creator";
+import { ZonesAdminPage } from "../pages/zones-admin/zones-admin";
 
 import { IonicStorageModule } from '@ionic/storage';
 import { TransPipe } from "../pipes/trans/trans";
@@ -32,6 +33,7 @@ import { SellerPage } from "../pages/seller/seller";
     VisitCreatorPage,
     PanicPage,
     SellerPage,
+    ZonesAdminPage,
     TransPipe
   ],
   imports: [
@@ -53,6 +55,7 @@ import { SellerPage } from "../pages/seller/seller";
     VisitCreatorPage,
     PanicPage,
     SellerPage,
+    ZonesAdminPage
   ],
   providers: [
     StatusBar,

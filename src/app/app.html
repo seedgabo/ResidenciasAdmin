@@ -18,6 +18,11 @@
                    {{ api.trans('__.Punto de Venta') }}
                 </button>
 
+                <button *ngIf="canZones()" menuClose ion-item (click)="openPage({component:ZonesAdminPage})" icon-left>
+                  <ion-icon name="partly-sunny"></ion-icon>
+                   {{ api.trans('literals.zones') }}
+                </button>
+
                 <button menuClose ion-item (click)="logout()" icon-left>
                   <ion-icon name="log-out"></ion-icon>
                   {{ api.trans('literals.logout') }}
