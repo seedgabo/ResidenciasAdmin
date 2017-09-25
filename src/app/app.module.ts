@@ -1,3 +1,4 @@
+import { PanicLogsPage } from './../pages/panic-logs/panic-logs';
 import { PanicPage } from './../pages/panic/panic';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -34,6 +35,7 @@ import { SellerPage } from "../pages/seller/seller";
     PanicPage,
     SellerPage,
     ZonesAdminPage,
+    PanicLogsPage,
     TransPipe
   ],
   imports: [
@@ -55,7 +57,8 @@ import { SellerPage } from "../pages/seller/seller";
     VisitCreatorPage,
     PanicPage,
     SellerPage,
-    ZonesAdminPage
+    ZonesAdminPage,
+    PanicLogsPage,
   ],
   providers: [
     StatusBar,

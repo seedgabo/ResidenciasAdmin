@@ -1,3 +1,4 @@
+import { PanicLogsPage } from './../pages/panic-logs/panic-logs';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -23,6 +24,7 @@ export class MyApp {
   pages: Array<{ title: string, component: any, icon: string }>;
   SellerPage = SellerPage;
   ZonesAdminPage = ZonesAdminPage;
+  PanicLogsPage = PanicLogsPage;
   constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush) {
     this.initializeApp();
 
@@ -70,6 +72,7 @@ export class MyApp {
     this.api.user = null;
     this.api.url = "";
   }
+
   canAccounter() {
     if (this.api.roles)
       for (var i = 0; i < this.api.roles.length; i++) {
@@ -83,6 +86,15 @@ export class MyApp {
     if (this.api.roles)
       for (var i = 0; i < this.api.roles.length; i++) {
         if (this.api.roles[i].name == 'Manage zones' || this.api.roles[i].name == 'SuperAdmin') {
+          return true;
+        }
+      }
+    return false;
+  }
+  canPanic() {
+    if (this.api.modules)
+      for (var i = 0; i < this.api.modules.length; i++) {
+        if (this.api.modules[i].name == 'panic') {
           return true;
         }
       }

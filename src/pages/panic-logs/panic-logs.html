@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar color="favorite">
+    <ion-title>{{'literals.panics'}}</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <div text-center>
+    <ion-spinner *ngIf="loading" color="primary"></ion-spinner>
+  </div>
+  <ion-list inset *ngIf="panics.data">
+    <ion-item *ngFor="let panic of panics.data">
+      <h2 *ngIf="panic.residence">
+        {{panic.residence.name}}
+      </h2>
+      <h3 *ngIf="panic.user">
+        {{panic.user.name}}
+      </h3>
+      <p>
+        {{panic.created_at | amCalendar}}
+      </p>
+      <button icon-only clear color="dark" ion-button item-right *ngIf="panic.location">
+          <ion-icon name="locate"></ion-icon>
+      </button>
+    </ion-item>
+  </ion-list>
+</ion-content>
