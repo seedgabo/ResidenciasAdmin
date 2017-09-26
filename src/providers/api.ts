@@ -49,6 +49,7 @@ export class Api {
         this.user = user
         this.resolve(user);
       });
+      window.$api = this;
 
     });
   }

@@ -16,16 +16,16 @@ export class PanicLogsPage {
   }
 
   getPanics() {
-    this.loading = false;
-    this.api.get('panics&paginate=300')
+    this.loading = true;
+    this.api.get('panics?with[]=user&with[]=residence&order[created_at]=desc&paginate=300')
       .then((data: any) => {
         console.log(data);
         this.panics = data;
-        this.loading = true;
+        this.loading = false;
       })
       .catch((err) => {
         console.error(err);
-        this.loading = true;
+        this.loading = false;
       })
   }
 

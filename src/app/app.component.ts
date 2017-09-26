@@ -92,12 +92,6 @@ export class MyApp {
     return false;
   }
   canPanic() {
-    if (this.api.modules)
-      for (var i = 0; i < this.api.modules.length; i++) {
-        if (this.api.modules[i].name == 'panic') {
-          return true;
-        }
-      }
-    return false;
+    return this.api.modules && this.api.modules.panic;
   }
 }
