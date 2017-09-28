@@ -22,6 +22,7 @@ import { MomentModule } from 'angular2-moment';
 import { CodePush } from "@ionic-native/code-push";
 import { VisitPage } from "../pages/visit/visit";
 import { SellerPage } from "../pages/seller/seller";
+import { ProductSearchPage } from '../pages/product-search/product-search';
 @NgModule({
   declarations: [
     MyApp,
@@ -36,6 +37,7 @@ import { SellerPage } from "../pages/seller/seller";
     SellerPage,
     ZonesAdminPage,
     PanicLogsPage,
+    ProductSearchPage,
     TransPipe
   ],
   imports: [
@@ -59,6 +61,8 @@ import { SellerPage } from "../pages/seller/seller";
     SellerPage,
     ZonesAdminPage,
     PanicLogsPage,
+    ProductSearchPage,
+
   ],
   providers: [
     StatusBar,

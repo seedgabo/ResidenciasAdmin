@@ -29,33 +29,64 @@
     </ion-item>
 
     <ion-list>
-        <ion-grid *ngFor="let item of items; let i = index">
-            <ion-row>
-                <ion-col>
-                    <ion-item>
-                        <ion-label floating>{{'literals.concept' | trans}}</ion-label>
-                        <ion-input [(ngModel)]="item.concept" [placeholder]=" 'literals.concept' | trans"></ion-input>
-                    </ion-item>
-                </ion-col>
-                <ion-col>
-                    <ion-item>
-                        <ion-label floating>{{'literals.amount' | trans}}</ion-label>
-                        <ion-input [(ngModel)]="item.amount" type="number" min="0" [placeholder]=" 'literals.amount' | trans"></ion-input>
-                    </ion-item>
-                </ion-col>
-                <ion-col>
-                    <ion-item>
-                        <ion-label floating>{{'literals.quantity' | trans}}</ion-label>
-                        <ion-input [(ngModel)]="item.quantity" type="number" min="1" [placeholder]=" 'literals.quantity' | trans"></ion-input>
-                    </ion-item>
-                </ion-col>
-                <ion-col col-1>
-                    <button ion-button color="danger" clear icon-only (click)="removeItem(i)">
+        <div *ngIf="mode=='restricted'">
+            <ion-grid *ngFor="let item of items; let i = index">
+                <ion-row>
+                    <ion-col>
+                        <ion-item>
+                            <ion-label floating>{{'literals.concept' | trans}}</ion-label>
+                            <ion-input disabled [(ngModel)]="item.concept" [placeholder]=" 'literals.concept' | trans"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col>
+                        <ion-item>
+                            <ion-label floating>{{'literals.amount' | trans}}</ion-label>
+                            <ion-input disabled [(ngModel)]="item.amount" type="number" min="0" [placeholder]=" 'literals.amount' | trans"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col>
+                        <ion-item>
+                            <ion-label floating>{{'literals.quantity' | trans}}</ion-label>
+                            <ion-input [(ngModel)]="item.quantity" type="number" min="1" [placeholder]=" 'literals.quantity' | trans"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col col-1>
+                        <button ion-button color="danger" clear icon-only (click)="removeItem(i)">
                       <ion-icon name="remove"></ion-icon>
                     </button>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </div>
+        <div *ngIf="mode!=='restricted'" #listed>
+            <ion-grid *ngFor="let item of items; let i = index">
+                <ion-row>
+                    <ion-col>
+                        <ion-item>
+                            <ion-label floating>{{'literals.concept' | trans}}</ion-label>
+                            <ion-input [(ngModel)]="item.concept" [placeholder]=" 'literals.concept' | trans"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col>
+                        <ion-item>
+                            <ion-label floating>{{'literals.amount' | trans}}</ion-label>
+                            <ion-input [(ngModel)]="item.amount" type="number" min="0" [placeholder]=" 'literals.amount' | trans"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col>
+                        <ion-item>
+                            <ion-label floating>{{'literals.quantity' | trans}}</ion-label>
+                            <ion-input [(ngModel)]="item.quantity" type="number" min="1" [placeholder]=" 'literals.quantity' | trans"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col col-1>
+                        <button ion-button color="danger" clear icon-only (click)="removeItem(i)">
+                      <ion-icon name="remove"></ion-icon>
+                    </button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </div>
         <ion-item>
             <button (click)="addItem()" ion-fab small mini item-right>
               <ion-icon name="add"></ion-icon>
@@ -66,6 +97,12 @@
 <ion-footer>
     <ion-toolbar>
         <ion-grid>
+            <ion-row>
+                <ion-col text-right>
+                    <b>{{'literals.total' | trans }}:</b>
+                    <span>{{total() | currency:'USD':true:'1.2-2' }}</span>
+                </ion-col>
+            </ion-row>
             <ion-row>
                 <ion-col>
                     <button ion-button full color="light" (click)="clear()">

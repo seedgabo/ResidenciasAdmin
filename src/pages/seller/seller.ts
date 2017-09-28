@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, AlertController, ModalController } from 'ionic-angular';
 import { Api } from '../../providers/api';
-
 import moment from 'moment';
+import { ProductSearchPage } from '../product-search/product-search';
 @Component({
   selector: 'page-seller',
   templateUrl: 'seller.html',
@@ -14,19 +14,18 @@ export class SellerPage {
     amount: 0,
     quantity: 1,
   }
-  items = [{
-    concept: '',
-    amount: 0,
-    quantity: 0,
-  }];
+  items = [];
   residences = [];
   residents = [];
-  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public api: Api) {
+  mode = "restricted";
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public api: Api) {
   }
 
   ionViewDidLoad() {
+    if (this.mode !== 'restricted') {
+      this.items.push({ concept: '', amount: 0, quantity: 0, });
+    }
     this.getResidences();
-
   }
 
   getResidences() {
@@ -63,11 +62,25 @@ export class SellerPage {
     this.residents = [];
   }
   addItem() {
-    this.items.push({
-      concept: '',
-      amount: 0,
-      quantity: 0,
-    })
+    if (this.mode == 'restricted') {
+      this.findProduct();
+    }
+    else {
+      this._addItem();
+    }
+  }
+  _addItem(item = { concept: '', amount: 0, quantity: 0, }) {
+    this.items.push(item);
+  }
+  findProduct() {
+    var modal = this.modal.create(ProductSearchPage, {})
+    modal.present();
+    modal.onDidDismiss((data, role) => {
+      if (role !== 'cancel') {
+        console.log(data, role);
+        this._addItem({ concept: data.name, amount: data.price, quantity: 1 })
+      }
+    });
   }
 
   removeItem(index) {
@@ -125,6 +138,14 @@ export class SellerPage {
     return this.charge.residence_id != null
       && this.items.length > 0
       && valid;
+  }
+
+  total() {
+    var total = 0;
+    this.items.forEach((item) => {
+      total += item.amount * item.quantity;
+    });
+    return total;
   }
 
 }
