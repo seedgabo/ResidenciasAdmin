@@ -16,10 +16,16 @@ export class ZonesAdminPage {
   }
 
   getZones() {
-    this.api.get('zones?with[]=schedule&with[]=image')
+    // this.api.get('zones?with[]=schedule&with[]=image')
+    //   .then((data: any) => {
+    //     console.log(data);
+    //     this.zones = data;
+    //   })
+    //   .catch(console.error)
+    this.api.get('users/' + this.api.user.id + '?with[]=zones&with[]=zones.schedule&with[]=zones.image')
       .then((data: any) => {
-        console.log(data);
-        this.zones = data;
+        console.log(data, data.zones);
+        this.zones = data.zones;
       })
       .catch(console.error)
   }
