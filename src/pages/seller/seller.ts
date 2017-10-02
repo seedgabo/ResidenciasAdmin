@@ -54,11 +54,17 @@ export class SellerPage {
       amount: 0,
       quantity: 1,
     }
-    this.items = [{
-      concept: '',
-      amount: 0,
-      quantity: 0,
-    }];
+    if (this.mode !== 'restricted') {
+      this.items = [{
+        concept: '',
+        amount: 0,
+        quantity: 0,
+      }];
+
+    }
+    else {
+      this.items = [];
+    }
     this.residents = [];
   }
   addItem() {
@@ -105,6 +111,10 @@ export class SellerPage {
         .then(() => {
           loading.setContent(this.api.trans('__.procesando') + ++procesing + '  de ' + this.items.length);
           if (procesing == this.items.length) {
+            if (this.charge.user_id) {
+              this.sendPush("Se ha generado un nuevo cargo a su factura", this.charge.user_id);
+            }
+
             loading.dismiss();
             this.complete();
           }
@@ -147,5 +157,16 @@ export class SellerPage {
     });
     return total;
   }
+
+  sendPush(message, user_id = this.charge.user_id) {
+    this.api.post('push/' + user_id + '/notification', { message: message })
+      .then(() => {
+
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+  }
+
 
 }
