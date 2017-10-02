@@ -74,7 +74,7 @@ export class MyApp {
   }
 
   canAccounter() {
-    if (this.api.roles)
+    if (this.api.roles && this.api.modules && this.api.modules.invoices)
       for (var i = 0; i < this.api.roles.length; i++) {
         if (this.api.roles[i].name == 'Accounter' || this.api.roles[i].name == 'SuperAdmin') {
           return true;
@@ -83,7 +83,7 @@ export class MyApp {
     return false;
   }
   canZones() {
-    if (this.api.roles)
+    if (this.api.roles && this.api.modules && this.api.modules.reservations)
       for (var i = 0; i < this.api.roles.length; i++) {
         if (this.api.roles[i].name == 'Manage zones' || this.api.roles[i].name == 'SuperAdmin') {
           return true;
@@ -92,6 +92,21 @@ export class MyApp {
     return false;
   }
   canPanic() {
-    return this.api.modules && this.api.modules.panic;
+    if (this.api.roles && this.api.modules && this.api.modules.panic)
+      for (var i = 0; i < this.api.roles.length; i++) {
+        if (this.api.roles[i].name == 'Manage panic logs' || this.api.roles[i].name == 'SuperAdmin') {
+          return true;
+        }
+      }
+    return false;
+  }
+  CanParking() {
+    if (this.api.roles && this.api.modules && this.api.modules.parkings)
+      for (var i = 0; i < this.api.roles.length; i++) {
+        if (this.api.roles[i].name == 'Manage panic logs' || this.api.roles[i].name == 'SuperAdmin') {
+          return true;
+        }
+      }
+    return false;
   }
 }
