@@ -1,3 +1,4 @@
+import { DashPage } from './../pages/dash/dash';
 import { PanicLogsPage } from './../pages/panic-logs/panic-logs';
 import { PanicPage } from './../pages/panic/panic';
 import { BrowserModule } from '@angular/platform-browser';
@@ -26,6 +27,7 @@ import { ProductSearchPage } from '../pages/product-search/product-search';
 @NgModule({
   declarations: [
     MyApp,
+    DashPage,
     HomePage,
     ListPage,
     Login,
@@ -50,6 +52,7 @@ import { ProductSearchPage } from '../pages/product-search/product-search';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    DashPage,
     HomePage,
     ListPage,
     Login,

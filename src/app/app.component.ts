@@ -1,3 +1,4 @@
+import { DashPage } from './../pages/dash/dash';
 import { PanicLogsPage } from './../pages/panic-logs/panic-logs';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, MenuController } from 'ionic-angular';
@@ -41,7 +42,7 @@ export class MyApp {
   initializeApp() {
     this.api.ready.then(() => {
       if (this.api.user) {
-        this.rootPage = HomePage;
+        this.rootPage = DashPage;
         this.api.getData();
         this.api.startEcho();
       }

@@ -1,3 +1,4 @@
+import { DashPage } from './../dash/dash';
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, MenuController } from 'ionic-angular';
 import { HomePage } from "../home/home";
@@ -165,7 +166,7 @@ export class Login {
   */
 
   goTo() {
-    this.navCtrl.setRoot(HomePage);
+    this.navCtrl.setRoot(DashPage);
   }
 
 }
