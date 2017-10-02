@@ -13,6 +13,7 @@ import { ParkingsPage } from "../pages/parkings/parkings";
 import { CodePush } from "@ionic-native/code-push";
 import { SellerPage } from '../pages/seller/seller';
 import { ZonesAdminPage } from '../pages/zones-admin/zones-admin';
+declare var window: any;
 @Component({
   templateUrl: 'app.html'
 })
@@ -68,9 +69,11 @@ export class MyApp {
   logout() {
     this.api.storage.clear();
     this.api.stopEcho();
-    this.rootPage = Login;
     this.api.user = null;
-    this.api.url = "";
+    // this.rootPage = Login;
+    if (!window.url)
+      this.api.url = null
+    this.nav.setRoot(Login);
   }
 
   canAccounter() {

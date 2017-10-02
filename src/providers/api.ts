@@ -39,7 +39,12 @@ export class Api {
   });
   constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController, public modal: ModalController) {
     storage.ready().then(() => {
-      storage.get('url').then(url => { this.url = url });
+      storage.get('url').then(url_data => {
+        if (url_data)
+          this.url = url_data;
+        else if (window.url)
+          this.url = window.url;
+      });
       storage.get('modules').then(modules => { this.modules = modules });
       storage.get('settings').then(settings => { this.settings = settings });
       storage.get('roles').then(roles => { this.roles = roles });

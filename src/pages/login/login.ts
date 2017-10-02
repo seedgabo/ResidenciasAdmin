@@ -4,7 +4,7 @@ import { HomePage } from "../home/home";
 import { Api } from "../../providers/api";
 // import { Facebook } from '@ionic-native/facebook';
 // import { GooglePlus } from '@ionic-native/google-plus';
-
+declare var window: any;
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -13,7 +13,11 @@ export class Login {
   servers = {};
   code = "";
   ready = false;
+  preconfigured = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public menuCtrl: MenuController) {
+    if (window.url) {
+      this.preconfigured = true;
+    }
   }
 
   ionViewDidLoad() {
