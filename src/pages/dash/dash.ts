@@ -37,7 +37,7 @@ export class DashPage {
     this.navCtrl.push(page);
   }
   canVisitors() {
-    if (this.api.roles)
+    if (this.api.roles && this.api.modules && this.api.modules.visits)
       for (var i = 0; i < this.api.roles.length; i++) {
         if (this.api.roles[i].name == 'Celator' || this.api.roles[i].name == 'SuperAdmin') {
           return true;
@@ -46,7 +46,7 @@ export class DashPage {
     return false;
   }
   canAccounter() {
-    if (this.api.roles && this.api.modules && this.api.modules.invoices)
+    if (this.api.roles && this.api.modules && this.api.modules.finanze)
       for (var i = 0; i < this.api.roles.length; i++) {
         if (this.api.roles[i].name == 'Accounter' || this.api.roles[i].name == 'SuperAdmin') {
           return true;
