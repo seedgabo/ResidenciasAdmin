@@ -86,7 +86,8 @@ export class ListPage {
 
 
     this.actionsheet.create({
-      title: this.api.trans('literals.visit') + " " + this.api.trans('__.from') + " " + visit.visitor.name,
+      title: this.api.trans('literals.visit') + " " + this.api.trans('__.from') + " " +
+      (visit.visitor ? visit.visitor.name : ''),
       buttons: buttons
     }).present();
   }
