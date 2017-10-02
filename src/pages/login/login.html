@@ -1,6 +1,7 @@
 <ion-content padding>
   <div text-center>
-    <img src="./assets/logo-completo.png" style="height:85px">
+    <img *ngIf="!api.url" src="./assets/logo-completo.png" style="height:85px">
+    <img *ngIf="api.url" [src]="api.url+ 'img/logo.png'" style="height:85px">
   </div>
   <div *ngIf="!api.url">
     <input class="code" type="text" [(ngModel)]="code" placeholder="CODIGO" (input)="verifyCode()">

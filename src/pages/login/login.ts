@@ -17,6 +17,7 @@ export class Login {
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public menuCtrl: MenuController) {
     if (window.url) {
       this.preconfigured = true;
+      this.api.storage.set('url', window.url);
     }
   }
 
