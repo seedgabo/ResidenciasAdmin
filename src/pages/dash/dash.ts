@@ -75,7 +75,7 @@ export class DashPage {
   canParking() {
     if (this.api.roles && this.api.modules && this.api.modules.parkings)
       for (var i = 0; i < this.api.roles.length; i++) {
-        if (this.api.roles[i].name == 'Manage panic logs' || this.api.roles[i].name == 'SuperAdmin') {
+        if (this.api.roles[i].name == 'Celator' || this.api.roles[i].name == 'SuperAdmin') {
           return true;
         }
       }
