@@ -13,7 +13,6 @@ export class HomePage {
   query: string = "";
   visitor_image;
   constructor(public navCtrl: NavController, public api: Api, public actionsheet: ActionSheetController, public modal: ModalController, public toast: ToastController) {
-    // this.loadVisitors();
   }
 
   ionViewDidLoad() {
@@ -22,17 +21,28 @@ export class HomePage {
         this.api.visits_approved = visits_approved
     });
     this.loadVisitors();
+    this.loadParkings();
   }
 
-  loadVisitors(rerfresher = null) {
+  loadVisitors(refresher = null) {
     this.api.get('visitors?with[]=residence&with[]=image').then((data: any) => {
       console.log(data);
       this.api.visitors = data;
-      if (rerfresher) rerfresher.complete();
+      if (refresher) refresher.complete();
     }).catch((err) => {
       console.error(err);
-      if (rerfresher) rerfresher.complete();
+      if (refresher) refresher.complete();
     });
+  }
+
+  loadParkings() {
+    if (this.api.parkings.length == 0)
+      this.api.get('parkings?where[status]=available')
+        .then((parkings: any) => {
+          this.api.parkings = parkings;
+        }).catch((err) => {
+          console.error(err);
+        })
   }
 
   getVisitors() {

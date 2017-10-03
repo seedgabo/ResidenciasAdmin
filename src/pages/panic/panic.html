@@ -13,14 +13,13 @@
   <h2>{{ '__.Hay una emergencia' | trans }}</h2>
   <ion-list>
 
+    <h1 item-right>
+      <b>{{ 'literals.residence' | trans }}</b>
+      <span>{{ residence.name }}</span>
+    </h1>
     <div *ngIf="user && user.image_url" text-center>
       <img [src]="user.image_url" [alt]="user.name" class="avatar-panic pulse">
     </div>
-    <ion-item>
-      <b>{{ 'literals.residence' | trans }}</b>
-      <h1 item-right>{{ residence.name }}</h1>
-    </ion-item>
-
     <ion-item>
       <b>{{ 'literals.user' | trans }}</b>
       <h2 item-right>{{ user.name }}</h2>
