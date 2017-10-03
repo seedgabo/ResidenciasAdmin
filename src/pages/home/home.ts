@@ -21,7 +21,6 @@ export class HomePage {
         this.api.visits_approved = visits_approved
     });
     this.loadVisitors();
-    this.loadParkings();
   }
 
   loadVisitors(refresher = null) {
@@ -35,15 +34,7 @@ export class HomePage {
     });
   }
 
-  loadParkings() {
-    if (this.api.parkings.length == 0)
-      this.api.get('parkings?where[status]=available')
-        .then((parkings: any) => {
-          this.api.parkings = parkings;
-        }).catch((err) => {
-          console.error(err);
-        })
-  }
+
 
   getVisitors() {
     if (this.query == "")

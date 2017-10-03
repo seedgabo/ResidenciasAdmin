@@ -36,7 +36,7 @@
     <ion-item>
       <ion-label> {{'literals.parking' | trans }} </ion-label>
       <ion-select [(ngModel)]="visit.parking_id">
-        <ion-option [value]="parking.id" *ngFor="let parking of api.parkings">{{ parking.name }} </ion-option>
+        <ion-option [value]="parking.id" *ngFor="let parking of parkings">{{ parking.name }} </ion-option>
       </ion-select>
     </ion-item>
 
