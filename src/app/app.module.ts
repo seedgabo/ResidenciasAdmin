@@ -1,3 +1,4 @@
+import { VehicleFinderPage } from './../pages/vehicle-finder/vehicle-finder';
 import { DashPage } from './../pages/dash/dash';
 import { PanicLogsPage } from './../pages/panic-logs/panic-logs';
 import { PanicPage } from './../pages/panic/panic';
@@ -40,6 +41,7 @@ import { ProductSearchPage } from '../pages/product-search/product-search';
     ZonesAdminPage,
     PanicLogsPage,
     ProductSearchPage,
+    VehicleFinderPage,
     TransPipe
   ],
   imports: [
@@ -65,6 +67,8 @@ import { ProductSearchPage } from '../pages/product-search/product-search';
     ZonesAdminPage,
     PanicLogsPage,
     ProductSearchPage,
+    VehicleFinderPage,
+
 
   ],
   providers: [
