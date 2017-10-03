@@ -1,19 +1,19 @@
 <ion-header>
-    <ion-navbar color="primary">
-        <button ion-button menuToggle>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-        <ion-title>{{'literals.visits' | trans}}</ion-title>
-    </ion-navbar>
-    <ion-toolbar>
-        <ion-searchbar [(ngModel)]="query" debounce="700" (ionInput)="filter()">
-        </ion-searchbar>
-    </ion-toolbar>
+    <ion-title>{{'literals.visits' | trans}}</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="query" [debounce]="700" (ionInput)="filter()">
+    </ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <ion-list [virtualScroll]="visits">
-        <button ion-item (click)="actions(visit)" *virtualItem="let visit">
+  <ion-list [virtualScroll]="visits">
+    <button ion-item (click)="actions(visit)" *virtualItem="let visit">
       <h2 *ngIf="visit.visitor">
         {{visit.visitor.name }}
         <br>
@@ -26,5 +26,5 @@
         {{ 'literals.'+ visit.status | trans }}
       </span>
     </button>
-    </ion-list>
+  </ion-list>
 </ion-content>

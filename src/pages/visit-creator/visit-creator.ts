@@ -34,8 +34,9 @@ export class VisitCreatorPage {
       console.log(err);
     });
   }
+
   selectVehicle() {
-    var modal = this.modal.create(VehicleFinderPage);
+    var modal = this.modal.create(VehicleFinderPage, { residence_id: this.visitor.residence_id });
     modal.present()
     modal.onDidDismiss((data) => {
       if (data && data.id) {

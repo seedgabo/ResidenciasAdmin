@@ -6,7 +6,7 @@
     <ion-title>{{ api.trans('literals.visitors')}} </ion-title>
   </ion-navbar>
   <ion-toolbar>
-    <ion-searchbar (ionInput)="null" [(ngModel)]="query"></ion-searchbar>
+    <ion-searchbar (ionInput)="null" [debounce]="700" [(ngModel)]="query"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 <ion-content>
