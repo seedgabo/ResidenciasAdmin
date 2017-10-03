@@ -44,6 +44,7 @@ export class MyApp {
       if (this.api.user) {
         this.rootPage = DashPage;
         this.api.getData();
+        this.api.getLang();
         this.api.startEcho();
       }
       else {
