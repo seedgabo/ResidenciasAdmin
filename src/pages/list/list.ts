@@ -106,6 +106,7 @@ export class ListPage {
     this.api.put('visits/' + visit.id, { status: 'departured', departured_at: moment.utc().toString() })
       .then((data) => {
         console.log(data);
+        visit.status = 'departured';
       })
       .catch((err) => {
         console.error(err);
