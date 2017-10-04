@@ -148,6 +148,20 @@ export class Api {
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
+
+          this.user = data.user;
+          this.residence = data.residence;
+          this.user.residences = data.residences;
+          this.modules = data.modules;
+          this.roles = data.roles;
+          this.settings = data.settings;
+          console.log(data.settings);
+          this.storage.set('user', data.user);
+          this.storage.set('residence', data.residence);
+          this.storage.set('modules', this.modules);
+          this.storage.set('roles', this.roles);
+          this.storage.set('settings', this.settings);
+
           this.get('residences').then((data: any) => {
             this.residences = data;
             data.forEach(res => {
