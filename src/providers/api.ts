@@ -251,10 +251,11 @@ export class Api {
             return visitor.id === data.visitor.id;
           });
           this.zone.run(() => {
+            var visitor;
             if (visitor_index > -1)
-              var visitor = this.visitors[visitor_index] = data.visitor;
+              visitor = this.visitors[visitor_index] = data.visitor;
             else {
-              var visitor = this.visitors[this.visitors.length] = data.visitor;
+              visitor = this.visitors[this.visitors.length] = data.visitor;
             }
             if (data.image) {
               visitor.image = data.image;
@@ -295,11 +296,12 @@ export class Api {
             return visit.id === data.visit.id;
           });
           this.zone.run(() => {
+            var visit;
             if (visit_index > -1)
-              var visit = this.visits[visit_index] = data.visit;
+              visit = this.visits[visit_index] = data.visit;
             else {
               this.visits.unshift(data.visit);
-              var visit = this.visits[0];
+              visit = this.visits[0];
             }
             if (data.visitor) {
               visit.visitor = data.visitor;
@@ -357,19 +359,20 @@ export class Api {
 
   trans(value, args = null) {
     if (!this.langs) return value;
+    var base, trans;
     var splits = value.split('.');
     if (splits.length == 2) {
-      var base = this.langs[splits[0]];
+      base = this.langs[splits[0]];
       if (base) {
-        var trans = base[splits[1]];
+        trans = base[splits[1]];
         if (trans) {
           value = trans;
         }
       }
     } else {
-      var base = this.langs["__"];
+      base = this.langs["__"];
       if (base) {
-        var trans = base[value];
+        trans = base[value];
         if (trans) {
           value = trans;
         }

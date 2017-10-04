@@ -16,7 +16,7 @@
   </ion-refresher>
   <ion-grid>
     <ion-row>
-      <ion-col col-12 col-md>
+      <ion-col col-12 col-md *ngIf="api.visits_approved && api.visits_approved.length>0">
         <ion-card>
           <ion-card-header> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-card-header>
           <ion-list>
