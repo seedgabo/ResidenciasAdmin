@@ -38,7 +38,7 @@ export class HomePage {
 
   getVisitors() {
     if (this.query == "")
-      return this.api.visitors;
+      return this.api.visitors.slice(0, 100);
 
     return this.api.visitors.filter((visitor) => {
       if (visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1
@@ -47,7 +47,7 @@ export class HomePage {
       if (this.api.residences_collection[visitor.residence_id] && this.api.residences_collection[visitor.residence_id].name.toLowerCase().indexOf(this.query.toLowerCase()) > -1)
         return true;
       return false;
-    });
+    }).slice(0, 100);
   }
 
   actions(visitor) {
