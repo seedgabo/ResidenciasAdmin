@@ -141,12 +141,16 @@ export class SellerPage {
     this.api.post('invoices', {
       user_id: this.charge.user_id,
       residence_id: this.charge.residence_id,
+      total: this.total(),
       items: this.items,
       type: 'normal',
     })
       .then((data: any) => {
         this.api.post(`invoices/${data.id}/payment`, {})
           .then((data2) => {
+            if (this.charge.user_id) {
+              this.sendPush("Compra Realizada!", this.charge.user_id);
+            }
             loading.dismiss();
             this.complete();
           })
@@ -197,6 +201,7 @@ export class SellerPage {
   }
 
   sendPush(message, user_id = this.charge.user_id) {
+    if (!user_id) return;
     this.api.post('push/' + user_id + '/notification', { message: message })
       .then(() => {
 
