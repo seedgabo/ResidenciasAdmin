@@ -22,6 +22,8 @@ import { IonicStorageModule } from '@ionic/storage';
 import { TransPipe } from "../pipes/trans/trans";
 import { MomentModule } from 'angular2-moment';
 import { CodePush } from "@ionic-native/code-push";
+import { Printer } from '@ionic-native/printer';
+
 import { VisitPage } from "../pages/visit/visit";
 import { SellerPage } from "../pages/seller/seller";
 import { ProductSearchPage } from '../pages/product-search/product-search';
@@ -75,6 +77,7 @@ import { ProductSearchPage } from '../pages/product-search/product-search';
     StatusBar,
     SplashScreen,
     CodePush,
+    Printer,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Api
   ]

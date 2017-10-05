@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController, AlertController, ModalController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { Api } from '../../providers/api';
 import moment from 'moment';
 import { ProductSearchPage } from '../product-search/product-search';
@@ -18,7 +18,7 @@ export class SellerPage {
   residences = [];
   residents = [];
   mode = "restricted";
-  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public api: Api) {
   }
 
   ionViewDidLoad() {
@@ -75,9 +75,11 @@ export class SellerPage {
       this._addItem();
     }
   }
+
   _addItem(item = { concept: '', amount: 0, quantity: 0, }) {
     this.items.push(item);
   }
+
   findProduct() {
     var modal = this.modal.create(ProductSearchPage, {})
     modal.present();
@@ -131,6 +133,42 @@ export class SellerPage {
 
   }
 
+  proccessWithInvoice() {
+    var loading = this.loading.create({
+      content: this.api.trans('__.procesando'),
+    });
+    loading.present();
+    this.api.post('invoices', {
+      user_id: this.charge.user_id,
+      residence_id: this.charge.residence_id,
+      items: this.items,
+      type: 'normal',
+    })
+      .then((data: any) => {
+        this.api.post(`invoices/${data.id}/payment`, {})
+          .then((data2) => {
+            loading.dismiss();
+            this.complete();
+          })
+          .catch((err) => {
+            console.error(err);
+            loading.dismiss();
+            this.alert.create({
+              title: "ERROR",
+              message: JSON.stringify(err)
+            }).present();
+          });
+      })
+      .catch((err) => {
+        console.error(err);
+        loading.dismiss();
+        this.alert.create({
+          title: "ERROR",
+          message: JSON.stringify(err)
+        }).present();
+      });
+  }
+
   complete() {
     this.alert.create({
       message: this.api.trans('literals.ready'),
@@ -168,5 +206,35 @@ export class SellerPage {
       })
   }
 
-
+  actions() {
+    this.actionsheet.create({
+      title: this.api.trans('__.que desea hacer?'),
+      buttons: [
+        {
+          text: this.api.trans('__.agregar a la siguiente factura'),
+          icon: 'paper',
+          cssClass: 'icon-primary',
+          handler: () => {
+            this.proccess();
+          }
+        },
+        {
+          text: this.api.trans('__.facturar ahora'),
+          icon: 'print',
+          cssClass: 'icon-secondary',
+          handler: () => {
+            this.proccessWithInvoice();
+          }
+        },
+        {
+          text: this.api.trans('crud.cancel'),
+          role: 'cancel',
+          cssClass: 'icon-light',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    }).present();
+  }
 }
