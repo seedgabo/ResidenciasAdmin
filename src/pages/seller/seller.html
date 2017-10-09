@@ -2,8 +2,8 @@
 
   <ion-navbar color="primary">
     <button ion-button menuToggle>
-          <ion-icon name="menu"></ion-icon>
-        </button>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>{{'__.Punto de Venta' | trans }}</ion-title>
   </ion-navbar>
 
@@ -52,8 +52,8 @@
           </ion-col>
           <ion-col col-1>
             <button ion-button color="danger" clear icon-only (click)="removeItem(i)">
-                      <ion-icon name="remove"></ion-icon>
-                    </button>
+              <ion-icon name="remove"></ion-icon>
+            </button>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -81,16 +81,16 @@
           </ion-col>
           <ion-col col-1>
             <button ion-button color="danger" clear icon-only (click)="removeItem(i)">
-                      <ion-icon name="remove"></ion-icon>
-                    </button>
+              <ion-icon name="remove"></ion-icon>
+            </button>
           </ion-col>
         </ion-row>
       </ion-grid>
     </div>
     <ion-item>
       <button (click)="addItem()" ion-fab small mini item-right>
-              <ion-icon name="add"></ion-icon>
-            </button>
+        <ion-icon name="add"></ion-icon>
+      </button>
     </ion-item>
   </ion-list>
 </ion-content>
@@ -106,15 +106,123 @@
       <ion-row>
         <ion-col>
           <button ion-button full color="light" (click)="clear()">
-                      {{'crud.clear' | trans}}
-                    </button>
+            {{'crud.clear' | trans}}
+          </button>
         </ion-col>
         <ion-col>
           <button ion-button full color="secondary" (click)="actions()" [disabled]="!canProccess()">
-                      {{'crud.proccess' | trans}}
-                    </button>
+            {{'crud.proccess' | trans}}
+          </button>
         </ion-col>
       </ion-row>
     </ion-grid>
   </ion-toolbar>
 </ion-footer>
+<div id="toPrint" *ngIf="toPrint">
+  <div class="invoice-box">
+    <table cellpadding="0" cellspacing="0">
+      <tr class="top">
+        <td colspan="2">
+          <table>
+            <tr>
+              <td class="title">
+                <img [src]="api.url + 'img/logo.png'" style="width:100%; max-width:300px;">
+              </td>
+
+              <td>
+                {{'literals.invoice' | trans }} #: {{toPrint.invoice.number}}
+
+                <br> Created: January 1, 2017
+                <br> Due: February 1, 2017
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr class="information">
+        <td colspan="2">
+          <table>
+            <tr>
+              <td>
+                Next Step Webs, Inc.
+                <br> 12345 Sunny Road
+                <br> Sunnyville, TX 12345
+              </td>
+
+              <td>
+                <br> {{ toPrint.user.name }}
+
+                <br> {{ toPrint.user.email}}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr class="heading">
+        <td>
+          {{'literals.payment' | trans }} {{'literal.method'| trans }}
+        </td>
+
+        <td>
+          {{ toPrint.invoice.payment }}
+        </td>
+      </tr>
+
+      <tr class="details">
+        <td>
+          Check
+        </td>
+
+        <td>
+          1000
+        </td>
+      </tr>
+
+      <tr class="heading">
+        <td>
+          Item
+        </td>
+
+        <td>
+          Quantity
+        </td>
+        <td>
+          Price
+        </td>
+
+        <td>
+          Subtotal
+        </td>
+      </tr>
+
+      <tr class="item last" *ngFor="let item of toPrint.invoice">
+        <td>
+          {{item.concept}}
+        </td>
+
+        <td>
+          {{item.price}}
+        </td>
+        <td>
+          {{item.quantity}}
+        </td>
+
+        <td>
+          {{item.total}}
+        </td>
+      </tr>
+
+      <tr class="total">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          Total: {{Total()}}
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</div>

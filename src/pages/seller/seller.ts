@@ -18,6 +18,7 @@ export class SellerPage {
   residences = [];
   residents = [];
   mode = "restricted";
+  toPrint;
   constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public api: Api) {
   }
 
