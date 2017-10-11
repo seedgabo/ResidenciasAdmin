@@ -13,7 +13,6 @@ export class HomePage {
   query: string = "";
   visitor_image;
   constructor(public navCtrl: NavController, public api: Api, public actionsheet: ActionSheetController, public modal: ModalController, public toast: ToastController) {
-    // this.loadVisitors();
   }
 
   ionViewDidLoad() {
@@ -24,20 +23,22 @@ export class HomePage {
     this.loadVisitors();
   }
 
-  loadVisitors(rerfresher = null) {
+  loadVisitors(refresher = null) {
     this.api.get('visitors?with[]=residence&with[]=image').then((data: any) => {
       console.log(data);
       this.api.visitors = data;
-      if (rerfresher) rerfresher.complete();
+      if (refresher) refresher.complete();
     }).catch((err) => {
       console.error(err);
-      if (rerfresher) rerfresher.complete();
+      if (refresher) refresher.complete();
     });
   }
 
+
+
   getVisitors() {
     if (this.query == "")
-      return this.api.visitors;
+      return this.api.visitors.slice(0, 100);
 
     return this.api.visitors.filter((visitor) => {
       if (visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1
@@ -46,7 +47,7 @@ export class HomePage {
       if (this.api.residences_collection[visitor.residence_id] && this.api.residences_collection[visitor.residence_id].name.toLowerCase().indexOf(this.query.toLowerCase()) > -1)
         return true;
       return false;
-    });
+    }).slice(0, 100);
   }
 
   actions(visitor) {

@@ -9,26 +9,32 @@
 
     <ion-content>
       <ion-list>
-        <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)" icon-left>
-            <ion-icon [name]="p.icon"></ion-icon>
-            {{ api.trans(p.title) }}
+        <button menuClose ion-item (click)="goHome()" icon-left>
+            <ion-icon color="primary" name="home"></ion-icon>
+            {{ api.trans('__.home') }}
         </button>
+        <div *ngIf="canVisitors()">
+          <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)" icon-left>
+              <ion-icon color="primary" [name]="p.icon"></ion-icon>
+              {{ api.trans(p.title) }}
+          </button>
+        </div>
         <button *ngIf="canPanic()" menuClose ion-item (click)="openPage({component:PanicLogsPage})" icon-left>
-            <ion-icon name="help-buoy"></ion-icon>
+            <ion-icon color="primary" name="help-buoy"></ion-icon>
             {{ api.trans('__.Panic Logs') }}
         </button>
         <button *ngIf="canAccounter()" menuClose ion-item (click)="openPage({component:SellerPage})" icon-left>
-            <ion-icon name="card"></ion-icon>
+            <ion-icon color="primary" name="card"></ion-icon>
             {{ api.trans('__.Punto de Venta') }}
         </button>
 
         <button *ngIf="canZones()" menuClose ion-item (click)="openPage({component:ZonesAdminPage})" icon-left>
-            <ion-icon name="partly-sunny"></ion-icon>
+            <ion-icon color="primary" name="partly-sunny"></ion-icon>
             {{ api.trans('literals.zones') }}
         </button>
 
         <button menuClose ion-item (click)="logout()" icon-left>
-            <ion-icon name="log-out"></ion-icon>
+            <ion-icon color="primary" name="log-out"></ion-icon>
             {{ api.trans('literals.logout') }}
         </button>
       </ion-list>

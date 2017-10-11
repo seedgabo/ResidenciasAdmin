@@ -1,3 +1,4 @@
+import { VehicleFinderPage } from './../pages/vehicle-finder/vehicle-finder';
 import { DashPage } from './../pages/dash/dash';
 import { PanicLogsPage } from './../pages/panic-logs/panic-logs';
 import { PanicPage } from './../pages/panic/panic';
@@ -21,6 +22,8 @@ import { IonicStorageModule } from '@ionic/storage';
 import { TransPipe } from "../pipes/trans/trans";
 import { MomentModule } from 'angular2-moment';
 import { CodePush } from "@ionic-native/code-push";
+import { Printer } from '@ionic-native/printer';
+
 import { VisitPage } from "../pages/visit/visit";
 import { SellerPage } from "../pages/seller/seller";
 import { ProductSearchPage } from '../pages/product-search/product-search';
@@ -40,6 +43,7 @@ import { ProductSearchPage } from '../pages/product-search/product-search';
     ZonesAdminPage,
     PanicLogsPage,
     ProductSearchPage,
+    VehicleFinderPage,
     TransPipe
   ],
   imports: [
@@ -65,12 +69,15 @@ import { ProductSearchPage } from '../pages/product-search/product-search';
     ZonesAdminPage,
     PanicLogsPage,
     ProductSearchPage,
+    VehicleFinderPage,
+
 
   ],
   providers: [
     StatusBar,
     SplashScreen,
     CodePush,
+    Printer,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Api
   ]

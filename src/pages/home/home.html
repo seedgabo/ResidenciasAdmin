@@ -6,7 +6,7 @@
     <ion-title>{{ api.trans('literals.visitors')}} </ion-title>
   </ion-navbar>
   <ion-toolbar>
-    <ion-searchbar (ionInput)="null" [(ngModel)]="query"></ion-searchbar>
+    <ion-searchbar (ionInput)="null" [debounce]="700" [(ngModel)]="query"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -16,31 +16,7 @@
   </ion-refresher>
   <ion-grid>
     <ion-row>
-      <ion-col col-12 col-md>
-        <ion-card>
-          <ion-card-header>{{ api.trans('literals.visitors') }}</ion-card-header>
-          <ion-list>
-            <button ion-item *ngFor="let visitor of getVisitors()" (click)="actions(visitor)">
-                <ion-avatar item-left>
-                  <img [src]="visitor.image_url">
-                </ion-avatar>
-                <h2>
-                  {{visitor.name}}
-                </h2>
-                <h4 *ngIf="visitor.residence" >
-                  {{visitor.residence.name}}
-                </h4>
-                <p>
-                  {{ visitor.document }}
-                </p>
-                <p *ngIf="api.residences_collection[visitor.residence_id]" text-right>
-                    {{api.residences_collection[visitor.residence_id].name}}
-                </p>
-              </button>
-          </ion-list>
-        </ion-card>
-      </ion-col>
-      <ion-col col-12 col-md>
+      <ion-col col-12 col-md *ngIf="api.visits_approved && api.visits_approved.length>0">
         <ion-card>
           <ion-card-header> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-card-header>
           <ion-list>
@@ -66,11 +42,35 @@
                             </button>
               <ion-item-options side="right">
                 <button ion-button color="secondary" (click)="dismissPreApproved(visit,i)">
-                              <ion-icon name="checkbox-outline"></ion-icon>
-                              {{ 'literals.done' | trans }}
-                            </button>
+                  <ion-icon name="checkbox-outline"></ion-icon>
+                  {{ 'literals.done' | trans }}
+                </button>
               </ion-item-options>
             </ion-item-sliding>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+      <ion-col col-12 col-md>
+        <ion-card>
+          <ion-card-header>{{ api.trans('literals.visitors') }}</ion-card-header>
+          <ion-list>
+            <button ion-item *ngFor="let visitor of getVisitors()" (click)="actions(visitor)">
+                <ion-avatar item-left>
+                  <img [src]="visitor.image_url">
+                </ion-avatar>
+                <h2>
+                  {{visitor.name}}
+                </h2>
+                <h4 *ngIf="visitor.residence" >
+                  {{visitor.residence.name}}
+                </h4>
+                <p>
+                  {{ visitor.document }}
+                </p>
+                <p *ngIf="api.residences_collection[visitor.residence_id]" text-right>
+                    {{api.residences_collection[visitor.residence_id].name}}
+                </p>
+              </button>
           </ion-list>
         </ion-card>
       </ion-col>

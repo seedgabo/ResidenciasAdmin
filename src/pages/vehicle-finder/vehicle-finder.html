@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar color="secondary">
+    <ion-title>{{'literals.vehicles' | trans}}</ion-title>
+    <ion-buttons end>
+      <button ion-button clear icon-only>
+            <ion-icon name="close" (click)="cancel()"></ion-icon>
+          </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="search()" [(ngModel)]="query"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list inset no-lines>
+    <button ion-item (click)="select(vehicle)" *ngFor="let vehicle of vehicles.data">
+        <ion-thumbnail item-left *ngIf="vehicle.image" >
+          <img [src]="vehicle.image.url">
+        </ion-thumbnail>
+        <h3>{{vehicle.plate}}</h3>
+        <p>{{vehicle.model}}</p>
+        <p>{{vehicle.make}}</p>
+        <p>{{vehicle.color}}</p>
+      </button>
+  </ion-list>
+  <ion-fab bottom right>
+    <button ion-fab color="primary" (click)="addQuickVehicle()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>

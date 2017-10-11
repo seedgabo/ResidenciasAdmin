@@ -148,8 +148,20 @@ export class Api {
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
-          this.vehicles = data.vehicles;
-          this.parkings = data.parking;
+
+          this.user = data.user;
+          this.residence = data.residence;
+          this.user.residences = data.residences;
+          this.modules = data.modules;
+          this.roles = data.roles;
+          this.settings = data.settings;
+          console.log(data.settings);
+          this.storage.set('user', data.user);
+          this.storage.set('residence', data.residence);
+          this.storage.set('modules', this.modules);
+          this.storage.set('roles', this.roles);
+          this.storage.set('settings', this.settings);
+
           this.get('residences').then((data: any) => {
             this.residences = data;
             data.forEach(res => {
@@ -253,10 +265,11 @@ export class Api {
             return visitor.id === data.visitor.id;
           });
           this.zone.run(() => {
+            var visitor;
             if (visitor_index > -1)
-              var visitor = this.visitors[visitor_index] = data.visitor;
+              visitor = this.visitors[visitor_index] = data.visitor;
             else {
-              var visitor = this.visitors[this.visitors.length] = data.visitor;
+              visitor = this.visitors[this.visitors.length] = data.visitor;
             }
             if (data.image) {
               visitor.image = data.image;
@@ -297,11 +310,12 @@ export class Api {
             return visit.id === data.visit.id;
           });
           this.zone.run(() => {
+            var visit;
             if (visit_index > -1)
-              var visit = this.visits[visit_index] = data.visit;
+              visit = this.visits[visit_index] = data.visit;
             else {
               this.visits.unshift(data.visit);
-              var visit = this.visits[0];
+              visit = this.visits[0];
             }
             if (data.visitor) {
               visit.visitor = data.visitor;
@@ -359,19 +373,20 @@ export class Api {
 
   trans(value, args = null) {
     if (!this.langs) return value;
+    var base, trans;
     var splits = value.split('.');
     if (splits.length == 2) {
-      var base = this.langs[splits[0]];
+      base = this.langs[splits[0]];
       if (base) {
-        var trans = base[splits[1]];
+        trans = base[splits[1]];
         if (trans) {
           value = trans;
         }
       }
     } else {
-      var base = this.langs["__"];
+      base = this.langs["__"];
       if (base) {
-        var trans = base[value];
+        trans = base[value];
         if (trans) {
           value = trans;
         }

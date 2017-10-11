@@ -28,16 +28,15 @@
     </ion-item>
 
     <ion-item>
-      <ion-label> {{'literals.vehicle' | trans }} </ion-label>
-      <ion-select [(ngModel)]="visit.vehcicle_id">
-        <ion-option [value]="vehicle.id" *ngFor="let vehicle of api.vehicles">{{ vehicle.name }} </ion-option>
-      </ion-select>
+      <button ion-button full (click)="selectVehicle()">
+        {{ vehicle ? vehicle.plate+ '-' +vehicle.name : ('literals.vehicle' | trans) }}
+      </button>
     </ion-item>
 
     <ion-item>
       <ion-label> {{'literals.parking' | trans }} </ion-label>
       <ion-select [(ngModel)]="visit.parking_id">
-        <ion-option [value]="parking.id" *ngFor="let parking of api.parkings">{{ parking.name }} </ion-option>
+        <ion-option [value]="parking.id" *ngFor="let parking of parkings">{{ parking.name }} </ion-option>
       </ion-select>
     </ion-item>
 

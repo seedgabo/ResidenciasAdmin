@@ -44,6 +44,7 @@ export class MyApp {
       if (this.api.user) {
         this.rootPage = DashPage;
         this.api.getData();
+        this.api.getLang();
         this.api.startEcho();
       }
       else {
@@ -60,10 +61,14 @@ export class MyApp {
     });
   }
 
+  goHome() {
+    this.nav.popToRoot();
+  }
+
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.rootPage = page.component
+    this.nav.push(page.component)
     // this.nav.setRoot(page.component);
   }
 
@@ -76,7 +81,15 @@ export class MyApp {
       this.api.url = null
     this.nav.setRoot(Login);
   }
-
+  canVisitors() {
+    if (this.api.roles && this.api.modules && this.api.modules.visits)
+      for (var i = 0; i < this.api.roles.length; i++) {
+        if (this.api.roles[i].name == 'Celator' || this.api.roles[i].name == 'SuperAdmin') {
+          return true;
+        }
+      }
+    return false;
+  }
   canAccounter() {
     if (this.api.roles && this.api.modules && this.api.modules.invoices)
       for (var i = 0; i < this.api.roles.length; i++) {
