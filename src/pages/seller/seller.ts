@@ -142,12 +142,13 @@ export class SellerPage {
     this.api.post('invoices', {
       user_id: this.charge.user_id,
       residence_id: this.charge.residence_id,
-      total: this.total(),
       items: this.items,
       type: 'normal',
+      date: (new Date()).toISOString().substring(0, 10),
+
     })
       .then((data: any) => {
-        this.api.post(`invoices/${data.id}/payment`, {})
+        this.api.post(`invoices/${data.id}/Payment`, {})
           .then((data2) => {
             if (this.charge.user_id) {
               this.sendPush("Compra Realizada!", this.charge.user_id);
@@ -176,7 +177,7 @@ export class SellerPage {
 
   complete() {
     this.alert.create({
-      message: this.api.trans('literals.ready'),
+      message: this.api.trans('literals.done'),
       buttons: ["OK"]
     }).present();
     this.clear();
