@@ -68,6 +68,7 @@ export class SellerPage {
     }
     this.residents = [];
   }
+
   addItem() {
     if (this.mode == 'restricted') {
       this.findProduct();
@@ -236,6 +237,7 @@ export class SellerPage {
         {
           text: this.api.trans('crud.cancel'),
           role: 'cancel',
+          icon: 'close',
           cssClass: 'icon-light',
           handler: () => {
             console.log('Cancel clicked');
