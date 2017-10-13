@@ -198,10 +198,17 @@ export class SellerPage {
           this.toPrint = null;
         })
         .catch((err) => {
+          this.toPrintCallback(invoice);
           console.error(err);
         });
 
     }, 1000);
+  }
+
+  toPrintCallback(invoice) {
+    window.print();
+    this.complete();
+    this.toPrint = null;
   }
 
   saveInvoice(invoice) {
