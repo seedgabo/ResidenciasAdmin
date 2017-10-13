@@ -3,6 +3,7 @@ import { NavController, NavParams, LoadingController, AlertController, ModalCont
 import { Api } from '../../providers/api';
 import moment from 'moment';
 import { ProductSearchPage } from '../product-search/product-search';
+import { Printer } from '@ionic-native/printer';
 @Component({
   selector: 'page-seller',
   templateUrl: 'seller.html',
@@ -19,7 +20,7 @@ export class SellerPage {
   residents = [];
   mode = "restricted";
   toPrint;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public printer: Printer, public api: Api) {
   }
 
   ionViewDidLoad() {
@@ -148,14 +149,14 @@ export class SellerPage {
       date: (new Date()).toISOString().substring(0, 10),
 
     })
-      .then((data: any) => {
-        this.api.post(`invoices/${data.id}/Payment`, {})
-          .then((data2) => {
+      .then((invoice: any) => {
+        this.api.post(`invoices/${invoice.id}/Payment`, {})
+          .then((data) => {
             if (this.charge.user_id) {
               this.sendPush("Compra Realizada!", this.charge.user_id);
             }
+            this.goPrint(invoice);
             loading.dismiss();
-            this.complete();
           })
           .catch((err) => {
             console.error(err);
@@ -174,6 +175,25 @@ export class SellerPage {
           message: JSON.stringify(err)
         }).present();
       });
+  }
+
+  goPrint(invoice) {
+    var user = this.residents.find((res) => {
+      return res.id == this.charge.user_id;
+    });
+    this.toPrint = { invoice: invoice, user: user };
+    setTimeout(() => {
+      this.printer.print(document.getElementById('toPrint'), { name: 'invoice' })
+        .then(() => {
+          this.complete();
+          this.toPrint = null;
+        })
+        .catch((err) => {
+          console.error(err);
+
+        });
+
+    }, 1000);
   }
 
   complete() {
