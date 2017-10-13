@@ -124,19 +124,17 @@
     <table cellpadding="0" cellspacing="0" style="width: 100%;line-height: inherit;text-align: left;">
 
       <tr class="top">
-        <td colspan="3" style="padding: 5px;vertical-align: top;">
+        <td colspan="4" style="padding: 5px;vertical-align: top;">
           <table style="width: 100%;line-height: inherit;text-align: left;">
             <tr>
-              <td class="title" style="padding: 5px;vertical-align: top;padding-bottom: 20px;font-size: 45px;line-height: 45px;color: #333;">
+              <td colspan="2" class="title" style="padding: 5px;vertical-align: top;padding-bottom: 20px;font-size: 45px;line-height: 45px;color: #333;">
                 <img [src]="api.url + 'img/logo.png'" style="width:100%; max-width:300px;">
               </td>
-              <td></td>
-
               <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;width:100%">
                 {{'literals.invoice' | trans }} #: {{toPrint.invoice.number}}
 
                 <br> {{ 'literals.date' | trans }}: {{toPrint.invoice.date | amDateFormat:'LLL'}}
-                <br> {{'literals.created_at'| trans }} {{toPrint.invoice.created_at | amDateFormat:'LLL'}}
+                <br> {{'date.from'| trans }} {{toPrint.invoice.created_at | amDateFormat:'LLL'}}
 
               </td>
             </tr>
@@ -145,7 +143,7 @@
       </tr>
 
       <tr class="information">
-        <td colspan="3" style="padding: 5px;vertical-align: top;">
+        <td colspan="4" style="padding: 5px;vertical-align: top;">
           <table style="width: 100%;line-height: inherit;text-align: left;">
             <tr>
               <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
@@ -155,14 +153,13 @@
                 <br> {{api.settings.phone}}
 
               </td>
-              <td>
-                {{'literals.payment' | trans }}: {{ ('literals.cash') | trans }}
+              <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
               </td>
-
               <td *ngIf="toPrint.user" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
                 {{ toPrint.user.name }}
 
                 <br> {{ toPrint.user.email}}
+                <br> {{'literals.payment' | trans }}: {{ ('literals.cash') | trans }}
               </td>
             </tr>
           </table>
@@ -180,18 +177,18 @@
 
       <!-- Heading Items -->
       <tr class="heading">
-        <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+        <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
           {{'literals.item' | trans }}
         </td>
 
-        <td style="padding: 5px;vertical-align: top;text-align: right;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+        <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
           {{'literals.quantity' | trans }}
         </td>
-        <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+        <td style="text-align:center; padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
           {{'literals.price' | trans }}
         </td>
 
-        <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+        <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
           {{'literals.subtotal' | trans }}
         </td>
       </tr>
@@ -205,11 +202,11 @@
           {{item.quantity}}
         </td>
 
-        <td style="padding: 5px;vertical-align: top;text-align: right;border-bottom: none;">
+        <td style="padding: 5px;vertical-align: top;text-align: center;border-bottom: none;">
           {{item.amount | currency:'USD':true:'4.2-2' }}
         </td>
 
-        <td style="padding: 5px;vertical-align: top;border-bottom: none;">
+        <td style="padding: 5px;vertical-align: top;text-align: center;border-bottom: none;">
           {{(item.quantity * item.amount) | currency:'USD':true:'4.2-2' }}
         </td>
       </tr>
@@ -217,9 +214,12 @@
       <!-- Total -->
       <tr class="total">
         <td style="padding: 5px;vertical-align: top;"></td>
-        <td style="padding: 5px;vertical-align: top;text-align: right;border-top: 2px solid #eee;font-weight: bold;"></td>
-        <td colspan="2" style="padding: 5px;vertical-align: top;">
-          Total: {{ total(toPrint.invoice) | currency:'USD':true:'4.2-2' }}
+        <td style="padding: 5px;vertical-align: top;"></td>
+        <td style="padding: 5px;vertical-align: top;text-align: center;border-top: 2px solid #eee;font-weight: bold;">
+          Total:
+        </td>
+        <td style="padding: 5px;vertical-align: top; text-align: center;border-top: 2px solid #eee;font-weight: bold;">
+          {{ total(toPrint.invoice) | currency:'USD':true:'4.2-2' }}
         </td>
       </tr>
 
