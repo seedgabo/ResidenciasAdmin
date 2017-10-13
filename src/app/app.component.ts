@@ -58,7 +58,7 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      // this.codepush.sync({ updateDialog: false }).subscribe((data) => { console.log(data) }, console.warn)
+      this.codepush.sync({ updateDialog: false }).subscribe((data) => { console.log(data) }, console.warn)
     });
   }
 
