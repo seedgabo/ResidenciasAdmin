@@ -20,10 +20,18 @@ export class SellerPage {
   residents = [];
   mode = "restricted";
   toPrint;
+  invoices_history = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public printer: Printer, public api: Api) {
   }
 
   ionViewDidLoad() {
+    this.api.storage.get('invoices_history')
+      .then((history) => {
+        if (history) {
+          this.invoices_history = history;
+        }
+      })
+      .catch(console.error)
     if (this.mode !== 'restricted') {
       this.items.push({ concept: '', amount: 0, quantity: 0, });
     }
@@ -182,6 +190,7 @@ export class SellerPage {
       return res.id == this.charge.user_id;
     });
     this.toPrint = { invoice: invoice, user: user };
+    this.saveInvoice(this.toPrint);
     setTimeout(() => {
       this.printer.print(document.getElementById('toPrint'), { name: 'invoice' })
         .then(() => {
@@ -190,10 +199,15 @@ export class SellerPage {
         })
         .catch((err) => {
           console.error(err);
-
         });
 
     }, 1000);
+  }
+
+  saveInvoice(invoice) {
+    this.invoices_history.push(invoice);
+    this.invoices_history.slice(this.invoices_history.length - 500)
+    this.api.storage.set('invoices_history', this.invoices_history);
   }
 
   complete() {
