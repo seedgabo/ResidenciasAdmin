@@ -161,7 +161,12 @@ export class SellerPage {
         this.api.post(`invoices/${invoice.id}/Payment`, {})
           .then((data) => {
             if (this.charge.user_id) {
-              this.sendPush("Compra Realizada!", this.charge.user_id);
+              var added;
+              if (this.items.length === 1)
+                added = `${this.items[0].concept}: ${this.items[0].quantity * this.items[0].amount}$`
+              else
+                added = this.total(invoice) + "$";
+              this.sendPush("Compra Realizada! " + added, this.charge.user_id);
             }
             this.goPrint(invoice);
             loading.dismiss();
