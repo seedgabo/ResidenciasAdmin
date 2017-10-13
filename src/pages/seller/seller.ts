@@ -215,9 +215,14 @@ export class SellerPage {
       && valid;
   }
 
-  total() {
+  total(invoice = null) {
+    var items;
+    if (invoice == null)
+      items = this.items
+    else
+      items = invoice.items
     var total = 0;
-    this.items.forEach((item) => {
+    items.forEach((item) => {
       total += item.amount * item.quantity;
     });
     return total;

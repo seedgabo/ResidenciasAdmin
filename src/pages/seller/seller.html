@@ -1,228 +1,234 @@
 <ion-header>
 
-    <ion-navbar color="primary">
-        <button ion-button menuToggle>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-        <ion-title>{{'__.Punto de Venta' | trans }}</ion-title>
-    </ion-navbar>
+    <ion-title>{{'__.Punto de Venta' | trans }}</ion-title>
+  </ion-navbar>
 
 </ion-header>
 
 
 <ion-content no-padding>
-    <ion-item>
-        <ion-label inline>
-            {{'literals.residence' | trans }}
-        </ion-label>
-        <ion-select (ionChange)="getResidents()" [(ngModel)]="charge.residence_id">
-            <ion-option [value]="residence.id" *ngFor="let residence of residences">{{residence.name}}</ion-option>
-        </ion-select>
-    </ion-item>
-    <ion-item *ngIf="residents.length > 0">
-        <ion-label inline>
-            {{'literals.user' | trans }}
-        </ion-label>
-        <ion-select [(ngModel)]="charge.user_id">
-            <ion-option [value]="user.id" *ngFor="let user of residents">{{user.name}}</ion-option>
-        </ion-select>
-    </ion-item>
+  <ion-item>
+    <ion-label inline>
+      {{'literals.residence' | trans }}
+    </ion-label>
+    <ion-select (ionChange)="getResidents()" [(ngModel)]="charge.residence_id">
+      <ion-option [value]="residence.id" *ngFor="let residence of residences">{{residence.name}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item *ngIf="residents.length > 0">
+    <ion-label inline>
+      {{'literals.user' | trans }}
+    </ion-label>
+    <ion-select [(ngModel)]="charge.user_id">
+      <ion-option [value]="user.id" *ngFor="let user of residents">{{user.name}}</ion-option>
+    </ion-select>
+  </ion-item>
 
-    <ion-list>
-        <div *ngIf="mode=='restricted'">
-            <ion-grid *ngFor="let item of items; let i = index">
-                <ion-row>
-                    <ion-col>
-                        <ion-item>
-                            <ion-label floating>{{'literals.concept' | trans}}</ion-label>
-                            <ion-input disabled [(ngModel)]="item.concept" [placeholder]=" 'literals.concept' | trans"></ion-input>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col>
-                        <ion-item>
-                            <ion-label floating>{{'literals.amount' | trans}}</ion-label>
-                            <ion-input disabled [(ngModel)]="item.amount" type="number" min="0" [placeholder]=" 'literals.amount' | trans"></ion-input>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col>
-                        <ion-item>
-                            <ion-label floating>{{'literals.quantity' | trans}}</ion-label>
-                            <ion-input [(ngModel)]="item.quantity" type="number" min="1" [placeholder]=" 'literals.quantity' | trans"></ion-input>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col col-1>
-                        <button ion-button color="danger" clear icon-only (click)="removeItem(i)">
+  <ion-list>
+    <div *ngIf="mode=='restricted'">
+      <ion-grid *ngFor="let item of items; let i = index">
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label floating>{{'literals.concept' | trans}}</ion-label>
+              <ion-input disabled [(ngModel)]="item.concept" [placeholder]=" 'literals.concept' | trans"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <ion-label floating>{{'literals.amount' | trans}}</ion-label>
+              <ion-input disabled [(ngModel)]="item.amount" type="number" min="0" [placeholder]=" 'literals.amount' | trans"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <ion-label floating>{{'literals.quantity' | trans}}</ion-label>
+              <ion-input [(ngModel)]="item.quantity" type="number" min="1" [placeholder]=" 'literals.quantity' | trans"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-1>
+            <button ion-button color="danger" clear icon-only (click)="removeItem(i)">
               <ion-icon name="remove"></ion-icon>
             </button>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-        </div>
-        <div *ngIf="mode!=='restricted'" #listed>
-            <ion-grid *ngFor="let item of items; let i = index">
-                <ion-row>
-                    <ion-col>
-                        <ion-item>
-                            <ion-label floating>{{'literals.concept' | trans}}</ion-label>
-                            <ion-input [(ngModel)]="item.concept" [placeholder]=" 'literals.concept' | trans"></ion-input>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col>
-                        <ion-item>
-                            <ion-label floating>{{'literals.amount' | trans}}</ion-label>
-                            <ion-input [(ngModel)]="item.amount" type="number" min="0" [placeholder]=" 'literals.amount' | trans"></ion-input>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col>
-                        <ion-item>
-                            <ion-label floating>{{'literals.quantity' | trans}}</ion-label>
-                            <ion-input [(ngModel)]="item.quantity" type="number" min="1" [placeholder]=" 'literals.quantity' | trans"></ion-input>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col col-1>
-                        <button ion-button color="danger" clear icon-only (click)="removeItem(i)">
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <div *ngIf="mode!=='restricted'" #listed>
+      <ion-grid *ngFor="let item of items; let i = index">
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label floating>{{'literals.concept' | trans}}</ion-label>
+              <ion-input [(ngModel)]="item.concept" [placeholder]=" 'literals.concept' | trans"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <ion-label floating>{{'literals.amount' | trans}}</ion-label>
+              <ion-input [(ngModel)]="item.amount" type="number" min="0" [placeholder]=" 'literals.amount' | trans"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <ion-label floating>{{'literals.quantity' | trans}}</ion-label>
+              <ion-input [(ngModel)]="item.quantity" type="number" min="1" [placeholder]=" 'literals.quantity' | trans"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-1>
+            <button ion-button color="danger" clear icon-only (click)="removeItem(i)">
               <ion-icon name="remove"></ion-icon>
             </button>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-        </div>
-        <ion-item>
-            <button (click)="addItem()" ion-fab small mini item-right>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <ion-item>
+      <button (click)="addItem()" ion-fab small mini item-right>
         <ion-icon name="add"></ion-icon>
       </button>
-        </ion-item>
-    </ion-list>
+    </ion-item>
+  </ion-list>
 </ion-content>
 <ion-footer>
-    <ion-toolbar>
-        <ion-grid>
-            <ion-row>
-                <ion-col text-right>
-                    <b>{{'literals.total' | trans }}:</b>
-                    <span>{{total() | currency:'USD':true:'1.2-2' }}</span>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
-                    <button ion-button full color="light" (click)="clear()">
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col text-right>
+          <b>{{'literals.total' | trans }}:</b>
+          <span>{{total() | currency:'USD':true:'1.2-2' }}</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <button ion-button full color="light" (click)="clear()">
             {{'crud.clear' | trans}}
           </button>
-                </ion-col>
-                <ion-col>
-                    <button ion-button full color="secondary" (click)="actions()" [disabled]="!canProccess()">
+        </ion-col>
+        <ion-col>
+          <button ion-button full color="secondary" (click)="actions()" [disabled]="!canProccess()">
             {{'crud.proccess' | trans}}
           </button>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-    </ion-toolbar>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
 </ion-footer>
 
 <div id="toPrint" *ngIf="toPrint">
-    <div class="invoice-box" style="max-width: 800px;margin: auto;padding: 30px;border: 1px solid #eee;box-shadow: 0 0 10px rgba(0, 0, 0, .15);font-size: 16px;line-height: 24px;font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;color: #555;">
-        <table cellpadding="0" cellspacing="0" style="width: 100%;line-height: inherit;text-align: left;">
-            <tr class="top">
-                <td colspan="2" style="padding: 5px;vertical-align: top;">
-                    <table style="width: 100%;line-height: inherit;text-align: left;">
-                        <tr>
-                            <td class="title" style="padding: 5px;vertical-align: top;padding-bottom: 20px;font-size: 45px;line-height: 45px;color: #333;">
-                                <img [src]="api.url + 'img/logo.png'" style="width:100%; max-width:300px;">
-                            </td>
+  <div class="invoice-box" style="max-width: 800px;margin: auto;padding: 30px;border: 1px solid #eee;box-shadow: 0 0 10px rgba(0, 0, 0, .15);font-size: 16px;line-height: 24px;font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;color: #555;">
+    <table cellpadding="0" cellspacing="0" style="width: 100%;line-height: inherit;text-align: left;">
 
-                            <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;">
-                                {{'literals.invoice' | trans }} #: {{toPrint.invoice.number}}
+      <tr class="top">
+        <td colspan="2" style="padding: 5px;vertical-align: top;">
+          <table style="width: 100%;line-height: inherit;text-align: left;">
+            <tr>
+              <td class="title" style="padding: 5px;vertical-align: top;padding-bottom: 20px;font-size: 45px;line-height: 45px;color: #333;">
+                <img [src]="api.url + 'img/logo.png'" style="width:100%; max-width:300px;">
+              </td>
 
-                                <br> Created: January 1, 2017
-                                <br> Due: February 1, 2017
-                            </td>
-                        </tr>
-                    </table>
-                </td>
+              <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;">
+                {{'literals.invoice' | trans }} #: {{toPrint.invoice.number}}
+
+                <br> {{ 'literals.date'}}: {{toPrint.invoice.date | amDateFormat:'LLL'}}
+                <br> {{'literals.created_at'}} {{toPrint.invoice.created_at | amDateFormat:'LLL'}}
+
+              </td>
             </tr>
+          </table>
+        </td>
+      </tr>
 
-            <tr class="information">
-                <td colspan="2" style="padding: 5px;vertical-align: top;">
-                    <table style="width: 100%;line-height: inherit;text-align: left;">
-                        <tr>
-                            <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
-                                Next Step Webs, Inc.
-                                <br> 12345 Sunny Road
-                                <br> Sunnyville, TX 12345
-                            </td>
+      <tr class="information">
+        <td colspan="2" style="padding: 5px;vertical-align: top;">
+          <table style="width: 100%;line-height: inherit;text-align: left;">
+            <tr>
+              <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
+                {{api.settings.document}}
+                <br> {{api.settings.address}}
+              </td>
 
-                            <td *ngIf="toPrint.user" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
-                                <br> {{ toPrint.user.name }}
+              <td *ngIf="toPrint.user" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
+                <br> {{ toPrint.user.name }}
 
-                                <br> {{ toPrint.user.email}}
-                            </td>
-                        </tr>
-                    </table>
-                </td>
+                <br> {{ toPrint.user.email}}
+              </td>
             </tr>
+          </table>
+        </td>
+      </tr>
 
-            <tr class="heading">
-                <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-                    {{'literals.payment' | trans }}
-                </td>
+      <tr class="heading">
+        <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+          {{'literals.payment' | trans }}
+        </td>
 
-                <td style="padding: 5px;vertical-align: top;text-align: right;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-                    {{ ('literals' +toPrint.invoice.payment) | trans }}
-                </td>
-            </tr>
+        <td style="padding: 5px;vertical-align: top;text-align: right;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+          {{ ('literals' + toPrint.invoice.payment) | trans }}
+        </td>
+      </tr>
 
-            <tr class="details">
-                <td style="padding: 5px;vertical-align: top;padding-bottom: 20px;">
-                    Check
-                </td>
+      <tr class="details">
+        <td style="padding: 5px;vertical-align: top;padding-bottom: 20px;">
+          {{api.settings.name}}
+        </td>
 
-                <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;">
-                    1000
-                </td>
-            </tr>
+        <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;">
+          {{api.settings.phone}}
+        </td>
+      </tr>
 
-            <tr class="heading">
-                <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-                    Item
-                </td>
+      <!-- Heading Items -->
+      <tr class="heading">
+        <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+          Item
+        </td>
 
-                <td style="padding: 5px;vertical-align: top;text-align: right;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-                    Quantity
-                </td>
-                <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-                    Price
-                </td>
+        <td style="padding: 5px;vertical-align: top;text-align: right;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+          Quantity
+        </td>
+        <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+          Price
+        </td>
 
-                <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-                    Subtotal
-                </td>
-            </tr>
+        <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+          Subtotal
+        </td>
+      </tr>
 
-            <tr class="item last" *ngFor="let item of toPrint.invoice.items">
-                <td style="padding: 5px;vertical-align: top;border-bottom: none;">
-                    {{item.concept}}
-                </td>
+      <!-- Items -->
+      <tr class="item last" *ngFor="let item of toPrint.invoice.items">
+        <td style="padding: 5px;vertical-align: top;border-bottom: none;">
+          {{item.concept}}
+        </td>
 
-                <td style="padding: 5px;vertical-align: top;text-align: right;border-bottom: none;">
-                    {{item.price}}
-                </td>
-                <td style="padding: 5px;vertical-align: top;border-bottom: none;">
-                    {{item.quantity}}
-                </td>
+        <td style="padding: 5px;vertical-align: top;text-align: right;border-bottom: none;">
+          {{item.price}}
+        </td>
+        <td style="padding: 5px;vertical-align: top;border-bottom: none;">
+          {{item.quantity}}
+        </td>
 
-                <td style="padding: 5px;vertical-align: top;border-bottom: none;">
-                    {{item.total}}
-                </td>
-            </tr>
+        <td style="padding: 5px;vertical-align: top;border-bottom: none;">
+          {{item.total}}
+        </td>
+      </tr>
 
-            <tr class="total">
-                <td style="padding: 5px;vertical-align: top;"></td>
-                <td style="padding: 5px;vertical-align: top;text-align: right;border-top: 2px solid #eee;font-weight: bold;"></td>
-                <td style="padding: 5px;vertical-align: top;"></td>
-                <td style="padding: 5px;vertical-align: top;">
-                    Total: {{ 0 | currency:'USD':true}}
-                </td>
-            </tr>
-        </table>
-    </div>
+      <!-- Total -->
+      <tr class="total">
+        <td style="padding: 5px;vertical-align: top;"></td>
+        <td style="padding: 5px;vertical-align: top;text-align: right;border-top: 2px solid #eee;font-weight: bold;"></td>
+        <td style="padding: 5px;vertical-align: top;"></td>
+        <td style="padding: 5px;vertical-align: top;">
+          Total: {{ total(toPrint.invoice) | currency:'USD':true:'4.2-2' }}
+
+        </td>
+      </tr>
+
+    </table>
+  </div>
 </div>
