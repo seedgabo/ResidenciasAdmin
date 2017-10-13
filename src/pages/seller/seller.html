@@ -130,12 +130,14 @@
               <td class="title" style="padding: 5px;vertical-align: top;padding-bottom: 20px;font-size: 45px;line-height: 45px;color: #333;">
                 <img [src]="api.url + 'img/logo.png'" style="width:100%; max-width:300px;">
               </td>
+              <td>
+              </td>
 
               <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;">
                 {{'literals.invoice' | trans }} #: {{toPrint.invoice.number}}
 
-                <br> {{ 'literals.date'}}: {{toPrint.invoice.date | amDateFormat:'LLL'}}
-                <br> {{'literals.created_at'}} {{toPrint.invoice.created_at | amDateFormat:'LLL'}}
+                <br> {{ 'literals.date' | trans }}: {{toPrint.invoice.date | amDateFormat:'LLL'}}
+                <br> {{'literals.created_at'| trans }} {{toPrint.invoice.created_at | amDateFormat:'LLL'}}
 
               </td>
             </tr>
@@ -148,12 +150,18 @@
           <table style="width: 100%;line-height: inherit;text-align: left;">
             <tr>
               <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
-                {{api.settings.document}}
+                {{api.settings.name}}
+                <br> {{api.settings.document}}
                 <br> {{api.settings.address}}
+                <br> {{api.settings.phone}}
+
+              </td>
+              <td>
+
               </td>
 
               <td *ngIf="toPrint.user" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
-                <br> {{ toPrint.user.name }}
+                {{ toPrint.user.name }}
 
                 <br> {{ toPrint.user.email}}
               </td>
@@ -163,40 +171,30 @@
       </tr>
 
       <tr class="heading">
-        <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-          {{'literals.payment' | trans }}
-        </td>
-
         <td style="padding: 5px;vertical-align: top;text-align: right;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-          {{ ('literals' + toPrint.invoice.payment) | trans }}
         </td>
-      </tr>
-
-      <tr class="details">
-        <td style="padding: 5px;vertical-align: top;padding-bottom: 20px;">
-          {{api.settings.name}}
+        <td style="padding: 5px;vertical-align: top;text-align: right;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
         </td>
-
-        <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;">
-          {{api.settings.phone}}
+        <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+          {{'literals.payment' | trans }} : {{ ('literals.cash') | trans }}
         </td>
       </tr>
 
       <!-- Heading Items -->
       <tr class="heading">
         <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-          Item
+          {{'literals.item' | trans }}
         </td>
 
         <td style="padding: 5px;vertical-align: top;text-align: right;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-          Quantity
+          {{'literals.quantity' | trans }}
         </td>
         <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-          Price
+          {{'literals.price' | trans }}
         </td>
 
         <td style="padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-          Subtotal
+          {{'literals.subtotal' | trans }}
         </td>
       </tr>
 
