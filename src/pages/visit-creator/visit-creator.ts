@@ -23,6 +23,7 @@ export class VisitCreatorPage {
   ionViewDidLoad() {
     this.loadParkings();
   }
+
   loadParkings() {
     this.api.get('parkings?where[status]=available&limit=500')
       .then((parkings: any) => {
@@ -31,6 +32,7 @@ export class VisitCreatorPage {
         console.error(err);
       })
   }
+
   dismiss() {
     this.viewCtrl.dismiss();
   }

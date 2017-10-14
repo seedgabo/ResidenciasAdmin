@@ -1,50 +1,68 @@
 <ion-header>
 
-    <ion-navbar color="dark">
-        <ion-title *ngIf="visitor.id">{{ visitor.name }}</ion-title>
-        <ion-title *ngIf="!visitor.id">{{ 'crud.add' | trans }} {{ 'literals.visitor' | trans }}</ion-title>
-        <ion-buttons end>
-            <button ion-button clear icon-only (click)="dismiss()">
+  <ion-navbar color="dark">
+    <ion-title *ngIf="visitor.id">{{ visitor.name }}</ion-title>
+    <ion-title *ngIf="!visitor.id">{{ 'crud.add' | trans }} {{ 'literals.visitor' | trans }}</ion-title>
+    <ion-buttons end>
+      <button ion-button clear icon-only (click)="dismiss()">
         <ion-icon name="close"></ion-icon>
       </button>
-        </ion-buttons>
-    </ion-navbar>
+    </ion-buttons>
+  </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-    <ion-list>
-        <ion-item>
-            <ion-label floating>{{'literals.name' | trans}}</ion-label>
-            <ion-input type="text" [(ngModel)]="visitor.name"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label floating>{{'literals.residence' | trans }}</ion-label>
-            <ion-select [(ngModel)]="visitor.residence_id">
-                <ion-option [value]="residence.id" *ngFor="let residence of api.residences">
-                    {{ residence.name }}
-                </ion-option>
-            </ion-select>
-        </ion-item>
-        <ion-item>
-            <ion-label floating>{{'literals.document' | trans }}</ion-label>
-            <ion-input type="number" [(ngModel)]="visitor.document"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label floating>{{'literals.sex' | trans}}</ion-label>
-            <ion-select [(ngModel)]="visitor.sex">
-                <ion-option value="male">{{'literals.male' | trans}}</ion-option>
-                <ion-option value="female">{{'literals.female' | trans}}</ion-option>
-            </ion-select>
-        </ion-item>
-    </ion-list>
+  <ion-list>
+    <ion-item>
+      <ion-label floating>{{'literals.name' | trans}}</ion-label>
+      <ion-input type="text" [(ngModel)]="visitor.name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>{{'literals.residence' | trans }}</ion-label>
+      <ion-select [(ngModel)]="visitor.residence_id">
+        <ion-option [value]="residence.id" *ngFor="let residence of api.residences">
+          {{ residence.name }}
+        </ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>{{'literals.document' | trans }}</ion-label>
+      <ion-input type="number" [(ngModel)]="visitor.document"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>{{'literals.sex' | trans}}</ion-label>
+      <ion-select [(ngModel)]="visitor.sex">
+        <ion-option value="male">{{'literals.male' | trans}}</ion-option>
+        <ion-option value="female">{{'literals.female' | trans}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <button ion-button full (click)="selectVehicle()">
+        {{ vehicle ? vehicle.plate+ '-' +vehicle.name : ('literals.vehicle' | trans) }}
+      </button>
+    </ion-item>
+    <ion-item *ngIf="vehicle">
+      <ion-label floating> {{'literals.parking' | trans }} </ion-label>
+      <ion-select [(ngModel)]="parking">
+        <ion-option [value]="parking" *ngFor="let parking of parkings">{{ parking.name }} </ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
 </ion-content>
 <ion-footer>
-    <ion-grid>
-        <ion-row>
-            <ion-col><button [disabled]="!canSave()" ion-button color="secondary" block (click)="save()">{{'crud.save' | trans }}</button></ion-col>
-            <ion-col><button ion-button color="light" block (click)="dismiss()">{{'crud.cancel' | trans }}</button></ion-col>
-        </ion-row>
-    </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12>
+        <button [disabled]="!canSave()" ion-button color="secondary" block (click)="saveWithVisit()">{{'crud.save' | trans }} & {{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}</button>
+      </ion-col>
+      <ion-col>
+        <button [disabled]="!canSave()" ion-button color="secondary" block (click)="save()">{{'crud.save' | trans }}</button>
+      </ion-col>
+      <ion-col>
+        <button ion-button color="light" block (click)="dismiss()">{{'crud.cancel' | trans }}</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-footer>

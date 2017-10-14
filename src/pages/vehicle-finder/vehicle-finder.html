@@ -3,8 +3,8 @@
     <ion-title>{{'literals.vehicles' | trans}}</ion-title>
     <ion-buttons end>
       <button ion-button clear icon-only>
-            <ion-icon name="close" (click)="cancel()"></ion-icon>
-          </button>
+        <ion-icon name="close" (click)="cancel()"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-navbar>
   <ion-toolbar>
@@ -12,9 +12,11 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-list inset no-lines>
-    <button ion-item (click)="select(vehicle)" *ngFor="let vehicle of vehicles.data">
-        <ion-thumbnail item-left *ngIf="vehicle.image" >
+  <ion-content no-padding no-margin>
+    <input type="file" name="filer" accept="image/*" (change)="readFile($event)" id="input-file" style="display:none;">
+    <ion-list inset no-lines>
+      <button ion-item (press)="actions(vehicle)" (click)="select(vehicle)" *ngFor="let vehicle of vehicles.data">
+        <ion-thumbnail item-left *ngIf="vehicle.image">
           <img [src]="vehicle.image.url">
         </ion-thumbnail>
         <h3>{{vehicle.plate}}</h3>
@@ -22,10 +24,10 @@
         <p>{{vehicle.make}}</p>
         <p>{{vehicle.color}}</p>
       </button>
-  </ion-list>
-  <ion-fab bottom right>
-    <button ion-fab color="primary" (click)="addQuickVehicle()">
-      <ion-icon name="add"></ion-icon>
-    </button>
-  </ion-fab>
-</ion-content>
+    </ion-list>
+    <ion-fab bottom right>
+      <button ion-fab color="primary" (click)="addQuickVehicle()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-fab>
+  </ion-content>
