@@ -160,7 +160,8 @@
                 {{ toPrint.user.name }}
                 <br> {{ toPrint.user.document }}
                 <br> {{ toPrint.user.email }}
-                <br> {{'literals.payment' | trans }}: {{ ('literals.cash') | trans }}
+                <br> {{'literals.payment' | trans }}: {{ ('literals.' + toPrint.receipt.transaction ) | trans }}
+
               </td>
             </tr>
           </table>
