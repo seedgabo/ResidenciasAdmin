@@ -15,6 +15,7 @@ export class TransPipe implements PipeTransform {
 
   }
   transform(value: string, ...args) {
+    var replace = args[0];
     if (!this.api.langs) return value;
     var splits = value.split('.');
     var base, trans;
@@ -35,6 +36,10 @@ export class TransPipe implements PipeTransform {
         }
       }
     }
+    for (var key in replace) {
+      value = value.replace(':' + key, replace[key]);
+    }
+
     return value.replace('__.', '').replace('literals.', "");
   }
 }

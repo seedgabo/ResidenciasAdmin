@@ -11,22 +11,19 @@
 
 
 <ion-content *ngIf="!toPrint" class="no-printable" no-padding>
-  <ion-item>
-    <ion-label inline>
-      {{'literals.residence' | trans }}
-    </ion-label>
-    <ion-select (ionChange)="getResidents()" [(ngModel)]="charge.residence_id">
-      <ion-option [value]="residence.id" *ngFor="let residence of residences">{{residence.name}}</ion-option>
-    </ion-select>
-  </ion-item>
-  <ion-item *ngIf="residents.length > 0">
-    <ion-label inline>
-      {{'literals.user' | trans }}
-    </ion-label>
-    <ion-select [(ngModel)]="charge.user_id">
-      <ion-option [value]="user.id" *ngFor="let user of residents">{{user.name}}</ion-option>
-    </ion-select>
-  </ion-item>
+  <button text-center ion-item (click)="selectPerson()">
+    <h2 *ngIf="!person">
+      {{'literals.select :person' | trans:{person: api.trans('literals.person')} }}
+    </h2>
+    <ion-avatar item-left *ngIf="person && person.image">
+      <img [src]="person.image.url" alt="">
+    </ion-avatar>
+    <span *ngIf="person">
+      <b>{{'literals.'+type | trans }}</b>
+      <span>{{person.name}}</span>
+    </span>
+  </button>
+
 
   <ion-list no-padding no-margin>
     <div *ngIf="mode=='restricted'">
@@ -161,8 +158,8 @@
               </td>
               <td *ngIf="toPrint.user" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
                 {{ toPrint.user.name }}
-
-                <br> {{ toPrint.user.email}}
+                <br> {{ toPrint.user.document }}
+                <br> {{ toPrint.user.email }}
                 <br> {{'literals.payment' | trans }}: {{ ('literals.cash') | trans }}
               </td>
             </tr>

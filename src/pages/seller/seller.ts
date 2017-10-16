@@ -15,9 +15,9 @@ export class SellerPage {
     amount: 0,
     quantity: 1,
   }
+  person = null;
+  type = null;
   items = [];
-  residences = [];
-  residents = [];
   mode = "restricted";
   toPrint;
   invoices_history = [];
@@ -35,26 +35,30 @@ export class SellerPage {
     if (this.mode !== 'restricted') {
       this.items.push({ concept: '', amount: 0, quantity: 0, });
     }
-    this.getResidences();
   }
 
-  getResidences() {
-    this.api.get('residences')
-      .then((data: any) => {
-        this.residences = data;
-      })
-      .catch(console.error)
-  }
+  selectPerson() {
+    var modal = this.modal.create('PersonFinderPage', {
+      users: true,
+      visitors: true,
+      workers: true,
+    })
+    modal.present();
+    modal.onDidDismiss((data) => {
+      if (!data) {
+        this.person = null;
+        this.type = null;
+        return;
+      }
+      console.log(data);
+      if (data.type == 'user') {
+        this.charge.user_id = data.person.user_id;
+        this.charge.residence_id = data.person.residence_id;
+      }
+      this.person = data.person;
+      this.type = data.type;
+    })
 
-  getResidents() {
-    if (!this.charge.residence_id) {
-      return;
-    }
-    this.api.get('residences/' + this.charge.residence_id + '?with[]=residents')
-      .then((data: any) => {
-        this.residents = data.residents;
-      })
-      .catch(console.error)
   }
 
   clear() {
@@ -75,7 +79,8 @@ export class SellerPage {
     else {
       this.items = [];
     }
-    this.residents = [];
+    this.person = null;
+    this.type = null;
   }
 
   addItem() {
@@ -149,14 +154,17 @@ export class SellerPage {
       content: this.api.trans('__.procesando'),
     });
     loading.present();
-    this.api.post('invoices', {
-      user_id: this.charge.user_id,
-      residence_id: this.charge.residence_id,
+    var data: any = {
       items: this.items,
       type: 'normal',
       date: (new Date()).toISOString().substring(0, 10),
-
-    })
+    };
+    data[this.type + '_id'] = this.person.user_id;
+    if (this.type == 'user') {
+      data.residence_id = this.charge.residence_id;
+    } else {
+    }
+    this.api.post('invoices', data)
       .then((invoice: any) => {
         this.api.post(`invoices/${invoice.id}/Payment`, {})
           .then((data) => {
@@ -191,10 +199,7 @@ export class SellerPage {
   }
 
   goPrint(invoice) {
-    var user = this.residents.find((res) => {
-      return res.id == this.charge.user_id;
-    });
-    this.toPrint = { invoice: invoice, user: user };
+    this.toPrint = { invoice: invoice, user: this.person };
     this.saveInvoice(this.toPrint);
     setTimeout(() => {
       this.printer.print(document.getElementById('toPrint'), { name: 'invoice' })
@@ -236,8 +241,7 @@ export class SellerPage {
       if (!(item.amount > 0 && item.quantity > 0 && item.concept.length > 0))
         valid = false;
     });
-    return this.charge.residence_id != null
-      && this.items.length > 0
+    return this.items.length > 0
       && valid;
   }
 
@@ -266,35 +270,40 @@ export class SellerPage {
   }
 
   actions() {
-    this.actionsheet.create({
-      title: this.api.trans('__.que desea hacer?'),
-      buttons: [
-        {
-          text: this.api.trans('__.agregar a la siguiente factura'),
-          icon: 'paper',
-          cssClass: 'icon-primary',
-          handler: () => {
-            this.proccess();
-          }
-        },
-        {
-          text: this.api.trans('__.facturar ahora'),
-          icon: 'print',
-          cssClass: 'icon-secondary',
-          handler: () => {
-            this.proccessWithInvoice();
-          }
-        },
-        {
-          text: this.api.trans('crud.cancel'),
-          role: 'cancel',
-          icon: 'close',
-          cssClass: 'icon-light',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
+    var buttons = [];
+    if (this.type == 'user') {
+      buttons.push({
+        text: this.api.trans('__.Agregar a la siguiente :invoice', { invoice: this.api.trans('literals.invoice') }),
+        icon: 'paper',
+        cssClass: 'icon-primary',
+        handler: () => {
+          this.proccess();
         }
-      ]
+      })
+    }
+
+    buttons.push({
+      text: this.api.trans('__.Facturar Ahora'),
+      icon: 'print',
+      cssClass: 'icon-secondary',
+      handler: () => {
+        this.proccessWithInvoice();
+      }
+    })
+
+    buttons.push({
+      text: this.api.trans('crud.cancel'),
+      role: 'cancel',
+      icon: 'close',
+      cssClass: 'icon-light',
+      handler: () => {
+        console.log('Cancel clicked');
+      }
+    })
+
+    this.actionsheet.create({
+      title: this.api.trans('__.¿Que desea hacer?'),
+      buttons: buttons
     }).present();
   }
 }

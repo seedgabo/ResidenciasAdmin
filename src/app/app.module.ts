@@ -17,9 +17,8 @@ import { ParkingsPage } from "../pages/parkings/parkings";
 import { VisitorPage } from "../pages/visitor/visitor";
 import { VisitCreatorPage } from "../pages/visit-creator/visit-creator";
 import { ZonesAdminPage } from "../pages/zones-admin/zones-admin";
-
+import { PipesModule } from '../pipes/pipes.module'
 import { IonicStorageModule } from '@ionic/storage';
-import { TransPipe } from "../pipes/trans/trans";
 import { MomentModule } from 'angular2-moment';
 import { CodePush } from "@ionic-native/code-push";
 import { Printer } from '@ionic-native/printer';
@@ -44,14 +43,13 @@ import { ProductSearchPage } from '../pages/product-search/product-search';
     PanicLogsPage,
     ProductSearchPage,
     VehicleFinderPage,
-    TransPipe
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    MomentModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
+    PipesModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

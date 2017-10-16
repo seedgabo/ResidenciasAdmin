@@ -17,13 +17,16 @@
       <h2 *ngIf="visit.visitor">
         {{visit.visitor.name }}
         <br>
-        <span *ngIf="visit.residence" >{{visit.residence.name}}</span>
+        <span *ngIf="visit.residence">{{visit.residence.name}}</span>
         <br>
         <small>{{visit.visitor.document}}</small>
       </h2>
       <span item-right>
-        {{ visit.created_at |amCalendar }} <br>
-        {{ 'literals.'+ visit.status | trans }}
+        {{ visit.created_at |amCalendar }}
+        <br>
+        <span ion-text [color]="visit.status == 'approved' ? 'secondary' : visit.status == 'rejected' ? 'danger' : ''">
+          {{ 'literals.'+ visit.status | trans }}
+        </span>
       </span>
     </button>
   </ion-list>

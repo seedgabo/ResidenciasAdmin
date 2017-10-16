@@ -34,8 +34,12 @@ export class VisitorPage {
         this.vehicle = data;
         this.loadParkings();
       }
+      else {
+        this.vehicle = null;
+      }
     });
   }
+
 
   dismiss() {
     if (this.action == 'update')

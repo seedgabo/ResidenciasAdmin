@@ -1,0 +1,65 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{'literals.search' | trans }}</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="cancel()" icon-only>
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-searchbar debounce="700" (ionInput)="search($event)" [(ngModel)]="query"></ion-searchbar>
+
+  <ion-list *ngIf="findFor.users && results.users && results.users.data">
+
+
+    <ion-list-header>{{'literals.users'|trans}}</ion-list-header>
+    <button ion-item (click)="select(person,'user')" *ngFor="let person of results.users.data">
+      <ion-avatar item-left *ngIf="person.image">
+        <img [src]="person.image.url" alt="image person">
+      </ion-avatar>
+      <h2>
+        {{person.name}}
+      </h2>
+      <p>{{person.document}}</p>
+      <p *ngIf="person.residence">{{person.residence.name}}</p>
+    </button>
+  </ion-list>
+
+  <ion-list *ngIf="findFor.visitors && results.visitors && results.visitors.data">
+    <ion-list-header>{{'literals.visitors'|trans}}</ion-list-header>
+    <button ion-item (click)="select(person,'visitor')" *ngFor="let person of results.visitors.data">
+      <ion-avatar item-left *ngIf="person.image">
+        <img [src]="person.image.url" alt="image person">
+      </ion-avatar>
+      <h2>
+        {{person.name}}
+      </h2>
+      <p>{{person.document}}</p>
+      <p *ngIf="person.residence">{{person.residence.name}}</p>
+    </button>
+
+  </ion-list>
+
+  <ion-list *ngIf="findFor.workers && results.workers && results.workers.data">
+
+    <ion-list-header>{{'literals.workers'|trans}}</ion-list-header>
+    <button ion-item (click)="select(person,'worker')" *ngFor="let person of results.workers.data">
+      <ion-avatar item-left *ngIf="person.image">
+        <img [src]="person.image.url" alt="image person">
+      </ion-avatar>
+      <h2>
+        {{person.name}}
+      </h2>
+      <p>{{person.document}}</p>
+      <p *ngIf="person.residence">{{person.residence.name}}</p>
+    </button>
+
+  </ion-list>
+
+
+</ion-content>
