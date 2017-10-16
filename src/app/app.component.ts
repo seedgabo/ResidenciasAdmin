@@ -57,8 +57,18 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      var sync = () => {
+        this.codepush.sync({ updateDialog: false, ignoreFailedUpdates: false, }).subscribe(
+          (status) => {
+            console.log(status)
+            if (status == 8)
+              this.splashScreen.show();
+          }
+          , (err) => { console.warn(err) });
 
-      this.codepush.sync({ updateDialog: false }).subscribe((data) => { console.log(data) }, console.warn)
+      }
+      sync();
+      setTimeout(sync, 1000 * 60 * 60 * 6)
     });
   }
 

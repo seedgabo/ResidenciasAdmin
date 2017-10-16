@@ -159,7 +159,7 @@ export class SellerPage {
       type: 'normal',
       date: (new Date()).toISOString().substring(0, 10),
     };
-    data[this.type + '_id'] = this.person.user_id;
+    data[this.type + '_id'] = this.person.id;
     if (this.type == 'user') {
       data.residence_id = this.charge.residence_id;
     } else {
