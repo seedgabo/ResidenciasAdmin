@@ -1,6 +1,6 @@
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController, AlertController, ActionSheetController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ViewController, ModalController, ActionSheetController, ToastController } from 'ionic-angular';
 // @IonicPage()
 @Component({
   selector: 'page-vehicle-finder',
@@ -10,7 +10,7 @@ export class VehicleFinderPage {
   vehicle_image: any;
   vehicles: any = {};
   query = [];
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewctrl: ViewController, public api: Api, public alert: AlertController, public actionsheet: ActionSheetController,
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewctrl: ViewController, public api: Api, public modal: ModalController, public actionsheet: ActionSheetController,
     public toast: ToastController) {
     this.api.storage.get('recent_vehicles')
       .then((recent_vehicles) => {
@@ -41,49 +41,58 @@ export class VehicleFinderPage {
   }
 
   addQuickVehicle() {
-    this.alert.create({
-      title: this.api.trans('crud.add') + ' ' + this.api.trans('literals.vehicle'),
-      inputs: [
-        {
-          label: this.api.trans('literals.plate'),
-          placeholder: this.api.trans('literals.plate'),
-          name: 'plate',
-        },
-        {
-          label: this.api.trans('literals.make'),
-          placeholder: this.api.trans('literals.make'),
-          name: 'make',
-        },
-        {
-          label: this.api.trans('literals.model'),
-          placeholder: this.api.trans('literals.model'),
-          name: 'model',
-        },
-        {
-          label: this.api.trans('literals.color'),
-          placeholder: this.api.trans('literals.color'),
-          name: 'color',
-        },
-      ],
-      buttons: [
-        {
-          role: 'destructive',
-          text: this.api.trans('crud.cancel'),
-          handler: (data) => {
-
-          }
-        },
-        {
-          role: 'creative',
-          text: this.api.trans('crud.add'),
-          handler: (data) => {
-            console.log(data);
-            if (this.canAddVehicle(data))
-              this.addVehicle(data);
-          }
+    var modal = this.modal.create('VehicleEditorPage', { vehicle: null });
+    modal.present();
+    modal.onDidDismiss((data, role) => {
+      if (data) {
+        if (this.canAddVehicle(data)) {
+          this.addVehicle(data);
         }
-      ]
-    }).present();
+      }
+    });
+    // this.alert.create({
+    //   title: this.api.trans('crud.add') + ' ' + this.api.trans('literals.vehicle'),
+    //   inputs: [
+    //     {
+    //       label: this.api.trans('literals.plate'),
+    //       placeholder: this.api.trans('literals.plate'),
+    //       name: 'plate',
+    //     },
+    //     {
+    //       label: this.api.trans('literals.make'),
+    //       placeholder: this.api.trans('literals.make'),
+    //       name: 'make',
+    //     },
+    //     {
+    //       label: this.api.trans('literals.model'),
+    //       placeholder: this.api.trans('literals.model'),
+    //       name: 'model',
+    //     },
+    //     {
+    //       label: this.api.trans('literals.color'),
+    //       placeholder: this.api.trans('literals.color'),
+    //       name: 'color',
+    //     },
+    //   ],
+    //   buttons: [
+    //     {
+    //       role: 'destructive',
+    //       text: this.api.trans('crud.cancel'),
+    //       handler: (data) => {
+
+    //       }
+    //     },
+    //     {
+    //       role: 'creative',
+    //       text: this.api.trans('crud.add'),
+    //       handler: (data) => {
+    //         console.log(data);
+    //         if (this.canAddVehicle(data))
+    //           this.addVehicle(data);
+    //       }
+    //     }
+    //   ]
+    // }).present();
   }
 
 
@@ -170,54 +179,16 @@ export class VehicleFinderPage {
   }
 
   editQuickVehicle(vehicle) {
-    this.alert.create({
-      title: this.api.trans('crud.edit') + ' ' + this.api.trans('literals.vehicle'),
-      inputs: [
-        {
-          label: this.api.trans('literals.plate'),
-          placeholder: this.api.trans('literals.plate'),
-          name: 'plate',
-          value: vehicle.plate
-        },
-        {
-          label: this.api.trans('literals.make'),
-          placeholder: this.api.trans('literals.make'),
-          name: 'make',
-          value: vehicle.make
-        },
-        {
-          label: this.api.trans('literals.model'),
-          placeholder: this.api.trans('literals.model'),
-          name: 'model',
-          value: vehicle.model
-
-        },
-        {
-          label: this.api.trans('literals.color'),
-          placeholder: this.api.trans('literals.color'),
-          name: 'color',
-          value: vehicle.color
-        },
-      ],
-      buttons: [
-        {
-          role: 'destructive',
-          text: this.api.trans('crud.cancel'),
-          handler: (data) => {
-
-          }
-        },
-        {
-          role: 'creative',
-          text: this.api.trans('crud.edit'),
-          handler: (data) => {
-            console.log(data);
-            if (this.canAddVehicle(data))
-              this.updateVehicle(vehicle, data);
-          }
+    var modal = this.modal.create('VehicleEditorPage', { vehicle: null });
+    modal.present();
+    modal.onDidDismiss((data, role) => {
+      console.log(data);
+      if (data) {
+        if (this.canAddVehicle(data)) {
+          this.updateVehicle(vehicle, data);
         }
-      ]
-    }).present();
+      }
+    });
   }
 
 

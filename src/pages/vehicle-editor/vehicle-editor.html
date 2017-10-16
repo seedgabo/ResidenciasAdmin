@@ -1,0 +1,58 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ 'literals.vehicle' | trans }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content no-padding>
+  <ion-list>
+    <ion-item>
+      <ion-label floating>{{'literals.plate' | trans }}</ion-label>
+      <ion-input [(ngModel)]="vehicle.plate" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>{{'literals.make'| trans }}</ion-label>
+      <ion-input [(ngModel)]="vehicle.make" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>{{'literals.model'| trans }}</ion-label>
+      <ion-input [(ngModel)]="vehicle.model" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating="">{{'literals.type' | trans }}</ion-label>
+      <ion-select [(ngModel)]="vehicle.type">
+        <ion-option value="car">{{'literals.car' | trans }}</ion-option>
+        <ion-option value="moto">{{'literals.moto' | trans }}</ion-option>
+        <ion-option value="van">{{'literals.van' | trans }}</ion-option>
+        <ion-option value="bicycle">{{'literals.bicycle' | trans }}</ion-option>
+        <ion-option value="boat">{{'literals.boat' | trans }}</ion-option>
+        <ion-option value="golf cart">{{'literals.golf cart' | trans }}</ion-option>
+        <ion-option value="bus">{{'literals.bus' | trans }}</ion-option>
+        <ion-option value="ambulance">{{'literals.ambulance' | trans }}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>{{'literals.color'| trans }}</ion-label>
+      <ion-input [(ngModel)]="vehicle.color" type="text"></ion-input>
+    </ion-item>
+
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <ion-grid text-center>
+    <ion-row>
+      <ion-col>
+        <button ion-button full clear [disabled]="!canAdd()" (click)="confirm()" color="dark">{{'crud.save' | trans }}</button>
+      </ion-col>
+      <ion-col>
+        <button ion-button full clear (click)="cancel()" color="dark">{{'crud.cancel' | trans }}</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
