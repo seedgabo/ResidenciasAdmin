@@ -10,6 +10,7 @@ import Pusher from 'pusher-js';
 import { AlertController, ToastController, ModalController } from "ionic-angular";
 import langs from "../assets/langs";
 window.Pusher = Pusher;
+import { Vibration } from '@ionic-native/vibration';
 
 @Injectable()
 export class Api {
@@ -37,7 +38,7 @@ export class Api {
   ready: Promise<any> = new Promise((resolve) => {
     this.resolve = resolve;
   });
-  constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController, public modal: ModalController) {
+  constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController, public vibration: Vibration, public modal: ModalController) {
     storage.ready().then(() => {
       storage.get('url').then(url_data => {
         if (url_data)
@@ -482,6 +483,7 @@ export class Api {
   playSoundSOS() {
     this.sound = new Audio('assets/sounds/sos.mp3');
     this.sound.play();
+    this.vibration.vibrate([2000, 1000, 2000, 1000, 2000, 1000, 2000]);
     return this.sound;
   }
 

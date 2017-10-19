@@ -22,6 +22,8 @@ import { IonicStorageModule } from '@ionic/storage';
 import { MomentModule } from 'angular2-moment';
 import { CodePush } from "@ionic-native/code-push";
 import { Printer } from '@ionic-native/printer';
+import { Vibration } from '@ionic-native/vibration';
+
 
 import { VisitPage } from "../pages/visit/visit";
 import { SellerPage } from "../pages/seller/seller";
@@ -68,14 +70,13 @@ import { ProductSearchPage } from '../pages/product-search/product-search';
     PanicLogsPage,
     ProductSearchPage,
     VehicleFinderPage,
-
-
   ],
   providers: [
     StatusBar,
     SplashScreen,
     CodePush,
     Printer,
+    Vibration,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Api
   ]
