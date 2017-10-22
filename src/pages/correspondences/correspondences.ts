@@ -55,7 +55,7 @@ export class CorrespondencesPage {
           text: this.api.trans('__.marcar como recogido'),
           icon: 'checkmark-circle-outline',
           handler: () => {
-
+            this.checkDone(corres);
           }
         },
         {
@@ -70,6 +70,7 @@ export class CorrespondencesPage {
           text: this.api.trans('crud.delete'),
           icon: 'trash',
           handler: () => {
+            this.deleteCorrespondence(corres)
           }
         },
         {
@@ -84,6 +85,24 @@ export class CorrespondencesPage {
     });
 
     actions.present();
+  }
+
+  checkDone(correspondence) {
+    this.api.put('correspondences/' + correspondence.id, {
+      status: 'delivered'
+    })
+      .then((data) => {
+        this.getCorrespondences();
+      })
+      .catch(console.error)
+  }
+
+  deleteCorrespondence(correspondence) {
+    this.api.delete('correspondences/' + correspondence.id)
+      .then((data) => {
+        this.getCorrespondences()
+      })
+      .catch(console.error)
   }
 
 }
