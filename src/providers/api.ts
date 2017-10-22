@@ -431,6 +431,7 @@ export class Api {
     visit.visitor = data.visitor;
     visit.visitors = data.visitors;
     this.alert.create({
+      cssClass: "visit-" + visit.status,
       title: this.trans('literals.visit') + " " + this.trans('literals.' + visit.status),
       subTitle: this.trans('literals.visitor') + ': ' + visit.visitor.name,
       message: visit.note,
@@ -471,19 +472,36 @@ export class Api {
   playSoundNotfication() {
     this.sound = new Audio('assets/sounds/notifcations.mp3');
     this.sound.play();
+    try {
+      this.vibration.vibrate([200]);
+
+    } catch (error) {
+      navigator.vibrate([200]);
+    }
     return this.sound;
   }
 
   playSoundBeep() {
     this.sound = new Audio('assets/sounds/beep.mp3');
     this.sound.play();
+    try {
+      this.vibration.vibrate([50]);
+
+    } catch (error) {
+      navigator.vibrate([50]);
+    }
     return this.sound;
   }
 
   playSoundSOS() {
     this.sound = new Audio('assets/sounds/sos.mp3');
     this.sound.play();
-    this.vibration.vibrate([2000, 1000, 2000, 1000, 2000, 1000, 2000]);
+    try {
+      this.vibration.vibrate([300, 200, 300, 200, 300, 200, 300, 300, 200, 300, 200, 300, 200, 300, 200]);
+
+    } catch (error) {
+      navigator.vibrate([300, 200, 300, 200, 300, 200, 300, 300, 200, 300, 200, 300, 200, 300, 200]);
+    }
     return this.sound;
   }
 
