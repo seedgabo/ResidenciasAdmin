@@ -1,0 +1,47 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>{{'literals.correspondences' | trans}}</ion-title>
+  </ion-navbar>
+
+
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="query" [debounce]="750"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher (ionRefresh)="getCorrespondences($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <button ion-item *ngFor="let corres of filter()" (click)="actions(corres)">
+      <h2>
+        {{corres.item}}
+        <span *ngIf="corres.quantity > 1"> ({{corres.quantity}})</span>
+      </h2>
+      <p *ngIf="corres.user">
+        <b> {{'literals.user' | trans }}:</b>
+        {{corres.user.name}}
+      </p>
+
+      <p *ngIf="corres.residence">
+        <b> {{'literals.residence' | trans }}:</b>
+        {{corres.residence.name}}
+      </p>
+
+      <p *ngIf="corres.receptor">
+        <b>{{'literals.receptor' | trans }}</b>
+        {{corres.receptor.name}}
+      </p>
+      <p text-right>
+        {{ corres.create_at | amCalendar }}
+      </p>
+    </button>
+  </ion-list>
+  <ion-fab bottom right>
+    <button ion-fab (click)="addCorrespondece()">
+      <ion-icon name="add-circle"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>

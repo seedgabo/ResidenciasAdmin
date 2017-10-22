@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>{{'crud.add' | trans }} {{'literals.correspondences' | trans }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+
+    <button ion-button full color="primary" (click)="selectPerson()">
+      <span *ngIf="person">{{person.name}}</span>
+      <span *ngIf="!person">{{'literals.select' | trans }} {{'literals.person' | trans }}</span>
+    </button>
+
+
+    <ion-item>
+      <ion-label floating>
+        {{'literals.item' | trans }}
+      </ion-label>
+      <ion-input [(ngModel)]="correspondence.item"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>
+        {{'literals.quantity' | trans }}
+      </ion-label>
+      <ion-input type="number" [(ngModel)]="correspondence.quantity"></ion-input>
+    </ion-item>
+
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <button ion-button full [disabled]="!canSave()" (click)="save()">
+    {{ 'crud.save' | trans }}
+  </button>
+</ion-footer>
