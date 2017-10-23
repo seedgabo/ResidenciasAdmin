@@ -20,9 +20,12 @@
       <span>{{ 'literals.user' | trans }}</span>
       <h1 item-right>{{ user.name }}</h1>
     </ion-item>
-    <ion-item *ngIf="location">
+    <ion-item>
       <b>{{ 'literals.location' | trans }}</b>
-      <span item-right>{{ location }}</span>
+      <button block color="secondary" *ngIf="location" (click)="openInMaps()">
+        {{ '__.open in maps' | trans }}
+      </button>
+      <span item-right *ngIf="!location">{{ '__.requesting location' | trans }}</span>
     </ion-item>
   </ion-list>
   <p text-right>
