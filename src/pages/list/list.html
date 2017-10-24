@@ -20,6 +20,9 @@
       <h2 *ngIf="visit.visitor">
         {{visit.visitor.name }}
         <br>
+        <span *ngIf="visit.visitors_count > 1">
+          <br> {{ '__.and others' | trans }} {{visit.visitors_count - 1}}
+        </span>
         <span *ngIf="visit.residence">{{visit.residence.name}}</span>
         <br>
         <small>{{visit.visitor.document}}</small>
