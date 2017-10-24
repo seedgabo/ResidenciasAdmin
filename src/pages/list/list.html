@@ -21,7 +21,7 @@
         <br>
         <small>{{visit.visitor.document}}</small>
       </h2>
-      <p *ngIf="visit.vehicle">
+      <p *ngIf="visit.vehicle" text-wrap>
         {{ visit.vehicle.name }} - {{visit.vehicle.plate}}
       </p>
       <span item-right>
