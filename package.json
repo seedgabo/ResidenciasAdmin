@@ -14,7 +14,6 @@
     "release-ios": "ionic cordova build ios --prod && code-push release-cordova residencias-admin ios -d Ios --mandatory",
     "release-web": "ionic cordova build browser --prod",
     "build-android": "cordova build android --release -- --keystore='./residenciasAdmin.jks' --storePassword=gab23gab --alias=residenciasAdmin"
-
   },
   "dependencies": {
     "@angular/common": "4.4.3",
@@ -65,7 +64,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.0.0",
-    "ionic": "3.13.2",
+    "ionic": "3.14.0",
     "typescript": "2.3.3"
   },
   "description": "An Ionic project",
