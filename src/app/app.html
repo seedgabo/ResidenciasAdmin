@@ -24,6 +24,14 @@
           <ion-icon color="primary" name="help-buoy"></ion-icon>
           {{ api.trans('literals.panic logs') }}
         </button>
+
+        <button *ngIf="CanCorrespondence()" menuClose ion-item (click)="openPage({component:'CorrespondencesPage'})" icon-left>
+
+          <ion-icon color="primary" name="cube"></ion-icon>
+
+          {{ api.trans('literals.correspondences') }}
+        </button>
+
         <button *ngIf="canAccounter()" menuClose ion-item (click)="openPage({component:SellerPage})" icon-left>
           <ion-icon color="primary" name="card"></ion-icon>
           {{ api.trans('__.Punto de Venta') }}

@@ -7,9 +7,10 @@ import 'rxjs/add/operator/map';
 import Echo from 'laravel-echo';
 declare var window: any;
 import Pusher from 'pusher-js';
-import { AlertController, ToastController, ModalController } from "ionic-angular";
+import { AlertController, ToastController, ModalController, Events } from "ionic-angular";
 import langs from "../assets/langs";
 window.Pusher = Pusher;
+import { Vibration } from '@ionic-native/vibration';
 
 @Injectable()
 export class Api {
@@ -37,7 +38,7 @@ export class Api {
   ready: Promise<any> = new Promise((resolve) => {
     this.resolve = resolve;
   });
-  constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController, public modal: ModalController) {
+  constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController, public vibration: Vibration, public modal: ModalController, public events: Events) {
     storage.ready().then(() => {
       storage.get('url').then(url_data => {
         if (url_data)
@@ -344,6 +345,11 @@ export class Api {
           this.handlePanic(data);
         })
 
+        .listen('PanicUpdate', (data) => {
+          console.log("panic", data)
+          this.handlePanic(data, false);
+        })
+
       this.Echo.private('App.User.' + this.user.id)
         .notification((notification) => {
           console.log(notification);
@@ -430,6 +436,7 @@ export class Api {
     visit.visitor = data.visitor;
     visit.visitors = data.visitors;
     this.alert.create({
+      cssClass: "visit-" + visit.status,
       title: this.trans('literals.visit') + " " + this.trans('literals.' + visit.status),
       subTitle: this.trans('literals.visitor') + ': ' + visit.visitor.name,
       message: visit.note,
@@ -437,10 +444,13 @@ export class Api {
     }).present();
   }
 
-  handlePanic(data) {
+  handlePanic(data, open = true) {
     data.sound = this.playSoundSOS();
-    var modal = this.modal.create(PanicPage, data);
-    modal.present();
+    if (open == true) {
+      var modal = this.modal.create(PanicPage, data);
+      modal.present();
+    }
+    this.events.publish("panic", data);
   }
 
   private setHeaders() {
@@ -470,18 +480,36 @@ export class Api {
   playSoundNotfication() {
     this.sound = new Audio('assets/sounds/notifcations.mp3');
     this.sound.play();
+    try {
+      this.vibration.vibrate([200]);
+
+    } catch (error) {
+      navigator.vibrate([200]);
+    }
     return this.sound;
   }
 
   playSoundBeep() {
     this.sound = new Audio('assets/sounds/beep.mp3');
     this.sound.play();
+    try {
+      this.vibration.vibrate([50]);
+
+    } catch (error) {
+      navigator.vibrate([50]);
+    }
     return this.sound;
   }
 
   playSoundSOS() {
     this.sound = new Audio('assets/sounds/sos.mp3');
     this.sound.play();
+    try {
+      this.vibration.vibrate([300, 200, 300, 200, 300, 200, 300, 300, 200, 300, 200, 300, 200, 300, 200]);
+
+    } catch (error) {
+      navigator.vibrate([300, 200, 300, 200, 300, 200, 300, 300, 200, 300, 200, 300, 200, 300, 200]);
+    }
     return this.sound;
   }
 

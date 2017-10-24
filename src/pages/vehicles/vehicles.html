@@ -1,0 +1,33 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ 'literals.vehicles' |trans }}</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="query" [debounce]="700" (ionInput)="filter()">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-list [virtualScroll]="vehicles">
+    <button ion-item *virtualItem="let vehicle" (click)="actions(vehicle)">
+      <h2 text-wrap>{{vehicle.name}}</h2>
+      <span item-right>{{vehicle.plate}}</span>
+
+      <p *ngIf="vehicle.residence">
+        {{vehicle.residence.name}}
+      </p>
+
+      <p *ngIf="vehicle.user">
+        {{vehicle.user.name}}
+      </p>
+
+      <p *ngIf="vehicle.visitor">
+        {{vehicle.visitor.name}}
+      </p>
+
+    </button>
+  </ion-list>
+</ion-content>

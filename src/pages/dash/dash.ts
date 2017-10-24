@@ -82,4 +82,14 @@ export class DashPage {
     return false;
   }
 
+  CanCorrespondence() {
+    if (this.api.roles && this.api.modules && this.api.modules.correspondences)
+      for (var i = 0; i < this.api.roles.length; i++) {
+        if (this.api.roles[i].name == 'Celator' || this.api.roles[i].name == 'SuperAdmin') {
+          return true;
+        }
+      }
+    return false;
+  }
+
 }

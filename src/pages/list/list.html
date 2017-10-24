@@ -21,6 +21,9 @@
         <br>
         <small>{{visit.visitor.document}}</small>
       </h2>
+      <p *ngIf="visit.vehicle" text-wrap>
+        {{ visit.vehicle.name }} - {{visit.vehicle.plate}}
+      </p>
       <span item-right>
         {{ visit.created_at |amCalendar }}
         <br>
