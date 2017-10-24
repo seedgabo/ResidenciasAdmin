@@ -12,6 +12,9 @@
 </ion-header>
 
 <ion-content>
+  <div text-center>
+    <ion-spinner *ngIf="loading"></ion-spinner>
+  </div>
   <ion-list [virtualScroll]="visits">
     <button ion-item (click)="actions(visit)" *virtualItem="let visit">
       <h2 *ngIf="visit.visitor">

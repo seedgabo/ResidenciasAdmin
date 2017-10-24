@@ -11,6 +11,7 @@ import moment from 'moment';
 export class ListPage {
   query = "";
   visits = [];
+  loading = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public actionsheet: ActionSheetController, public modal: ModalController) {
   }
 
@@ -19,12 +20,15 @@ export class ListPage {
   }
 
   getVisits() {
-    this.api.get('visits?with[]=residence&with[]=user&with[]=vehicle&with[]=visitor' + this.filters()).then((data: any) => {
+    this.loading = true
+    this.api.get('visits?with[]=residence&with[]=user&with[]=vehicle&with[]=visitor&withCount[]=visitors' + this.filters()).then((data: any) => {
       console.log(data);
       this.api.visits = data;
+      this.loading = false
       this.filter()
     }).catch((err) => {
       console.error(err);
+      this.loading = false
     });
   }
 
