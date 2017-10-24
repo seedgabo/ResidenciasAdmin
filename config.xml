@@ -89,8 +89,8 @@
     <engine name="browser" spec="^4.1.0" />
     <engine name="ios" spec="^4.4.0" />
     <plugin name="cordova-plugin-camera" spec="^2.4.1">
-        <variable name="CAMERA_USAGE_DESCRIPTION" value="Residentes Online quiere usar la camara para actualizar las fotos de los activos" />
-        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Residentes Online quiere usar tus imagenes para actualizar las fotos de los activos" />
+        <variable name="CAMERA_USAGE_DESCRIPTION" value=" " />
+        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value=" " />
     </plugin>
     <plugin name="cordova-plugin-code-push" spec="^1.9.5-beta" />
     <plugin name="cordova-plugin-console" spec="^1.0.7" />
