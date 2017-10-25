@@ -23,6 +23,8 @@ import { MomentModule } from 'angular2-moment';
 import { CodePush } from "@ionic-native/code-push";
 import { Printer } from '@ionic-native/printer';
 import { Vibration } from '@ionic-native/vibration';
+import { BackgroundMode } from '@ionic-native/background-mode';
+import { AppMinimize } from '@ionic-native/app-minimize';
 
 
 import { VisitPage } from "../pages/visit/visit";
@@ -77,6 +79,8 @@ import { ProductSearchPage } from '../pages/product-search/product-search';
     CodePush,
     Printer,
     Vibration,
+    BackgroundMode,
+    AppMinimize,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Api
   ]
