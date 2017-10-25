@@ -1,9 +1,11 @@
+import { BackgroundMode } from '@ionic-native/background-mode';
 import { DashPage } from './../pages/dash/dash';
 import { PanicLogsPage } from './../pages/panic-logs/panic-logs';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { AppMinimize } from '@ionic-native/app-minimize';
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
@@ -27,7 +29,7 @@ export class MyApp {
   SellerPage = SellerPage;
   ZonesAdminPage = ZonesAdminPage;
   PanicLogsPage = PanicLogsPage;
-  constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush, public backgroundmode: BackgroundMode, public minimize: AppMinimize) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -57,6 +59,19 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.platform.registerBackButtonAction(() => {
+        if (this.nav.canGoBack())
+          return this.nav.pop();
+        else {
+          this.minimize.minimize();
+        }
+      });
+
+      this.backgroundmode.enable();
+      this.backgroundmode.setDefaults(
+        { icon: 'icon', text: "", title: "Residentes Online Administrador", color: "#42f459", bigText: true }
+      );
+      this.backgroundmode.excludeFromTaskList();
       var sync = () => {
         this.codepush.sync({ updateDialog: false, ignoreFailedUpdates: false, }).subscribe(
           (status) => {

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.seedgabo.residentesAdmin" version="1.3.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.seedgabo.residentesAdmin" version="1.3.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Residentes Online Administrador</name>
     <description>La Administración en tu bolsillo</description>
     <author email="seedgabo@gmail.com" href="http://residenciasonlin.com/">Newton developers</author>
@@ -86,13 +86,8 @@
     </platform>
     <allow-navigation href="http://192.168.1.109:8100" />
     <engine name="android" spec="^6.1.2" />
-    <engine name="browser" spec="^4.1.0" />
     <engine name="ios" spec="^4.4.0" />
-    <plugin name="cordova-plugin-camera" spec="^2.4.1">
-        <variable name="CAMERA_USAGE_DESCRIPTION" value="Residentes online quiere usar tu camara para compartir tus fotos de  activos" />
-        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Residentes online quiere usar tu camara para compartir tus fotos de  activos" />
-    </plugin>
-    <plugin name="cordova-plugin-code-push" spec="^1.9.5-beta" />
+    <engine name="browser" spec="~5.0.1" />
     <plugin name="cordova-plugin-console" spec="^1.0.7" />
     <plugin name="cordova-plugin-device" spec="^1.1.6" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
@@ -107,4 +102,6 @@
         <variable name="CAMERA_USAGE_DESCRIPTION" value="Residentes online quiere usar tu camara para compartir tus fotos de  activos" />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Residentes online quiere usar tu camara para compartir tus fotos de  activos" />
     </plugin>
+    <plugin name="cordova-plugin-background-mode" spec="^0.7.2" />
+    <plugin name="cordova-plugin-appminimize" spec="^1.0.0" />
 </widget>
