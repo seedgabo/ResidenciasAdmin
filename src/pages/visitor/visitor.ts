@@ -13,6 +13,7 @@ export class VisitorPage {
   vehicle = null;
   parking = null;
   parkings = [];
+  loading = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public viewCtrl: ViewController, public modal: ModalController) {
     var visitor = navParams.get('visitor');
     if (visitor) {
@@ -52,6 +53,7 @@ export class VisitorPage {
   }
 
   save() {
+    this.loading = true;
     var data = {
       name: this.visitor.name,
       document: this.visitor.document,
@@ -62,15 +64,21 @@ export class VisitorPage {
       this.api.post('visitors', data).then((response) => {
         console.log(response);
         this.viewCtrl.dismiss();
+        this.loading = false;
       }).catch((err) => {
+        this.loading = false;
+        this.api.Error(err);
         console.log(err);
       });
     }
     if (this.action == 'update') {
       this.api.put('visitors/' + this.visitor.id, data).then((response) => {
         console.log(response);
+        this.loading = false;
         this.viewCtrl.dismiss();
       }).catch((err) => {
+        this.loading = false;
+        this.api.Error(err);
         console.log(err);
       });
     }
@@ -87,6 +95,7 @@ export class VisitorPage {
   }
 
   saveWithVisit() {
+    this.loading = true
     var data = {
       name: this.visitor.name,
       document: this.visitor.document,
@@ -97,16 +106,22 @@ export class VisitorPage {
       this.api.post('visitors', data).then((response) => {
         console.log(response);
         this.addVisit(response)
+        this.loading = false;
       }).catch((err) => {
+        this.loading = false;
         console.log(err);
+        this.api.Error(err);
       });
     }
     if (this.action == 'update') {
       this.api.put('visitors/' + this.visitor.id, data).then((response) => {
         console.log(response);
+        this.loading = false;
         this.addVisit(response)
       }).catch((err) => {
         console.log(err);
+        this.loading = false;
+        this.api.Error(err);
       });
     }
 

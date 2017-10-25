@@ -55,10 +55,10 @@
   <ion-grid>
     <ion-row>
       <ion-col col-12>
-        <button [disabled]="!canSave()" ion-button color="secondary" block (click)="saveWithVisit()">{{'crud.save' | trans }} & {{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}</button>
+        <button [disabled]="!canSave() || loading" ion-button color="secondary" block (click)="saveWithVisit()">{{'crud.save' | trans }} & {{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}</button>
       </ion-col>
       <ion-col>
-        <button [disabled]="!canSave()" ion-button color="secondary" block (click)="save()">{{'crud.save' | trans }}</button>
+        <button [disabled]="!canSave() || loading" ion-button color="secondary" block (click)="save()">{{'crud.save' | trans }}</button>
       </ion-col>
       <ion-col>
         <button ion-button color="light" block (click)="dismiss()">{{'crud.cancel' | trans }}</button>
