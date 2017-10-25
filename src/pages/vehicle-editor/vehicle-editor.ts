@@ -14,7 +14,7 @@ export class VehicleEditorPage {
     model: '',
     type: 'car',
     color: '',
-    user_id: null,
+    owner_id: null,
     residence_id: null,
     visitor_id: null,
   }

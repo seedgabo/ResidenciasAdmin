@@ -53,3 +53,8 @@
   <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
   <ion-nav [root]="rootPage" main #content swipeBackEnabled="false"></ion-nav>
 </ion-split-pane>
+<ion-footer *ngIf="api.Echo && !api.Echo.connector.socket.connected">
+  <ion-toolbar color="danger">
+    <p ion-text color="light">{{'__.Error en la conexion con el servidor' | trans }}</p>
+  </ion-toolbar>
+</ion-footer>

@@ -1,6 +1,6 @@
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController, Events } from 'ionic-angular';
 @IonicPage()
 @Component({
   selector: 'page-correspondences',
@@ -10,11 +10,18 @@ export class CorrespondencesPage {
 
   query = "";
   correspondences = [];
-  constructor(public navCtrl: NavController, public navParams: NavParams, public action: ActionSheetController, public api: Api) {
+  handler = (data) => {
+    this.getCorrespondences();
+  }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public action: ActionSheetController, public api: Api, public events: Events) {
   }
 
   ionViewDidLoad() {
     this.getCorrespondences();
+    this.events.subscribe("CorrespondenceCreated", this.handler);
+  }
+  ionViewDidLeave() {
+    this.events.unsubscribe("CorrespondenceCreated", this.handler);
   }
 
   getCorrespondences(refresher = null) {

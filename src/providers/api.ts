@@ -336,6 +336,13 @@ export class Api {
           })
         })
 
+        .listen('CorrespondenceCreated', (data) => {
+          console.log("correspondence created:", data);
+          this.events.publish("CorrespondenceCreated", data);
+          this.zone.run(() => {
+          })
+        })
+
         .listen('VisitConfirmed', (data) => {
           this.VisitConfirmed(data);
         })

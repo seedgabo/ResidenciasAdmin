@@ -9,7 +9,7 @@
     </ion-buttons>
   </ion-navbar>
   <ion-toolbar>
-    <ion-searchbar (ionInput)="search()" [(ngModel)]="query"></ion-searchbar>
+    <ion-searchbar (ionInput)="search()" [debounce]="750" [(ngModel)]="query"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 <ion-content>
