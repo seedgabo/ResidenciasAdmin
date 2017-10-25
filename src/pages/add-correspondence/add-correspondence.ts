@@ -16,6 +16,7 @@ export class AddCorrespondencePage {
     status: 'arrival'
   }
   person = null;
+  loading = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public modal: ModalController, public api: Api) {
   }
 
@@ -52,14 +53,20 @@ export class AddCorrespondencePage {
 
 
   save() {
+    this.loading = true;
     if (!this.correspondence.receptor_id) {
       this.correspondence.receptor_id = this.api.user.id;
     }
     this.api.post('correspondences', this.correspondence)
       .then((data) => {
         this.close()
+        this.loading = false;
       })
-      .catch(console.error)
+      .catch((err) => {
+        this.loading = false;
+        this.api.Error(err);
+        console.error(err)
+      })
   }
 
   close() {

@@ -43,7 +43,7 @@
   </ion-list>
 </ion-content>
 <ion-footer>
-  <button ion-button full color="secondary" icon-left (click)="create()">
+  <button ion-button [disabled]="loading" full color="secondary" icon-left (click)="create()">
     <ion-icon name="add"></ion-icon>
     {{'crud.add' | trans }} {{'literals.visit' | trans }}
   </button>

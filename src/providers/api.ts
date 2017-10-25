@@ -453,6 +453,26 @@ export class Api {
     this.events.publish("panic", data);
   }
 
+  Error(error) {
+    var message = "";
+    if (error.error == 500 || error.errorStatus == 500) {
+      message = this.trans("__.Internal Server Error")
+    }
+    if (error.error == 404 || error.errorStatus == 404) {
+      message = this.trans("__.Not Found")
+    }
+    if (error.error == 401 || error.errorStatus == 401) {
+      message = this.trans("__.Unathorized")
+    }
+    this.alert.create({
+      title: "Error",
+      subTitle: error.error,
+      message: message,
+      buttons: ["OK"],
+
+    }).present();
+  }
+
   private setHeaders() {
     let headers = new Headers();
     if (this.user && this.user.token)

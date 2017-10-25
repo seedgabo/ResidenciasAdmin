@@ -15,6 +15,7 @@ export class VisitCreatorPage {
   vehicle;
   parkings = [];
   statutes = ['waiting for confirmation', 'approved', 'rejected', 'departured'];
+  loading = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public viewCtrl: ViewController, public modal: ModalController) {
     console.log(navParams.get('visitor'))
     this.visitor = navParams.get('visitor');
@@ -38,10 +39,14 @@ export class VisitCreatorPage {
   }
 
   create() {
+    this.loading = true;
     this.api.post(`visitors/${this.visitor.id}/visit`, this.visit).then((response) => {
       console.log(response);
       this.viewCtrl.dismiss();
+      this.loading = false;
     }).catch((err) => {
+      this.loading = false;
+      this.api.Error(err);
       console.log(err);
     });
   }

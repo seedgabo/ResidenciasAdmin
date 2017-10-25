@@ -33,7 +33,7 @@
 </ion-content>
 
 <ion-footer>
-  <button ion-button full [disabled]="!canSave()" (click)="save()">
+  <button ion-button full [disabled]="!canSave() || loading" (click)="save()">
     {{ 'crud.save' | trans }}
   </button>
 </ion-footer>
