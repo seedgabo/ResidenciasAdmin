@@ -472,7 +472,7 @@ export class Api {
       message = this.trans("__.Unathorized")
     }
     this.alert.create({
-      title: "Error",
+      title: this.trans("__.Network Error"),
       subTitle: error.error,
       message: message,
       buttons: ["OK"],
