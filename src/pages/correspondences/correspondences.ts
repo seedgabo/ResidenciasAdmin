@@ -88,9 +88,7 @@ export class CorrespondencesPage {
   }
 
   checkDone(correspondence) {
-    this.api.put('correspondences/' + correspondence.id, {
-      status: 'delivered'
-    })
+    this.api.post('correspondences/' + correspondence.id + "/deliver", {})
       .then((data) => {
         this.getCorrespondences();
       })

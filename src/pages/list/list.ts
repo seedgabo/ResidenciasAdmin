@@ -1,3 +1,4 @@
+import { VisitPage } from './../visit/visit';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ActionSheetController, ModalController } from 'ionic-angular';
 import { Api } from "../../providers/api";
@@ -10,6 +11,7 @@ import moment from 'moment';
 export class ListPage {
   query = "";
   visits = [];
+  loading = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public actionsheet: ActionSheetController, public modal: ModalController) {
   }
 
@@ -18,12 +20,15 @@ export class ListPage {
   }
 
   getVisits() {
-    this.api.get('visits?with[]=residence&with[]=user&with[]=vehicle&with[]=visitor' + this.filters()).then((data: any) => {
+    this.loading = true
+    this.api.get('visits?with[]=residence&with[]=user&with[]=vehicle&with[]=visitor&withCount[]=visitors' + this.filters()).then((data: any) => {
       console.log(data);
       this.api.visits = data;
+      this.loading = false
       this.filter()
     }).catch((err) => {
       console.error(err);
+      this.loading = false
     });
   }
 
@@ -71,16 +76,24 @@ export class ListPage {
         handler: () => { this.departure(visit); }
       })
     }
+
+    buttons.push({
+      text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.visit'),
+      icon: 'eye',
+      // cssClass: 'icon-danger',
+      handler: () => { this.viewVisit(visit) }
+    });
     buttons.push({
       text: this.api.trans('crud.edit') + " " + this.api.trans('literals.visitor'),
       icon: 'contact',
       handler: () => { this.editVisitor(visit.visitor) }
     });
+
     buttons.push({
       text: this.api.trans('crud.delete') + " " + this.api.trans('literals.visit'),
       icon: 'trash',
       cssClass: 'icon-danger',
-      role: 'ddestructive',
+      role: 'destructive',
       handler: () => { this.deleteVisit(visit) }
     });
 
@@ -127,6 +140,20 @@ export class ListPage {
         console.error(err);
       })
 
+  }
+
+  viewVisit(visit) {
+    this.navCtrl.push(VisitPage, {
+      visit: visit,
+      done: () => {
+        this.api.put("visits/" + visit.id, { status: "departured" })
+          .then(() => {
+            visit.status = "departured";
+
+          })
+          .catch(console.error)
+      }
+    });
   }
 
 }

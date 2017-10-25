@@ -6,6 +6,8 @@
 
 
 <ion-content>
+
+
   <ion-card>
     <ion-card-content>
       <ion-list>
@@ -20,19 +22,7 @@
             <span *ngIf="!visit.visitor" item-right>{{'literals.unkown'| trans }}</span>
           </ion-item>
         </div>
-        <div *ngIf="visit.user">
-          <div text-center>
-            <img [src]="visit.user.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
-          </div>
-          <ion-item>
-            <ion-icon name="person"></ion-icon>
-            <b>{{'literals.user' | trans }}</b>
-            <span item-right>{{visit.user.name}}</span>
-          </ion-item>
-        </div>
-        <p *ngIf="api.residences_collection[visit.residence_id]" text-left>
-          {{api.residences_collection[visit.residence_id].name}}
-        </p>
+
         <div *ngIf="visit.visitors &&  visit.visitors.length > 1">
           <ion-list-header>{{'literals.visitors' | trans}}</ion-list-header>
           <ion-item *ngFor="let person of visit.visitors">
@@ -54,7 +44,40 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card>
+
+  <ion-card *ngIf="visit.user">
+    <ion-card-header>
+      <ion-card-title>{{'literals.user' | trans }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <div>
+        <div text-center>
+          <img [src]="visit.user.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
+        </div>
+        <ion-item>
+          <ion-icon name="person"></ion-icon>
+          <span item-right>{{visit.user.name}}</span>
+        </ion-item>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="api.residences_collection[visit.residence_id]">
+    <ion-card-header>
+      <ion-card-title>{{'literals.sidence' | trans }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p text-center>
+        {{ api.residences_collection[visit.residence_id].name }}
+      </p>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="visit.note">
     <ion-card-header>
       <ion-card-title>{{'literals.notes' | trans }}</ion-card-title>
     </ion-card-header>
@@ -93,17 +116,19 @@
   </ion-card>
 
 </ion-content>
+
 <ion-footer>
   <ion-grid>
     <ion-row>
       <ion-col>
-        <button ion-button full color="secondary" (click)="done()">
-            {{'__.marcar como listo' | trans }}
+        <button *ngIf="done" ion-button full color="secondary" (click)="done()">
+          {{'__.marcar como listo' | trans }}
         </button>
       </ion-col>
       <ion-col>
-        <button ion-button full (click)="dismiss()">
-            {{'crud.cancel' | trans }}
+        <button *ngIf="done" ion-button full (click)="dismiss()">
+
+          {{'crud.cancel' | trans }}
         </button>
       </ion-col>
     </ion-row>
