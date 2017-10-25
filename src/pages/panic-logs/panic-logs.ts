@@ -1,6 +1,6 @@
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Platform } from 'ionic-angular';
 @Component({
   selector: 'page-panic-logs',
   templateUrl: 'panic-logs.html',
@@ -8,7 +8,7 @@ import { NavController, NavParams } from 'ionic-angular';
 export class PanicLogsPage {
   panics: any = {};
   loading = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public platform: Platform) {
   }
 
   ionViewDidLoad() {
@@ -27,6 +27,19 @@ export class PanicLogsPage {
         console.error(err);
         this.loading = false;
       })
+  }
+
+  openMap(panic) {
+    if (!panic.location) {
+      return;
+    }
+    var addressLongLat = panic.location.latitude + ',' + panic.location.longitude;
+
+    if (this.platform.is("ios")) {
+      window.open("http://maps.apple.com/?q=" + addressLongLat, '_system');
+      return
+    }
+    window.open("geo:" + addressLongLat);
   }
 
 }

@@ -42,13 +42,14 @@ export class PanicPage {
   }
 
   ionViewDidLoad() {
-    this.events.subscribe("panic0", this.prepareData);
+    this.events.subscribe("panic", this.prepareData);
   }
 
   close() {
     if (this.navParams.get('sound'))
       this.navParams.get('sound').pause()
     this.viewctrl.dismiss();
+    this.events.unsubscribe("panic", this.prepareData);
   }
 
   openInMaps() {
