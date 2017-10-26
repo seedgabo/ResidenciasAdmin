@@ -2,6 +2,11 @@
 
   <ion-navbar color="primary">
     <ion-title>{{'literals.correspondences' | trans}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="filterActions()">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 
@@ -34,8 +39,12 @@
         <b>{{'literals.receptor' | trans }}</b>
         {{corres.receptor.name}}
       </p>
+      <p text-right *ngIf="corres.delivered_at">
+        <b>{{'literals.delivered at' | trans }}</b>
+        {{ corres.delivered_at | amCalendar }}
+      </p>
       <p text-right>
-        {{ corres.create_at | amCalendar }}
+        {{ corres.created_at | amCalendar }}
       </p>
     </button>
   </ion-list>

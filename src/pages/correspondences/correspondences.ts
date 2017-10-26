@@ -13,6 +13,7 @@ export class CorrespondencesPage {
   handler = (data) => {
     this.getCorrespondences();
   }
+  filter_status = '';
   constructor(public navCtrl: NavController, public navParams: NavParams, public action: ActionSheetController, public api: Api, public events: Events) {
   }
 
@@ -25,7 +26,7 @@ export class CorrespondencesPage {
   }
 
   getCorrespondences(refresher = null) {
-    this.api.get('correspondences?whereNot[status]=delivered&order[residence_id]=asc&with[]=user&with[]=residence&with[]=receptor')
+    this.api.get('correspondences?order[id]=desc&with[]=user&with[]=residence&with[]=receptor&limit=1000')
       .then((data: any) => {
         console.log(data);
         this.correspondences = data;
@@ -38,15 +39,19 @@ export class CorrespondencesPage {
 
   filter() {
     if (this.query === "") {
-      return this.correspondences;
+      return this.correspondences.filter((corres) => {
+        return corres.status.toLowerCase().indexOf(this.filter_status) > -1
+      });
     }
     var finder = this.query.toLowerCase();
     return this.correspondences.filter((corres) => {
-      return corres.item.toLowerCase().indexOf(finder) > -1
-        || (corres.user && corres.user.name.toLowerCase().indexOf(finder) > -1)
-        || (corres.residence && corres.residence.name.toLowerCase().indexOf(finder) > -1)
-        || (corres.residence && corres.residence.name.toLowerCase().indexOf(finder) > -1)
-        || (corres.receptor && corres.receptor.name.toLowerCase().indexOf(finder) > -1)
+      return corres.status.toLowerCase().indexOf(this.filter_status) > -1
+        && (corres.item.toLowerCase().indexOf(finder) > -1
+          || (corres.user && corres.user.name.toLowerCase().indexOf(finder) > -1)
+          || (corres.residence && corres.residence.name.toLowerCase().indexOf(finder) > -1)
+          || (corres.residence && corres.residence.name.toLowerCase().indexOf(finder) > -1)
+          || (corres.receptor && corres.receptor.name.toLowerCase().indexOf(finder) > -1)
+        )
     });
   }
 
@@ -110,4 +115,42 @@ export class CorrespondencesPage {
       .catch(console.error)
   }
 
+  filterActions() {
+    var actions = this.action.create({
+      title: this.api.trans("literals.correspondences"),
+      buttons: [
+        {
+          text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.all') + 's',
+          icon: 'checkmark-circle-outline',
+          handler: () => {
+            this.filter_status = ""
+          }
+        },
+        {
+          text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.delivered') + 's',
+          icon: 'checkmark-circle-outline',
+          handler: () => {
+            this.filter_status = "delivered"
+          }
+        },
+        {
+          text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.arrival') + 's',
+          icon: 'eye',
+          handler: () => {
+            this.filter_status = "arrival"
+          }
+        },
+        {
+          role: 'cancel',
+          icon: 'close',
+          text: this.api.trans('crud.cancel'),
+          handler: () => {
+          }
+        }
+      ],
+
+    });
+
+    actions.present();
+  }
 }
