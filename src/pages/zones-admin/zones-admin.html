@@ -1,67 +1,67 @@
 <ion-header>
-    <ion-navbar color="primary">
-        <button ion-button menuToggle>
-        <ion-icon name="menu"></ion-icon>
-      </button>
-        <ion-title text-capitalize>{{'base.admin' | trans }} {{ 'literals.zones' | trans }}</ion-title>
-    </ion-navbar>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title text-capitalize>{{'__.admin' | trans }} {{ 'literals.zones' | trans }}</ion-title>
+  </ion-navbar>
 </ion-header>
 
 
 <ion-content>
-    <ion-list *ngIf="!zone">
-        <button ion-item *ngFor="let zone of zones" (click)="selectZone(zone)">
-            <ion-thumbnail item-left>
-               <img [src]="zone.image_url" [alt]="zone.name">
-            </ion-thumbnail>
-            <h2>
-              {{zone.name}}
-            </h2>
-            <h3>
-               {{zone.description}}
-            </h3>
-        </button>
-    </ion-list>
-    <div *ngIf="zone">
-        <button ion-button clear (click)="deselect()" icon-only>
-            <ion-icon name="arrow-back"></ion-icon>
-        </button>
+  <ion-list *ngIf="!zone">
+    <button ion-item *ngFor="let zone of zones" (click)="selectZone(zone)">
+      <ion-thumbnail item-left>
+        <img [src]="zone.image_url" [alt]="zone.name">
+      </ion-thumbnail>
+      <h2>
+        {{zone.name}}
+      </h2>
+      <h3>
+        {{zone.description}}
+      </h3>
+    </button>
+  </ion-list>
+  <div *ngIf="zone">
+    <button ion-button clear (click)="deselect()" icon-only>
+      <ion-icon name="arrow-back"></ion-icon>
+    </button>
 
-        <ion-card padding>
-            <ion-item>
-                <ion-label floating>{{'literals.name' | trans }} </ion-label>
-                <ion-input [(ngModel)]="zone.name"></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label floating>{{'literals.description' | trans }} </ion-label>
-                <ion-textarea [(ngModel)]="zone.description"></ion-textarea>
-            </ion-item>
-            <ion-item>
-                <ion-label floating>{{'literals.price' | trans }} </ion-label>
-                <ion-input type="number" step="0.001" [(ngModel)]="zone.price"></ion-input>
-            </ion-item>
-            <button ion-button clear full (click)="save()">
-            {{'crud.save' | trans }}
-          </button>
-        </ion-card>
+    <ion-card padding>
+      <ion-item>
+        <ion-label floating>{{'literals.name' | trans }} </ion-label>
+        <ion-input [(ngModel)]="zone.name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>{{'literals.description' | trans }} </ion-label>
+        <ion-textarea [(ngModel)]="zone.description"></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>{{'literals.price' | trans }} </ion-label>
+        <ion-input type="number" step="0.001" [(ngModel)]="zone.price"></ion-input>
+      </ion-item>
+      <button ion-button clear full (click)="save()">
+        {{'crud.save' | trans }}
+      </button>
+    </ion-card>
 
-        <ion-card padding *ngIf="zone.reservations && zone.reservations.data">
-            <ion-card-title>{{'literals.reservations' | trans }}</ion-card-title>
-            <ion-card-content>
-                <ion-list>
-                    <ion-item *ngFor="let reserv of zone.reservations.data">
-                        <p *ngIf="reserv.user">
-                            {{reserv.user.name }}
-                        </p>
-                        <p>
-                            {{reserv.start | amCalendar }}
-                        </p>
-                        <span item-right>
-                          {{ reserv.total  | currency:'USD':true:'1.2-2' }}
-                        </span>
-                    </ion-item>
-                </ion-list>
-            </ion-card-content>
-        </ion-card>
-    </div>
+    <ion-card padding *ngIf="zone.reservations && zone.reservations.data">
+      <ion-card-title>{{'literals.reservations' | trans }}</ion-card-title>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let reserv of zone.reservations.data">
+            <p *ngIf="reserv.user">
+              {{reserv.user.name }}
+            </p>
+            <p>
+              {{reserv.start | amCalendar }}
+            </p>
+            <span item-right>
+              {{ reserv.total | currency:'USD':true:'1.2-2' }}
+            </span>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
