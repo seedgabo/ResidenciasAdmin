@@ -469,7 +469,7 @@ export class Api {
       message = this.trans("__.Not Found")
     }
     if (error.error == 401 || error.errorStatus == 401) {
-      message = this.trans("__.Unathorized")
+      message = this.trans("__.Unauthorized")
     }
     this.alert.create({
       title: this.trans("__.Network Error"),
