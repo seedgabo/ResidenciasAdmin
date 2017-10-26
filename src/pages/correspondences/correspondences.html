@@ -11,7 +11,7 @@
 
 
   <ion-toolbar>
-    <ion-searchbar [(ngModel)]="query" [debounce]="750"></ion-searchbar>
+    <ion-searchbar [(ngModel)]="query" (ionInput)="filter()" [debounce]="750"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -19,12 +19,16 @@
   <ion-refresher (ionRefresh)="getCorrespondences($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list>
-    <button ion-item *ngFor="let corres of filter()" (click)="actions(corres)">
+  <ion-list [virtualScroll]="filtered">
+    <button ion-item *virtualItem="let corres" (click)="actions(corres)">
       <h2>
         {{corres.item}}
         <span *ngIf="corres.quantity > 1"> ({{corres.quantity}})</span>
       </h2>
+      <h3>
+        <b>{{'literals.status' | trans }}</b>
+        <span>{{'literals.'+ corres.status | trans }}</span>
+      </h3>
       <p *ngIf="corres.user">
         <b> {{'literals.user' | trans }}:</b>
         {{corres.user.name}}

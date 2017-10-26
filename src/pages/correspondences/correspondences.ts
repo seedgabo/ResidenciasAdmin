@@ -14,6 +14,7 @@ export class CorrespondencesPage {
     this.getCorrespondences();
   }
   filter_status = '';
+  filtered = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, public action: ActionSheetController, public api: Api, public events: Events) {
   }
 
@@ -21,30 +22,38 @@ export class CorrespondencesPage {
     this.getCorrespondences();
     this.events.subscribe("CorrespondenceCreated", this.handler);
   }
+
   ionViewDidLeave() {
     this.events.unsubscribe("CorrespondenceCreated", this.handler);
   }
 
   getCorrespondences(refresher = null) {
-    this.api.get('correspondences?order[id]=desc&with[]=user&with[]=residence&with[]=receptor&limit=1000')
+    this.api.get('correspondences?order[status]=desc&order[id]=desc&with[]=user&with[]=residence&with[]=receptor&limit=1000')
       .then((data: any) => {
         console.log(data);
         this.correspondences = data;
+        this.filter();
         if (refresher) {
           refresher.complete();
         }
       })
-      .catch(console.error)
+      .catch((err) => {
+        this.api.Error(err);
+        if (refresher) {
+          refresher.complete();
+        }
+        console.error(err);
+      })
   }
 
   filter() {
     if (this.query === "") {
-      return this.correspondences.filter((corres) => {
+      this.filtered = this.correspondences.filter((corres) => {
         return corres.status.toLowerCase().indexOf(this.filter_status) > -1
       });
     }
     var finder = this.query.toLowerCase();
-    return this.correspondences.filter((corres) => {
+    this.filtered = this.correspondences.filter((corres) => {
       return corres.status.toLowerCase().indexOf(this.filter_status) > -1
         && (corres.item.toLowerCase().indexOf(finder) > -1
           || (corres.user && corres.user.name.toLowerCase().indexOf(finder) > -1)
@@ -123,21 +132,24 @@ export class CorrespondencesPage {
           text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.all') + 's',
           icon: 'checkmark-circle-outline',
           handler: () => {
-            this.filter_status = ""
+            this.filter_status = "";
+            this.filter()
           }
         },
         {
           text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.delivered') + 's',
           icon: 'checkmark-circle-outline',
           handler: () => {
-            this.filter_status = "delivered"
+            this.filter_status = "delivered";
+            this.filter()
           }
         },
         {
           text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.arrival') + 's',
           icon: 'eye',
           handler: () => {
-            this.filter_status = "arrival"
+            this.filter_status = "arrival";
+            this.filter()
           }
         },
         {

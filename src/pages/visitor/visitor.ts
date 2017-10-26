@@ -58,7 +58,8 @@ export class VisitorPage {
       name: this.visitor.name,
       document: this.visitor.document,
       residence_id: this.visitor.residence_id,
-      sex: this.visitor.sex
+      sex: this.visitor.sex,
+      relationship: this.visitor.relationship
     };
     if (this.action == 'create') {
       this.api.post('visitors', data).then((response) => {

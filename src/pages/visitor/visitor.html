@@ -39,6 +39,10 @@
       </ion-select>
     </ion-item>
     <ion-item>
+      <ion-label floating>{{'literals.relationship' | trans }}</ion-label>
+      <ion-input type="text" [(ngModel)]="visitor.relationship"></ion-input>
+    </ion-item>
+    <ion-item>
       <button ion-button full (click)="selectVehicle()">
         {{ vehicle ? vehicle.plate+ '-' +vehicle.name : ('literals.vehicle' | trans) }}
       </button>

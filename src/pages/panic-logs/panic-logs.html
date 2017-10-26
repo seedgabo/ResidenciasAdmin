@@ -10,8 +10,8 @@
   <div text-center>
     <ion-spinner *ngIf="loading" color="primary"></ion-spinner>
   </div>
-  <ion-list inset *ngIf="panics.data">
-    <ion-item *ngFor="let panic of panics.data">
+  <ion-list inset *ngIf="panics.data" [virtualScroll]="panics.data">
+    <ion-item *virtualItem="let panic">
       <h2 *ngIf="panic.residence">
         {{panic.residence.name}}
       </h2>
