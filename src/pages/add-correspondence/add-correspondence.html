@@ -11,7 +11,7 @@
 
     <button ion-button full color="primary" (click)="selectPerson()">
       <span *ngIf="person">{{person.name}}</span>
-      <span *ngIf="!person">{{'literals.select' | trans }} {{'literals.person' | trans }}</span>
+      <span *ngIf="!person">{{'literals.select :person' | trans }}</span>
     </button>
 
 

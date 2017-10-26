@@ -6,7 +6,7 @@ import { NavController, NavParams, Platform } from 'ionic-angular';
   templateUrl: 'panic-logs.html',
 })
 export class PanicLogsPage {
-  panics: any = {};
+  panics: any = { data: [] };
   loading = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public platform: Platform) {
   }

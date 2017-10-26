@@ -19,39 +19,41 @@
   <ion-refresher (ionRefresh)="getCorrespondences($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list [virtualScroll]="filtered">
-    <button ion-item *virtualItem="let corres" (click)="actions(corres)">
-      <h2>
-        {{corres.item}}
-        <span *ngIf="corres.quantity > 1"> ({{corres.quantity}})</span>
-      </h2>
-      <h3>
-        <b>{{'literals.status' | trans }}</b>
-        <span>{{'literals.'+ corres.status | trans }}</span>
-      </h3>
-      <p *ngIf="corres.user">
-        <b> {{'literals.user' | trans }}:</b>
-        {{corres.user.name}}
-      </p>
+  <div *ngIf="filtered">
+    <ion-list [virtualScroll]="filtered">
+      <button ion-item *virtualItem="let corres" (click)="actions(corres)">
+        <h2 text-center>
+          {{corres.item}}
+          <span *ngIf="corres.quantity > 1"> ({{corres.quantity}})</span>
+        </h2>
+        <h3>
+          <b>{{'literals.status' | trans }}</b>
+          <span ion-text [color]="corres.status == 'delivered' ? 'secondary' :''">{{'literals.'+ corres.status | trans }}</span>
+        </h3>
+        <p *ngIf="corres.user">
+          <b> {{'literals.user' | trans }}:</b>
+          {{corres.user.name}}
+        </p>
 
-      <p *ngIf="corres.residence">
-        <b> {{'literals.residence' | trans }}:</b>
-        {{corres.residence.name}}
-      </p>
+        <p *ngIf="corres.residence">
+          <b> {{'literals.residence' | trans }}:</b>
+          {{corres.residence.name}}
+        </p>
 
-      <p *ngIf="corres.receptor">
-        <b>{{'literals.receptor' | trans }}</b>
-        {{corres.receptor.name}}
-      </p>
-      <p text-right *ngIf="corres.delivered_at">
-        <b>{{'literals.delivered at' | trans }}</b>
-        {{ corres.delivered_at | amCalendar }}
-      </p>
-      <p text-right>
-        {{ corres.created_at | amCalendar }}
-      </p>
-    </button>
-  </ion-list>
+        <p *ngIf="corres.receptor">
+          <b>{{'literals.receptor' | trans }}</b>
+          {{corres.receptor.name}}
+        </p>
+        <p text-right *ngIf="corres.delivered_at">
+          <b>{{'literals.delivered at' | trans }}</b>
+          {{ corres.delivered_at | amCalendar }}
+        </p>
+        <p text-right>
+          {{ corres.created_at | amCalendar }}
+        </p>
+      </button>
+    </ion-list>
+  </div>
   <ion-fab bottom right>
     <button ion-fab (click)="addCorrespondece()">
       <ion-icon name="add-circle"></ion-icon>
