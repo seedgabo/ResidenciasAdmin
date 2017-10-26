@@ -17,7 +17,7 @@ export class PanicLogsPage {
 
   getPanics() {
     this.loading = true;
-    this.api.get('panics?with[]=user&with[]=residence&order[created_at]=desc&paginate=300')
+    this.api.get('panics?with[]=user&with[]=residence&order[created_at]=desc&paginate=500')
       .then((data: any) => {
         console.log(data);
         this.panics = data;
