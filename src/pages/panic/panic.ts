@@ -57,7 +57,8 @@ export class PanicPage {
       return
     }
     var addressLongLat = this.location.latitude + ',' + this.location.longitude;
-    window.open("http://maps.google.com/?q=" + addressLongLat, '_system');
+    window.open("http://maps.google.com/?q=" + addressLongLat, "_system");
+
   }
 
 }

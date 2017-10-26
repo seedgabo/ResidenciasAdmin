@@ -34,12 +34,7 @@ export class PanicLogsPage {
       return;
     }
     var addressLongLat = panic.location.latitude + ',' + panic.location.longitude;
-
-    if (this.platform.is("ios")) {
-      window.open("http://maps.apple.com/?q=" + addressLongLat, '_system');
-      return
-    }
-    window.open("geo:" + addressLongLat);
+    window.open("http://maps.google.com/?q=" + addressLongLat, "_system");
   }
 
 }
