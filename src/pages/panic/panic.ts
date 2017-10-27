@@ -13,6 +13,18 @@ export class PanicPage {
   residence: any = {};
   location = null;
   datetime = moment.utc();
+  prepareData = (data) => {
+    console.log(data);
+    this.user = data.user;
+    this.residence = data.residence;
+    this.location = data.location;
+    if (data.datetime)
+      this.datetime = moment.utc(data.date);
+
+    if (!this.datetime.isValid())
+      this.datetime = moment.utc();
+  }
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewctrl: ViewController, public events: Events) {
     this.user = this.navParams.get('user')
 
@@ -30,16 +42,6 @@ export class PanicPage {
 
   }
 
-  prepareData(data) {
-    this.user = data.user;
-    this.residence = data.residence;
-    this.location = data.location;
-    if (data.datetime)
-      this.datetime = moment.utc(data.date);
-
-    if (!this.datetime.isValid())
-      this.datetime = moment.utc();
-  }
 
   ionViewDidLoad() {
     this.events.subscribe("panic", this.prepareData);
@@ -57,7 +59,8 @@ export class PanicPage {
       return
     }
     var addressLongLat = this.location.latitude + ',' + this.location.longitude;
-    window.open("http://maps.google.com/?q=" + addressLongLat, "_system");
+    var label = "SOS: " + this.user.name;
+    window.open("http://maps.google.com/?q=" + addressLongLat + "(" + label + ")", "_system");
 
   }
 

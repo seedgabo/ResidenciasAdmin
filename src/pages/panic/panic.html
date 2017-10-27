@@ -22,7 +22,8 @@
     </ion-item>
     <ion-item>
       <b>{{ 'literals.location' | trans }}</b>
-      <button block color="secondary" *ngIf="location" (click)="openInMaps()">
+      <button ion-button block color="secondary" *ngIf="location" (click)="openInMaps()" icon-left>
+        <ion-icon name="map"></ion-icon>
         {{ '__.open in maps' | trans }}
       </button>
       <span item-right *ngIf="!location">{{ '__.requesting location' | trans }}</span>
