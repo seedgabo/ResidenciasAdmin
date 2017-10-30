@@ -289,5 +289,16 @@ export class ZonesAdminPage {
   }
 
 
+  sendPush(message, reservation) {
+    var user_id = reservation.user_id
+    this.api.post('push/' + user_id + '/notification', { message: message })
+      .then(() => {
+
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+  }
+
 
 }
