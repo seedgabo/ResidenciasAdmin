@@ -216,6 +216,7 @@ export class ReservationPage {
           message: this.api.trans('__.processed'),
           duration: 3000
         }).present();
+        reservation.status = "approved";
       })
       .catch((e) => {
         console.error(e);

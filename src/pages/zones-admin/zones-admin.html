@@ -60,7 +60,7 @@
 
             <h3>
               <b>{{'literals.status' | trans }}:</b>
-              <span>
+              <span ion-text [color]="reserv.status == 'approved'? 'secondary': reserv.status == 'rejected' ? 'danger': ''">
                 {{ 'literals.' + reserv.status | trans }}
               </span>
             </h3>
