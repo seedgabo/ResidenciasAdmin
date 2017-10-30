@@ -132,7 +132,7 @@ export class ZonesAdminPage {
         role: "cash",
         text: this.api.trans("literals.payment") + " " + this.api.trans("literals.reservation"),
         handler: () => {
-          this.approve(reservation);
+          this.askForMethod(reservation)
         },
       })
 

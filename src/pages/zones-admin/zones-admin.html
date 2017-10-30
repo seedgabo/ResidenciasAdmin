@@ -73,6 +73,10 @@
                 {{ reserv.quotas }}
               </span>
             </p>
+            <p text-wrap *ngIf="reserv.note">
+              <b>{{'literals.notes' | trans }}</b>
+              {{reserv.note}}
+            </p>
             <p>
               {{reserv.start | amCalendar }}
             </p>

@@ -45,6 +45,12 @@
         </ion-item>
 
         <ion-item>
+          <ion-icon small item-left name="list"></ion-icon>
+          <h2>{{ 'literals.notes' | trans }}</h2>
+          <span item-right>{{ reservation.note }}</span>
+        </ion-item>
+
+        <ion-item>
           <ion-icon small item-left name="cash"></ion-icon>
           <h2>{{ 'literals.total' | trans }}</h2>
           <span item-right>{{( reservation.total )| currency:'USD':true:'1.2-2' }}</span>
