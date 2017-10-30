@@ -1,3 +1,4 @@
+import { AlertController } from 'ionic-angular';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController, ActionSheetController } from 'ionic-angular';
 import { Api } from '../../providers/api';
@@ -8,7 +9,7 @@ import { Api } from '../../providers/api';
 export class ZonesAdminPage {
   zones = [];
   zone = null;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public toast: ToastController, public actionsheet: ActionSheetController, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public toast: ToastController, public actionsheet: ActionSheetController, public alert: AlertController, public api: Api) {
   }
 
   ionViewDidLoad() {
@@ -268,6 +269,7 @@ export class ZonesAdminPage {
     if (type === 'charge') {
       promise = this.api.post(`reservations/${reservation.id}/charge`, {})
     }
+
     else {
       promise = this.api.post(`reservations/${reservation.id}/checkIn`, {})
     }
@@ -279,6 +281,12 @@ export class ZonesAdminPage {
           duration: 3000
         }).present();
         reservation.status = "approved";
+        if (type == 'charge') {
+          this.sendPush("Se ha generado un nuevo cargo a su factura", data.user_id);
+        }
+        if (type == "invoice") {
+          this.sendPush("Se ha generado una nueva factura por reservacion", data.user_id);
+        }
       })
       .catch((e) => {
         console.error(e);
@@ -286,6 +294,58 @@ export class ZonesAdminPage {
       })
 
     return promise;
+  }
+
+  askForPayment() {
+    return new Promise((resolve, reject) => {
+      this.alert.create({
+        inputs: [
+          {
+            type: 'radio',
+            label: this.api.trans('literals.cash'),
+            value: 'cash',
+            checked: true
+          },
+          {
+            type: 'radio',
+            label: this.api.trans('literals.debit_card'),
+            value: 'debit card',
+          },
+          {
+            type: 'radio',
+            label: this.api.trans('literals.credit_card'),
+            value: 'credit card',
+          },
+          {
+            type: 'radio',
+            label: this.api.trans('literals.transfer'),
+            value: 'transfer',
+          },
+          {
+            type: 'radio',
+            label: this.api.trans('literals.deposit'),
+            value: 'deposit',
+          },
+        ],
+        buttons: [
+          {
+            role: 'destructive',
+            text: this.api.trans('crud.cancel'),
+            handler: (data) => {
+              reject();
+            }
+          },
+          {
+            role: 'accept',
+            text: this.api.trans('crud.add'),
+            handler: (data) => {
+              console.log("transaction", data);
+              resolve(data);
+            }
+          }
+        ]
+      }).present();
+    })
   }
 
 

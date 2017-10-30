@@ -1,3 +1,4 @@
+import { AlertController } from 'ionic-angular';
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ActionSheetController, ToastController } from 'ionic-angular';
@@ -9,7 +10,7 @@ import { IonicPage, NavController, NavParams, ActionSheetController, ToastContro
 export class ReservationPage {
   reservation: any = {}
   loading = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public actionsheet: ActionSheetController, public toast: ToastController, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public actionsheet: ActionSheetController, public alert: AlertController, public toast: ToastController, public api: Api) {
     this.reservation = navParams.get('reservation');
   }
 
@@ -164,6 +165,9 @@ export class ReservationPage {
               reservation.total = data.total;
               this.api.put(`reservations/${reservation.id}`, { total: data.total });
               this.proccessPayment(reservation, mode)
+                .then((invoice) => {
+                  this.navCtrl.push("PrintInvoicePage", { invoice: invoice });
+                })
             }
           }
         },
@@ -202,12 +206,14 @@ export class ReservationPage {
   }
 
   proccessPayment(reservation, type = "charge") {
-    var promise;
+    var promise: Promise<any>;
     if (type === 'charge') {
       promise = this.api.post(`reservations/${reservation.id}/charge`, {})
     }
     else {
-      promise = this.api.post(`reservations/${reservation.id}/checkIn`, {})
+      this.askForPayment().then((payment) => {
+        promise = this.api.post(`reservations/${reservation.id}/checkIn`, { payment: payment })
+      })
     }
 
     promise
@@ -229,6 +235,59 @@ export class ReservationPage {
   dismiss() {
     this.navCtrl.pop({ animation: "ios-transition" });
   }
+
+  askForPayment() {
+    return new Promise((resolve, reject) => {
+      this.alert.create({
+        inputs: [
+          {
+            type: 'radio',
+            label: this.api.trans('literals.cash'),
+            value: 'cash',
+            checked: true
+          },
+          {
+            type: 'radio',
+            label: this.api.trans('literals.debit_card'),
+            value: 'debit card',
+          },
+          {
+            type: 'radio',
+            label: this.api.trans('literals.credit_card'),
+            value: 'credit card',
+          },
+          {
+            type: 'radio',
+            label: this.api.trans('literals.transfer'),
+            value: 'transfer',
+          },
+          {
+            type: 'radio',
+            label: this.api.trans('literals.deposit'),
+            value: 'deposit',
+          },
+        ],
+        buttons: [
+          {
+            role: 'destructive',
+            text: this.api.trans('crud.cancel'),
+            handler: (data) => {
+              reject();
+            }
+          },
+          {
+            role: 'accept',
+            text: this.api.trans('crud.add'),
+            handler: (data) => {
+              console.log("transaction", data);
+              resolve(data);
+            }
+          }
+        ]
+      }).present();
+    })
+  }
+
 
   sendPush(message, reservation) {
     var user_id = reservation.user_id
