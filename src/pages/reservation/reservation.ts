@@ -207,13 +207,17 @@ export class ReservationPage {
 
   proccessPayment(reservation, type = "charge") {
     var promise: Promise<any>;
+    var message;
     if (type === 'charge') {
       promise = this.api.post(`reservations/${reservation.id}/charge`, {})
+      message = this.api.trans('__.Se ha generado un nuevo cargo a su factura')
     }
     else {
+      message = this.api.trans('__.Se ha generado una nueva factura por una reservacion');
       this.askForPayment().then((payment) => {
         promise = this.api.post(`reservations/${reservation.id}/checkIn`, { payment: payment })
       })
+
     }
 
     promise
@@ -223,6 +227,7 @@ export class ReservationPage {
           duration: 3000
         }).present();
         reservation.status = "approved";
+        this.sendPush(message, reservation)
       })
       .catch((e) => {
         console.error(e);
@@ -230,10 +235,6 @@ export class ReservationPage {
       })
 
     return promise;
-  }
-
-  dismiss() {
-    this.navCtrl.pop({ animation: "ios-transition" });
   }
 
   askForPayment() {
@@ -288,7 +289,6 @@ export class ReservationPage {
     })
   }
 
-
   sendPush(message, reservation) {
     var user_id = reservation.user_id
     this.api.post('push/' + user_id + '/notification', { message: message })
@@ -299,4 +299,12 @@ export class ReservationPage {
         console.error(error);
       })
   }
+
+
+
+  dismiss() {
+    this.navCtrl.pop({ animation: "ios-transition" });
+  }
+
+
 }

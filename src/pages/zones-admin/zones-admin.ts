@@ -86,17 +86,9 @@ export class ZonesAdminPage {
       })
   }
 
-  // TODO: Rollback payment
   actions(reservation) {
-    var buttons = [{
-      cssClass: "icon-primary",
-      icon: "eye",
-      role: "view",
-      text: this.api.trans("literals.view_resource"),
-      handler: () => {
-        this.navCtrl.push("ReservationPage", { reservation: reservation }, { animation: "ios-transition" });
-      },
-    }];
+    // Actions: Aprove, aprove and get pay, get pay,
+    var buttons = [];
 
     if (reservation.status == "waiting for confirmation") {
       buttons.push({
@@ -166,7 +158,7 @@ export class ZonesAdminPage {
 
     this.actionsheet.create({
       title: this.api.trans("literals.reservation") + " " + reservation.user.name,
-      subTitle: this.zone.name,
+      subTitle: this.reservation.zone.name,
       buttons: buttons,
     }).present();
 
@@ -227,6 +219,9 @@ export class ZonesAdminPage {
               reservation.total = data.total;
               this.api.put(`reservations/${reservation.id}`, { total: data.total });
               this.proccessPayment(reservation, mode)
+                .then((invoice) => {
+                  this.navCtrl.push("PrintInvoicePage", { invoice: invoice });
+                })
             }
           }
         },
@@ -265,13 +260,18 @@ export class ZonesAdminPage {
   }
 
   proccessPayment(reservation, type = "charge") {
-    var promise;
+    var promise: Promise<any>;
+    var message;
     if (type === 'charge') {
       promise = this.api.post(`reservations/${reservation.id}/charge`, {})
+      message = this.api.trans('__.Se ha generado un nuevo cargo a su factura')
     }
-
     else {
-      promise = this.api.post(`reservations/${reservation.id}/checkIn`, {})
+      message = this.api.trans('__.Se ha generado una nueva factura por una reservacion');
+      this.askForPayment().then((payment) => {
+        promise = this.api.post(`reservations/${reservation.id}/checkIn`, { payment: payment })
+      })
+
     }
 
     promise
@@ -281,12 +281,7 @@ export class ZonesAdminPage {
           duration: 3000
         }).present();
         reservation.status = "approved";
-        if (type == 'charge') {
-          this.sendPush("Se ha generado un nuevo cargo a su factura", data.user_id);
-        }
-        if (type == "invoice") {
-          this.sendPush("Se ha generado una nueva factura por reservacion", data.user_id);
-        }
+        this.sendPush(message, reservation)
       })
       .catch((e) => {
         console.error(e);
