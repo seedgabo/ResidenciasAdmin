@@ -5,12 +5,12 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>{{ 'literals.reservation' | trans }} # {{ reservation.id }}</ion-title>
+    <ion-buttons end>
+      <button ion-button clear icon-only (click)="actions()">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
-  <ion-buttons end>
-    <button ion-button icon-only (click)="actions()">
-      <ion-icon name="more"></ion-icon>
-    </button>
-  </ion-buttons>
 
 </ion-header>
 
@@ -32,10 +32,10 @@
           <span item-right>{{reservation.user.residence.name}}</span>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="reservation.zone">
           <ion-icon small item-left name="pricetag"></ion-icon>
           <h2>{{ 'literals.price' | trans }}</h2>
-          <span item-right>{{reservation.price | currency:'USD':true:'1.2-2' }}</span>
+          <span item-right>{{reservation.zone.price | currency:'USD':true:'1.2-2' }}</span>
         </ion-item>
 
         <ion-item>
@@ -47,7 +47,7 @@
         <ion-item>
           <ion-icon small item-left name="cash"></ion-icon>
           <h2>{{ 'literals.total' | trans }}</h2>
-          <span item-right>{{(reservation.quotas * reservation.price )| currency:'USD':true:'1.2-2' }}</span>
+          <span item-right>{{( reservation.total )| currency:'USD':true:'1.2-2' }}</span>
         </ion-item>
 
         <ion-item>

@@ -9,6 +9,9 @@
 
 
 <ion-content>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-list *ngIf="!zone">
     <button ion-item *ngFor="let zone of zones" (click)="selectZone(zone)">
       <ion-thumbnail item-left>
@@ -23,8 +26,9 @@
     </button>
   </ion-list>
   <div *ngIf="zone">
-    <button ion-button clear (click)="deselect()" icon-only>
+    <button ion-button clear (click)="deselect()" icon-left>
       <ion-icon name="arrow-back"></ion-icon>
+      {{'literals.back' | trans }}
     </button>
 
     <ion-card padding>
@@ -55,13 +59,16 @@
             </h2>
 
             <h3>
-              <b>{{'literals.status'}}:</b>
+              <b>{{'literals.status' | trans }}:</b>
               <span>
                 {{ 'literals.' + reserv.status | trans }}
               </span>
             </h3>
+            <h3>
+              {{ reserv.total | currency:'USD':true:'1.2-2' }}
+            </h3>
             <p>
-              <b>{{'literals.quotas'}}:</b>
+              <b>{{'literals.quotas' | trans }}:</b>
               <span>
                 {{ reserv.quotas }}
               </span>
@@ -69,9 +76,6 @@
             <p>
               {{reserv.start | amCalendar }}
             </p>
-            <span item-right>
-              {{ reserv.total | currency:'USD':true:'1.2-2' }}
-            </span>
           </button>
         </ion-list>
       </ion-card-content>

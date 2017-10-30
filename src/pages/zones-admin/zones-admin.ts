@@ -15,6 +15,16 @@ export class ZonesAdminPage {
     this.getZones();
   }
 
+  refresh(refresher = null) {
+    this.getZones();
+    if (this.zone) {
+      this.getReservations(this.zone);
+    }
+    if (refresher) {
+      refresher.complete()
+    }
+  }
+
   getZones() {
     // this.api.get('zones?with[]=schedule&with[]=image')
     //   .then((data: any) => {
@@ -88,7 +98,7 @@ export class ZonesAdminPage {
         cssClass: "icon-secondary",
         icon: "checkmark",
         role: "approve",
-        text: this.api.trans("literals.approve") + " " + this.api.trans("literals.reservation"),
+        text: this.api.trans("__.approve") + " " + this.api.trans("literals.reservation"),
         handler: () => {
           this.api.alert.create({
             title: this.api.trans("__.desea procesar el pago?"),
@@ -115,7 +125,7 @@ export class ZonesAdminPage {
 
     }
 
-    if (reservation.status != 'approved' && reservation.invoice_id == null && reservation.charge_id == null) {
+    if (reservation.status == 'approved' && reservation.invoice_id == null && reservation.charge_id == null) {
       buttons.push({
         cssClass: "icon-secondary",
         icon: "checkmark",
@@ -133,7 +143,7 @@ export class ZonesAdminPage {
         cssClass: "icon-danger",
         icon: "trash",
         role: "cancel",
-        text: this.api.trans("literals.reject") + " " + this.api.trans("literals.reservation"),
+        text: this.api.trans("__.reject") + " " + this.api.trans("literals.reservation"),
         handler: () => {
           this.reject(reservation);
         },
@@ -163,14 +173,15 @@ export class ZonesAdminPage {
       title: this.api.trans("literals.method"),
       inputs: [
         {
-          checked: true,
           label: this.api.trans('__.Agregar a la siguiente :invoice', { invoice: this.api.trans('literals.invoice') }),
-          value: "charge"
+          type: 'radio',
+          value: "charge",
+          checked: true,
         },
         {
-          checked: true,
           label: this.api.trans('__.Facturar Ahora'),
-          value: "invoice"
+          value: "invoice",
+          type: 'radio',
         },
       ],
       buttons: [
@@ -178,7 +189,39 @@ export class ZonesAdminPage {
           text: this.api.trans("literals.confirm"),
           handler: (data) => {
             if (data == 'charge' || data == 'invoice') {
-              this.proccessPayment(reservation, data)
+              this.askForPrice(reservation, data)
+            }
+          }
+        },
+        {
+          text: this.api.trans('crud.cancel'),
+          handler: () => { }
+        }
+      ]
+    })
+    alert.present()
+  }
+
+  askForPrice(reservation, mode = 'charge') {
+    var alert = this.api.alert.create({
+      title: this.api.trans("literals.payment"),
+      inputs: [
+        {
+          label: this.api.trans('literals.total'),
+          type: 'number',
+          value: reservation.total,
+          checked: true,
+          name: 'total'
+        }
+      ],
+      buttons: [
+        {
+          text: this.api.trans("literals.confirm"),
+          handler: (data) => {
+            if (data.total) {
+              reservation.total = data.total;
+              this.api.put(`reservations/${reservation.id}`, { total: data.total });
+              this.proccessPayment(reservation, mode)
             }
           }
         },
@@ -219,10 +262,10 @@ export class ZonesAdminPage {
   proccessPayment(reservation, type = "charge") {
     var promise;
     if (type === 'charge') {
-      promise = this.api.post(`reservations${reservation.id}/charge`, {})
+      promise = this.api.post(`reservations/${reservation.id}/charge`, {})
     }
     else {
-      promise = this.api.post(`reservations${reservation.id}/checkIn`, {})
+      promise = this.api.post(`reservations/${reservation.id}/checkIn`, {})
     }
 
     promise

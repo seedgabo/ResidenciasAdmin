@@ -1,6 +1,6 @@
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController, ToastController } from 'ionic-angular';
 @IonicPage()
 @Component({
   selector: 'page-reservation',
@@ -9,7 +9,7 @@ import { IonicPage, NavController, NavParams, ActionSheetController } from 'ioni
 export class ReservationPage {
   reservation: any = {}
   loading = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public actionsheet: ActionSheetController, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public actionsheet: ActionSheetController, public toast: ToastController, public api: Api) {
     this.reservation = navParams.get('reservation');
   }
 
@@ -40,7 +40,7 @@ export class ReservationPage {
         cssClass: "icon-secondary",
         icon: "checkmark",
         role: "approve",
-        text: this.api.trans("literals.approve") + " " + this.api.trans("literals.reservation"),
+        text: this.api.trans("__.approve") + " " + this.api.trans("literals.reservation"),
         handler: () => {
           this.api.alert.create({
             title: this.api.trans("__.desea procesar el pago?"),
@@ -67,7 +67,7 @@ export class ReservationPage {
 
     }
 
-    if (reservation.status != 'approved' && reservation.invoice_id == null && reservation.charge_id == null) {
+    if (reservation.status == 'approved' && reservation.invoice_id == null && reservation.charge_id == null) {
       buttons.push({
         cssClass: "icon-secondary",
         icon: "checkmark",
@@ -85,7 +85,7 @@ export class ReservationPage {
         cssClass: "icon-danger",
         icon: "trash",
         role: "cancel",
-        text: this.api.trans("literals.reject") + " " + this.api.trans("literals.reservation"),
+        text: this.api.trans("__.reject") + " " + this.api.trans("literals.reservation"),
         handler: () => {
           this.reject(reservation);
         },
@@ -115,14 +115,15 @@ export class ReservationPage {
       title: this.api.trans("literals.method"),
       inputs: [
         {
-          checked: true,
           label: this.api.trans('__.Agregar a la siguiente :invoice', { invoice: this.api.trans('literals.invoice') }),
-          value: "charge"
+          type: 'radio',
+          value: "charge",
+          checked: true,
         },
         {
-          checked: true,
           label: this.api.trans('__.Facturar Ahora'),
-          value: "invoice"
+          value: "invoice",
+          type: 'radio',
         },
       ],
       buttons: [
@@ -130,7 +131,39 @@ export class ReservationPage {
           text: this.api.trans("literals.confirm"),
           handler: (data) => {
             if (data == 'charge' || data == 'invoice') {
-              this.proccessPayment(reservation, data)
+              this.askForPrice(reservation, data)
+            }
+          }
+        },
+        {
+          text: this.api.trans('crud.cancel'),
+          handler: () => { }
+        }
+      ]
+    })
+    alert.present()
+  }
+
+  askForPrice(reservation, mode = 'charge') {
+    var alert = this.api.alert.create({
+      title: this.api.trans("literals.payment"),
+      inputs: [
+        {
+          label: this.api.trans('literals.total'),
+          type: 'number',
+          value: reservation.total,
+          checked: true,
+          name: 'total'
+        }
+      ],
+      buttons: [
+        {
+          text: this.api.trans("literals.confirm"),
+          handler: (data) => {
+            if (data.total) {
+              reservation.total = data.total;
+              this.api.put(`reservations/${reservation.id}`, { total: data.total });
+              this.proccessPayment(reservation, mode)
             }
           }
         },
@@ -171,10 +204,10 @@ export class ReservationPage {
   proccessPayment(reservation, type = "charge") {
     var promise;
     if (type === 'charge') {
-      promise = this.api.post(`reservations${reservation.id}/charge`, {})
+      promise = this.api.post(`reservations/${reservation.id}/charge`, {})
     }
     else {
-      promise = this.api.post(`reservations${reservation.id}/checkIn`, {})
+      promise = this.api.post(`reservations/${reservation.id}/checkIn`, {})
     }
 
     promise
@@ -191,7 +224,6 @@ export class ReservationPage {
 
     return promise;
   }
-
 
   dismiss() {
     this.navCtrl.pop({ animation: "ios-transition" });
