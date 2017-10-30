@@ -15,6 +15,10 @@ export class ZonesAdminPage {
     this.getZones();
   }
 
+  ionViewDidEnter() {
+    this.refresh();
+  }
+
   refresh(refresher = null) {
     this.getZones();
     if (this.zone) {
@@ -274,6 +278,7 @@ export class ZonesAdminPage {
           message: this.api.trans('__.processed'),
           duration: 3000
         }).present();
+        reservation.status = "approved";
       })
       .catch((e) => {
         console.error(e);
