@@ -30,8 +30,8 @@ export class ReservationPage {
       })
   }
 
-  // TODO actions approve and reject 
-  actions(reservation) {
+  actions() {
+    var reservation = this.reservation;
     // Actions: Aprove, aprove and get pay, get pay,
     var buttons = [];
 
@@ -42,19 +42,42 @@ export class ReservationPage {
         role: "approve",
         text: this.api.trans("literals.approve") + " " + this.api.trans("literals.reservation"),
         handler: () => {
-          // TODO: Pay Transsaction
+          this.api.alert.create({
+            title: this.api.trans("__.desea procesar el pago?"),
+            buttons: [{
+              text: this.api.trans('literals.yes'),
+              handler: () => {
+                this.askForMethod(reservation)
+              }
+            },
+            {
+              text: this.api.trans('literals.no'),
+              handler: () => {
+                this.approve(reservation);
+              }
+            },
+            {
+              text: this.api.trans('crud.cancel'),
+              handler: () => { }
+            }
+            ]
+          }).present();
         },
       })
 
+    }
+
+    if (reservation.status != 'approved' && reservation.invoice_id == null && reservation.charge_id == null) {
       buttons.push({
         cssClass: "icon-secondary",
         icon: "checkmark",
         role: "cash",
         text: this.api.trans("literals.payment") + " " + this.api.trans("literals.reservation"),
         handler: () => {
-          // TODO: Approve Transsaction
+          this.approve(reservation);
         },
       })
+
     }
 
     if (reservation.status != "rejected") {
@@ -64,20 +87,10 @@ export class ReservationPage {
         role: "cancel",
         text: this.api.trans("literals.reject") + " " + this.api.trans("literals.reservation"),
         handler: () => {
-          // TODO: Reject Transsaction
+          this.reject(reservation);
         },
       })
     }
-
-    buttons.push({
-      cssClass: "icon-danger",
-      icon: "close",
-      role: "cancel",
-      text: this.api.trans("crud.cancel"),
-      handler: () => {
-      },
-    })
-
 
     buttons.push({
       cssClass: "icon-danger",
@@ -95,6 +108,90 @@ export class ReservationPage {
     }).present();
 
   }
+
+
+  askForMethod(reservation) {
+    var alert = this.api.alert.create({
+      title: this.api.trans("literals.method"),
+      inputs: [
+        {
+          checked: true,
+          label: this.api.trans('__.Agregar a la siguiente :invoice', { invoice: this.api.trans('literals.invoice') }),
+          value: "charge"
+        },
+        {
+          checked: true,
+          label: this.api.trans('__.Facturar Ahora'),
+          value: "invoice"
+        },
+      ],
+      buttons: [
+        {
+          text: this.api.trans("literals.confirm"),
+          handler: (data) => {
+            if (data == 'charge' || data == 'invoice') {
+              this.proccessPayment(reservation, data)
+            }
+          }
+        },
+        {
+          text: this.api.trans('crud.cancel'),
+          handler: () => { }
+        }
+      ]
+    })
+    alert.present()
+  }
+
+  approve(reservation) {
+    var promise = this.api.put(`reservations/${reservation.id}`, { status: 'approved' })
+    promise
+      .then((data) => {
+        reservation.status = 'approved';
+      })
+      .catch((e) => {
+        this.api.Error(e);
+      })
+    return promise
+
+  }
+
+  reject(reservation) {
+    var promise = this.api.put(`reservations/${reservation.id}`, { status: 'rejected' })
+    promise
+      .then((data) => {
+        reservation.status = 'rejected';
+      })
+      .catch((e) => {
+        this.api.Error(e);
+      })
+    return promise;
+  }
+
+  proccessPayment(reservation, type = "charge") {
+    var promise;
+    if (type === 'charge') {
+      promise = this.api.post(`reservations${reservation.id}/charge`, {})
+    }
+    else {
+      promise = this.api.post(`reservations${reservation.id}/checkIn`, {})
+    }
+
+    promise
+      .then((data) => {
+        this.toast.create({
+          message: this.api.trans('__.processed'),
+          duration: 3000
+        }).present();
+      })
+      .catch((e) => {
+        console.error(e);
+        this.api.Error(e);
+      })
+
+    return promise;
+  }
+
 
   dismiss() {
     this.navCtrl.pop({ animation: "ios-transition" });
