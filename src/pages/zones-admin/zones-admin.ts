@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ToastController, ActionSheetController } from 'ionic-angular';
 import { Api } from '../../providers/api';
 @Component({
   selector: 'page-zones-admin',
@@ -8,7 +8,7 @@ import { Api } from '../../providers/api';
 export class ZonesAdminPage {
   zones = [];
   zone = null;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public toast: ToastController, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public toast: ToastController, public actionsheet: ActionSheetController, public api: Api) {
   }
 
   ionViewDidLoad() {
@@ -33,7 +33,7 @@ export class ZonesAdminPage {
   getReservations(zone, date = null) {
     if (!date)
       date = new Date();
-    this.api.get('reservations?with[]=user&with[]=user.residence&where[zone_id]=' + zone.id + '&whereDateGte[date]=' + date.toString() + "&paginate=100&order[start]=desc")
+    this.api.get('reservations?with[]=user&with[]=user.residence&where[zone_id]=' + zone.id + '&whereDateGte[date]=' + date.toString() + "&paginate=150&order[start]=desc")
       .then((data) => {
         console.log(data);
         zone.reservations = data;
@@ -45,9 +45,11 @@ export class ZonesAdminPage {
     this.zone = zone;
     this.getReservations(this.zone);
   }
+
   deselect() {
     this.zone = null;
   }
+
   save() {
     var zone = {
       name: this.zone.name,
@@ -68,5 +70,80 @@ export class ZonesAdminPage {
         console.error(err);
       })
   }
+
+  actions(reservation) {
+    // Actions: Aprove, aprove and get pay, get pay,
+    var buttons = [{
+      cssClass: "icon-primary",
+      icon: "eye",
+      role: "view",
+      text: this.api.trans("literals.view_resource"),
+      handler: () => {
+        this.navCtrl.push("ReservationPage", { reservation: reservation }, { animation: "ios-transition" });
+      },
+    }];
+
+    if (reservation.status == "waiting for confirmation") {
+      buttons.push({
+        cssClass: "icon-secondary",
+        icon: "checkmark",
+        role: "approve",
+        text: this.api.trans("literals.approve") + " " + this.api.trans("literals.reservation"),
+        handler: () => {
+          // TODO: Pay Transsaction
+        },
+      })
+
+      buttons.push({
+        cssClass: "icon-secondary",
+        icon: "checkmark",
+        role: "cash",
+        text: this.api.trans("literals.payment") + " " + this.api.trans("literals.reservation"),
+        handler: () => {
+          // TODO: Approve Transsaction
+        },
+      })
+    }
+
+    if (reservation.status != "rejected") {
+      buttons.push({
+        cssClass: "icon-danger",
+        icon: "trash",
+        role: "cancel",
+        text: this.api.trans("literals.reject") + " " + this.api.trans("literals.reservation"),
+        handler: () => {
+          // TODO: Reject Transsaction
+        },
+      })
+    }
+
+    buttons.push({
+      cssClass: "icon-danger",
+      icon: "close",
+      role: "cancel",
+      text: this.api.trans("crud.cancel"),
+      handler: () => {
+      },
+    })
+
+
+    buttons.push({
+      cssClass: "icon-danger",
+      icon: "close",
+      role: "cancel",
+      text: this.api.trans("crud.cancel"),
+      handler: () => {
+      },
+    })
+
+    this.actionsheet.create({
+      title: this.api.trans("literals.reservation") + " " + reservation.user.name,
+      subTitle: this.zone.name,
+      buttons: buttons,
+    }).present();
+
+  }
+
+
 
 }

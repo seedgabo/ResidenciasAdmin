@@ -49,9 +49,22 @@
       <ion-card-title>{{'literals.reservations' | trans }}</ion-card-title>
       <ion-card-content>
         <ion-list>
-          <ion-item *ngFor="let reserv of zone.reservations.data">
-            <p *ngIf="reserv.user">
+          <button ion-item (click)="actions(reserv)" *ngFor="let reserv of zone.reservations.data">
+            <h2 *ngIf="reserv.user">
               {{reserv.user.name }}
+            </h2>
+
+            <h3>
+              <b>{{'literals.status'}}:</b>
+              <span>
+                {{ 'literals.' + reserv.status | trans }}
+              </span>
+            </h3>
+            <p>
+              <b>{{'literals.quotas'}}:</b>
+              <span>
+                {{ reserv.quotas }}
+              </span>
             </p>
             <p>
               {{reserv.start | amCalendar }}
@@ -59,7 +72,7 @@
             <span item-right>
               {{ reserv.total | currency:'USD':true:'1.2-2' }}
             </span>
-          </ion-item>
+          </button>
         </ion-list>
       </ion-card-content>
     </ion-card>

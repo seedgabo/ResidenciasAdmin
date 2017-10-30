@@ -1,0 +1,83 @@
+<ion-header>
+
+  <ion-navbar color="secondary">
+    <button ion-button menuToggle icon-only>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{ 'literals.reservation' | trans }} # {{ reservation.id }}</ion-title>
+  </ion-navbar>
+  <ion-buttons end>
+    <button ion-button icon-only (click)="actions()">
+      <ion-icon name="more"></ion-icon>
+    </button>
+  </ion-buttons>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <ion-list>
+
+        <ion-item *ngIf="reservation.user">
+          <ion-icon small item-left name="person"></ion-icon>
+          <h2>{{ 'literals.user' | trans }}</h2>
+          <span item-right>{{reservation.user.name}}</span>
+        </ion-item>
+
+        <ion-item *ngIf="reservation.user && reservation.user.residence">
+          <ion-icon small item-left name="person"></ion-icon>
+          <h2>{{ 'literals.residence' | trans }}</h2>
+          <span item-right>{{reservation.user.residence.name}}</span>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon small item-left name="pricetag"></ion-icon>
+          <h2>{{ 'literals.price' | trans }}</h2>
+          <span item-right>{{reservation.price | currency:'USD':true:'1.2-2' }}</span>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon small item-left name="people"></ion-icon>
+          <h2>{{ 'literals.quotas' | trans }}</h2>
+          <span item-right>{{ reservation.quotas }}</span>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon small item-left name="cash"></ion-icon>
+          <h2>{{ 'literals.total' | trans }}</h2>
+          <span item-right>{{(reservation.quotas * reservation.price )| currency:'USD':true:'1.2-2' }}</span>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon small item-left name="ios-clock"></ion-icon>
+          <h2>{{ 'literals.start' | trans }}</h2>
+          <span item-right>{{ reservation.start | amCalendar }}</span>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon small item-left name="ios-clock-outline"></ion-icon>
+          <h2>{{ 'literals.end' | trans }}</h2>
+          <span item-right>{{ reservation.end | amCalendar }}</span>
+        </ion-item>
+
+
+
+        <ion-item *ngIf="reservation.zone">
+          <ion-icon small item-left name="basket"></ion-icon>
+          <h2>{{ 'literals.zone' | trans }}</h2>
+          <span item-right>{{reservation.zone.name}}</span>
+        </ion-item>
+
+        <ion-item *ngIf="reservation.event">
+          <ion-icon small item-left name="calendar"></ion-icon>
+          <h2>{{ 'literals.event' | trans }}</h2>
+          <span item-right>{{reservation.event.title}}</span>
+        </ion-item>
+
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
