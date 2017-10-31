@@ -9,7 +9,7 @@ import { Api } from '../../providers/api';
 export class ZonesAdminPage {
   zones = [];
   zone = null;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public toast: ToastController, public actionsheet: ActionSheetController, public alert: AlertController, public loading: LoadingController, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public toast: ToastController, public actionsheet: ActionSheetController, public alert: AlertController, public loadingctrl: LoadingController, public api: Api) {
   }
 
   ionViewDidLoad() {
@@ -290,7 +290,7 @@ export class ZonesAdminPage {
   proccessWithInvoice(reservation, type) {
     return new Promise((resolve, reject) => {
       this.askForPayment().then((payment) => {
-        var loading = this.loading.create({
+        var loading = this.loadingctrl.create({
           content: this.api.trans('__.procesando'),
         });
         loading.present();

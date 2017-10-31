@@ -1,4 +1,4 @@
-import { AlertController } from 'ionic-angular';
+import { AlertController, LoadingController } from 'ionic-angular';
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ActionSheetController, ToastController } from 'ionic-angular';
@@ -10,7 +10,7 @@ import { IonicPage, NavController, NavParams, ActionSheetController, ToastContro
 export class ReservationPage {
   reservation: any = {}
   loading = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public actionsheet: ActionSheetController, public alert: AlertController, public toast: ToastController, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public actionsheet: ActionSheetController, public alert: AlertController, public toast: ToastController, public loadingctrl: LoadingController, public api: Api) {
     this.reservation = navParams.get('reservation');
   }
 
@@ -233,7 +233,7 @@ export class ReservationPage {
   proccessWithInvoice(reservation, type) {
     return new Promise((resolve, reject) => {
       this.askForPayment().then((payment) => {
-        var loading = this.loading.create({
+        var loading = this.loadingctrl.create({
           content: this.api.trans('__.procesando'),
         });
         loading.present();
