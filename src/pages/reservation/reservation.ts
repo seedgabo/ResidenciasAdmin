@@ -31,8 +31,7 @@ export class ReservationPage {
       })
   }
 
-  actions() {
-    var reservation = this.reservation;
+  actions(reservation) {
     // Actions: Aprove, aprove and get pay, get pay,
     var buttons = [];
 
@@ -104,7 +103,7 @@ export class ReservationPage {
 
     this.actionsheet.create({
       title: this.api.trans("literals.reservation") + " " + reservation.user.name,
-      subTitle: this.reservation.zone.name,
+      subTitle: reservation.zone.name,
       buttons: buttons,
     }).present();
 
@@ -165,9 +164,6 @@ export class ReservationPage {
               reservation.total = data.total;
               this.api.put(`reservations/${reservation.id}`, { total: data.total });
               this.proccessPayment(reservation, mode)
-                .then((invoice) => {
-                  this.navCtrl.push("PrintInvoicePage", { invoice: invoice });
-                })
             }
           }
         },
@@ -214,10 +210,7 @@ export class ReservationPage {
     }
     else {
       message = this.api.trans('__.Se ha generado una nueva factura por una reservacion');
-      this.askForPayment().then((payment) => {
-        promise = this.api.post(`reservations/${reservation.id}/checkIn`, { payment: payment })
-      })
-
+      promise = this.proccessWithInvoice(reservation, type)
     }
 
     promise
@@ -237,9 +230,68 @@ export class ReservationPage {
     return promise;
   }
 
+  proccessWithInvoice(reservation, type) {
+    return new Promise((resolve, reject) => {
+      this.askForPayment().then((payment) => {
+        var loading = this.loading.create({
+          content: this.api.trans('__.procesando'),
+        });
+        loading.present();
+        var concept = this.api.trans('literals.reservation') + " " + reservation.zone.name
+        var data: any = {
+          items: [{
+            concept: concept,
+            amount: reservation.total,
+            quantity: 1,
+          }],
+          type: 'normal',
+          date: (new Date()).toISOString().substring(0, 10),
+          user_id: reservation.user_id
+        };
+
+        this.api.post('invoices', data)
+          .then((invoice: any) => {
+            this.api.post(`invoices/${invoice.id}/Payment`, { transaction: payment })
+              .then((data: any) => {
+                this.api.put(`reservations/${reservation.id}`, { status: 'approved' })
+                  .then((data) => {
+                    reservation.status = 'approved'
+                  })
+                this.sendPush("Compra Realizada! " + concept, reservation.user_id);
+                invoice.user = reservation.user
+                this.goPrint(invoice, data.receipt);
+                loading.dismiss();
+                resolve(invoice)
+              })
+              .catch((err) => {
+                loading.dismiss();
+                this.api.Error(err)
+                reject(err);
+              });
+
+          })
+          .catch((err) => {
+            loading.dismiss();
+            this.api.Error(err)
+            reject(err);
+          });
+      })
+        .catch((err) => {
+          this.api.Error(err)
+          reject(err);
+        })
+    })
+
+  }
+
+  goPrint(invoice, receipt = null) {
+    this.navCtrl.push("PrintInvoicePage", { invoice: invoice, receipt: receipt, print: true });
+  }
+
   askForPayment() {
     return new Promise((resolve, reject) => {
       this.alert.create({
+        title: this.api.trans('literals.payment'),
         inputs: [
           {
             type: 'radio',
@@ -270,24 +322,25 @@ export class ReservationPage {
         ],
         buttons: [
           {
-            role: 'destructive',
-            text: this.api.trans('crud.cancel'),
-            handler: (data) => {
-              reject();
-            }
-          },
-          {
             role: 'accept',
             text: this.api.trans('crud.add'),
             handler: (data) => {
               console.log("transaction", data);
               resolve(data);
             }
-          }
+          },
+          {
+            role: 'destructive',
+            text: this.api.trans('crud.cancel'),
+            handler: (data) => {
+              reject();
+            }
+          },
         ]
       }).present();
     })
   }
+
 
   sendPush(message, reservation) {
     var user_id = reservation.user_id

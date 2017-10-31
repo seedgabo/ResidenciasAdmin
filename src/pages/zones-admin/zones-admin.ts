@@ -86,6 +86,8 @@ export class ZonesAdminPage {
       })
   }
 
+  // TODO: see invoice for reservation
+
   actions(reservation) {
     // Actions: Aprove, aprove and get pay, get pay,
     var buttons = [];
