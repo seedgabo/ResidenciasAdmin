@@ -268,21 +268,21 @@ export class ZonesAdminPage {
     }
     else {
       message = this.api.trans('__.Se ha generado una nueva factura por una reservacion');
-      promise = new Promise((resolve,reject)=>{
+      promise = new Promise((resolve, reject) => {
         this.askForPayment().then((payment) => {
           this.api.post(`reservations/${reservation.id}/checkIn`, {})
-          .then((resp)=>{
-            this.api.get(`invoices/${resp.id}?with[]=user&with[]=residences&with[]=items&with[]=receipt`)
-            .then((data)=>{
-              resolve(data);
+            .then((resp: any) => {
+              this.api.get(`invoices/${resp.id}?with[]=user&with[]=residences&with[]=items&with[]=receipt`)
+                .then((data) => {
+                  resolve(data);
+                })
+                .catch((err) => {
+                  reject(err);
+                })
             })
-            .catch((err)=>{
-                reject(err);
+            .catch((err) => {
+              reject(err);
             })
-          })
-          .catch((err)=>{
-            reject(err);
-          })
         })
 
       })
