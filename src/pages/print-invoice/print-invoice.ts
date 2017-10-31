@@ -29,7 +29,6 @@ export class PrintInvoicePage {
       this.printer.print(document.getElementById('toPrint'), { name: 'invoice' })
         .then(() => {
           this.complete();
-          this.invoice = null;
         })
         .catch((err) => {
           this.toPrintCallback(invoice);
@@ -42,7 +41,6 @@ export class PrintInvoicePage {
   toPrintCallback(invoice) {
     window.print();
     this.complete();
-    this.invoice = null;
   }
 
   complete() {
