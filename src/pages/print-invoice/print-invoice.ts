@@ -16,6 +16,9 @@ export class PrintInvoicePage {
     if (navParams.get('user')) {
       this.invoice.user = navParams.get('user');
     }
+    if (navParams.get('receipt')) {
+      this.invoice.receipt = navParams.get('receipt');
+    }
     console.log(this.invoice);
   }
 

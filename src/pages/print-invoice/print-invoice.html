@@ -41,8 +41,8 @@
                   <br> {{ invoice.user.document }}
                   <br> {{ invoice.user.email }}
                   <br>
-                  <span *ngIf="receipt">
-                    {{'literals.payment' | trans }}: {{ ('literals.' + receipt.transaction ) | trans }}
+                  <span *ngIf="invoice.receipt">
+                    {{'literals.payment' | trans }}: {{ ('literals.' + invoice.receipt.transaction ) | trans }}
                   </span>
 
                 </td>

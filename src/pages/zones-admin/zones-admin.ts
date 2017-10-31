@@ -166,7 +166,7 @@ export class ZonesAdminPage {
               if (data.receipts && data.receipts.length > 0) {
                 data.receipt = data.receipts[0]
               }
-              this.goPrint(reservation.invoice, data.receipt);
+              this.goPrint(data.invoice, data.receipt);
             })
             .catch((err) => {
               console.error(err);
