@@ -48,7 +48,7 @@ export class ZonesAdminPage {
   getReservations(zone, date = null) {
     if (!date)
       date = new Date();
-    this.api.get('reservations?with[]=user&with[]=user.residence&where[zone_id]=' + zone.id + '&whereDateGte[date]=' + date.toString() + "&paginate=150&order[start]=desc")
+    this.api.get('reservations?with[]=zone&with[]=user&with[]=user.residence&where[zone_id]=' + zone.id + '&whereDateGte[date]=' + date.toString() + "&paginate=150&order[start]=desc")
       .then((data) => {
         console.log(data);
         zone.reservations = data;
@@ -158,7 +158,7 @@ export class ZonesAdminPage {
 
     this.actionsheet.create({
       title: this.api.trans("literals.reservation") + " " + reservation.user.name,
-      subTitle: this.reservation.zone.name,
+      subTitle: reservation.zone.name,
       buttons: buttons,
     }).present();
 
@@ -268,8 +268,23 @@ export class ZonesAdminPage {
     }
     else {
       message = this.api.trans('__.Se ha generado una nueva factura por una reservacion');
-      this.askForPayment().then((payment) => {
-        promise = this.api.post(`reservations/${reservation.id}/checkIn`, { payment: payment })
+      promise = new Promise((resolve,reject)=>{
+        this.askForPayment().then((payment) => {
+          this.api.post(`reservations/${reservation.id}/checkIn`, {})
+          .then((resp)=>{
+            this.api.get(`invoices/${resp.id}?with[]=user&with[]=residences&with[]=items&with[]=receipt`)
+            .then((data)=>{
+              resolve(data);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+          })
+          .catch((err)=>{
+            reject(err);
+          })
+        })
+
       })
 
     }

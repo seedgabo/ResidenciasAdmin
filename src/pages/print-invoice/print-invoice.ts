@@ -11,6 +11,7 @@ export class PrintInvoicePage {
   invoice: any = {};
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public printer: Printer) {
     this.invoice = navParams.get('invoice');
+    console.log(this.invoice);
   }
 
   ionViewDidLoad() {
