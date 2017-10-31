@@ -308,6 +308,10 @@ export class ZonesAdminPage {
           .then((invoice: any) => {
             this.api.post(`invoices/${invoice.id}/Payment`, { transaction: payment })
               .then((data: any) => {
+                this.api.put(`reservations/${reservation.id}`, { status: 'approved' })
+                  .then((data) => {
+                    reservation.status = 'approved'
+                  })
                 this.sendPush("Compra Realizada! " + concept, reservation.user_id);
                 invoice.user = reservation.user
                 this.goPrint(invoice, data.receipt);
