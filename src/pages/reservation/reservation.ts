@@ -279,7 +279,7 @@ export class ReservationPage {
                     reservation.status = 'approved'
                     reservation.invoice_id = invoice.id
                   })
-                this.sendPush("Compra Realizada! " + concept, reservation.user_id);
+                this.sendPush("Compra Realizada! " + concept, reservation);
                 invoice.user = reservation.user
                 this.goPrint(invoice, data.receipt);
                 loading.dismiss();
