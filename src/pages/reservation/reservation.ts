@@ -32,7 +32,6 @@ export class ReservationPage {
   }
 
   actions(reservation) {
-    // Actions: Aprove, aprove and get pay, get pay,
     var buttons = [];
 
     if (reservation.status == "waiting for confirmation") {
@@ -88,6 +87,28 @@ export class ReservationPage {
         text: this.api.trans("__.reject") + " " + this.api.trans("literals.reservation"),
         handler: () => {
           this.reject(reservation);
+        },
+      })
+    }
+
+    if (reservation.invoice_id) {
+      buttons.push({
+        cssClass: "icon-success",
+        icon: "document",
+        role: "view",
+        text: this.api.trans("literals.view_resource") + " " + this.api.trans("literals.invoice"),
+        handler: () => {
+          this.api.get("invoices/" + reservation.invoice_id + "?with[]=user&with[]=receipts&with[]=items")
+            .then((data: any) => {
+              if (data.receipts && data.receipts.length > 0) {
+                data.receipt = data.receipts[0]
+              }
+              this.goPrint(reservation.invoice, data.receipt);
+            })
+            .catch((err) => {
+              console.error(err);
+              this.api.Error(err)
+            })
         },
       })
     }
@@ -253,9 +274,10 @@ export class ReservationPage {
           .then((invoice: any) => {
             this.api.post(`invoices/${invoice.id}/Payment`, { transaction: payment })
               .then((data: any) => {
-                this.api.put(`reservations/${reservation.id}`, { status: 'approved' })
+                this.api.put(`reservations/${reservation.id}`, { status: 'approved', invoice_id: invoice.id })
                   .then((data) => {
                     reservation.status = 'approved'
+                    reservation.invoice_id = invoice.id
                   })
                 this.sendPush("Compra Realizada! " + concept, reservation.user_id);
                 invoice.user = reservation.user
