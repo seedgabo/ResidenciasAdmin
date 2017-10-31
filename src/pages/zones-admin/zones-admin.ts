@@ -304,7 +304,7 @@ export class ZonesAdminPage {
           user_id: reservation.user_id
         };
 
-        this.api.post('invoices?with[]=user&with[]=residence&with[]=items', data)
+        this.api.post('invoices', data)
           .then((invoice: any) => {
             this.api.post(`invoices/${invoice.id}/Payment`, { transaction: payment })
               .then((data: any) => {
