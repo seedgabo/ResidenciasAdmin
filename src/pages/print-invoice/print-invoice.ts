@@ -9,8 +9,13 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class PrintInvoicePage {
   invoice: any = {};
+  receipt: any = {};
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public printer: Printer) {
     this.invoice = navParams.get('invoice');
+    this.receipt = navParams.get('receipt');
+    if (navParams.get('user')) {
+      this.invoice.user = navParams.get('user');
+    }
     console.log(this.invoice);
   }
 

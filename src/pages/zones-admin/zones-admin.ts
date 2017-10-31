@@ -1,4 +1,4 @@
-import { AlertController } from 'ionic-angular';
+import { AlertController, LoadingController } from 'ionic-angular';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController, ActionSheetController } from 'ionic-angular';
 import { Api } from '../../providers/api';
@@ -9,7 +9,7 @@ import { Api } from '../../providers/api';
 export class ZonesAdminPage {
   zones = [];
   zone = null;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public toast: ToastController, public actionsheet: ActionSheetController, public alert: AlertController, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public toast: ToastController, public actionsheet: ActionSheetController, public alert: AlertController, public loading: LoadingController, public api: Api) {
   }
 
   ionViewDidLoad() {
@@ -48,7 +48,7 @@ export class ZonesAdminPage {
   getReservations(zone, date = null) {
     if (!date)
       date = new Date();
-    this.api.get('reservations?with[]=zone&with[]=user&with[]=user.residence&where[zone_id]=' + zone.id + '&whereDateGte[date]=' + date.toString() + "&paginate=150&order[start]=desc")
+    this.api.get('reservations?with[]=zone&with[]=user&with[]=user.residence&where[zone_id]=' + zone.id + '&whereDateGte[start]=' + 'today-1year' + "&paginate=150&order[start]=asc")
       .then((data) => {
         console.log(data);
         zone.reservations = data;
@@ -219,9 +219,6 @@ export class ZonesAdminPage {
               reservation.total = data.total;
               this.api.put(`reservations/${reservation.id}`, { total: data.total });
               this.proccessPayment(reservation, mode)
-                .then((invoice) => {
-                  this.navCtrl.push("PrintInvoicePage", { invoice: invoice });
-                })
             }
           }
         },
@@ -268,25 +265,7 @@ export class ZonesAdminPage {
     }
     else {
       message = this.api.trans('__.Se ha generado una nueva factura por una reservacion');
-      promise = new Promise((resolve, reject) => {
-        this.askForPayment().then((payment) => {
-          this.api.post(`reservations/${reservation.id}/checkIn`, {})
-            .then((resp: any) => {
-              this.api.get(`invoices/${resp.id}?with[]=user&with[]=residences&with[]=items&with[]=receipt`)
-                .then((data) => {
-                  resolve(data);
-                })
-                .catch((err) => {
-                  reject(err);
-                })
-            })
-            .catch((err) => {
-              reject(err);
-            })
-        })
-
-      })
-
+      promise = this.proccessWithInvoice(reservation, type)
     }
 
     promise
@@ -306,9 +285,64 @@ export class ZonesAdminPage {
     return promise;
   }
 
+  proccessWithInvoice(reservation, type) {
+    return new Promise((resolve, reject) => {
+      this.askForPayment().then((payment) => {
+        var loading = this.loading.create({
+          content: this.api.trans('__.procesando'),
+        });
+        loading.present();
+        var concept = this.api.trans('literals.reservation') + " " + reservation.zone.name
+        var data: any = {
+          items: [{
+            concept: concept,
+            amount: reservation.total,
+            quantity: 1,
+          }],
+          type: 'normal',
+          date: (new Date()).toISOString().substring(0, 10),
+          user_id: reservation.user_id
+        };
+
+        this.api.post('invoices?with[]=user&with[]=residence&with[]=items', data)
+          .then((invoice: any) => {
+            this.api.post(`invoices/${invoice.id}/Payment`, { transaction: payment })
+              .then((data: any) => {
+                this.sendPush("Compra Realizada! " + concept, reservation.user_id);
+                invoice.user = reservation.user
+                this.goPrint(invoice, data.receipt);
+                loading.dismiss();
+                resolve(invoice)
+              })
+              .catch((err) => {
+                loading.dismiss();
+                this.api.Error(err)
+                reject(err);
+              });
+
+          })
+          .catch((err) => {
+            loading.dismiss();
+            this.api.Error(err)
+            reject(err);
+          });
+      })
+        .catch((err) => {
+          this.api.Error(err)
+          reject(err);
+        })
+    })
+
+  }
+
+  goPrint(invoice, receipt = null) {
+    this.navCtrl.push("PrintInvoicePage", { invoice: invoice, receipt: receipt, print: true });
+  }
+
   askForPayment() {
     return new Promise((resolve, reject) => {
       this.alert.create({
+        title: this.api.trans('literals.payment'),
         inputs: [
           {
             type: 'radio',
@@ -339,20 +373,20 @@ export class ZonesAdminPage {
         ],
         buttons: [
           {
-            role: 'destructive',
-            text: this.api.trans('crud.cancel'),
-            handler: (data) => {
-              reject();
-            }
-          },
-          {
             role: 'accept',
             text: this.api.trans('crud.add'),
             handler: (data) => {
               console.log("transaction", data);
               resolve(data);
             }
-          }
+          },
+          {
+            role: 'destructive',
+            text: this.api.trans('crud.cancel'),
+            handler: (data) => {
+              reject();
+            }
+          },
         ]
       }).present();
     })

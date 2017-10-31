@@ -1,52 +1,54 @@
-<div class="printable" id="toPrint">
-  <div class="invoice-box" style="max-width: 800px;margin: auto;padding: 30px;border: 1px solid #eee;box-shadow: 0 0 10px rgba(0, 0, 0, .15);font-size: 16px;line-height: 24px;font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;color: #555;">
-    <table cellpadding="0" cellspacing="0" style="width: 100%;line-height: inherit;text-align: left;">
+<ion-content>
 
-      <tr class="top">
-        <td colspan="4" style="padding: 5px;vertical-align: top;">
-          <table style="width: 100%;line-height: inherit;text-align: left;">
-            <tr>
-              <td colspan="2" class="title" style="padding: 5px;vertical-align: top;padding-bottom: 20px;font-size: 45px;line-height: 45px;color: #333;">
-                <img [src]="api.url + 'img/logo.png'" style="max-width:100%; max-width:300px;">
-              </td>
-              <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;width:100%">
-                {{'literals.invoice' | trans }} #: {{invoice.number}}
+  <div class="printable" id="toPrint">
+    <div class="invoice-box" style="max-width: 800px;margin: auto;padding: 30px;border: 1px solid #eee;box-shadow: 0 0 10px rgba(0, 0, 0, .15);font-size: 16px;line-height: 24px;font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;color: #555;">
+      <table cellpadding="0" cellspacing="0" style="width: 100%;line-height: inherit;text-align: left;">
 
-                <br> {{ 'literals.date' | trans }}: {{invoice.date | amDateFormat:'LLL'}}
-                <br> {{'date.from'| trans }} {{invoice.created_at | amDateFormat:'LLL'}}
+        <tr class="top">
+          <td colspan="4" style="padding: 5px;vertical-align: top;">
+            <table style="width: 100%;line-height: inherit;text-align: left;">
+              <tr>
+                <td colspan="2" class="title" style="padding: 5px;vertical-align: top;padding-bottom: 20px;font-size: 45px;line-height: 45px;color: #333;">
+                  <img [src]="api.url + 'img/logo.png'" style="max-width:100%; max-width:300px;">
+                </td>
+                <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;width:100%">
+                  {{'literals.invoice' | trans }} #: {{invoice.number}}
 
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
+                  <br> {{ 'literals.date' | trans }}: {{invoice.date | amDateFormat:'LLL'}}
+                  <br> {{'date.from'| trans }} {{invoice.created_at | amDateFormat:'LLL'}}
 
-      <tr class="information">
-        <td colspan="4" style="padding: 5px;vertical-align: top;">
-          <table style="width: 100%;line-height: inherit;text-align: left;">
-            <tr>
-              <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
-                {{api.settings.name}}
-                <br> {{api.settings.document}}
-                <br> {{api.settings.address}}
-                <br> {{api.settings.phone}}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
 
-              </td>
-              <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
-              </td>
-              <td *ngIf="invoice.user" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
-                {{ invoice.user.name }}
-                <br> {{ invoice.user.document }}
-                <br> {{ invoice.user.email }}
-                <br> {{'literals.payment' | trans }}: {{ ('literals.' + invoice.receipt.transaction ) | trans }}
+        <tr class="information">
+          <td colspan="4" style="padding: 5px;vertical-align: top;">
+            <table style="width: 100%;line-height: inherit;text-align: left;">
+              <tr>
+                <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
+                  {{api.settings.name}}
+                  <br> {{api.settings.document}}
+                  <br> {{api.settings.address}}
+                  <br> {{api.settings.phone}}
 
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
+                </td>
+                <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
+                </td>
+                <td *ngIf="invoice.user" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
+                  {{ invoice.user.name }}
+                  <br> {{ invoice.user.document }}
+                  <br> {{ invoice.user.email }}
+                  <br> {{'literals.payment' | trans }}: {{ ('literals.' + invoice.receipt.transaction ) | trans }}
 
-      <!-- <tr class="heading">
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- <tr class="heading">
         <td style="padding: 5px;vertical-align: top;text-align: right;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
         </td>
         <td style="padding: 5px;vertical-align: top;text-align: right;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
@@ -55,54 +57,55 @@
         </td>
       </tr> -->
 
-      <!-- Heading Items -->
-      <tr class="heading">
-        <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-          {{'literals.item' | trans }}
-        </td>
+        <!-- Heading Items -->
+        <tr class="heading">
+          <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+            {{'literals.item' | trans }}
+          </td>
 
-        <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-          {{'literals.quantity' | trans }}
-        </td>
-        <td style="text-align:center; padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-          {{'literals.price' | trans }}
-        </td>
+          <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+            {{'literals.quantity' | trans }}
+          </td>
+          <td style="text-align:center; padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+            {{'literals.price' | trans }}
+          </td>
 
-        <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-          {{'literals.subtotal' | trans }}
-        </td>
-      </tr>
+          <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+            {{'literals.subtotal' | trans }}
+          </td>
+        </tr>
 
-      <!-- Items -->
-      <tr class="item last" *ngFor="let item of invoice.items">
-        <td style="padding: 5px;vertical-align: top;border-bottom: none;">
-          {{item.concept}}
-        </td>
-        <td style="padding: 5px;vertical-align: top;border-bottom: none;">
-          {{item.quantity}}
-        </td>
+        <!-- Items -->
+        <tr class="item last" *ngFor="let item of invoice.items">
+          <td style="padding: 5px;vertical-align: top;border-bottom: none;">
+            {{item.concept}}
+          </td>
+          <td style="padding: 5px;vertical-align: top;border-bottom: none;">
+            {{item.quantity}}
+          </td>
 
-        <td style="padding: 5px;vertical-align: top;text-align: center;border-bottom: none;">
-          {{item.amount | currency:'USD':true:'4.2-2' }}
-        </td>
+          <td style="padding: 5px;vertical-align: top;text-align: center;border-bottom: none;">
+            {{item.amount | currency:'USD':true:'4.2-2' }}
+          </td>
 
-        <td style="padding: 5px;vertical-align: top;text-align: center;border-bottom: none;">
-          {{(item.quantity * item.amount) | currency:'USD':true:'4.2-2' }}
-        </td>
-      </tr>
+          <td style="padding: 5px;vertical-align: top;text-align: center;border-bottom: none;">
+            {{(item.quantity * item.amount) | currency:'USD':true:'4.2-2' }}
+          </td>
+        </tr>
 
-      <!-- Total -->
-      <tr class="total">
-        <td style="padding: 5px;vertical-align: top;"></td>
-        <td style="padding: 5px;vertical-align: top;"></td>
-        <td style="padding: 5px;vertical-align: top;text-align: center;border-top: 2px solid #eee;font-weight: bold;">
-          Total:
-        </td>
-        <td style="padding: 5px;vertical-align: top; text-align: center;border-top: 2px solid #eee;font-weight: bold;">
-          {{ total(invoice) | currency:'USD':true:'4.2-2' }}
-        </td>
-      </tr>
+        <!-- Total -->
+        <tr class="total">
+          <td style="padding: 5px;vertical-align: top;"></td>
+          <td style="padding: 5px;vertical-align: top;"></td>
+          <td style="padding: 5px;vertical-align: top;text-align: center;border-top: 2px solid #eee;font-weight: bold;">
+            Total:
+          </td>
+          <td style="padding: 5px;vertical-align: top; text-align: center;border-top: 2px solid #eee;font-weight: bold;">
+            {{ total(invoice) | currency:'USD':true:'4.2-2' }}
+          </td>
+        </tr>
 
-    </table>
+      </table>
+    </div>
   </div>
-</div>
+</ion-content>
