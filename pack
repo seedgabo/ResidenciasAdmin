@@ -1,1 +1,8 @@
-rsync --exclude assets/header.js -avz --delete ./platforms/browser/www/ eyc_proveedores@newton.eycproveedores.com:htdocs/residencias/admin
+#!/bin/bash
+# a Sample bash script
+if [ -z "$1" ]
+  then
+    echo "No argument supplied"
+    exit
+fi
+rsync --exclude assets/header.js -avz --delete ./platforms/browser/www/ "eyc_proveedores@newton.eycproveedores.com:htdocs/$1/admin"
