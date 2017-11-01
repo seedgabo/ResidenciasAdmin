@@ -269,7 +269,9 @@ export class ReservationPage {
           date: (new Date()).toISOString().substring(0, 10),
           user_id: reservation.user_id
         };
-
+        if (reservation.user) {
+          data.residence_id = reservation.user.residence_id
+        }
         this.api.post('invoices', data)
           .then((invoice: any) => {
             this.api.post(`invoices/${invoice.id}/Payment`, { transaction: payment })
