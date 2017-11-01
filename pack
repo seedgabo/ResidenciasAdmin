@@ -1,0 +1,1 @@
+rsync --exclude assets/header.js  ./platforms/browser/www/ eyc_proveedores@newton.eycproveedores.com:htdocs/residencias/admin -avz --delete
