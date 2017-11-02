@@ -69,7 +69,6 @@ export class VisitorPage {
       }).catch((err) => {
         this.loading = false;
         this.api.Error(err);
-        console.log(err);
       });
     }
     if (this.action == 'update') {
@@ -80,7 +79,6 @@ export class VisitorPage {
       }).catch((err) => {
         this.loading = false;
         this.api.Error(err);
-        console.log(err);
       });
     }
 
@@ -91,7 +89,7 @@ export class VisitorPage {
       .then((parkings: any) => {
         this.parkings = parkings;
       }).catch((err) => {
-        console.error(err);
+        this.api.Error(err);
       })
   }
 
@@ -107,17 +105,14 @@ export class VisitorPage {
       this.api.post('visitors', data).then((response) => {
         console.log(response);
         this.addVisit(response)
-        this.loading = false;
       }).catch((err) => {
         this.loading = false;
-        console.log(err);
         this.api.Error(err);
       });
     }
     if (this.action == 'update') {
       this.api.put('visitors/' + this.visitor.id, data).then((response) => {
         console.log(response);
-        this.loading = false;
         this.addVisit(response)
       }).catch((err) => {
         console.log(err);
@@ -140,12 +135,13 @@ export class VisitorPage {
     if (this.parking) {
       visit.parking_id = this.parking.id;
     }
-
     this.api.post(`visitors/${visitor.id}/visit`, visit).then((response) => {
       console.log(response);
       this.viewCtrl.dismiss();
+      this.loading = false;
     }).catch((err) => {
-      console.log(err);
+      this.api.Error(err)
+      this.loading = false;
     });
   }
 
