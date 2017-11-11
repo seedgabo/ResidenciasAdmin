@@ -18,12 +18,17 @@
 <ion-content>
   <ion-card>
     <ion-card-content>
-      <ion-list>
+      <ion-list *ngIf="!edition">
 
         <ion-item *ngIf="reservation.user">
           <ion-icon small item-left name="person"></ion-icon>
           <h2>{{ 'literals.user' | trans }}</h2>
-          <span item-right>{{reservation.user.name}}</span>
+          <span item-right *ngIf="reservation.user">
+            {{reservation.user.name}}
+            <span *ngIf="reservation.user.residence">
+              - {{ reservation.user.residence.name }}
+            </span>
+          </span>
         </ion-item>
 
         <ion-item *ngIf="reservation.user && reservation.user.residence">
@@ -32,10 +37,17 @@
           <span item-right>{{reservation.user.residence.name}}</span>
         </ion-item>
 
-        <ion-item *ngIf="reservation.zone">
+        <ion-item>
+          <ion-icon small item-left name="book"></ion-icon>
+          <h2>{{ 'literals.status' | trans }}</h2>
+          <span item-right>{{'literals.' + reservation.status | trans }}</span>
+        </ion-item>
+
+
+        <ion-item>
           <ion-icon small item-left name="pricetag"></ion-icon>
           <h2>{{ 'literals.price' | trans }}</h2>
-          <span item-right>{{reservation.zone.price | currency:'USD':true:'1.2-2' }}</span>
+          <span item-right>{{reservation.total | currency:'USD':true:'1.2-2' }}</span>
         </ion-item>
 
         <ion-item>
@@ -48,12 +60,6 @@
           <ion-icon small item-left name="list"></ion-icon>
           <h2>{{ 'literals.notes' | trans }}</h2>
           <span item-right>{{ reservation.note }}</span>
-        </ion-item>
-
-        <ion-item>
-          <ion-icon small item-left name="cash"></ion-icon>
-          <h2>{{ 'literals.total' | trans }}</h2>
-          <span item-right>{{( reservation.total )| currency:'USD':true:'1.2-2' }}</span>
         </ion-item>
 
         <ion-item>
@@ -83,7 +89,54 @@
         </ion-item>
 
       </ion-list>
+
+
+      <ion-list *ngIf="edition">
+
+        <button ion-item (click)="selectPerson()">
+          <h3 *ngIf="!reservation.user">{{ 'literals.user' | trans }}</h3>
+          <h3 *ngIf="reservation.user">{{reservation.user.name}}</h3>
+          <ion-icon small item-right name="arrow-dropdown"></ion-icon>
+        </button>
+
+
+        <ion-item>
+          <ion-icon small item-left name="pricetag"></ion-icon>
+          <ion-label floating>{{ 'literals.total' | trans }}</ion-label>
+          <ion-input [(ngModel)]="reservation.total" type="number"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon small item-left name="people"></ion-icon>
+          <ion-label floating>{{ 'literals.quotas' | trans }}</ion-label>
+          <ion-input [(ngModel)]="reservation.quotas" type="number"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon small item-left name="list"></ion-icon>
+          <ion-label floating>{{ 'literals.notes' | trans }}</ion-label>
+          <ion-textarea [(ngModel)]="reservation.note" type="number"></ion-textarea>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon small item-left name="ios-clock"></ion-icon>
+          <ion-label floating>{{ 'literals.start' | trans }}</ion-label>
+          <ion-datetime [(ngModel)]="reservation.start"></ion-datetime>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon small item-left name="ios-clock-outline"></ion-icon>
+          <ion-label floating>{{ 'literals.end' | trans }}</ion-label>
+          <ion-datetime [(ngModel)]="reservation.end"></ion-datetime>
+        </ion-item>
+      </ion-list>
+
     </ion-card-content>
   </ion-card>
 
 </ion-content>
+<ion-footer *ngIf="edition">
+  <button ion-button full color="secondary" (click)="save()" [disabled]="!canSave()">
+    {{'crud.save' | trans }}
+  </button>
+</ion-footer>

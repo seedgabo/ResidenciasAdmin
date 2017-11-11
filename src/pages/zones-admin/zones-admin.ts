@@ -48,7 +48,7 @@ export class ZonesAdminPage {
   getReservations(zone, date = null) {
     if (!date)
       date = new Date();
-    this.api.get('reservations?with[]=zone&with[]=user&with[]=user.residence&where[zone_id]=' + zone.id + '&whereDateGte[start]=' + 'today-1year' + "&paginate=150&order[start]=asc")
+    this.api.get('reservations?with[]=zone&with[]=user&with[]=user.residence&where[zone_id]=' + zone.id + '&whereDateGte[start]=' + 'today' + "&paginate=150&order[start]=asc")
       .then((data) => {
         console.log(data);
         zone.reservations = data;
@@ -146,7 +146,7 @@ export class ZonesAdminPage {
       buttons.push({
         cssClass: "icon-danger",
         icon: "trash",
-        role: "cancel",
+        role: "reject",
         text: this.api.trans("__.reject") + " " + this.api.trans("literals.reservation"),
         handler: () => {
           this.reject(reservation);
@@ -274,15 +274,40 @@ export class ZonesAdminPage {
   }
 
   reject(reservation) {
-    var promise = this.api.put(`reservations/${reservation.id}`, { status: 'rejected' })
-    promise
-      .then((data) => {
-        reservation.status = 'rejected';
+    return new Promise((resolve, reject) => {
+      this.api.alert.create({
+        title: this.api.trans('__.Nota de cancelación'),
+        inputs: [{
+          label: this.api.trans('literals.note'),
+          name: 'note',
+          placeholder: this.api.trans('literals.note'),
+
+        }],
+        buttons: [{
+          text: this.api.trans('crud.send'),
+          handler: (data) => {
+            var promise = this.api.put(`reservations/${reservation.id}`, { status: 'rejected', 'note': data.note })
+            promise
+              .then((data) => {
+                reservation.status = 'rejected';
+                resolve(data)
+              })
+              .catch((e) => {
+                reject(e)
+                this.api.Error(e);
+              })
+          }
+        },
+        {
+          text: this.api.trans('crud.cancel'),
+          handler: () => {
+            resolve()
+          }
+        }
+        ]
       })
-      .catch((e) => {
-        this.api.Error(e);
-      })
-    return promise;
+
+    })
   }
 
   proccessPayment(reservation, type = "charge") {

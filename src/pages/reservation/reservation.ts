@@ -10,6 +10,7 @@ import { IonicPage, NavController, NavParams, ActionSheetController, ToastContro
 export class ReservationPage {
   reservation: any = {}
   loading = false;
+  edition = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public actionsheet: ActionSheetController, public alert: AlertController, public toast: ToastController, public loadingctrl: LoadingController, public api: Api) {
     this.reservation = navParams.get('reservation');
   }
@@ -32,7 +33,15 @@ export class ReservationPage {
   }
 
   actions(reservation) {
-    var buttons = [];
+    var buttons = [{
+      text: this.api.trans('crud.edit'),
+      icon: 'create',
+      cssClass: "icon-success",
+      role: 'edit',
+      handler: () => {
+        this.edition = !this.edition;
+      }
+    }];
 
     if (reservation.status == "waiting for confirmation") {
       buttons.push({
@@ -82,8 +91,8 @@ export class ReservationPage {
     if (reservation.status != "rejected") {
       buttons.push({
         cssClass: "icon-danger",
-        icon: "trash",
-        role: "cancel",
+        icon: "close-circle",
+        role: "reject",
         text: this.api.trans("__.reject") + " " + this.api.trans("literals.reservation"),
         handler: () => {
           this.reject(reservation);
@@ -113,8 +122,19 @@ export class ReservationPage {
       })
     }
 
+
+
     buttons.push({
       cssClass: "icon-danger",
+      icon: "trash",
+      role: "destructive",
+      text: this.api.trans("crud.delete"),
+      handler: () => {
+        this.delete();
+      },
+    })
+    buttons.push({
+      cssClass: "icon-normal",
       icon: "close",
       role: "cancel",
       text: this.api.trans("crud.cancel"),
@@ -124,7 +144,6 @@ export class ReservationPage {
 
     this.actionsheet.create({
       title: this.api.trans("literals.reservation") + " " + reservation.user.name,
-      subTitle: reservation.zone.name,
       buttons: buttons,
     }).present();
 
@@ -211,15 +230,40 @@ export class ReservationPage {
   }
 
   reject(reservation) {
-    var promise = this.api.put(`reservations/${reservation.id}`, { status: 'rejected' })
-    promise
-      .then((data) => {
-        reservation.status = 'rejected';
+    return new Promise((resolve, reject) => {
+      this.api.alert.create({
+        title: this.api.trans('__.Nota de cancelación'),
+        inputs: [{
+          label: this.api.trans('literals.note'),
+          name: 'note',
+          placeholder: this.api.trans('literals.note'),
+
+        }],
+        buttons: [{
+          text: this.api.trans('crud.send'),
+          handler: (data) => {
+            var promise = this.api.put(`reservations/${reservation.id}`, { status: 'rejected', 'note': data.note })
+            promise
+              .then((data) => {
+                reservation.status = 'rejected';
+                resolve(data)
+              })
+              .catch((e) => {
+                reject(e)
+                this.api.Error(e);
+              })
+          }
+        },
+        {
+          text: this.api.trans('crud.cancel'),
+          handler: () => {
+            resolve()
+          }
+        }
+        ]
       })
-      .catch((e) => {
-        this.api.Error(e);
-      })
-    return promise;
+
+    })
   }
 
   proccessPayment(reservation, type = "charge") {
@@ -375,6 +419,70 @@ export class ReservationPage {
       .catch((error) => {
         console.error(error);
       })
+  }
+
+
+  selectPerson() {
+    var modal = this.modal.create('PersonFinderPage', {
+      users: true,
+      visitors: false,
+      workers: false,
+    })
+    modal.present();
+    modal.onDidDismiss((data) => {
+      if (!data) {
+        return;
+      }
+      console.log(data);
+      this.reservation.user_id = data.person.id;
+      this.reservation.residence_id = data.person.residence_id;
+      this.reservation.user = data.person;
+    })
+  }
+
+  save() {
+    var promise: Promise<any>
+    this.loading = true;
+    var data = {
+      user_id: this.reservation.user_id,
+      quotas: this.reservation.quotas,
+      notes: this.reservation.notes,
+      start: this.reservation.start,
+      end: this.reservation.end,
+      zone_id: this.reservation.zone_id,
+      event_id: this.reservation.event_id,
+    }
+    if (this.reservation.id) {
+      promise = this.api.put('reservations/' + this.reservation.id, data)
+    }
+    else {
+      promise = this.api.post('reservations', data)
+    }
+    promise.then((resp) => {
+      this.edition = false;
+      this.loading = false;
+    })
+      .catch((err) => {
+        this.api.Error(err);
+        this.loading = false;
+      })
+
+  }
+
+  delete() {
+    this.loading = true;
+    this.api.delete('reservations/' + this.reservation.id)
+      .then((data) => {
+        this.loading = false;
+        this.dismiss();
+      })
+      .catch((err) => {
+        this.loading = false;
+        this.api.Error(err);
+      })
+  }
+
+  canSave() {
   }
 
 

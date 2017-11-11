@@ -56,6 +56,7 @@
           <button ion-item (click)="actions(reserv)" *ngFor="let reserv of zone.reservations.data">
             <h2 *ngIf="reserv.user">
               {{reserv.user.name }}
+              <span *ngIf="reserv.user.residence"> - {{reserv.user.residence.name }} </span>
             </h2>
 
             <h3>
