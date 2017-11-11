@@ -97,7 +97,7 @@ export class ZonesAdminPage {
       },
     }];
 
-    if (reservation.status == "waiting for confirmation") {
+    if (reservation.status != "approved") {
       buttons.push({
         cssClass: "icon-secondary",
         icon: "checkmark",
@@ -126,7 +126,6 @@ export class ZonesAdminPage {
           }).present();
         },
       })
-
     }
 
     if (reservation.status == 'approved' && reservation.invoice_id == null && reservation.charge_id == null) {
@@ -177,7 +176,7 @@ export class ZonesAdminPage {
     }
 
     buttons.push({
-      cssClass: "icon-danger",
+      cssClass: "icon-normal",
       icon: "close",
       role: "cancel",
       text: this.api.trans("crud.cancel"),
@@ -278,19 +277,21 @@ export class ZonesAdminPage {
       this.api.alert.create({
         title: this.api.trans('__.Nota de cancelación'),
         inputs: [{
-          label: this.api.trans('literals.note'),
+          label: this.api.trans('literals.notes'),
           name: 'note',
-          placeholder: this.api.trans('literals.note'),
+          placeholder: this.api.trans('literals.notes'),
 
         }],
         buttons: [{
-          text: this.api.trans('crud.send'),
+          text: this.api.trans('literals.send'),
           handler: (data) => {
             var promise = this.api.put(`reservations/${reservation.id}`, { status: 'rejected', 'note': data.note })
             promise
-              .then((data) => {
+              .then((resp) => {
                 reservation.status = 'rejected';
-                resolve(data)
+                reservation.note = data.note;
+                this.sendPush(this.api.trans('literals.reservation') + " " + this.api.trans('literals.rejected') + ": " + data.note, reservation)
+                resolve(resp);
               })
               .catch((e) => {
                 reject(e)
@@ -301,14 +302,15 @@ export class ZonesAdminPage {
         {
           text: this.api.trans('crud.cancel'),
           handler: () => {
-            resolve()
+            reject()
           }
         }
         ]
-      })
+      }).present();
 
     })
   }
+
 
   proccessPayment(reservation, type = "charge") {
     var promise: Promise<any>;

@@ -31,12 +31,6 @@
           </span>
         </ion-item>
 
-        <ion-item *ngIf="reservation.user && reservation.user.residence">
-          <ion-icon small item-left name="person"></ion-icon>
-          <h2>{{ 'literals.residence' | trans }}</h2>
-          <span item-right>{{reservation.user.residence.name}}</span>
-        </ion-item>
-
         <ion-item>
           <ion-icon small item-left name="book"></ion-icon>
           <h2>{{ 'literals.status' | trans }}</h2>
@@ -121,13 +115,15 @@
         <ion-item>
           <ion-icon small item-left name="ios-clock"></ion-icon>
           <ion-label floating>{{ 'literals.start' | trans }}</ion-label>
-          <ion-datetime [(ngModel)]="reservation.start"></ion-datetime>
+          <ion-datetime [monthNames]="monthNames" displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD MMMM YYYY HH mm" [(ngModel)]="start"
+            (ionChange)="changeDate('start')"></ion-datetime>
         </ion-item>
 
         <ion-item>
           <ion-icon small item-left name="ios-clock-outline"></ion-icon>
           <ion-label floating>{{ 'literals.end' | trans }}</ion-label>
-          <ion-datetime [(ngModel)]="reservation.end"></ion-datetime>
+          <ion-datetime [monthNames]="monthNames" displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD MMMM YYYY HH mm" [(ngModel)]="end"
+            (ionChange)="changeDate('end')"></ion-datetime>
         </ion-item>
       </ion-list>
 

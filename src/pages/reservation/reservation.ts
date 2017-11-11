@@ -2,6 +2,8 @@ import { AlertController, LoadingController } from 'ionic-angular';
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ActionSheetController, ToastController } from 'ionic-angular';
+import { ModalController } from 'ionic-angular/components/modal/modal-controller';
+import * as moment from 'moment';
 @IonicPage()
 @Component({
   selector: 'page-reservation',
@@ -11,12 +13,24 @@ export class ReservationPage {
   reservation: any = {}
   loading = false;
   edition = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public actionsheet: ActionSheetController, public alert: AlertController, public toast: ToastController, public loadingctrl: LoadingController, public api: Api) {
+  start;
+  end;
+  monthNames = moment.localeData('es').months();
+  constructor(public navCtrl: NavController, public navParams: NavParams, public actionsheet: ActionSheetController, public alert: AlertController, public modal: ModalController, public toast: ToastController, public loadingctrl: LoadingController, public api: Api) {
     this.reservation = navParams.get('reservation');
+    if (navParams.get('edition')) {
+      this.edition = true;
+    }
+    this.start = moment.utc(this.reservation.start).format('YYYY-MM-DDTHH:mm')
+    this.end = moment.utc(this.reservation.end).format('YYYY-MM-DDTHH:mm')
+    console.log(this.start, this.end)
   }
 
   ionViewDidLoad() {
     this.getReservation();
+  }
+  changeDate(key) {
+    this.reservation[key] = moment(this[key]).toDate();
   }
 
   getReservation() {
@@ -43,7 +57,7 @@ export class ReservationPage {
       }
     }];
 
-    if (reservation.status == "waiting for confirmation") {
+    if (reservation.status != "approved") {
       buttons.push({
         cssClass: "icon-secondary",
         icon: "checkmark",
@@ -234,19 +248,21 @@ export class ReservationPage {
       this.api.alert.create({
         title: this.api.trans('__.Nota de cancelación'),
         inputs: [{
-          label: this.api.trans('literals.note'),
+          label: this.api.trans('literals.notes'),
           name: 'note',
-          placeholder: this.api.trans('literals.note'),
+          placeholder: this.api.trans('literals.notes'),
 
         }],
         buttons: [{
-          text: this.api.trans('crud.send'),
+          text: this.api.trans('literals.send'),
           handler: (data) => {
             var promise = this.api.put(`reservations/${reservation.id}`, { status: 'rejected', 'note': data.note })
             promise
-              .then((data) => {
+              .then((resp) => {
                 reservation.status = 'rejected';
-                resolve(data)
+                reservation.note = data.note;
+                this.sendPush(this.api.trans('literals.reservation') + " " + this.api.trans('literals.rejected') + ": " + data.note, reservation)
+                resolve(resp);
               })
               .catch((e) => {
                 reject(e)
@@ -257,11 +273,11 @@ export class ReservationPage {
         {
           text: this.api.trans('crud.cancel'),
           handler: () => {
-            resolve()
+            reject()
           }
         }
         ]
-      })
+      }).present();
 
     })
   }
@@ -483,6 +499,7 @@ export class ReservationPage {
   }
 
   canSave() {
+    return this.reservation.user && this.reservation.start && this.reservation.end
   }
 
 
