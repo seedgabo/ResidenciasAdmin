@@ -9,6 +9,7 @@
 
 
   <ion-card>
+
     <ion-card-content>
       <ion-list>
         <div *ngIf="!(visit.visitors &&  visit.visitors.length > 1)">
@@ -40,6 +41,26 @@
             </ion-select>
           </ion-item>
         </div>
+
+        <div *ngIf="visit.guest">
+          <div text-center>
+            <img *ngIf="visit.guest" [src]="visit.guest.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
+          </div>
+          <ion-item>
+            <ion-icon name="person"></ion-icon>
+            <b>{{'literals.guest' | trans }}</b>
+            <span item-right>
+              {{visit.guest.name}}
+              <small *ngIf="visit.guest.document">({{ visit.guest.document }})</small>
+            </span>
+            <br>
+            <span *ngIf="visit.guest.reason">
+              <b>{{'literals.reason' | trans }}</b>
+              <span>{{visit.guest.reason}}</span>
+            </span>
+          </ion-item>
+        </div>
+
       </ion-list>
     </ion-card-content>
   </ion-card>

@@ -1,0 +1,45 @@
+<ion-header>
+
+  <ion-navbar color="favorite">
+    <ion-title>{{'crud.add' | trans }} {{'literals.special' | trans }} {{ 'literals.visit' | trans }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+
+    <ion-item>
+      <ion-label floating> {{'literals.visitor' | trans }} </ion-label>
+      <ion-input [(ngModel)]="visit.guest.name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating> {{'literals.document' | trans }} </ion-label>
+      <ion-input [(ngModel)]="visit.guest.document"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating> {{'literals.reason' | trans }} </ion-label>
+      <ion-input [(ngModel)]="visit.guest.reason"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating> {{'literals.notes' | trans }} </ion-label>
+      <ion-textarea [(ngModel)]="visit.note"></ion-textarea>
+    </ion-item>
+
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <button ion-button full color="secondary" icon-left (click)="create()" [disabled]="canSave() || loading">
+    <ion-icon name="add"></ion-icon>
+    {{'crud.add' | trans }} {{'literals.visit' | trans }}
+  </button>
+</ion-footer>
