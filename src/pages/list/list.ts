@@ -55,7 +55,7 @@ export class ListPage {
   }
 
   filters() {
-    return "&order[id]=desc&limit=5000";
+    return "&append[]=guest&order[id]=desc&limit=5000";
   }
 
   actions(visit) {
@@ -83,11 +83,12 @@ export class ListPage {
       // cssClass: 'icon-danger',
       handler: () => { this.viewVisit(visit) }
     });
-    buttons.push({
-      text: this.api.trans('crud.edit') + " " + this.api.trans('literals.visitor'),
-      icon: 'contact',
-      handler: () => { this.editVisitor(visit.visitor) }
-    });
+    if (visit.visitor)
+      buttons.push({
+        text: this.api.trans('crud.edit') + " " + this.api.trans('literals.visitor'),
+        icon: 'contact',
+        handler: () => { this.editVisitor(visit.visitor) }
+      });
 
     buttons.push({
       text: this.api.trans('crud.delete') + " " + this.api.trans('literals.visit'),
@@ -100,7 +101,7 @@ export class ListPage {
 
     this.actionsheet.create({
       title: this.api.trans('literals.visit') + " " + this.api.trans('__.from') + " " +
-      (visit.visitor ? visit.visitor.name : ''),
+        (visit.visitor ? visit.visitor.name : visit.guest ? visit.guest.name : ''),
       buttons: buttons
     }).present();
   }
