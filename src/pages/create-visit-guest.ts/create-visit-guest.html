@@ -24,6 +24,13 @@
     </ion-item>
 
     <ion-item>
+      <ion-label> {{'literals.status' | trans }} </ion-label>
+      <ion-select [(ngModel)]="visit.status">
+        <ion-option [value]="status" *ngFor="let status of statutes">{{ 'literals.' + status | trans }} </ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
       <ion-label floating> {{'literals.visitor' | trans }} </ion-label>
       <ion-input [(ngModel)]="visit.guest.name"></ion-input>
     </ion-item>

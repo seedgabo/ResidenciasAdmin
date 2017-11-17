@@ -8,13 +8,14 @@ import { Api } from "../../providers/api";
 })
 export class CreateVisitGuestPage {
   visit: any = {
-    status: 'approved',
+    status: 'waiting for confirmation',
     guest: {
       name: "",
       document: "",
       reason: this.api.trans("literals.delivery")
     }
   }
+  statutes = ['waiting for confirmation', 'approved', 'rejected', 'departured'];
   loading = false
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public viewCtrl: ViewController) {
     var guest = navParams.get('guest');

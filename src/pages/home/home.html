@@ -21,42 +21,45 @@
           <ion-card-header> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-card-header>
           <ion-list>
             <ion-item-sliding *ngFor="let visit of api.visits_approved;let i= index">
-              <button ion-item (tap)="viewVisit(visit,i)" *ngIf="!visit.guest">
-                <ion-thumbnail item-left (click)="askFile(visit.visitor);$event.stopPropagation()">
-                  <img [src]="visit.visitor.image_url">
-                </ion-thumbnail>
-                <span>
-                  {{visit.visitor.name }}
-                </span>
-                <span *ngIf="visit.visitors && visit.visitors.length > 1">{{'__.and others' | trans }} {{visit.visitors.length - 1}}</span>
-                <p *ngIf="api.residences_collection[visit.residence_id]" text-left>
-                  {{api.residences_collection[visit.residence_id].name}}
-                </p>
-                <p>
-                  {{visit.note}}
-                </p>
-                <small *ngIf="visit.user">{{'literals.user' | trans }}: {{visit.user.name}}</small>
-                <p>
-                  {{ visit.created_at | amCalendar }}
-                </p>
-              </button>
-              <button ion-item (tap)="viewVisit(visit,i)" *ngIf="visit.guest">
-                <ion-thumbnail item-left *ngIf="visit.guest.image_url">
-                  <img [src]="visit.guest.image_url">
-                </ion-thumbnail>
-                <span>
-                  {{visit.guest.name }}
-                </span>
-                <p *ngIf="api.residences_collection[visit.residence_id]" text-left>
-                  {{api.residences_collection[visit.residence_id].name}}
-                </p>
-                <p>
-                  {{visit.note}}
-                </p>
-                <small *ngIf="visit.user">{{'literals.user' | trans }}: {{visit.user.name}}</small>
-                <p>
-                  {{ visit.created_at | amCalendar }}
-                </p>
+              <button ion-item (tap)="viewVisit(visit,i)">
+                <div *ngIf="visit.visitor">
+                  <ion-thumbnail item-left (click)="askFile(visit.visitor);$event.stopPropagation()">
+                    <img [src]="visit.visitor.image_url">
+                  </ion-thumbnail>
+                  <span>
+                    {{visit.visitor.name }}
+                  </span>
+                  <span *ngIf="visit.visitors && visit.visitors.length > 1">{{'__.and others' | trans }} {{visit.visitors.length - 1}}</span>
+                  <p *ngIf="api.residences_collection[visit.residence_id]" text-left>
+                    {{api.residences_collection[visit.residence_id].name}}
+                  </p>
+                  <p>
+                    {{visit.note}}
+                  </p>
+                  <small *ngIf="visit.user">{{'literals.user' | trans }}: {{visit.user.name}}</small>
+                  <p>
+                    {{ visit.created_at | amCalendar }}
+                  </p>
+                </div>
+
+                <div *ngIf="visit.guest">
+                  <ion-thumbnail item-left *ngIf="visit.guest.image_url">
+                    <img [src]="visit.guest.image_url">
+                  </ion-thumbnail>
+                  <span>
+                    {{visit.guest.name }}
+                  </span>
+                  <p *ngIf="api.residences_collection[visit.residence_id]" text-left>
+                    {{api.residences_collection[visit.residence_id].name}}
+                  </p>
+                  <p>
+                    {{visit.note}}
+                  </p>
+                  <small *ngIf="visit.user">{{'literals.user' | trans }}: {{visit.user.name}}</small>
+                  <p>
+                    {{ visit.created_at | amCalendar }}
+                  </p>
+                </div>
               </button>
               <ion-item-options side="right">
                 <button ion-button color="secondary" (click)="dismissPreApproved(visit,i)">
