@@ -31,6 +31,10 @@
         {{visit.guest.name }}
         <br>
         <span *ngIf="visit.residence">{{visit.residence.name}}</span>
+        <p *ngIf="visit.guest.reason">
+          <b>{{'literals.reason' | trans }}</b>
+          <span>{{visit.guest.reason}}</span>
+        </p>
         <br>
         <small>{{visit.guest.document}}</small>
       </h2>
