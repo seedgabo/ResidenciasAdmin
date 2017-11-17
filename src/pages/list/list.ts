@@ -41,6 +41,7 @@ export class ListPage {
       var element = this.api.visits[index];
       if (
         (element.visitor && element.visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
+        (element.guest && element.guest.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
         (element.residence && element.residence.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
         (element.user && element.user.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1)
       )
@@ -105,6 +106,8 @@ export class ListPage {
       buttons: buttons
     }).present();
   }
+
+
 
   approve(visit) {
     this.api.put('visits/' + visit.id, { status: 'approved', departured_at: moment.utc().toString() })
