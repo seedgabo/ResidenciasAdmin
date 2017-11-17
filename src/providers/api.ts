@@ -296,6 +296,7 @@ export class Api {
             var visit = this.visits[0];
             if (data.visitor) {
               visit.visitor = data.visitor;
+              visit.guest = data.guest;
               visit.visitors = data.visitors;
 
             }
@@ -321,6 +322,8 @@ export class Api {
             if (data.visitor) {
               visit.visitor = data.visitor;
               visit.visitors = data.visitors;
+              visit.guest = data.guest;
+
             }
           });
         })
@@ -441,6 +444,7 @@ export class Api {
   VisitConfirmed(data) {
     var visit = data.visit;
     visit.visitor = data.visitor;
+    visit.guest = data.guest;
     visit.visitors = data.visitors;
     this.alert.create({
       cssClass: "visit-" + visit.status,
