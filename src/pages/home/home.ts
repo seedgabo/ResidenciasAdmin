@@ -84,6 +84,31 @@ export class HomePage {
     }).present();
   }
 
+  more() {
+    this.actionsheet.create({
+      title: this.api.trans('literals.actions'),
+      buttons: [
+        {
+          text: this.api.trans('crud.add') + " " + this.api.trans('literals.person'),
+          icon: 'person-add',
+          cssClass: 'icon-primary',
+          handler: () => { this.visitModal() }
+        },
+        {
+          text: this.api.trans('crud.add') + " " + this.api.trans('literals.delivery'),
+          icon: 'basket',
+          cssClass: 'icon-favorite',
+          handler: () => {
+            var modal = this.modal.create("CreateVisitGuestPage", {})
+            modal.present();
+            modal.onWillDismiss(() => {
+            })
+          }
+        }
+      ]
+    }).present();
+  }
+
   viewVisit(visit, index) {
     this.navCtrl.push(VisitPage, {
       visit: visit,
@@ -105,7 +130,7 @@ export class HomePage {
     });
   }
 
-  visitModal(visitor) {
+  visitModal(visitor = null) {
     this.modal.create(VisitCreatorPage, { visitor: visitor }, { showBackdrop: true, enableBackdropDismiss: true }).present();
 
   }

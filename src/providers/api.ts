@@ -206,12 +206,12 @@ export class Api {
         broadcaster: 'socket.io', // pusher o socket.io
         host: this.user.hostEcho,
         auth:
-        {
-          headers:
           {
-            'Auth-Token': this.user.token,
+            headers:
+              {
+                'Auth-Token': this.user.token,
+              }
           }
-        }
 
       });
       this.Echo.private('Application')
@@ -417,7 +417,7 @@ export class Api {
     this.playSoundBeep();
     var alert = this.alert.create({
       title: this.trans('literals.visit') + " Pre " + this.trans('literals.approved_f'),
-      subTitle: this.trans('literals.visitor') + ': ' + visit.visitor.name,
+      subTitle: this.trans('literals.visitor') + ': ' + (visit.visitor ? visit.visitor.name : visit.guest ? visit.guest.name : ''),
       message: visit.note,
       buttons: ["OK"],
     })
@@ -445,7 +445,7 @@ export class Api {
     this.alert.create({
       cssClass: "visit-" + visit.status,
       title: this.trans('literals.visit') + " " + this.trans('literals.' + visit.status),
-      subTitle: this.trans('literals.visitor') + ': ' + visit.visitor.name,
+      subTitle: this.trans('literals.visitor') + ': ' + (visit.visitor ? visit.visitor.name : visit.guest ? visit.guest.name : ''),
       message: visit.note,
       buttons: ["OK"],
     }).present();

@@ -14,6 +14,14 @@
 
 <ion-content padding>
   <ion-list>
+    <ion-item>
+      <ion-label floating>{{'literals.residence' | trans }}</ion-label>
+      <ion-select [(ngModel)]="visit.residence_id">
+        <ion-option [value]="residence.id" *ngFor="let residence of api.residences">
+          {{ residence.name }}
+        </ion-option>
+      </ion-select>
+    </ion-item>
 
     <ion-item>
       <ion-label floating> {{'literals.visitor' | trans }} </ion-label>
@@ -38,7 +46,7 @@
   </ion-list>
 </ion-content>
 <ion-footer>
-  <button ion-button full color="secondary" icon-left (click)="create()" [disabled]="canSave() || loading">
+  <button ion-button full color="secondary" icon-left (click)="create()" [disabled]="!canSave() || loading">
     <ion-icon name="add"></ion-icon>
     {{'crud.add' | trans }} {{'literals.visit' | trans }}
   </button>

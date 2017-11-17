@@ -12,7 +12,7 @@
 
     <ion-card-content>
       <ion-list>
-        <div *ngIf="!(visit.visitors &&  visit.visitors.length > 1)">
+        <div *ngIf="!visit.guest && !(visit.visitors &&  visit.visitors.length > 1)">
           <div text-center>
             <img *ngIf="visit.visitor" [src]="visit.visitor.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
           </div>
@@ -44,7 +44,7 @@
 
         <div *ngIf="visit.guest">
           <div text-center>
-            <img *ngIf="visit.guest" [src]="visit.guest.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
+            <img *ngIf="visit.guest.image_url" [src]="visit.guest.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
           </div>
           <ion-item>
             <ion-icon name="person"></ion-icon>
