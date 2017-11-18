@@ -47,7 +47,6 @@ export class VisitCreatorPage {
     }).catch((err) => {
       this.loading = false;
       this.api.Error(err);
-      console.log(err);
     });
   }
 

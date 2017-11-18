@@ -92,7 +92,7 @@ export class HomePage {
           text: this.api.trans('crud.add') + " " + this.api.trans('literals.person'),
           icon: 'person-add',
           cssClass: 'icon-primary',
-          handler: () => { this.visitModal() }
+          handler: () => { this.visitorModal() }
         },
         {
           text: this.api.trans('crud.add') + " " + this.api.trans('literals.delivery'),

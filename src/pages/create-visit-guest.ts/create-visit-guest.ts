@@ -47,14 +47,20 @@ export class CreateVisitGuestPage {
   create() {
     this.loading = true;
     this.api.post('visits', this.visit)
-      .then(
-      (data) => {
+      .then((data: any) => {
         console.log(data);
-        this.loading = false
-        this.dismiss();
+        this.api.post('visits/' + data.id + '/visit', {})
+          .then((resp) => {
+            console.log(resp);
+            this.loading = false
+            this.dismiss();
+          })
+          .catch((err) => {
+            this.loading = false
+            this.api.Error(err)
+          })
       })
-      .catch(
-      (err) => {
+      .catch((err) => {
         this.loading = false
         this.api.Error(err)
       })
