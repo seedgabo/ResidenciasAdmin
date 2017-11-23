@@ -5,6 +5,12 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>{{'__.Punto de Venta' | trans }}</ion-title>
+
+    <ion-buttons end>
+      <button ion-button (click)="gotoReports($event)" icon-only clear>
+        <ion-icon name="paper"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>

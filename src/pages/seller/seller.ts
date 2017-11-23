@@ -24,7 +24,7 @@ export class SellerPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public printer: Printer, public api: Api) {
   }
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     this.api.storage.get('invoices_history')
       .then((history) => {
         if (history) {
@@ -226,7 +226,7 @@ export class SellerPage {
 
   saveInvoice(invoice) {
     this.invoices_history.push(invoice);
-    this.invoices_history.slice(this.invoices_history.length - 500)
+    // this.invoices_history.slice(this.invoices_history.length - 500)
     this.api.storage.set('invoices_history', this.invoices_history);
   }
 
@@ -360,5 +360,9 @@ export class SellerPage {
       title: this.api.trans('__.¿Que desea hacer?'),
       buttons: buttons
     }).present();
+  }
+
+  gotoReports(ev) {
+    this.navCtrl.push("SellerReportPage", { invoices: this.invoices_history })
   }
 }
