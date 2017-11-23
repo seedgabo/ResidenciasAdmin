@@ -19,7 +19,19 @@ export class PrintInvoicePage {
     if (navParams.get('receipt')) {
       this.invoice.receipt = navParams.get('receipt');
     }
+    this.prepare();
     console.log(this.invoice);
+  }
+  prepare() {
+    if (this.invoice.user) {
+      this.invoice.person = this.invoice.user
+    }
+    if (this.invoice.visitor) {
+      this.invoice.person = this.invoice.visitor
+    }
+    if (this.invoice.worker) {
+      this.invoice.person = this.invoice.worker
+    }
   }
 
   ionViewDidLoad() {
@@ -27,6 +39,7 @@ export class PrintInvoicePage {
       this.print(this.invoice);
     }
   }
+
   print(invoice, receipt = null) {
     setTimeout(() => {
       this.printer.print(document.getElementById('toPrint'), { name: 'invoice' })

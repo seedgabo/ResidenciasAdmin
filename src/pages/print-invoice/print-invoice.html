@@ -110,5 +110,88 @@
 
       </table>
     </div>
+
+  </div>
+
+
+  <div *ngIf="api.settings.print_type == 'pos'" class="printable punto" id="toPrintMini">
+    <br>
+    <div text-center>
+      <img [src]="api.url + 'img/logo.png'" style="max-height:60pt; max-width:60pt;">
+    </div>
+    <h3 text-center no-margin>
+      {{api.settings.name}}
+    </h3>
+    <h6 text-center no-margin>
+      NIT: {{api.settings.document}}
+    </h6>
+    <p text-center no-margin>
+      {{api.settings.address}}
+    </p>
+    <p text-center no-margin>
+      {{api.settings.phone }}
+    </p>
+    <br>
+    <p no-margin>
+      <b>
+        {{'literals.invoices' | trans }} # {{invoice.number }}
+      </b>
+    </p>
+    <p no-margin>
+      {{'literals.date' | trans }}: {{ invoice.created_at | amDateFormat:'DD MMMM YYYY - h:mm a'}}
+    </p>
+    <p no-margin>
+      <b>
+        {{'literals.worker' | trans }}:
+      </b>
+      <span>{{ api.user.full_name }}</span>
+    </p>
+    <span *ngIf="invoice.receipt">
+      {{'literals.payment' | trans }}: {{ ('literals.' + invoice.receipt.transaction ) | trans }}
+    </span>
+    <br>
+    <div class="separator"></div>
+    <table style="width:100%">
+      <thead>
+        <tr text-center>
+          <th>{{'literals.quantity' | trans }}</th>
+          <th>{{'literals.item' | trans }}</th>
+          <th>{{'literals.price' | trans }}</th>
+          <th>{{'literals.total' | trans }}</th>
+        </tr>
+      </thead>
+      <tbody text-center class="pos-items">
+        <tr *ngFor="let item of invoice.items">
+          <td>{{ item.quantity }}</td>
+          <td style="width:50pt">{{item.concept}}</td>
+          <td>{{item.amount | number: '1.2-2'}}</td>
+          <td> {{(item.quantity * item.amount) | number:'1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="separator"></div>
+    <br>
+    <div class="separator"></div>
+    <table style="width:100%">
+      <tr>
+        <th> Total:</th>
+        <th> {{ invoice.total | number: '1.2-2'}} </th>
+      </tr>
+    </table>
+    <br>
+    <div *ngIf="invoice.person">
+      {{'literals.person' | trans }}: {{ invoice.person.full_name }}
+      <br> {{ invoice.person.document }}
+      <span *ngIf="invoice.person.phone_number">
+        <br> {{'literals.phone_number' | trans }}: {{invoice.person.phone_number}}</span>
+    </div>
+    <div *ngIf="!(invoice.user)">
+      {{'literals.person' | trans }}: _______________________________
+      <br> {{'literals.document' | trans }}: ______________________________
+      <span>
+        <br> {{'literals.phone_number' | trans }}: ___________________
+      </span>
+    </div>
+    <br>
   </div>
 </ion-content>
