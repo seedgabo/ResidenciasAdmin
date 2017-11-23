@@ -363,6 +363,6 @@ export class SellerPage {
   }
 
   gotoReports(ev) {
-    this.navCtrl.push("SellerReportPage", { invoices: this.invoices_history })
+    this.navCtrl.push("SellerReportsPage", { invoices: this.invoices_history })
   }
 }

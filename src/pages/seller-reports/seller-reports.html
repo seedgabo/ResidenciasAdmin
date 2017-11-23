@@ -1,18 +1,82 @@
-<!--
-  Generated template for the SellerReportsPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>SellerReports</ion-title>
+  <ion-navbar color="favorite">
+    <button ion-button icon-only clear menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{'literals.resports' | trans }}</ion-title>
   </ion-navbar>
-
 </ion-header>
 
+<ion-content>
+  <ion-list [ngClass]="{'no-print': api.settings.print_type == 'pos'}" id="toPrint" [virtualScroll]="invoices">
+    <button approxItemHeight="50px" ion-item *virtualItem="let invoice" (click)="actions(invoice)" text-wrap>
+      <span item-left>
+        {{invoice.number}}
+      </span>
+      <h3 *ngIf="invoice.person">
+        {{invoice.person.full_name}}
+      </h3>
+      <h4>
+        {{ invoice.created_at | amDateFormat:'dddd, DD MMMM YYYY - h:mm a' }}
+      </h4>
+      <p *ngIf="invoice.person">
+        {{invoice.person.document}}
+      </p>
+      <span item-right>
+        {{ invoice.total | currency:'USD':true:'1.2-2' }}
+      </span>
+    </button>
+  </ion-list>
 
-<ion-content padding>
+  <div *ngIf="printing && api.settings.print_type == 'pos'" class="printable punto" id="toPrintMini" no-margin>
+    <table style="width:100%;text-align:center;margin-right:5pt" no-margin>
+      <thead>
+        <tr>
+          <th class="pos-items">#</th>
+          <th class="pos-items">{{'literals.customer' | trans }</th>
+          <th class="pos-items">{{'literals.date' | trans }}</th>
 
+          <th class="pos-items">{{'literals.total' | trans }}</th>
+
+        </tr>
+      </thead>
+      <tbody *ngFor="let invoice of invoices">
+        <tr>
+          <td class="pos-items">{{ invoice.number }}</td>
+          <td class="pos-items" style="width:50pt">{{ invoice.person ? invoice.person.full_name : 'N/A' }}</td>
+          <td class="pos-items">{{ invoice.created_at | amDateFormat:"D/MM/YY H:mm a" }} </td>
+          <td class="pos-items">{{ invoice.total | number:'1.1-1' }}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th></th>
+          <th></th>
+          <th>{{'literals.total' | trans }}:</th>
+
+          <th>{{ total | number:'1.2-2' }}</th>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="separator"></div>
+  </div>
 </ion-content>
+
+<ion-footer *ngIf="!printing || api.settings.print_type != 'pos'">
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <b>{{'literals.total' | trans }}:</b>
+
+          <span>{{ total | currency:'USD':true:'1.2-2' }}</span>
+        </ion-col>
+        <ion-col class="no-print">
+          <button [disabled]="loading" *ngIf="!from" ion-button full color="secondary" (click)="print()">
+            {{'literals.print'| trans }}
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

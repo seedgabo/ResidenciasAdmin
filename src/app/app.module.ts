@@ -19,7 +19,6 @@ import { VisitCreatorPage } from "../pages/visit-creator/visit-creator";
 import { ZonesAdminPage } from "../pages/zones-admin/zones-admin";
 import { PipesModule } from '../pipes/pipes.module'
 import { IonicStorageModule } from '@ionic/storage';
-import { MomentModule } from 'angular2-moment';
 import { CodePush } from "@ionic-native/code-push";
 import { Printer } from '@ionic-native/printer';
 import { Vibration } from '@ionic-native/vibration';

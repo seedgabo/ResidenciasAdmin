@@ -25,3 +25,9 @@
     color: color($colors, "danger");
   }
 }
+
+@media print {
+  .no-print {
+    display: none;
+  }
+}
