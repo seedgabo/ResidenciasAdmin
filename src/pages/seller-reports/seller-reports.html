@@ -1,15 +1,20 @@
 <ion-header>
-  <ion-navbar color="favorite">
+  <ion-navbar color="dark" class="no-print">
     <button ion-button icon-only clear menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{'literals.resports' | trans }}</ion-title>
+    <ion-title>{{'literals.reports' | trans }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="more()">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
   <ion-list [ngClass]="{'no-print': api.settings.print_type == 'pos'}" id="toPrint" [virtualScroll]="invoices">
-    <button approxItemHeight="50px" ion-item *virtualItem="let invoice" (click)="actions(invoice)" text-wrap>
+    <button ion-item *virtualItem="let invoice" (click)="actions(invoice)" text-wrap>
       <span item-left>
         {{invoice.number}}
       </span>

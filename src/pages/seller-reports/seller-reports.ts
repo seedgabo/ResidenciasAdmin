@@ -24,7 +24,12 @@ export class SellerReportsPage {
     this.invoices = navParams.get('invoices');
   }
   ionViewDidLoad() {
+    this.prepare();
     this.calculate();
+    console.log(this.invoices);
+  }
+
+  prepare() {
   }
 
   calculate() {
@@ -42,20 +47,7 @@ export class SellerReportsPage {
   }
 
   printInvoice(data) {
-    var id = data.invoice_id;
-    if (!id) {
-      id = data.id;
-    }
-
-    this.api.get('invoices/' + id + "?with[]=cliente&with[]=items&with[]=user")
-      .then((resp: any) => {
-        console.log("invoice:", resp);
-        resp.items = JSON.parse(resp.items);
-        this.navCtrl.push("PrintInvoicePage", { invoice: resp });
-      })
-      .catch((err) => {
-        this.navCtrl.push("PrintInvoicePage", { invoice: data });
-      })
+    this.navCtrl.push("PrintInvoicePage", { invoice: data });
   }
 
   print(clear = true) {
@@ -92,7 +84,29 @@ export class SellerReportsPage {
     }, 300);
   }
 
-  actions() {
+  actions(invoice) {
+    var sheet = this.actionsheet.create({
+      title: this.api.trans("literals.actions") + " " + this.api.trans('literals.invoice'),
+    })
+
+    sheet.addButton({
+      text: this.api.trans('literals.print'),
+      handler: () => {
+        this.printInvoice(invoice)
+      }
+    })
+
+
+    sheet.addButton({
+      text: this.api.trans('crud.cancel'),
+      icon: "close",
+      role: "cancel",
+      handler: () => {
+      }
+    }).present();
+  }
+
+  more() {
     var sheet = this.actionsheet.create({
       title: this.api.trans("literals.generate") + " " + this.api.trans('literals.report'),
     })
