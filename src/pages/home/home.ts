@@ -35,7 +35,6 @@ export class HomePage {
   }
 
 
-
   getVisitors() {
     if (this.query == "")
       return this.api.visitors.slice(0, 100);

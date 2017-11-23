@@ -64,7 +64,7 @@ export class VisitorPage {
     if (this.action == 'create') {
       this.api.post('visitors', data).then((response) => {
         console.log(response);
-        this.viewCtrl.dismiss();
+        this.viewCtrl.dismiss(response);
         this.loading = false;
       }).catch((err) => {
         this.loading = false;
@@ -75,7 +75,7 @@ export class VisitorPage {
       this.api.put('visitors/' + this.visitor.id, data).then((response) => {
         console.log(response);
         this.loading = false;
-        this.viewCtrl.dismiss();
+        this.viewCtrl.dismiss(response);
       }).catch((err) => {
         this.loading = false;
         this.api.Error(err);

@@ -1,25 +1,25 @@
 <ion-header>
-    <ion-navbar color="secondary">
-        <ion-title>{{'literals.products' | trans}}</ion-title>
-        <ion-buttons end>
-            <button ion-button clear icon-only>
-            <ion-icon name="close" (click)="cancel()"></ion-icon>
-          </button>
-        </ion-buttons>
-    </ion-navbar>
-    <ion-toolbar>
-        <ion-searchbar (ionInput)="search()" [(ngModel)]="query"></ion-searchbar>
-    </ion-toolbar>
+  <ion-navbar color="secondary">
+    <ion-title>{{'literals.products' | trans}}</ion-title>
+    <ion-buttons end>
+      <button ion-button clear icon-only (click)="cancel()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="search()" [(ngModel)]="query"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-list inset no-lines>
-        <button ion-item (click)="select(product)" *ngFor="let product of products.data">
-        <ion-thumbnail item-left *ngIf="product.image" >
-          <img [src]="product.image.url">
-        </ion-thumbnail>
-        <h2>{{product.name}}</h2>
-        <h3>{{product.description}}</h3>
-        <p>{{product.price |  currency:'USD':true:'1.2-2'}}</p>
-      </button>
-    </ion-list>
+  <ion-list inset no-lines>
+    <button ion-item (click)="select(product)" *ngFor="let product of products.data">
+      <ion-thumbnail item-left *ngIf="product.image">
+        <img [src]="product.image.url">
+      </ion-thumbnail>
+      <h2>{{product.name}}</h2>
+      <h3>{{product.description}}</h3>
+      <p>{{product.price | currency:'USD':true:'1.2-2'}}</p>
+    </button>
+  </ion-list>
 </ion-content>

@@ -11,8 +11,8 @@
 
 </ion-header>
 
-<ion-content padding>
-  <ion-searchbar debounce="700" (ionInput)="search($event)" [(ngModel)]="query"></ion-searchbar>
+<ion-content>
+  <ion-searchbar debounce="900" (ionInput)="search($event)" [(ngModel)]="query"></ion-searchbar>
 
   <ion-list *ngIf="findFor.users && results.users && results.users.data">
 
@@ -24,9 +24,13 @@
       </ion-avatar>
       <h2>
         {{person.name}}
+        <span>({{'literals.'+ person.relationship | trans}})</span>
       </h2>
       <p>{{person.document}}</p>
-      <p *ngIf="person.residence">{{person.residence.name}}</p>
+      <p *ngIf="person.residence">{{person.residence.name}}
+        <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
+        <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
+      </p>
     </button>
   </ion-list>
 
@@ -40,9 +44,11 @@
         {{person.name}}
       </h2>
       <p>{{person.document}}</p>
-      <p *ngIf="person.residence">{{person.residence.name}}</p>
+      <p *ngIf="person.residence">{{person.residence.name}}
+        <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
+        <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
+      </p>
     </button>
-
   </ion-list>
 
   <ion-list *ngIf="findFor.workers && results.workers && results.workers.data">
@@ -56,10 +62,25 @@
         {{person.name}}
       </h2>
       <p>{{person.document}}</p>
-      <p *ngIf="person.residence">{{person.residence.name}}</p>
+      <p *ngIf="person.residence">{{person.residence.name}}
+        <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
+        <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
+      </p>
     </button>
+
 
   </ion-list>
 
+  <ion-fab bottom right #fab>
+    <button ion-fab>
+      <ion-icon name="add"></ion-icon>
+    </button>
+    <ion-fab-list side="top" style="right:5px">
+      <button ion-button (click)="visitorModal(); fab.close()" icon-left>
+        <ion-icon name="person-add"></ion-icon>
+        {{'crud.add' | trans }} {{ 'literals.visitor' | trans }}
+      </button>
+    </ion-fab-list>
+  </ion-fab>
 
 </ion-content>

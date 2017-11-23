@@ -1,6 +1,8 @@
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { ModalController } from 'ionic-angular/components/modal/modal-controller';
+import { VisitorPage } from '../visitor/visitor';
 /**
  * Generated class for the PersonFinderPage page.
  *
@@ -26,7 +28,7 @@ export class PersonFinderPage {
     visitors: null,
     workers: null,
   }
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewctrl: ViewController, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewctrl: ViewController, public modal: ModalController, public api: Api) {
     if (navParams.get('users') !== undefined)
       this.findFor.users = navParams.get('users');
     if (navParams.get('visitors') !== undefined)
@@ -56,7 +58,7 @@ export class PersonFinderPage {
   }
 
   search() {
-    this.api.get(`users?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&with[]=image&with[]=residence&paginate=50`)
+    this.api.get(`users?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&with[]=image&with[]=residence&paginate=25`)
       .then((data) => {
         this.results.users = data;
         this.api.storage.set('recent_users', data);
@@ -67,7 +69,7 @@ export class PersonFinderPage {
 
 
     if (this.findFor.visitors) {
-      this.api.get(`visitors?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&with[]=image&with[]=residence&paginate=50`)
+      this.api.get(`visitors?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&with[]=image&with[]=residence&paginate=25`)
         .then((data) => {
           this.results.visitors = data;
           this.api.storage.set('recent_visitors', data);
@@ -77,7 +79,7 @@ export class PersonFinderPage {
 
 
     if (this.findFor.workers) {
-      this.api.get(`workers?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&with[]=image&with[]=residence&paginate=50`)
+      this.api.get(`workers?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&with[]=image&with[]=residence&paginate=25`)
         .then((data) => {
           this.results.workers = data;
           this.api.storage.set('recent_workers', data);
@@ -89,6 +91,18 @@ export class PersonFinderPage {
 
   cancel() {
     this.viewctrl.dismiss(null, 'cancel');
+  }
+
+  visitorModal(visitor = null) {
+    var modal = this.modal.create(VisitorPage, { visitor: visitor }, { showBackdrop: true, enableBackdropDismiss: true })
+    modal.present();
+    modal.onDidDismiss((data) => {
+      if (data) {
+        this.results.users = null;
+        this.results.visitors = { data: [data] };
+        this.results.workers = null;
+      }
+    })
   }
 
   select(person, type = 'user') {

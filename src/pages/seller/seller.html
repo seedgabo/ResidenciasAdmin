@@ -11,7 +11,7 @@
 
 
 <ion-content *ngIf="!toPrint" class="no-printable" no-padding>
-  <button text-center ion-item (click)="selectPerson()">
+  <button ion-item (click)="selectPerson()">
     <h2 *ngIf="!person">
       {{'literals.select :person' | trans:{person: api.trans('literals.person')} }}
     </h2>
@@ -22,6 +22,7 @@
       <b>{{'literals.'+type | trans }}</b>
       <span>{{person.name}}</span>
     </span>
+    <ion-icon item-end name="arrow-dropdown"></ion-icon>
   </button>
 
 
