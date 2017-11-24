@@ -13,7 +13,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-list [ngClass]="{'no-print': api.settings.print_type == 'pos'}" id="toPrint" [virtualScroll]="invoices">
+  <ion-list [ngClass]="{'no-print': api.settings?.print_type == 'pos'}" id="toPrint" [virtualScroll]="invoices">
     <button ion-item *virtualItem="let invoice" (click)="actions(invoice)" text-wrap>
       <span item-left>
         {{invoice.number}}
@@ -27,13 +27,16 @@
       <p *ngIf="invoice.person">
         {{invoice.person.document}}
       </p>
+      <p>
+        {{ "literals." + invoice.status | trans }}
+      </p>
       <span item-right>
         {{ invoice.total | currency:'USD':true:'1.2-2' }}
       </span>
     </button>
   </ion-list>
 
-  <div *ngIf="printing && api.settings.print_type == 'pos'" class="printable punto" id="toPrintMini" no-margin>
+  <div *ngIf="printing && api.settings?.print_type == 'pos'" class="printable punto" id="toPrintMini" no-margin>
     <table style="width:100%;text-align:center;margin-right:5pt" no-margin>
       <thead>
         <tr>
@@ -67,7 +70,7 @@
   </div>
 </ion-content>
 
-<ion-footer *ngIf="!printing || api.settings.print_type != 'pos'">
+<ion-footer *ngIf="!printing || api.settings?.print_type != 'pos'">
   <ion-toolbar>
     <ion-grid>
       <ion-row>
