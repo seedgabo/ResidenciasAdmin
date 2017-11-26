@@ -93,13 +93,13 @@ export class SellerReportsPage {
 
     sheet.addButton({
       text: this.api.trans('literals.print'),
-      icon : 'print',
+      icon: 'print',
       handler: () => {
         this.printInvoice(invoice)
       }
     })
-    
-    if(invoice.status !== 'cancelled'){
+
+    if (invoice.status !== 'cancelled') {
       sheet.addButton({
         text: this.api.trans('crud.cancel') + " " + this.api.trans('literals.invoice'),
         icon: 'remove-circle',
@@ -120,30 +120,30 @@ export class SellerReportsPage {
   }
 
   cancelInvoice(invoice) {
-      this.api.alert.create({
-        title: this.api.trans("__.nota de cancelacion"),
-        inputs: [{
-          label: this.api.trans('literals.note'),
-          placeholder: this.api.trans('literals.note'),
-          name: "note",
-          type: "text",
-        }],
-        buttons : [{
-          text : this.api.trans("literals.proccess"),
-          handler: (data)=>{
-              if(data.note){
-                this.api.put(`invoices/${invoice.id}`,{status:"cancelled", note: data.note})
-                .then((resp)=>{
-                    invoice.status = "cancelled"
-                    invoice.note = data.note
-                })
-                .catch((err)=>{
-                  this.api.Error(err);
-                })
-              }
+    this.api.alert.create({
+      title: this.api.trans("__.nota de cancelacion"),
+      inputs: [{
+        label: this.api.trans('literals.note'),
+        placeholder: this.api.trans('literals.note'),
+        name: "note",
+        type: "text",
+      }],
+      buttons: [{
+        text: this.api.trans("literals.proccess"),
+        handler: (data) => {
+          if (data.note) {
+            this.api.put(`invoices/${invoice.id}`, { status: "cancelled", note: data.note })
+              .then((resp) => {
+                invoice.status = "cancelled"
+                invoice.note = data.note
+              })
+              .catch((err) => {
+                this.api.Error(err);
+              })
           }
-        }]
-      }).present()
+        }
+      }]
+    }).present()
   }
 
   more() {
@@ -152,7 +152,7 @@ export class SellerReportsPage {
     })
 
     sheet.addButton({
-      text: this.api.trans('literals.'),
+      text: this.api.trans('__.Consolidado de ventas por producto'),
       handler: () => {
       }
     })
