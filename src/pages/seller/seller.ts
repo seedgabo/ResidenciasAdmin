@@ -159,6 +159,7 @@ export class SellerPage {
       var data: any = {
         items: this.items,
         type: 'normal',
+        payment: transaction,
         date: (new Date()).toISOString().substring(0, 10),
       };
       data[this.type + '_id'] = this.person.id;
