@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-navbar class="no-print">
+    <ion-title>{{'__.Consolidado de ventas por producto' | trans }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-start clear>
+        <ion-icon name="print"></ion-icon>
+        {{ 'literals.print' |trans }}
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-card color="light">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-12 col-sm>
+          <b> {{'literals.worker' | trans }} </b>
+          <span> {{ user.name }} - {{ user.document }} </span>
+        </ion-col>
+        <ion-col col-12 col-sm>
+          <b> {{'literals.place' | trans }} </b>
+          <span> {{ residence.name }}</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-12 col-sm>
+          {{'date.from' | trans }} {{from | amDateFormat:'llll' }}
+        </ion-col>
+        <ion-col col-12 col-sm>
+          {{'date.to' | trans }} {{to | amDateFormat:'llll' }}
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+  <ion-list>
+    <ion-item *ngFor="let item of (products|keys)">
+      <h2>{{ item.key }}</h2>
+      <h3>{{item.value.amount | number:'1.2-2' }}</h3>
+      <b item-right>{{item.value.quantity}}</b>
+      <h4 text-center>{{ (item.value.quantity * item.value.amount) | currency:'USD':true:'1.2-2' }}</h4>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -153,7 +153,9 @@ export class SellerReportsPage {
 
     sheet.addButton({
       text: this.api.trans('__.Consolidado de ventas por producto'),
+      icon: "paper",
       handler: () => {
+        this.navCtrl.push("ConsolidateSellPage", { invoices: this.invoices });
       }
     })
 
