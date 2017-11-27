@@ -252,6 +252,7 @@ export class SellerPage {
   askForPayment() {
     return new Promise((resolve, reject) => {
       this.alert.create({
+        title: this.api.trans('literals.select') + " " + this.api.trans('literals.method'),
         inputs: [
           {
             type: 'radio',
@@ -279,6 +280,11 @@ export class SellerPage {
             label: this.api.trans('literals.deposit'),
             value: 'deposit',
           },
+          {
+            type: 'radio',
+            label: this.api.trans('literals.detailed'),
+            value: 'detailed',
+          },
         ],
         buttons: [
           {
@@ -293,7 +299,21 @@ export class SellerPage {
             text: this.api.trans('crud.add'),
             handler: (data) => {
               console.log("transaction", data);
-              resolve(data);
+              if (data == 'detailed') {
+                var modal = this.modal.create("PaymentsPage", { total: this.total() })
+                modal.present()
+                modal.onDidDismiss((data, role) => {
+                  if (role == 'accept') {
+                    resolve(JSON.stringify(data));
+                  } else {
+                    reject(data);
+                  }
+                })
+
+              }
+              else {
+                resolve(data);
+              }
             }
           }
         ]

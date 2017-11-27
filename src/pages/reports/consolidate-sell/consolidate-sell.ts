@@ -13,7 +13,8 @@ import * as moment from 'moment';
 export class ConsolidateSellPage {
   invoices = []
   products = {}
-  print = true;
+  sums = {}
+  printing = true;
   from;
   to;
   user;
@@ -22,7 +23,7 @@ export class ConsolidateSellPage {
     this.invoices = this.navParams.get('invoices');
 
     if (this.navParams.get('print')) {
-      this.print = this.navParams.get('print');
+      this.printing = this.navParams.get('print');
     }
 
 
@@ -41,6 +42,7 @@ export class ConsolidateSellPage {
 
   calculate() {
     this.products = {}
+    this.sums = {}
     if (this.invoices.length > 0) {
       this.from = moment(this.invoices[0].created_at)
       this.to = moment(this.invoices[this.invoices.length - 1].created_at)
@@ -54,7 +56,45 @@ export class ConsolidateSellPage {
           this.products[item.concept].quantity += item.quantity;
         }
       });
+
+      this.getPaymentsFromInvoices(inv);
     })
+  }
+  print() {
+    window.print()
+  }
+
+  getPaymentsFromInvoices(invoice) {
+    var payment = invoice.payment
+    if (!payment) {
+      this.addTosums("cash", invoice.total)
+      return;
+    }
+    if (this.isJson(payment)) {
+      JSON.parse(payment).forEach(pay => {
+        this.addTosums(pay.method, pay.amount)
+      });
+    }
+    else {
+
+      this.addTosums(payment, invoice.total)
+    }
+  }
+
+  isJson(str) {
+    try {
+      JSON.parse(str);
+    } catch (error) {
+      return false
+    }
+    return true;
+  }
+  addTosums(method, amount) {
+    if (!this.sums[method]) {
+      this.sums[method] = Number(amount);
+    } else {
+      this.sums[method] += Number(amount);
+    }
   }
 
 }

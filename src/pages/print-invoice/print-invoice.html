@@ -36,13 +36,20 @@
                 </td>
                 <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
                 </td>
-                <td *ngIf="invoice.user" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
-                  {{ invoice.user.name }}
-                  <br> {{ invoice.user.document }}
-                  <br> {{ invoice.user.email }}
-                  <br>
-                  <span *ngIf="invoice.receipt">
-                    {{'literals.payment' | trans }}: {{ ('literals.' + invoice.receipt.transaction ) | trans }}
+                <td *ngIf="invoice.person" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
+                  {{ invoice.person.name }}
+                  <br> {{ invoice.person.document }}
+                  <br> {{ invoice.person.email }}
+                  <span *ngIf="payments">
+                    <h5>{{'literals.payments' |trans }}</h5>
+                    <span *ngFor="let pay of payments">
+                      <b>{{'literals.'+ pay.method | trans }}</b>
+                      <span>{{ pay.amount | number:'1.1-1'}}</span>
+                      <br>
+                    </span>
+                  </span>
+                  <span *ngIf="!payments && invoice.receipt">
+                    <br> {{'literals.payment' | trans }}: {{ ('literals.' + invoice.receipt.transaction ) | trans }}
                   </span>
 
                 </td>
@@ -146,7 +153,13 @@
       </b>
       <span>{{ api.user.full_name }}</span>
     </p>
-    <span *ngIf="invoice.receipt">
+    <span *ngIf="payments">
+      <p *ngFor="let pay of payments">
+        <b>{{'literals.'+ pay.method | trans }}</b>
+        <span>{{ pay.amount | number:'1.1-1'}}</span>
+      </p>
+    </span>
+    <span *ngIf="!payments && invoice.receipt">
       {{'literals.payment' | trans }}: {{ ('literals.' + invoice.receipt.transaction ) | trans }}
     </span>
     <br>
@@ -185,7 +198,7 @@
       <span *ngIf="invoice.person.phone_number">
         <br> {{'literals.phone_number' | trans }}: {{invoice.person.phone_number}}</span>
     </div>
-    <div *ngIf="!(invoice.user)">
+    <div *ngIf="!(invoice.person)">
       {{'literals.person' | trans }}: _______________________________
       <br> {{'literals.document' | trans }}: ______________________________
       <span>

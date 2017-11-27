@@ -1,8 +1,8 @@
-<ion-header>
-  <ion-navbar class="no-print">
+<ion-header class="no-printable">
+  <ion-navbar class="no-printable">
     <ion-title>{{'__.Consolidado de ventas por producto' | trans }}</ion-title>
     <ion-buttons end>
-      <button ion-button icon-start clear>
+      <button ion-button icon-start clear (click)="print()">
         <ion-icon name="print"></ion-icon>
         {{ 'literals.print' |trans }}
       </button>
@@ -38,8 +38,19 @@
     <ion-item *ngFor="let item of (products|keys)">
       <h2>{{ item.key }}</h2>
       <h3>{{item.value.amount | number:'1.2-2' }}</h3>
-      <b item-right>{{item.value.quantity}}</b>
-      <h4 text-center>{{ (item.value.quantity * item.value.amount) | currency:'USD':true:'1.2-2' }}</h4>
+      <span item-right text-right>
+        {{item.value.quantity}}
+        <h4 text-center>{{ (item.value.quantity * item.value.amount) | currency:'USD':true:'1.2-2' }}</h4>
+      </span>
     </ion-item>
   </ion-list>
+  <ion-card color="light">
+    <ion-card-header>{{'literals.payments' | trans }}</ion-card-header>
+    <ion-list>
+      <ion-item *ngFor="let sum of (sums|keys)">
+        <b>{{'literals.'+ sum.key | trans }}:</b>
+        <p item-right>{{sum.value | currency:'USD':true:'1.2-2'}}</p>
+      </ion-item>
+    </ion-list>
+  </ion-card>
 </ion-content>

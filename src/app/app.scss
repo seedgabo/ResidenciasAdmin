@@ -28,7 +28,13 @@
 
 @media print {
   .no-print {
-    display: none;
+    display: none !important;
+  }
+  .no-printable {
+    display: none !important;
+  }
+  .printable {
+    display: block;
   }
 }
 

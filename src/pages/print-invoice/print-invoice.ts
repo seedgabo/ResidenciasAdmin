@@ -10,6 +10,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 export class PrintInvoicePage {
   invoice: any = {};
   receipt: any = {};
+  payments = null;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public printer: Printer) {
     this.invoice = navParams.get('invoice');
     this.receipt = navParams.get('receipt');
@@ -20,7 +21,6 @@ export class PrintInvoicePage {
       this.invoice.receipt = navParams.get('receipt');
     }
     this.prepare();
-    console.log(this.invoice);
   }
   prepare() {
     if (this.invoice.user) {
@@ -32,12 +32,25 @@ export class PrintInvoicePage {
     if (this.invoice.worker) {
       this.invoice.person = this.invoice.worker
     }
+    if (this.isJson(this.invoice.payment)) {
+      this.payments = JSON.parse(this.invoice.payment);
+    }
   }
 
   ionViewDidLoad() {
+
     if (this.navParams.get('print') === undefined || this.navParams.get('print')) {
       this.print(this.invoice);
     }
+  }
+
+  isJson(str) {
+    try {
+      JSON.parse(str);
+    } catch (error) {
+      return false
+    }
+    return true;
   }
 
   print(invoice, receipt = null) {
