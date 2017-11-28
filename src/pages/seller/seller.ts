@@ -235,10 +235,10 @@ export class SellerPage {
       items: items,
       person: this.person,
       concept: concept.substring(0, concept.length - 2),
-      note: this.api.trans("__.recibo de anexo a su proxima :invoice", { invoice: this.api.trans('literals.invoice') });
       date: moment().toDate(),
       amount: this.total(),
-      transaction: this.api.trans("__.compra")
+      transaction: this.api.trans("__.compra"),
+      note: this.api.trans("__.recibo de anexo a su proxima :invoice", { invoice: this.api.trans('literals.invoice') }),
     }
 
     this.saveCharge(receipt);
