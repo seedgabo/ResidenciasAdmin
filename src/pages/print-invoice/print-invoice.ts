@@ -64,7 +64,7 @@ export class PrintInvoicePage {
           console.error(err);
         });
 
-    }, 1000);
+    }, 1200);
   }
 
   toPrintCallback(invoice) {

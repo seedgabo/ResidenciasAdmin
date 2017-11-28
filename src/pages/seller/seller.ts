@@ -165,7 +165,6 @@ export class SellerPage {
       data[this.type + '_id'] = this.person.id;
       if (this.type == 'user') {
         data.residence_id = this.charge.residence_id;
-      } else {
       }
       this.api.post('invoices', data)
         .then((invoice: any) => {
@@ -179,8 +178,9 @@ export class SellerPage {
                   added = this.total(invoice) + "$";
                 this.sendPush("Compra Realizada! " + added, this.charge.user_id);
               }
-              this.goPrint(invoice, data.receipt);
-              loading.dismiss();
+              loading.dismiss().then(() => {
+                this.goPrint(invoice, data.receipt);
+              });
             })
             .catch((err) => {
               console.error(err);
@@ -204,25 +204,10 @@ export class SellerPage {
 
   goPrint(invoice, receipt) {
     this.toPrint = { invoice: invoice, user: this.person, receipt: receipt };
+    invoice.person = this.person;
     this.saveInvoice(this.toPrint);
-    setTimeout(() => {
-      this.printer.print(document.getElementById('toPrint'), { name: 'invoice' })
-        .then(() => {
-          this.complete();
-          this.toPrint = null;
-        })
-        .catch((err) => {
-          this.toPrintCallback(invoice);
-          console.error(err);
-        });
-
-    }, 1000);
-  }
-
-  toPrintCallback(invoice) {
-    window.print();
-    this.complete();
-    this.toPrint = null;
+    this.navCtrl.push("PrintInvoicePage", { invoice: invoice, receipt: receipt });
+    this.clear();
   }
 
   saveInvoice(invoice) {

@@ -17,6 +17,7 @@ export class ConsolidateSellPage {
   printing = true;
   from;
   to;
+  total = 0;
   user;
   residence
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api) {
@@ -43,6 +44,7 @@ export class ConsolidateSellPage {
   calculate() {
     this.products = {}
     this.sums = {}
+    this.total = 0
     if (this.invoices.length > 0) {
       this.from = moment(this.invoices[0].created_at)
       this.to = moment(this.invoices[this.invoices.length - 1].created_at)
@@ -56,7 +58,7 @@ export class ConsolidateSellPage {
           this.products[item.concept].quantity += item.quantity;
         }
       });
-
+      this.total += inv.total;
       this.getPaymentsFromInvoices(inv);
     })
   }
