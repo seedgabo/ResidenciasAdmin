@@ -21,7 +21,7 @@ export class SellerPage {
   mode = "restricted";
   toPrint;
   invoices_history = [];
-  charges_history = [];
+  receipts_history = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public printer: Printer, public api: Api) {
   }
 
@@ -32,10 +32,10 @@ export class SellerPage {
           this.invoices_history = history;
         }
       })
-    this.api.storage.get('charges_history')
+    this.api.storage.get('receipts_history')
       .then((history) => {
         if (history) {
-          this.charges_history = history;
+          this.receipts_history = history;
         }
       })
     if (this.mode !== 'restricted') {
@@ -221,9 +221,9 @@ export class SellerPage {
     this.api.storage.set('invoices_history', this.invoices_history);
   }
 
-  saveCharge(charge) {
-    this.charges_history.push(charge);
-    this.api.storage.set('charges_history', this.invoices_history);
+  saveReceipt(receipt) {
+    this.receipts_history.push(receipt);
+    this.api.storage.set('receipts_history', this.receipts_history);
   }
 
   complete(items) {
@@ -241,7 +241,7 @@ export class SellerPage {
       note: this.api.trans("__.recibo de anexo a su proxima :invoice", { invoice: this.api.trans('literals.invoice') }),
     }
 
-    this.saveCharge(receipt);
+    this.saveReceipt(receipt);
     this.navCtrl.push("PrintReceiptPage", { receipt: receipt });
     this.clear();
   }
@@ -390,6 +390,7 @@ export class SellerPage {
     }).present();
   }
 
+
   gotoReports(ev) {
     this.navCtrl.push("SellerReportsPage", {
       invoices: this.invoices_history.map((data) => {
@@ -398,6 +399,12 @@ export class SellerPage {
         invoice.person = data.user
         return invoice
       })
+    })
+  }
+
+  gotoReceipts(ev) {
+    this.navCtrl.push("ReceiptsReportPage", {
+      receipts: this.receipts_history
     })
   }
 }

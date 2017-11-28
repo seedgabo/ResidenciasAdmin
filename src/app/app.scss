@@ -27,7 +27,8 @@
 }
 
 @media print {
-  .no-print {
+  .no-print,
+  .back-button {
     display: none !important;
   }
   .no-printable {
