@@ -21,6 +21,7 @@ export class SellerPage {
   mode = "restricted";
   toPrint;
   invoices_history = [];
+  charges_history = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public printer: Printer, public api: Api) {
   }
 
@@ -31,7 +32,12 @@ export class SellerPage {
           this.invoices_history = history;
         }
       })
-      .catch(console.error)
+    this.api.storage.get('charges_history')
+      .then((history) => {
+        if (history) {
+          this.charges_history = history;
+        }
+      })
     if (this.mode !== 'restricted') {
       this.items.push({ concept: '', amount: 0, quantity: 0, });
     }
@@ -126,7 +132,7 @@ export class SellerPage {
         year: moment().year(),
         type: "unique",
       })
-        .then(() => {
+        .then((data) => {
           loading.setContent(this.api.trans('__.procesando') + ++procesing + '  de ' + this.items.length);
           if (procesing == this.items.length) {
             if (this.charge.user_id) {
@@ -134,7 +140,7 @@ export class SellerPage {
             }
 
             loading.dismiss();
-            this.complete();
+            this.complete(this.items);
           }
         })
         .catch((err) => {
@@ -212,15 +218,31 @@ export class SellerPage {
 
   saveInvoice(invoice) {
     this.invoices_history.push(invoice);
-    // this.invoices_history.slice(this.invoices_history.length - 500)
     this.api.storage.set('invoices_history', this.invoices_history);
   }
 
-  complete() {
-    this.alert.create({
-      message: this.api.trans('literals.done'),
-      buttons: ["OK"]
-    }).present();
+  saveCharge(charge) {
+    this.charges_history.push(charge);
+    this.api.storage.set('charges_history', this.invoices_history);
+  }
+
+  complete(items) {
+    var concept = ""
+    this.items.forEach((element) => {
+      concept += element.concept + "(x" + element.quantity + "), "
+    });
+    var receipt = {
+      items: items,
+      person: this.person,
+      concept: concept.substring(0, concept.length - 2),
+      note: this.api.trans("__.recibo de anexo a su proxima :invoice", { invoice: this.api.trans('literals.invoice') });
+      date: moment().toDate(),
+      amount: this.total(),
+      transaction: this.api.trans("__.compra")
+    }
+
+    this.saveCharge(receipt);
+    this.navCtrl.push("PrintReceiptPage", { receipt: receipt });
     this.clear();
   }
 

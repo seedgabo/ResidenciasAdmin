@@ -1,0 +1,102 @@
+<ion-content>
+
+  <div class="printable" id="toPrint">
+    <div class="invoice-box" style="max-width: 800px;margin: auto;padding: 30px;border: 1px solid #eee;box-shadow: 0 0 10px rgba(0, 0, 0, .15);font-size: 16px;line-height: 24px;font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;color: #555;">
+      <table cellpadding="0" cellspacing="0" style="width: 100%;line-height: inherit;text-align: left;">
+
+        <tr class="top">
+          <td colspan="4" style="padding: 5px;vertical-align: top;">
+            <table style="width: 100%;line-height: inherit;text-align: left;">
+              <tr>
+                <td colspan="2" class="title" style="padding: 5px;vertical-align: top;padding-bottom: 20px;font-size: 45px;line-height: 45px;color: #333;">
+                  <img [src]="api.url + 'img/logo.png'" style="max-width:100%; max-width:200px;">
+                </td>
+                <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;width:100%">
+                  {{'literals.receipt' | trans }}
+
+                  <br> {{ 'literals.date' | trans }}: {{ receipt.date | amDateFormat:'LLL'}}
+
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <tr class="information">
+          <td colspan="4" style="padding: 5px;vertical-align: top;">
+            <table style="width: 100%;line-height: inherit;text-align: left;">
+              <tr>
+                <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
+                  {{api.settings.name}}
+                  <br> {{api.settings.document}}
+                  <br> {{api.settings.address}}
+                  <br> {{api.settings.phone}}
+
+                </td>
+                <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
+                </td>
+                <td *ngIf="receipt.person" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
+                  {{ receipt.person.name }}
+                  <span *ngIf="receipt.person.residence">{{ receipt.person.residence.name }}</span>
+                  <br> {{ receipt.person.document }}
+                  <br> {{ receipt.person.email }}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <tr class="heading">
+          <th style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+            {{'literals.concept' | trans }}
+          </th>
+          <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+            {{ receipt.concept }}
+          </td>
+        </tr>
+
+        <tr class="heading">
+          <th style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+            {{'literals.amount' | trans }}
+          </th>
+          <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+            {{ receipt.amount | currency:'USD':true:'1.2-2' }}
+          </td>
+        </tr>
+
+        <tr class="heading" *ngIf="receipt.transaction">
+          <th style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+            {{'literals.transaction' | trans }}
+          </th>
+          <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+            {{ receipt.transaction }}
+          </td>
+        </tr>
+
+        <tr class="heading" *ngIf="receipt.person.residence">
+          <th style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+            {{'literals.residence' | trans }}
+          </th>
+          <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
+            {{ receipt.person.residence.name }}
+          </td>
+        </tr>
+
+
+        <tr class="total">
+          <td colspan="4" style="padding: 5px;vertical-align: top; text-align: center;border-top: 2px solid #eee;font-weight: bold;">
+            {{ receipt.note }}
+          </td>
+        </tr>
+
+
+      </table>
+    </div>
+
+  </div>
+
+
+  <div *ngIf="api.settings.print_type == 'pos'" class="printable punto" id="toPrintMini">
+  </div>
+
+</ion-content>
