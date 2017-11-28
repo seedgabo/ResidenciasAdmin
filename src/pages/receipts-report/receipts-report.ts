@@ -125,6 +125,13 @@ export class ReceiptsReportPage {
     var sheet = this.actionsheet.create({
       title: this.api.trans("literals.generate") + " " + this.api.trans('literals.report'),
     })
+    sheet.addButton({
+      text: this.api.trans('__.Consolidado de ventas por producto'),
+      icon: "paper",
+      handler: () => {
+        this.navCtrl.push("ConsolidateReceiptsPage", { invoices: this.receipts });
+      }
+    })
 
     sheet.addButton({
       text: this.api.trans('crud.clear') + " " + this.api.trans('literals.receipts'),
