@@ -16,7 +16,7 @@
 
                   <br> {{ 'literals.date' | trans }}: {{invoice.date | amDateFormat:'LLL'}}
                   <br> {{'date.from'| trans }} {{invoice.created_at | amDateFormat:'LLL'}}
-
+                  <br> {{'literals.worker' | trans }} {{ api.user.full_name }}
                 </td>
               </tr>
             </table>
@@ -115,7 +115,6 @@
             {{ total(invoice) | currency:'USD':true:'4.2-2' }}
           </td>
         </tr>
-
       </table>
     </div>
 

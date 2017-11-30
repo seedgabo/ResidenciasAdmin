@@ -247,13 +247,18 @@ export class SellerPage {
   }
 
   canProccess() {
-    var valid = true;
-    this.items.forEach((item) => {
-      if (!(item.amount > 0 && item.quantity > 0 && item.concept.length > 0))
-        valid = false;
-    });
-    return this.items.length > 0
-      && valid;
+    for (let index = 0; index < this.items.length; index++) {
+      const item = this.items[index];
+      if (!(item.amount > 0 && item.quantity > 0 && item.concept.length > 0)) {
+        return false;
+      }
+    }
+
+    if (!this.person) {
+      return false;
+    }
+
+    return this.items.length > 0;
   }
 
   askForPayment() {

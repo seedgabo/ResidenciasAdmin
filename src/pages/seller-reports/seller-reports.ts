@@ -23,6 +23,7 @@ export class SellerReportsPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public modal: ModalController, public actionsheet: ActionSheetController, public platform: Platform, public printer: Printer) {
     this.invoices = navParams.get('invoices');
   }
+
   ionViewDidLoad() {
     this.prepare();
     this.calculate();

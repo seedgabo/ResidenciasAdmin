@@ -26,6 +26,10 @@
   }
 }
 
+.print-only {
+  display: none;
+}
+
 @media print {
   .no-print,
   .back-button {
@@ -34,11 +38,19 @@
   .no-printable {
     display: none !important;
   }
-  .printable {
+  .print-only {
     display: block;
   }
 }
 
+.signature {
+  border: 0;
+  border-bottom: 1px solid #000;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+// INVOICE
 .invoice-box {
   max-width: 800px;
   margin: auto;

@@ -14,22 +14,25 @@
 <ion-content>
   <ion-card color="light">
     <ion-grid>
-      <ion-row>
-        <ion-col col-12 col-sm>
-          <b> {{'literals.worker' | trans }} </b>
+      <ion-row wrap>
+        <ion-col col-6 col-sm>
+          <b> {{'literals.seller' | trans }} </b>
           <span> {{ user.name }} - {{ user.document }} </span>
-        </ion-col>
-        <ion-col col-12 col-sm>
+          <br>
           <b> {{'literals.place' | trans }} </b>
           <span> {{ residence.name }}</span>
+          <br> {{'date.from' | trans }} {{from | amDateFormat:'llll' }}
+          <br> {{'date.to' | trans }} {{to | amDateFormat:'llll' }}
         </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col col-12 col-sm>
-          {{'date.from' | trans }} {{from | amDateFormat:'llll' }}
-        </ion-col>
-        <ion-col col-12 col-sm>
-          {{'date.to' | trans }} {{to | amDateFormat:'llll' }}
+        <ion-col col-6 col-sm class="print-only" text-right>
+          <div style="float:right">
+            <img [src]="api.url + 'img/logo.png'" style="max-width:100%; max-width:150px;">
+          </div>
+          <div style="clear:both">
+            <b>{{api.settings.name}}</b>
+            <br>
+            <span>{{api.settings.document}}</span>
+          </div>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -57,4 +60,13 @@
       </ion-item>
     </ion-list>
   </ion-card>
+
+  <div class="print-only" text-center>
+    <br>
+    <br>
+    <br>
+    <div class="signature"></div>
+    {{ 'literals.signature' | trans }}
+  </div>
+
 </ion-content>
