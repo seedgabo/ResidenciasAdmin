@@ -73,7 +73,7 @@ export class ResidencesPage {
   }
 
   actions(residence) {
-    console.log(residence);
+    this.navCtrl.push("ResidencePage", { residence: residence });
   }
   trackBy(index, item) {
     return item.id;

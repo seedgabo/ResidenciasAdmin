@@ -1,0 +1,164 @@
+<ion-header>
+  <ion-navbar color="secondary">
+    <ion-title>{{residence.name}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-card>
+    <ion-card-header color="primary">
+      {{residence.name}}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <p>{{'literals.status' | trans }}</p>
+          <span item-right>{{'literals.'+ residence.status | trans }}
+            <span *ngIf="residence.is_disabled"> ({{'literals.disabled' | trans }})</span>
+          </span>
+        </ion-item>
+        <ion-item>
+          <p>{{'literals.number_of_people' | trans }}</p>
+          <span item-right>{{residence.number_of_people}}</span>
+        </ion-item>
+        <ion-item>
+          <p>{{'literals.type' | trans }}</p>
+          <span item-right>{{'literals.'+ residence.type | trans }}</span>
+        </ion-item>
+        <ion-item>
+          <p>{{'literals.owner' | trans }}</p>
+          <span item-right>{{residence.owner?.name}}</span>
+        </ion-item>
+        <ion-item>
+          <p>{{'literals.alicuota' | trans }}</p>
+          <span item-right>{{ residence.alicuota }} %</span>
+        </ion-item>
+
+        <ion-item *ngIf="residence.debt">
+          <p>{{'literals.debt' | trans }}</p>
+          <span item-right>{{ residence.debt | currency:'USD':true:'1.2-2' }}</span>
+        </ion-item>
+
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="residence.emergency_contact">
+    <ion-card-header color="primary">
+      {{'literals.emergency_contact' | trans }}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <p>{{'literals.name' | trans }}</p>
+          <span item-right>{{residence.emergency_contact.name }} </span>
+        </ion-item>
+        <ion-item>
+          <p>{{'literals.phone_number' | trans }}</p>
+          <span item-right>{{residence.emergency_contact.phone_number }} </span>
+        </ion-item>
+        <ion-item>
+          <p>{{'literals.email' | trans }}</p>
+          <span item-right>{{residence.emergency_contact.email }} </span>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-card *ngIf="residence.users">
+    <ion-card-header color="primary">
+      {{'literals.users' | trans }}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor=" let user of residence.users ">
+          <ion-avatar item-left>
+            <img [src]="user.image_url ">
+          </ion-avatar>
+          <h2>{{ user.name }}</h2>
+          <span>{{ user.document }}</span>
+          <p>{{ user.phone_number }} -{{ user.email }}</p>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="residence.visitors">
+    <ion-card-header color="primary">
+      {{'literals.visitors' | trans }}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor=" let visitor of residence.visitors ">
+          <ion-avatar item-left>
+            <img [src]="visitor.image_url ">
+          </ion-avatar>
+
+          <h2>{{ visitor.name }}</h2>
+          <span>{{ visitor.document }}</span>
+          <p>{{ visitor.phone_number }} -{{ visitor.email }}</p>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="residence.workers">
+    <ion-card-header color="primary">
+      {{'literals.workers' | trans }}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor=" let worker of residence.workers ">
+          <ion-avatar item-left>
+            <img [src]="worker.image_url ">
+          </ion-avatar>
+
+          <h2>{{ worker.name }}</h2>
+          <span>{{ worker.document }}</span>
+          <p>{{ worker.phone_number }} -{{ worker.email }}</p>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="residence.pets">
+    <ion-card-header color="primary">
+      {{'literals.pets' | trans }}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor=" let pet of residence.pets ">
+          <ion-avatar item-left>
+            <img [src]="pet.image_url ">
+          </ion-avatar>
+
+          <h2>{{ pet.name }}</h2>
+          <span>{{ pet.document }}</span>
+          <p>{{ pet.breed }} -{{ pet.specie }}</p>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="residence.vehicles">
+    <ion-card-header color="primary">
+      {{'literals.vehicles' | trans }}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor=" let vehicle of residence.vehicles ">
+          <ion-avatar item-left>
+            <img [src]="vehicle.image_url ">
+          </ion-avatar>
+          <h2>{{ vehicle.name }}</h2>
+          <span>{{ vehicle.plate }}</span>
+          <p>{{ vehicle.color }}</p>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
