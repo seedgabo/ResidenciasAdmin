@@ -36,6 +36,7 @@ export class MyApp {
       { title: 'literals.visitors', component: HomePage, icon: "contacts" },
       { title: 'literals.visits', component: ListPage, icon: "list" },
       { title: 'literals.parkings', component: ParkingsPage, icon: "car" },
+      { title: 'literals.residences', component: "ResidencesPage", icon: "home" },
     ];
 
   }

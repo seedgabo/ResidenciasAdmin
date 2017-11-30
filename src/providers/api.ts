@@ -163,7 +163,7 @@ export class Api {
           this.storage.set('roles', this.roles);
           this.storage.set('settings', this.settings);
 
-          this.get('residences').then((data: any) => {
+          this.get('residences?with[]=users').then((data: any) => {
             this.residences = data;
             data.forEach(res => {
               this.residences_collection[res.id] = res;

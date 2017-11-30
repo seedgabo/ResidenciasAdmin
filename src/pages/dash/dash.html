@@ -55,6 +55,13 @@
         </div>
       </ion-col>
 
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="canVisitors()">
+        <div tappable class="dash-card" padding no-margin (click)="openPage('ResidencesPage')">
+          <ion-icon class="dash-icon" large color="primary" name="home"></ion-icon>
+          <h1 class="dash-title">{{api.trans('literals.residences')}}</h1>
+        </div>
+      </ion-col>
+
       <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="CanCorrespondence()">
         <div tappable class="dash-card" padding no-margin (click)="openPage('CorrespondencesPage')">
           <ion-icon class="dash-icon" large color="primary" name="cube"></ion-icon>
