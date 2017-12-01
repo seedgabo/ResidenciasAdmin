@@ -41,6 +41,9 @@
   .print-only {
     display: block;
   }
+   ::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .signature {
