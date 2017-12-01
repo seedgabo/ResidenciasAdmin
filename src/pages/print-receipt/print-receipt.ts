@@ -1,7 +1,7 @@
 import { Api } from './../../providers/api';
 import { Printer } from '@ionic-native/printer';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 @IonicPage()
 @Component({
   selector: 'page-print-receipt',
@@ -9,7 +9,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class PrintReceiptPage {
   receipt: any = {}
-  constructor(public navCtrl: NavController, public navParams: NavParams, public printer: Printer, public api: Api) {
+  constructor(public platform: Platform, public navCtrl: NavController, public navParams: NavParams, public printer: Printer, public api: Api) {
     this.receipt = navParams.get('receipt');
     this.prepare();
   }
@@ -43,6 +43,9 @@ export class PrintReceiptPage {
 
   print() {
     setTimeout(() => {
+      if (!this.platform.is('mobile')) {
+        return this.toPrintCallback();
+      };
       this.printer.print(document.getElementById('toPrint'), { name: 'invoice' })
         .then(() => {
           this.complete();
