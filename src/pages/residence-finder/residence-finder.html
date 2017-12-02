@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar color="secondary">
+    <ion-title>{{'literals.residences' | trans}}</ion-title>
+    <ion-buttons end>
+      <button ion-button clear icon-only (click)="cancel()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="search()" [(ngModel)]="query"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list inset no-lines>
+    <button ion-item (click)="select(residence)" *ngFor="let residence of residences.data">
+      <ion-thumbnail item-left *ngIf="residence.image">
+        <img [src]="residence.image.url">
+      </ion-thumbnail>
+      <h2>{{residence.name}}</h2>
+      <h4>{{'literals.'+ residence.type | trans }}</h4>
+      <p>{{'literals.'+residence.status | trans }}
+        <span *ngIf="residence.is_disabled">{{'literals.disabled' | trans }}</span>
+      </p>
+    </button>
+  </ion-list>
+</ion-content>
