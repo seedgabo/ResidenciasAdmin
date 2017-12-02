@@ -7,6 +7,10 @@ import { HomePage } from './../home/home';
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular/navigation/ionic-page';
+@IonicPage({
+  priority: "high"
+})
 @Component({
   selector: 'page-dash',
   templateUrl: 'dash.html',

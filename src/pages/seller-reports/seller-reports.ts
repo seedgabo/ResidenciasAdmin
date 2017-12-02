@@ -25,6 +25,7 @@ export class SellerReportsPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public modal: ModalController, public actionsheet: ActionSheetController, public popover: PopoverController, public platform: Platform, public printer: Printer) {
     this.invoices = navParams.get('invoices');
   }
+
   ionViewDidLoad() {
     this.prepare();
     this.calculate();
@@ -148,6 +149,20 @@ export class SellerReportsPage {
     }).present()
   }
 
+  clearData() {
+    this.api.alert.create({
+      title: this.api.trans("__.are you sure"),
+      buttons: [{
+        text: this.api.trans("literals.yes"),
+        handler: () => {
+          this.api.storage.remove("invoices_history");
+          this.invoices = [];
+          this.calculate();
+        }
+      }, this.api.trans('cancel')]
+    }).present()
+  }
+
   more() {
     var sheet = this.actionsheet.create({
       title: this.api.trans("literals.generate") + " " + this.api.trans('literals.report'),
@@ -155,7 +170,19 @@ export class SellerReportsPage {
 
     sheet.addButton({
       text: this.api.trans('__.Consolidado de ventas por producto'),
+      icon: "paper",
       handler: () => {
+        this.navCtrl.push("ConsolidateSellPage", { invoices: this.invoices });
+      }
+    })
+
+    sheet.addButton({
+      text: this.api.trans('crud.clear') + " " + this.api.trans('literals.invoices'),
+      icon: "remove-circle",
+      role: 'destructive',
+      cssClass: "icon-danger",
+      handler: () => {
+        this.clearData();
       }
     })
 

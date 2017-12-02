@@ -21,6 +21,7 @@ export class SellerPage {
   mode = "restricted";
   toPrint;
   invoices_history = [];
+  receipts_history = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public printer: Printer, public api: Api) {
   }
 
@@ -31,7 +32,12 @@ export class SellerPage {
           this.invoices_history = history;
         }
       })
-      .catch(console.error)
+    this.api.storage.get('receipts_history')
+      .then((history) => {
+        if (history) {
+          this.receipts_history = history;
+        }
+      })
     if (this.mode !== 'restricted') {
       this.items.push({ concept: '', amount: 0, quantity: 0, });
     }
@@ -126,7 +132,7 @@ export class SellerPage {
         year: moment().year(),
         type: "unique",
       })
-        .then(() => {
+        .then((data) => {
           loading.setContent(this.api.trans('__.procesando') + ++procesing + '  de ' + this.items.length);
           if (procesing == this.items.length) {
             if (this.charge.user_id) {
@@ -134,7 +140,7 @@ export class SellerPage {
             }
 
             loading.dismiss();
-            this.complete();
+            this.complete(this.items);
           }
         })
         .catch((err) => {
@@ -159,12 +165,12 @@ export class SellerPage {
       var data: any = {
         items: this.items,
         type: 'normal',
+        payment: transaction,
         date: (new Date()).toISOString().substring(0, 10),
       };
       data[this.type + '_id'] = this.person.id;
       if (this.type == 'user') {
         data.residence_id = this.charge.residence_id;
-      } else {
       }
       this.api.post('invoices', data)
         .then((invoice: any) => {
@@ -178,8 +184,9 @@ export class SellerPage {
                   added = this.total(invoice) + "$";
                 this.sendPush("Compra Realizada! " + added, this.charge.user_id);
               }
-              this.goPrint(invoice, data.receipt);
-              loading.dismiss();
+              loading.dismiss().then(() => {
+                this.goPrint(invoice, data.receipt);
+              });
             })
             .catch((err) => {
               console.error(err);
@@ -203,54 +210,61 @@ export class SellerPage {
 
   goPrint(invoice, receipt) {
     this.toPrint = { invoice: invoice, user: this.person, receipt: receipt };
+    invoice.person = this.person;
     this.saveInvoice(this.toPrint);
-    setTimeout(() => {
-      this.printer.print(document.getElementById('toPrint'), { name: 'invoice' })
-        .then(() => {
-          this.complete();
-          this.toPrint = null;
-        })
-        .catch((err) => {
-          this.toPrintCallback(invoice);
-          console.error(err);
-        });
-
-    }, 1000);
-  }
-
-  toPrintCallback(invoice) {
-    window.print();
-    this.complete();
-    this.toPrint = null;
+    this.navCtrl.push("PrintInvoicePage", { invoice: invoice, receipt: receipt });
+    this.clear();
   }
 
   saveInvoice(invoice) {
     this.invoices_history.push(invoice);
-    // this.invoices_history.slice(this.invoices_history.length - 500)
     this.api.storage.set('invoices_history', this.invoices_history);
   }
 
-  complete() {
-    this.alert.create({
-      message: this.api.trans('literals.done'),
-      buttons: ["OK"]
-    }).present();
+  saveReceipt(receipt) {
+    this.receipts_history.push(receipt);
+    this.api.storage.set('receipts_history', this.receipts_history);
+  }
+
+  complete(items) {
+    var concept = ""
+    this.items.forEach((element) => {
+      concept += element.concept + "(x" + element.quantity + "), "
+    });
+    var receipt = {
+      items: items,
+      person: this.person,
+      concept: concept.substring(0, concept.length - 2),
+      date: moment().toDate(),
+      amount: this.total(),
+      transaction: this.api.trans("__.compra"),
+      note: this.api.trans("__.recibo de anexo a su proxima :invoice", { invoice: this.api.trans('literals.invoice') }),
+    }
+
+    this.saveReceipt(receipt);
+    this.navCtrl.push("PrintReceiptPage", { receipt: receipt });
     this.clear();
   }
 
   canProccess() {
-    var valid = true;
-    this.items.forEach((item) => {
-      if (!(item.amount > 0 && item.quantity > 0 && item.concept.length > 0))
-        valid = false;
-    });
-    return this.items.length > 0
-      && valid;
+    for (let index = 0; index < this.items.length; index++) {
+      const item = this.items[index];
+      if (!(item.amount > 0 && item.quantity > 0 && item.concept.length > 0)) {
+        return false;
+      }
+    }
+
+    if (!this.person) {
+      return false;
+    }
+
+    return this.items.length > 0;
   }
 
   askForPayment() {
     return new Promise((resolve, reject) => {
       this.alert.create({
+        title: this.api.trans('literals.select') + " " + this.api.trans('literals.method'),
         inputs: [
           {
             type: 'radio',
@@ -278,6 +292,11 @@ export class SellerPage {
             label: this.api.trans('literals.deposit'),
             value: 'deposit',
           },
+          {
+            type: 'radio',
+            label: this.api.trans('literals.detailed'),
+            value: 'detailed',
+          },
         ],
         buttons: [
           {
@@ -292,7 +311,21 @@ export class SellerPage {
             text: this.api.trans('crud.add'),
             handler: (data) => {
               console.log("transaction", data);
-              resolve(data);
+              if (data == 'detailed') {
+                var modal = this.modal.create("PaymentsPage", { total: this.total() })
+                modal.present()
+                modal.onDidDismiss((data, role) => {
+                  if (role == 'accept') {
+                    resolve(JSON.stringify(data));
+                  } else {
+                    reject(data);
+                  }
+                })
+
+              }
+              else {
+                resolve(data);
+              }
             }
           }
         ]
@@ -362,6 +395,7 @@ export class SellerPage {
     }).present();
   }
 
+
   gotoReports(ev) {
     this.navCtrl.push("SellerReportsPage", {
       invoices: this.invoices_history.map((data) => {
@@ -370,6 +404,12 @@ export class SellerPage {
         invoice.person = data.user
         return invoice
       })
+    })
+  }
+
+  gotoReceipts(ev) {
+    this.navCtrl.push("ReceiptsReportPage", {
+      receipts: this.receipts_history
     })
   }
 }

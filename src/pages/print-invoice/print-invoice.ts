@@ -1,7 +1,7 @@
 import { Api } from './../../providers/api';
 import { Printer } from '@ionic-native/printer';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 @IonicPage()
 @Component({
   selector: 'page-print-invoice',
@@ -10,7 +10,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 export class PrintInvoicePage {
   invoice: any = {};
   receipt: any = {};
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public printer: Printer) {
+  payments = null;
+  constructor(public platform: Platform, public navCtrl: NavController, public navParams: NavParams, public api: Api, public printer: Printer) {
     this.invoice = navParams.get('invoice');
     this.receipt = navParams.get('receipt');
     if (navParams.get('user')) {
@@ -20,7 +21,6 @@ export class PrintInvoicePage {
       this.invoice.receipt = navParams.get('receipt');
     }
     this.prepare();
-    console.log(this.invoice);
   }
   prepare() {
     if (this.invoice.user) {
@@ -32,16 +32,32 @@ export class PrintInvoicePage {
     if (this.invoice.worker) {
       this.invoice.person = this.invoice.worker
     }
+    if (this.isJson(this.invoice.payment)) {
+      this.payments = JSON.parse(this.invoice.payment);
+    }
   }
 
   ionViewDidLoad() {
+
     if (this.navParams.get('print') === undefined || this.navParams.get('print')) {
       this.print(this.invoice);
     }
   }
 
+  isJson(str) {
+    try {
+      JSON.parse(str);
+    } catch (error) {
+      return false
+    }
+    return true;
+  }
+
   print(invoice, receipt = null) {
     setTimeout(() => {
+      if (!this.platform.is('mobile')) {
+        return this.toPrintCallback(invoice);
+      };
       this.printer.print(document.getElementById('toPrint'), { name: 'invoice' })
         .then(() => {
           this.complete();
@@ -51,7 +67,7 @@ export class PrintInvoicePage {
           console.error(err);
         });
 
-    }, 1000);
+    }, 1200);
   }
 
   toPrintCallback(invoice) {

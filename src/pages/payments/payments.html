@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-title>{{'literals.payments'| trans}}</ion-title>
+    <ion-buttons end>
+      <button ion-button clear icon-only (click)="cancel()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-card *ngFor="let payment of payments;let i = index">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label floating>{{'literals.payment' | trans }}</ion-label>
+            <ion-select [(ngModel)]="payment.method">
+              <ion-option [value]="method" *ngFor="let method of methods">
+                {{'literals.'+ method | trans }}
+              </ion-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label floating>{{'literals.amount' | trans }}</ion-label>
+            <ion-input type="number" [(ngModel)]="payment.amount"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col col-2>
+          <button ion-button clear color="danger" item-end (click)="remove(i)">
+            <ion-icon name="remove-circle"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+
+  <ion-fab bottom right small (click)="add()">
+    <button ion-fab>
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <span ion-text [color]="total == totalized()?'secondary':'danger'">
+          {{'__.El Total debe ser' | trans }}: {{total}}
+          <small>({{totalized()}})</small>
+        </span>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button color="light" block (click)="cancel()">{{'crud.cancel' | trans }}</button>
+      </ion-col>
+      <ion-col>
+        <button ion-button color="primary" block [disabled]="!canSave()" (click)="save()">{{'crud.save' | trans }}</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

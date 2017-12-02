@@ -1,5 +1,4 @@
 import { BackgroundMode } from '@ionic-native/background-mode';
-import { DashPage } from './../pages/dash/dash';
 import { PanicLogsPage } from './../pages/panic-logs/panic-logs';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, MenuController } from 'ionic-angular';
@@ -37,6 +36,7 @@ export class MyApp {
       { title: 'literals.visitors', component: HomePage, icon: "contacts" },
       { title: 'literals.visits', component: ListPage, icon: "list" },
       { title: 'literals.parkings', component: ParkingsPage, icon: "car" },
+      { title: 'literals.residences', component: "ResidencesPage", icon: "home" },
     ];
 
   }
@@ -44,7 +44,8 @@ export class MyApp {
   initializeApp() {
     this.api.ready.then(() => {
       if (this.api.user) {
-        this.rootPage = DashPage;
+        // if (!this.nav.getActive())
+        this.rootPage = "DashPage";
         this.api.getData();
         this.api.getLang();
         this.api.startEcho();
@@ -88,6 +89,7 @@ export class MyApp {
   }
 
   goHome() {
+    this.nav.setRoot("DashPage");
     this.nav.popToRoot();
   }
 

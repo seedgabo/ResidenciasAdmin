@@ -1,13 +1,10 @@
 <ion-header>
-  <ion-navbar color="dark" class="no-print">
-    <button ion-button icon-only clear menuToggle>
+  <ion-navbar color="dark">
+    <button ion-button icon-only clear menuToggle class="no-print">
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{'literals.invoices' | trans }}</ion-title>
-    <ion-buttons end>
-      <button ion-button icon-only (click)="openFinder($event)">
-        <ion-icon name="calendar"></ion-icon>
-      </button>
+    <ion-title>{{'literals.receipts' | trans }}</ion-title>
+    <ion-buttons end class="no-print">
       <button ion-button icon-only (click)="more()">
         <ion-icon name="more"></ion-icon>
       </button>
@@ -16,25 +13,22 @@
 </ion-header>
 
 <ion-content>
-  <ion-list [ngClass]="{'no-print': api.settings?.print_type == 'pos'}" id="toPrint" [virtualScroll]="invoices">
-    <button ion-item *virtualItem="let invoice" (click)="actions(invoice)" text-wrap>
-      <span item-left>
-        {{invoice.number}}
-      </span>
-      <h3 *ngIf="invoice.person">
-        {{invoice.person.full_name}}
+  <ion-list [ngClass]="{'no-print': api.settings?.print_type == 'pos'}" id="toPrint" [virtualScroll]="receipts">
+    <button ion-item *virtualItem="let receipt" (click)="actions(receipt)" text-wrap>
+      <h3 *ngIf="receipt.person">
+        {{receipt.person.full_name}}
       </h3>
       <h4>
-        {{ invoice.created_at | amDateFormat:'dddd, DD MMMM YYYY - h:mm a' }}
+        {{ receipt.date | amDateFormat:'dddd, DD MMMM YYYY - h:mm a' }}
       </h4>
-      <p *ngIf="invoice.person">
-        {{invoice.person.document}}
+      <p text-wrap>
+        {{receipt.concept}}
       </p>
-      <p>
-        {{ "literals." + invoice.status | trans }}
+      <p *ngIf="receipt.person">
+        {{receipt.person.document}}
       </p>
       <span item-right>
-        {{ invoice.total | currency:'USD':true:'1.2-2' }}
+        {{ receipt.amount | currency:'USD':true:'1.2-2' }}
       </span>
     </button>
   </ion-list>
@@ -51,12 +45,11 @@
 
         </tr>
       </thead>
-      <tbody *ngFor="let invoice of invoices">
+      <tbody *ngFor="let receipt of receipts">
         <tr>
-          <td class="pos-items">{{ invoice.number }}</td>
-          <td class="pos-items" style="width:50pt">{{ invoice.person ? invoice.person.full_name : 'N/A' }}</td>
-          <td class="pos-items">{{ invoice.created_at | amDateFormat:"D/MM/YY H:mm a" }} </td>
-          <td class="pos-items">{{ invoice.total | number:'1.1-1' }}</td>
+          <td class="pos-items" style="width:50pt">{{ receipt.person ? receipt.person.full_name : 'N/A' }}</td>
+          <td class="pos-items">{{ receipt.created_at | amDateFormat:"D/MM/YY H:mm a" }} </td>
+          <td class="pos-items">{{ receipt.total | number:'1.1-1' }}</td>
         </tr>
       </tbody>
       <tfoot>

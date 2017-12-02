@@ -9,14 +9,14 @@
             <table style="width: 100%;line-height: inherit;text-align: left;">
               <tr>
                 <td colspan="2" class="title" style="padding: 5px;vertical-align: top;padding-bottom: 20px;font-size: 45px;line-height: 45px;color: #333;">
-                  <img [src]="api.url + 'img/logo.png'" style="max-width:100%; max-width:300px;">
+                  <img [src]="api.url + 'img/logo.png'" style="max-width:100%; max-width:200px;">
                 </td>
                 <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;width:100%">
-                  {{'literals.invoice' | trans }} #: {{invoice.number}}
+                  <b>{{'literals.invoice' | trans }} #: {{invoice.number}}</b>
 
                   <br> {{ 'literals.date' | trans }}: {{invoice.date | amDateFormat:'LLL'}}
                   <br> {{'date.from'| trans }} {{invoice.created_at | amDateFormat:'LLL'}}
-
+                  <br> {{'literals.worker' | trans }} {{ api.user.full_name }}
                 </td>
               </tr>
             </table>
@@ -36,13 +36,21 @@
                 </td>
                 <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
                 </td>
-                <td *ngIf="invoice.user" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
-                  {{ invoice.user.name }}
-                  <br> {{ invoice.user.document }}
-                  <br> {{ invoice.user.email }}
-                  <br>
-                  <span *ngIf="invoice.receipt">
-                    {{'literals.payment' | trans }}: {{ ('literals.' + invoice.receipt.transaction ) | trans }}
+                <td *ngIf="invoice.person" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
+                  {{ invoice.person.name }}
+                  <span *ngIf="invoice.person.residence">{{ invoice.person.residence.name }}</span>
+                  <br> {{ invoice.person.document }}
+                  <br> {{ invoice.person.email }}
+                  <span *ngIf="payments">
+                    <h5>{{'literals.payments' |trans }}</h5>
+                    <span *ngFor="let pay of payments">
+                      <b>{{'literals.'+ pay.method | trans }}</b>
+                      <span>{{ pay.amount | number:'1.1-1'}}</span>
+                      <br>
+                    </span>
+                  </span>
+                  <span *ngIf="!payments && invoice.receipt">
+                    <br> {{'literals.payment' | trans }}: {{ ('literals.' + invoice.receipt.transaction ) | trans }}
                   </span>
 
                 </td>
@@ -63,7 +71,7 @@
         <!-- Heading Items -->
         <tr class="heading">
           <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-            {{'literals.item' | trans }}
+            {{'literals.concept' | trans }}
           </td>
 
           <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
@@ -107,8 +115,26 @@
             {{ total(invoice) | currency:'USD':true:'4.2-2' }}
           </td>
         </tr>
-
       </table>
+      <br>
+      <br>
+      <br>
+      <ion-grid class="print-only">
+        <ion-row>
+          <ion-col col-6 text-center>
+            <div class="signature"></div>
+            <span>
+              {{'literals.signature' | trans }} {{'literals.person' | trans }}
+            </span>
+          </ion-col>
+          <ion-col col-6 text-center>
+            <div class="signature"></div>
+            <span>
+              {{'literals.signature' | trans }} {{'literals.seller' | trans }}
+            </span>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </div>
 
   </div>
@@ -146,7 +172,13 @@
       </b>
       <span>{{ api.user.full_name }}</span>
     </p>
-    <span *ngIf="invoice.receipt">
+    <span *ngIf="payments">
+      <p *ngFor="let pay of payments">
+        <b>{{'literals.'+ pay.method | trans }}</b>
+        <span>{{ pay.amount | number:'1.1-1'}}</span>
+      </p>
+    </span>
+    <span *ngIf="!payments && invoice.receipt">
       {{'literals.payment' | trans }}: {{ ('literals.' + invoice.receipt.transaction ) | trans }}
     </span>
     <br>
@@ -181,11 +213,12 @@
     <br>
     <div *ngIf="invoice.person">
       {{'literals.person' | trans }}: {{ invoice.person.full_name }}
+      <span *ngIf="invoice.person.residence">{{ invoice.person.residence.name }}</span>
       <br> {{ invoice.person.document }}
       <span *ngIf="invoice.person.phone_number">
         <br> {{'literals.phone_number' | trans }}: {{invoice.person.phone_number}}</span>
     </div>
-    <div *ngIf="!(invoice.user)">
+    <div *ngIf="!(invoice.person)">
       {{'literals.person' | trans }}: _______________________________
       <br> {{'literals.document' | trans }}: ______________________________
       <span>

@@ -1,0 +1,72 @@
+<ion-header class="no-printable">
+  <ion-navbar class="no-printable">
+    <ion-title>{{'__.Consolidado de ventas por producto' | trans }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-start clear (click)="print()">
+        <ion-icon name="print"></ion-icon>
+        {{ 'literals.print' |trans }}
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-card color="light">
+    <ion-grid>
+      <ion-row wrap>
+        <ion-col col-6 col-sm>
+          <b> {{'literals.seller' | trans }} </b>
+          <span> {{ user.name }} - {{ user.document }} </span>
+          <br>
+          <b> {{'literals.place' | trans }} </b>
+          <span> {{ residence.name }}</span>
+          <br> {{'date.from' | trans }} {{from | amDateFormat:'llll' }}
+          <br> {{'date.to' | trans }} {{to | amDateFormat:'llll' }}
+        </ion-col>
+        <ion-col col-6 col-sm class="print-only" text-right>
+          <div style="float:right">
+            <img [src]="api.url + 'img/logo.png'" style="max-width:100%; max-width:150px;">
+          </div>
+          <div style="clear:both">
+            <b>{{api.settings.name}}</b>
+            <br>
+            <span>{{api.settings.document}}</span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+  <ion-list>
+    <ion-item *ngFor="let item of (products|keys)">
+      <h2>{{ item.key }}</h2>
+      <h3>{{item.value.amount | number:'1.2-2' }}</h3>
+      <span item-right text-right>
+        {{item.value.quantity}}
+        <h4 text-center>{{ (item.value.quantity * item.value.amount) | currency:'USD':true:'1.2-2' }}</h4>
+      </span>
+    </ion-item>
+  </ion-list>
+  <ion-card color="light">
+    <ion-card-header>{{'literals.payments' | trans }}</ion-card-header>
+    <ion-list>
+      <ion-item *ngFor="let sum of (sums|keys)">
+        <b>{{'literals.'+ sum.key | trans }}:</b>
+        <p item-right>{{sum.value | currency:'USD':true:'1.2-2'}}</p>
+      </ion-item>
+      <ion-item>
+        <b>{{'literals.total' | trans }}:</b>
+        <span item-right>{{ total | currency:'USD':true:'1.2-2' }} </span>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <div class="print-only" text-center>
+    <br>
+    <br>
+    <br>
+    <div class="signature"></div>
+    {{ 'literals.signature' | trans }}
+  </div>
+
+</ion-content>
