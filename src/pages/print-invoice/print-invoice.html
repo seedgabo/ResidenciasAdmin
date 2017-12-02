@@ -12,7 +12,7 @@
                   <img [src]="api.url + 'img/logo.png'" style="max-width:100%; max-width:200px;">
                 </td>
                 <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;width:100%">
-                  <b>{{'literals.invoice' | trans }} #: {{invoice.number}}</b>
+                  <h4>{{'literals.invoice' | trans }} #: {{invoice.number}}</h4>
 
                   <br> {{ 'literals.date' | trans }}: {{invoice.date | amDateFormat:'LLL'}}
                   <br> {{'date.from'| trans }} {{invoice.created_at | amDateFormat:'LLL'}}
@@ -38,11 +38,19 @@
                 </td>
                 <td *ngIf="invoice.person" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
                   {{ invoice.person.name }}
-                  <br> {{ invoice.person.document }}
-                  <!-- <br> {{ invoice.person.email }} -->
                   <span *ngIf="invoice.person.residence">
-                    <br> {{'literals.residence' | trans }} {{ receipt.person.residence.name }}
+                    <br> {{'literals.residence' | trans }}
+                    <span *ngIf="invoice.person.residence">
+                      <br>
+                      <b>{{'literals.residence' | trans }}</b>
+                      {{ invoice.person.residence.name }}
+                    </span>
                   </span>
+                  <br>
+                  <span *ngIf="invoice.person.document">
+                    {{'literal.document' | trans }}: {{ invoice.person.document }}
+                  </span>
+
                   <span *ngIf="payments">
                     <h5>{{'literals.payments' |trans }}</h5>
                     <span *ngFor="let pay of payments">
@@ -118,6 +126,12 @@
           </td>
         </tr>
       </table>
+      <br>
+      <br>
+      <p text-center>
+        <b>{{'literals.note' | trans }}</b>
+        <span>{{invoice.note}}</span>
+      </p>
       <br>
       <br>
       <br>

@@ -151,6 +151,8 @@ export class SellerReportsPage {
     }).present()
   }
 
+
+
   clearData() {
     this.api.alert.create({
       title: this.api.trans("__.are you sure"),
