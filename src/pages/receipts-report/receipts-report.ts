@@ -34,6 +34,23 @@ export class ReceiptsReportPage {
   }
 
   prepare() {
+
+    this.receipts.forEach(rec => {
+      if (!rec.person) {
+        if (rec.person_assoc) {
+          rec.person = rec.user;
+        }
+        if (rec.user) {
+          rec.person = rec.user;
+        }
+        if (rec.worker) {
+          rec.person = rec.worker;
+        }
+        if (rec.visitor) {
+          rec.person = rec.visitor;
+        }
+      }
+    });
   }
 
   calculate() {
@@ -162,12 +179,12 @@ export class ReceiptsReportPage {
     this.loading = true;
     var start = moment(date).format("YYYY-MM-DD")
     var end = (to ? moment(to).add(1, 'day').format('YYYY-MM-DD') : moment(date).add(1, 'day').format("YYYY-MM-DD"))
-    this.api.get(`receipts?where[created_by]=${this.api.user.id}&&whereDategte[created_at]=${start}&whereDatelwe[created_at]=${end}&with[]=user&with[]=visitor&with[]=worker&with[]=items`)
+    this.api.get(`receipts?where[created_by]=${this.api.user.id}&&whereDategte[created_at]=${start}&whereDatelwe[created_at]=${end}&attr[person_assoc]=person`)
       .then((data: any) => {
         console.log(data);
         this.loading = false;
         this.receipts = data;
-        this.calculate();
+        this.ionViewDidLoad();
       })
       .catch((err) => {
         this.api.Error(err);
