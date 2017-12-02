@@ -1,0 +1,24 @@
+<ion-list>
+
+  <ion-item>
+    <ion-label floating>Desde:</ion-label>
+    <ion-datetime [(ngModel)]="from" (ionChange)="changeTo()"></ion-datetime>
+  </ion-item>
+
+  <ion-item>
+    <ion-label floating>Hasta:</ion-label>
+    <ion-datetime [(ngModel)]="to"></ion-datetime>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Solo mi usuario</ion-label>
+    <ion-checkbox [(ngModel)]="only_user"></ion-checkbox>
+  </ion-item>
+
+  <ion-item text-center>
+    <button ion-button full clear large color="primary" (click)="exec($event)" icon-only>
+      <ion-icon name="search"></ion-icon>
+    </button>
+  </ion-item>
+
+</ion-list>

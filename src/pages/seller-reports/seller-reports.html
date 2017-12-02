@@ -5,6 +5,9 @@
     </button>
     <ion-title>{{'literals.reports' | trans }}</ion-title>
     <ion-buttons end>
+      <button ion-button icon-only (click)="openFinder($event)">
+        <ion-icon name="calendar"></ion-icon>
+      </button>
       <button ion-button icon-only (click)="more()">
         <ion-icon name="more"></ion-icon>
       </button>

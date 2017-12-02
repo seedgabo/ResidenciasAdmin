@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { Api } from '../../providers/api';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 import { ActionSheetController } from 'ionic-angular/components/action-sheet/action-sheet-controller';
@@ -20,7 +20,9 @@ export class SellerReportsPage {
   last_date;
   total = 0;
   loading = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public modal: ModalController, public actionsheet: ActionSheetController, public platform: Platform, public printer: Printer) {
+  from;
+  to;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public modal: ModalController, public actionsheet: ActionSheetController, public popover: PopoverController, public platform: Platform, public printer: Printer) {
     this.invoices = navParams.get('invoices');
   }
   ionViewDidLoad() {
@@ -165,6 +167,41 @@ export class SellerReportsPage {
       handler: () => {
       }
     }).present();
+  }
+
+  findByDate(date, to = null, only_user = true) {
+    this.loading = true;
+    var start = moment(date).format("YYYY-MM-DD")
+    var end = (to ? moment(to).add(1, 'day').format('YYYY-MM-DD') : moment(date).add(1, 'day').format("YYYY-MM-DD"))
+    this.api.get(`invoices?where[created_by]=${this.api.user.id}&&whereDategte[created_at]=${start}&whereDatelwe[created_at]=${end}&with[]=cliente&with[]=items`)
+      .then((data: any) => {
+        console.log(data);
+        this.invoices = data;
+        this.calculate();
+      })
+      .catch(console.error)
+  }
+
+  clearByDate() {
+    this.ionViewDidLoad()
+  }
+
+
+  openFinder(ev) {
+    let popover = this.popover.create("PopoverListPage", {
+      from: this.from,
+      to: this.to
+    })
+    popover.present({ ev: ev });
+    popover.onWillDismiss((data) => {
+      if (!data) return
+      if (data.action == 'search')
+        this.findByDate(data.from, data.to, data.only_user);
+      if (data.action == 'clear')
+        this.clearByDate();
+      this.from = data.from
+      this.to = data.to
+    })
   }
 
 }
