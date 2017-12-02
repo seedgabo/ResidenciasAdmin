@@ -51,15 +51,17 @@ export class ConsolidateSellPage {
     }
 
     this.invoices.forEach((inv) => {
-      inv.items.forEach(item => {
-        if (!this.products[item.concept]) {
-          this.products[item.concept] = { quantity: item.quantity, amount: item.amount };
-        } else {
-          this.products[item.concept].quantity += item.quantity;
-        }
-      });
-      this.total += inv.total;
-      this.getPaymentsFromInvoices(inv);
+      if (inv.status !== 'cancelled') {
+        inv.items.forEach(item => {
+          if (!this.products[item.concept]) {
+            this.products[item.concept] = { quantity: item.quantity, amount: item.amount };
+          } else {
+            this.products[item.concept].quantity += item.quantity;
+          }
+        });
+        this.total += inv.total;
+        this.getPaymentsFromInvoices(inv);
+      }
     })
   }
   print() {

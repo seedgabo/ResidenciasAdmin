@@ -37,9 +37,11 @@
                 </td>
                 <td *ngIf="receipt.person" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
                   {{ receipt.person.name }}
-                  <span *ngIf="receipt.person.residence">{{ receipt.person.residence.name }}</span>
+                  <span *ngIf="receipt.person.residence">
+                    <br> {{'literals.residence' | trans }} {{ receipt.person.residence.name }}
+                  </span>
                   <br> {{ receipt.person.document }}
-                  <br> {{ receipt.person.email }}
+                  <!-- <br> {{ receipt.person.email }} -->
                 </td>
               </tr>
             </table>

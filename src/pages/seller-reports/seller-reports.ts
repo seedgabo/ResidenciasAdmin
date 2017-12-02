@@ -44,7 +44,8 @@ export class SellerReportsPage {
     }
 
     this.invoices.forEach((inv) => {
-      total += Number(inv.total);
+      if (inv.status !== 'cancelled')
+        total += Number(inv.total);
     })
 
     this.total = total;

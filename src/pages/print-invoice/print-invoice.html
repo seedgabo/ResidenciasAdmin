@@ -38,9 +38,11 @@
                 </td>
                 <td *ngIf="invoice.person" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
                   {{ invoice.person.name }}
-                  <span *ngIf="invoice.person.residence">{{ invoice.person.residence.name }}</span>
                   <br> {{ invoice.person.document }}
-                  <br> {{ invoice.person.email }}
+                  <!-- <br> {{ invoice.person.email }} -->
+                  <span *ngIf="invoice.person.residence">
+                    <br> {{'literals.residence' | trans }} {{ receipt.person.residence.name }}
+                  </span>
                   <span *ngIf="payments">
                     <h5>{{'literals.payments' |trans }}</h5>
                     <span *ngFor="let pay of payments">
