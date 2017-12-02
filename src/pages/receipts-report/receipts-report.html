@@ -67,6 +67,12 @@
     </table>
     <div class="separator"></div>
   </div>
+  <div class="print-only" text-center>
+    <br>
+    <br>
+    <div class="signature"></div>
+    {{ 'literals.signature' | trans }}
+  </div>
 </ion-content>
 
 <ion-footer *ngIf="!printing || api.settings?.print_type != 'pos'">
