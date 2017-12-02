@@ -479,7 +479,7 @@ export class Api {
     this.alert.create({
       title: this.trans("__.Network Error"),
       subTitle: error.error,
-      message: message,
+      message: message + " " + error.message,
       buttons: ["OK"],
 
     }).present();
