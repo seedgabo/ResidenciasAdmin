@@ -10,9 +10,15 @@
     <ion-datetime [(ngModel)]="to"></ion-datetime>
   </ion-item>
 
-  <ion-item>
+  <!-- <ion-item>
     <ion-label>Solo mi usuario</ion-label>
     <ion-checkbox [(ngModel)]="only_user"></ion-checkbox>
+  </ion-item> -->
+  <ion-item>
+    <button ion-button full clear color="dark" (click)="clear($event)" icon-left>
+      <ion-icon name="remove"></ion-icon>
+      {{ 'crud.clear' | trans }}
+    </button>
   </ion-item>
 
   <ion-item text-center>

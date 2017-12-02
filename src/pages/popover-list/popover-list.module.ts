@@ -1,3 +1,4 @@
+import { PipesModule } from './../../pipes/pipes.module';
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { PopoverListPage } from './popover-list';
@@ -8,6 +9,7 @@ import { PopoverListPage } from './popover-list';
   ],
   imports: [
     IonicPageModule.forChild(PopoverListPage),
+    PipesModule
   ],
 })
-export class PopoverListPageModule {}
+export class PopoverListPageModule { }

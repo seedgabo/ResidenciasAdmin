@@ -83,7 +83,7 @@
           <span>{{ total | currency:'USD':true:'1.2-2' }}</span>
         </ion-col>
         <ion-col class="no-print">
-          <button [disabled]="loading" *ngIf="!from" ion-button full color="secondary" (click)="print()">
+          <button [disabled]="loading" ion-button full color="secondary" (click)="print()">
             {{'literals.print'| trans }}
           </button>
         </ion-col>

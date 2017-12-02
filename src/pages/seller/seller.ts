@@ -138,7 +138,6 @@ export class SellerPage {
             if (this.charge.user_id) {
               this.sendPush("Se ha generado un nuevo cargo a su factura", this.charge.user_id);
             }
-
             loading.dismiss();
             this.complete(this.items);
           }
@@ -231,6 +230,7 @@ export class SellerPage {
     this.items.forEach((element) => {
       concept += element.concept + "(x" + element.quantity + "), "
     });
+    this.person.type = this.type;
     var receipt = {
       items: items,
       person: this.person,
@@ -241,9 +241,15 @@ export class SellerPage {
       note: this.api.trans("__.recibo de anexo a su proxima :invoice", { invoice: this.api.trans('literals.invoice') }),
     }
 
-    this.saveReceipt(receipt);
-    this.navCtrl.push("PrintReceiptPage", { receipt: receipt });
-    this.clear();
+    this.api.post('receipts', receipt)
+      .then((data) => {
+        this.saveReceipt(receipt);
+        this.navCtrl.push("PrintReceiptPage", { receipt: receipt });
+        this.clear();
+      })
+      .catch((err) => {
+        this.api.Error(err)
+      })
   }
 
   canProccess() {

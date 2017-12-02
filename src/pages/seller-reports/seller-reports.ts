@@ -12,7 +12,7 @@ import { Printer } from '@ionic-native/printer';
   templateUrl: 'seller-reports.html',
 })
 export class SellerReportsPage {
-
+  _invoices = [];
   invoices = [];
   printing = false;
   totals = null
@@ -24,6 +24,7 @@ export class SellerReportsPage {
   to;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public modal: ModalController, public actionsheet: ActionSheetController, public popover: PopoverController, public platform: Platform, public printer: Printer) {
     this.invoices = navParams.get('invoices');
+    this._invoices = navParams.get('invoices');
   }
 
   ionViewDidLoad() {
@@ -43,7 +44,7 @@ export class SellerReportsPage {
     }
 
     this.invoices.forEach((inv) => {
-      total += inv.total;
+      total += Number(inv.total);
     })
 
     this.total = total;
@@ -157,6 +158,7 @@ export class SellerReportsPage {
         handler: () => {
           this.api.storage.remove("invoices_history");
           this.invoices = [];
+          this._invoices = [];
           this.calculate();
         }
       }, this.api.trans('cancel')]
@@ -200,16 +202,21 @@ export class SellerReportsPage {
     this.loading = true;
     var start = moment(date).format("YYYY-MM-DD")
     var end = (to ? moment(to).add(1, 'day').format('YYYY-MM-DD') : moment(date).add(1, 'day').format("YYYY-MM-DD"))
-    this.api.get(`invoices?where[created_by]=${this.api.user.id}&&whereDategte[created_at]=${start}&whereDatelwe[created_at]=${end}&with[]=cliente&with[]=items`)
+    this.api.get(`invoices?where[created_by]=${this.api.user.id}&&whereDategte[created_at]=${start}&whereDatelwe[created_at]=${end}&with[]=user&with[]=visitor&with[]=worker&with[]=items`)
       .then((data: any) => {
         console.log(data);
+        this.loading = false;
         this.invoices = data;
         this.calculate();
       })
-      .catch(console.error)
+      .catch((err) => {
+        this.api.Error(err);
+        this.loading = false;
+      })
   }
 
   clearByDate() {
+    this.invoices = this._invoices.slice();
     this.ionViewDidLoad()
   }
 

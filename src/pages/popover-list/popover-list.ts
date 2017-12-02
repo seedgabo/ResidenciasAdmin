@@ -32,8 +32,16 @@ export class PopoverListPage {
     });
   }
 
+  clear() {
+    this.viewctrl.dismiss({
+      action: 'clear',
+      from: this.from,
+      to: this.to,
+    });
+  }
+
   changeTo() {
-    this.to = moment(this.from).add(1, 'day').format("YYYY-MM-DD")
+    // this.to = moment(this.from).add(1, 'day').format("YYYY-MM-DD")
   }
 
   close() {

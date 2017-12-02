@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { Api } from '../../providers/api';
 import * as moment from 'moment';
 import { Platform } from 'ionic-angular/platform/platform';
@@ -12,6 +12,7 @@ import { Printer } from '@ionic-native/printer';
   templateUrl: 'receipts-report.html',
 })
 export class ReceiptsReportPage {
+  _receipts = [];
   receipts = [];
   printing = false;
   totals = null
@@ -19,8 +20,11 @@ export class ReceiptsReportPage {
   last_date;
   total = 0;
   loading = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public platform: Platform, public actionsheet: ActionSheetController, public printer: Printer) {
+  from;
+  to;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public platform: Platform, public actionsheet: ActionSheetController, public popover: PopoverController, public printer: Printer) {
     this.receipts = navParams.get('receipts');
+    this._receipts = navParams.get('receipts');
   }
 
   ionViewDidLoad() {
@@ -40,7 +44,7 @@ export class ReceiptsReportPage {
     }
 
     this.receipts.forEach((inv) => {
-      total += inv.amount;
+      total += Number(inv.amount);
     })
 
     this.total = total;
@@ -151,6 +155,47 @@ export class ReceiptsReportPage {
       handler: () => {
       }
     }).present();
+  }
+
+
+  findByDate(date, to = null, only_user = true) {
+    this.loading = true;
+    var start = moment(date).format("YYYY-MM-DD")
+    var end = (to ? moment(to).add(1, 'day').format('YYYY-MM-DD') : moment(date).add(1, 'day').format("YYYY-MM-DD"))
+    this.api.get(`receipts?where[created_by]=${this.api.user.id}&&whereDategte[created_at]=${start}&whereDatelwe[created_at]=${end}&with[]=user&with[]=visitor&with[]=worker&with[]=items`)
+      .then((data: any) => {
+        console.log(data);
+        this.loading = false;
+        this.receipts = data;
+        this.calculate();
+      })
+      .catch((err) => {
+        this.api.Error(err);
+        this.loading = false;
+      })
+  }
+
+  clearByDate() {
+    this.receipts = this._receipts.slice();
+    this.ionViewDidLoad()
+  }
+
+
+  openFinder(ev) {
+    let popover = this.popover.create("PopoverListPage", {
+      from: this.from,
+      to: this.to
+    })
+    popover.present({ ev: ev });
+    popover.onWillDismiss((data) => {
+      if (!data) return
+      if (data.action == 'search')
+        this.findByDate(data.from, data.to, data.only_user);
+      if (data.action == 'clear')
+        this.clearByDate();
+      this.from = data.from
+      this.to = data.to
+    })
   }
 
 }
