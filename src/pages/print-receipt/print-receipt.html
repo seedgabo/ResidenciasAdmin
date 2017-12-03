@@ -38,7 +38,6 @@
                 <td *ngIf="receipt.person" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
                   {{ receipt.person.name }}
                   <span *ngIf="receipt.person.residence">
-                    <br> {{'literals.residence' | trans }}
                     <span *ngIf="receipt.person.residence">
                       <br>
                       <b>{{'literals.residence' | trans }}</b>
