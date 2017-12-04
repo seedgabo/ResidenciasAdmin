@@ -25,6 +25,11 @@
           <br> {{'date.to' | trans }} {{to | amDateFormat:'llll' }}
         </ion-col>
         <ion-col col-6 col-sm class="print-only" text-right>
+          <div style="clear:both">
+            <h1 *ngIf="cash_desk">
+              {{'literals.cash desk' | trans }} # {{cash_desk.id}}
+            </h1>
+          </div>
           <div style="float:right">
             <img [src]="api.url + 'img/logo.png'" style="max-width:100%; max-width:150px;">
           </div>

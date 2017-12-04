@@ -121,6 +121,7 @@ export class SellerReportsPage {
       role: "cancel",
       handler: () => {
       }
+
     }).present();
   }
 
@@ -181,6 +182,19 @@ export class SellerReportsPage {
       }
     })
 
+    if (this.from == null) {
+      sheet.addButton({
+        text: this.api.trans('literals.cash desk'),
+        icon: "paper",
+        handler: () => {
+          this.navCtrl.push("ConsolidateSellPage", { invoices: this.invoices, close: true });
+          setTimeout(() => {
+            this.clearData();
+          }, 1500)
+        }
+      })
+    }
+
     sheet.addButton({
       text: this.api.trans('crud.clear') + " " + this.api.trans('literals.invoices'),
       icon: "remove-circle",
@@ -220,6 +234,8 @@ export class SellerReportsPage {
 
   clearByDate() {
     this.invoices = this._invoices.slice();
+    this.from = null;
+    this.to = null;
     this.ionViewDidLoad()
   }
 
