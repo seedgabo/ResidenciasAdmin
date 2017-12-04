@@ -188,9 +188,6 @@ export class SellerReportsPage {
         icon: "paper",
         handler: () => {
           this.navCtrl.push("ConsolidateSellPage", { invoices: this.invoices, close: true });
-          setTimeout(() => {
-            this.clearData();
-          }, 1500)
         }
       })
     }
