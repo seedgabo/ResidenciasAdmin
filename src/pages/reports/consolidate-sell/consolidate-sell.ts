@@ -53,12 +53,12 @@ export class ConsolidateSellPage {
     this.invoices.forEach((inv) => {
       inv.items.forEach(item => {
         if (!this.products[item.concept]) {
-          this.products[item.concept] = { quantity: item.quantity, amount: item.amount };
+          this.products[item.concept] = { quantity: Number(item.quantity), amount: Number(item.amount) };
         } else {
-          this.products[item.concept].quantity += item.quantity;
+          this.products[item.concept].quantity += Number(item.quantity);
         }
       });
-      this.total += inv.total;
+      this.total += Number(inv.total);
       this.getPaymentsFromInvoices(inv);
     })
   }
