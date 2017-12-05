@@ -11,6 +11,7 @@ export class VisitorPage {
   action: string = 'create';
   visitor: any = { sex: 'male' };
   vehicle = null;
+  residence = null;
   parking = null;
   parkings = [];
   loading = false;
@@ -37,6 +38,21 @@ export class VisitorPage {
       }
       else {
         this.vehicle = null;
+      }
+    });
+  }
+
+  selectResidence() {
+    var modal = this.modal.create("ResidenceFinderPage", {});
+    modal.present()
+    modal.onDidDismiss((data) => {
+      if (data && data.id) {
+        this.residence = data;
+        this.visitor.residence_id = data.id;
+      }
+      else {
+        this.visitor.residence_id = null;
+        this.residence = null;
       }
     });
   }

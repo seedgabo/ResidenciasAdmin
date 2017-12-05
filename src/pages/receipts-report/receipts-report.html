@@ -5,6 +5,9 @@
     </button>
     <ion-title>{{'literals.receipts' | trans }}</ion-title>
     <ion-buttons end class="no-print">
+      <button ion-button icon-only (click)="openFinder($event)">
+        <ion-icon name="calendar"></ion-icon>
+      </button>
       <button ion-button icon-only (click)="more()">
         <ion-icon name="more"></ion-icon>
       </button>
@@ -63,6 +66,12 @@
       </tfoot>
     </table>
     <div class="separator"></div>
+  </div>
+  <div class="print-only" text-center>
+    <br>
+    <br>
+    <div class="signature"></div>
+    {{ 'literals.signature' | trans }}
   </div>
 </ion-content>
 

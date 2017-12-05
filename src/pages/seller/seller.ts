@@ -118,75 +118,31 @@ export class SellerPage {
   }
 
   proccess() {
-    var procesing = 0;
-    var loading = this.loading.create({
-      content: this.api.trans('__.procesando') + procesing + '  de ' + this.items.length,
-    });
-    loading.present();
-    this.items.forEach(element => {
-      this.api.post('charges', {
-        'residence_id': this.charge.residence_id,
-        'concept': element.concept + "(x" + element.quantity + ")",
-        amount: element.amount * element.quantity,
-        month: moment().month() + 1,
-        year: moment().year(),
-        type: "unique",
-      })
-        .then((data) => {
-          loading.setContent(this.api.trans('__.procesando') + ++procesing + '  de ' + this.items.length);
-          if (procesing == this.items.length) {
-            if (this.charge.user_id) {
-              this.sendPush("Se ha generado un nuevo cargo a su factura", this.charge.user_id);
-            }
-
-            loading.dismiss();
-            this.complete(this.items);
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          loading.dismiss();
-          this.alert.create({
-            title: "ERROR",
-            message: JSON.stringify(err)
-          }).present();
-        })
-    });
-
-  }
-
-  proccessWithInvoice() {
-    this.askForPayment().then((transaction) => {
-
-      var loading = this.loading.create({
-        content: this.api.trans('__.procesando'),
-      });
-      loading.present();
-      var data: any = {
-        items: this.items,
-        type: 'normal',
-        payment: transaction,
-        date: (new Date()).toISOString().substring(0, 10),
-      };
-      data[this.type + '_id'] = this.person.id;
-      if (this.type == 'user') {
-        data.residence_id = this.charge.residence_id;
-      }
-      this.api.post('invoices', data)
-        .then((invoice: any) => {
-          this.api.post(`invoices/${invoice.id}/Payment`, { transaction: transaction })
-            .then((data: any) => {
-              if (this.charge.user_id) {
-                var added;
-                if (this.items.length === 1)
-                  added = `${this.items[0].concept}: ${this.items[0].quantity * this.items[0].amount} $`
-                else
-                  added = this.total(invoice) + "$";
-                this.sendPush("Compra Realizada! " + added, this.charge.user_id);
+    this.askNote(this.api.trans("__.recibo de anexo a su proxima :invoice", { invoice: this.api.trans('literals.invoice') }))
+      .then((note) => {
+        var procesing = 0;
+        var loading = this.loading.create({
+          content: this.api.trans('__.procesando') + procesing + '  de ' + this.items.length,
+        });
+        loading.present();
+        this.items.forEach(element => {
+          this.api.post('charges', {
+            'residence_id': this.charge.residence_id,
+            'concept': element.concept + "(x" + element.quantity + ")",
+            amount: element.amount * element.quantity,
+            month: moment().month() + 1,
+            year: moment().year(),
+            type: "unique",
+          })
+            .then((data) => {
+              loading.setContent(this.api.trans('__.procesando') + ++procesing + '  de ' + this.items.length);
+              if (procesing == this.items.length) {
+                if (this.charge.user_id) {
+                  this.sendPush("Se ha generado un nuevo cargo a su factura", this.charge.user_id);
+                }
+                loading.dismiss();
+                this.complete(this.items, note);
               }
-              loading.dismiss().then(() => {
-                this.goPrint(invoice, data.receipt);
-              });
             })
             .catch((err) => {
               console.error(err);
@@ -195,17 +151,68 @@ export class SellerPage {
                 title: "ERROR",
                 message: JSON.stringify(err)
               }).present();
-            });
-        })
-        .catch((err) => {
-          console.error(err);
-          loading.dismiss();
-          this.alert.create({
-            title: "ERROR",
-            message: JSON.stringify(err)
-          }).present();
+            })
         });
-    }).catch(console.error);
+
+      })
+      .catch(console.warn)
+
+  }
+
+  proccessWithInvoice() {
+    this.askForPayment().then((transaction) => {
+      this.askNote().then((note) => {
+
+        var loading = this.loading.create({
+          content: this.api.trans('__.procesando'),
+        });
+        loading.present();
+        var data: any = {
+          items: this.items,
+          type: 'normal',
+          payment: transaction,
+          note: note,
+          date: (new Date()).toISOString().substring(0, 10),
+        };
+        data[this.type + '_id'] = this.person.id;
+        if (this.type == 'user') {
+          data.residence_id = this.charge.residence_id;
+        }
+        this.api.post('invoices', data)
+          .then((invoice: any) => {
+            this.api.post(`invoices/${invoice.id}/Payment`, { transaction: transaction })
+              .then((data: any) => {
+                if (this.charge.user_id) {
+                  var added;
+                  if (this.items.length === 1)
+                    added = `${this.items[0].concept}: ${this.items[0].quantity * this.items[0].amount} $`
+                  else
+                    added = this.total(invoice) + "$";
+                  this.sendPush("Compra Realizada! " + added, this.charge.user_id);
+                }
+                loading.dismiss().then(() => {
+                  this.goPrint(invoice, data.receipt);
+                });
+              })
+              .catch((err) => {
+                console.error(err);
+                loading.dismiss();
+                this.alert.create({
+                  title: "ERROR",
+                  message: JSON.stringify(err)
+                }).present();
+              });
+          })
+          .catch((err) => {
+            console.error(err);
+            loading.dismiss();
+            this.alert.create({
+              title: "ERROR",
+              message: JSON.stringify(err)
+            }).present();
+          });
+      }).catch(console.warn);
+    }).catch(console.warn);
   }
 
   goPrint(invoice, receipt) {
@@ -226,24 +233,31 @@ export class SellerPage {
     this.api.storage.set('receipts_history', this.receipts_history);
   }
 
-  complete(items) {
+  complete(items, note) {
     var concept = ""
     this.items.forEach((element) => {
       concept += element.concept + "(x" + element.quantity + "), "
     });
+    this.person.type = this.type;
     var receipt = {
       items: items,
       person: this.person,
       concept: concept.substring(0, concept.length - 2),
       date: moment().toDate(),
       amount: this.total(),
+      note: note ? note : this.api.trans("__.recibo de anexo a su proxima :invoice", { invoice: this.api.trans('literals.invoice') }),
       transaction: this.api.trans("__.compra"),
-      note: this.api.trans("__.recibo de anexo a su proxima :invoice", { invoice: this.api.trans('literals.invoice') }),
     }
 
-    this.saveReceipt(receipt);
-    this.navCtrl.push("PrintReceiptPage", { receipt: receipt });
-    this.clear();
+    this.api.post('receipts', receipt)
+      .then((data) => {
+        this.saveReceipt(receipt);
+        this.navCtrl.push("PrintReceiptPage", { receipt: receipt });
+        this.clear();
+      })
+      .catch((err) => {
+        this.api.Error(err)
+      })
   }
 
   canProccess() {
@@ -264,7 +278,7 @@ export class SellerPage {
   askForPayment() {
     return new Promise((resolve, reject) => {
       this.alert.create({
-        title: this.api.trans('literals.select') + " " + this.api.trans('literals.method'),
+        title: this.api.trans('crud.select') + " " + this.api.trans('literals.method'),
         inputs: [
           {
             type: 'radio',
@@ -326,6 +340,38 @@ export class SellerPage {
               else {
                 resolve(data);
               }
+            }
+          }
+        ]
+      }).present();
+    })
+  }
+  askNote(note = null) {
+    return new Promise((resolve, reject) => {
+      this.alert.create({
+        title: this.api.trans('crud.add') + " " + this.api.trans('literals.note'),
+        inputs: [
+          {
+            type: 'text',
+            label: this.api.trans('literals.note'),
+            value: note ? note : '',
+            name: 'note'
+          }
+        ],
+        buttons: [
+          {
+            role: 'destructive',
+            text: this.api.trans('crud.cancel'),
+            handler: (data) => {
+              reject();
+            }
+          },
+          {
+            role: 'accept',
+            text: this.api.trans('crud.add'),
+            handler: (data) => {
+              console.log("note", data.note);
+              resolve(data.note);
             }
           }
         ]

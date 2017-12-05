@@ -18,13 +18,18 @@ export class ConsolidateSellPage {
   from;
   to;
   total = 0;
+  close = false;
   user;
   residence
+  cash_desk = null;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api) {
     this.invoices = this.navParams.get('invoices');
 
     if (this.navParams.get('print')) {
       this.printing = this.navParams.get('print');
+    }
+    if (this.navParams.get('close')) {
+      this.close = this.navParams.get('close');
     }
 
 
@@ -39,6 +44,27 @@ export class ConsolidateSellPage {
 
   ionViewDidLoad() {
     this.calculate()
+    if (this.close) {
+      var data = {
+        user_id: this.api.user.id,
+        from: this.from.format('Y-M-D H:mm:s'),
+        to: this.to.format('Y-M-D H:mm:s'),
+        invoices: []
+      }
+      this.invoices.forEach((inv) => {
+        data.invoices.push(inv.id)
+      })
+      this.api.post('cash_desks', data)
+        .then((resp) => {
+          this.cash_desk = resp;
+          setTimeout(() => {
+            this.print();
+          }, 300)
+        })
+        .catch((err) => {
+          this.api.Error(err)
+        })
+    }
   }
 
   calculate() {

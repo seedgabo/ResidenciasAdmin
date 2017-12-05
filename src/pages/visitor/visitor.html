@@ -19,14 +19,16 @@
       <ion-label floating>{{'literals.name' | trans}}</ion-label>
       <ion-input type="text" [(ngModel)]="visitor.name"></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-label floating>{{'literals.residence' | trans }}</ion-label>
-      <ion-select [(ngModel)]="visitor.residence_id">
-        <ion-option [value]="residence.id" *ngFor="let residence of api.residences">
-          {{ residence.name }}
-        </ion-option>
-      </ion-select>
-    </ion-item>
+    <button ion-item (click)="selectResidence()">
+      <h2 *ngIf="!residence">
+        {{'literals.select' | trans }} {{'literals.residence' | trans }}
+      </h2>
+      <ion-avatar item-left *ngIf="residence && residence.image">
+        <img [src]="residence.image.url" alt="">
+      </ion-avatar>
+      <span *ngIf="residence">{{ residence.name }}</span>
+      <ion-icon item-end name="arrow-dropdown"></ion-icon>
+    </button>
     <ion-item>
       <ion-label floating>{{'literals.document' | trans }}</ion-label>
       <ion-input type="number" [(ngModel)]="visitor.document"></ion-input>

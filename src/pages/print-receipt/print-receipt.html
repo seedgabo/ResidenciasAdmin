@@ -12,7 +12,7 @@
                   <img [src]="api.url + 'img/logo.png'" style="max-width:100%; max-width:200px;">
                 </td>
                 <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;width:100%">
-                  {{'literals.receipt' | trans }}
+                  <h4> {{'literals.receipt' | trans }} </h4>
 
                   <br> {{ 'literals.date' | trans }}: {{ receipt.date | amDateFormat:'LLL'}}
 
@@ -37,9 +37,17 @@
                 </td>
                 <td *ngIf="receipt.person" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
                   {{ receipt.person.name }}
-                  <span *ngIf="receipt.person.residence">{{ receipt.person.residence.name }}</span>
-                  <br> {{ receipt.person.document }}
-                  <br> {{ receipt.person.email }}
+                  <span *ngIf="receipt.person.residence">
+                    <span *ngIf="receipt.person.residence">
+                      <br>
+                      <b>{{'literals.residence' | trans }}</b>
+                      {{ receipt.person.residence.name }}
+                    </span>
+                  </span>
+                  <br>
+                  <span *ngIf="receipt.person.document">
+                    {{'literals.document' | trans }}: {{ receipt.person.document }}
+                  </span>
                 </td>
               </tr>
             </table>
