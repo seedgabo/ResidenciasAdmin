@@ -78,9 +78,16 @@
     <div class="signature"></div>
     {{ 'literals.signature' | trans }}
   </div>
+  <br>
+  <div class="print-only">
+    <b>{{'literals.total' | trans }}:</b>
+    <span>{{ total | currency:'USD':true:'1.2-2' }}</span>
+  </div>
+
 </ion-content>
 
-<ion-footer *ngIf="!printing || api.settings?.print_type != 'pos'">
+<ion-footer *ngIf="!printing || api.settings?.print_type != 'pos'" class="no-print">
+
   <ion-toolbar>
     <ion-grid>
       <ion-row>
