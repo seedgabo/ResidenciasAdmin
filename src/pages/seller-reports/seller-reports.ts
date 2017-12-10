@@ -160,12 +160,15 @@ export class SellerReportsPage {
       buttons: [{
         text: this.api.trans("literals.yes"),
         handler: () => {
-          this.api.storage.remove("invoices_history");
-          this.invoices = [];
-          this._invoices = [];
-          this.calculate();
+          this.api.storage.set("invoices_history", [])
+            .then(() => {
+              this.invoices = [];
+              this._invoices = [];
+              this.calculate();
+              console.warn('invoices cleaned');
+            });
         }
-      }, this.api.trans('cancel')]
+      }, this.api.trans('crud.cancel')]
     }).present()
   }
 

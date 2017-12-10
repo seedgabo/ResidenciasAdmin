@@ -190,6 +190,7 @@ export class SellerPage {
                     added = this.total(invoice) + "$";
                   this.sendPush("Compra Realizada! " + added, this.charge.user_id);
                 }
+                invoice.status = 'paid';
                 loading.dismiss().then(() => {
                   this.goPrint(invoice, data.receipt);
                 });
