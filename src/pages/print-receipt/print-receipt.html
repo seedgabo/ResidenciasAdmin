@@ -12,7 +12,9 @@
                   <img [src]="api.url + 'img/logo.png'" style="max-width:100%; max-width:200px;">
                 </td>
                 <td style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 20px;width:100%">
-                  <h4> {{'literals.receipt' | trans }} </h4>
+                  <h4> {{'literals.receipt' | trans }} 
+                    # {{ receipt.id }}
+                  </h4>
 
                   <br> {{ 'literals.date' | trans }}: {{ receipt.date | amDateFormat:'LLL'}}
 
