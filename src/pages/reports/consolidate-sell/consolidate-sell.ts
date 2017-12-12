@@ -47,8 +47,8 @@ export class ConsolidateSellPage {
     if (this.close) {
       var data = {
         user_id: this.api.user.id,
-        from: this.from.format('Y-M-D H:mm:s'),
-        to: this.to.format('Y-M-D H:mm:s'),
+        from: this.from.format('Y-M-D H:mm:ss'),
+        to: this.to.format('Y-M-D H:mm:ss'),
         invoices: []
       }
       this.invoices.forEach((inv) => {
