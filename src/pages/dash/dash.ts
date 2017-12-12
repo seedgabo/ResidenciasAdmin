@@ -43,7 +43,7 @@ export class DashPage {
   canVisitors() {
     if (this.api.roles && this.api.modules && this.api.modules.visits)
       for (var i = 0; i < this.api.roles.length; i++) {
-        if (this.api.roles[i].name == 'Celator' || this.api.roles[i].name == 'SuperAdmin') {
+        if (this.api.roles[i].name == 'Manage visitors' || this.api.roles[i].name == 'Celator' || this.api.roles[i].name == 'SuperAdmin') {
           return true;
         }
       }
