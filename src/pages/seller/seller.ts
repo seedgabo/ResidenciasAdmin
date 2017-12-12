@@ -240,7 +240,7 @@ export class SellerPage {
       concept += element.concept + "(x" + element.quantity + "), "
     });
     this.person.type = this.type;
-    var receipt = {
+    var receipt: any = {
       items: items,
       person: this.person,
       concept: concept.substring(0, concept.length - 2),
@@ -251,7 +251,8 @@ export class SellerPage {
     }
 
     this.api.post('receipts', receipt)
-      .then((data) => {
+      .then((data: any) => {
+        receipt.id = data.id
         this.saveReceipt(receipt);
         this.navCtrl.push("PrintReceiptPage", { receipt: receipt });
         this.clear();
