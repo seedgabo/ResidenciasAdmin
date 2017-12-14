@@ -28,6 +28,7 @@ import { AppMinimize } from '@ionic-native/app-minimize';
 import { VisitPage } from "../pages/visit/visit";
 import { SellerPage } from "../pages/seller/seller";
 import { ProductSearchPage } from '../pages/product-search/product-search';
+import { SettingProvider } from '../providers/setting/setting';
 @NgModule({
   declarations: [
     MyApp,
@@ -78,7 +79,8 @@ import { ProductSearchPage } from '../pages/product-search/product-search';
     BackgroundMode,
     AppMinimize,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    Api
+    Api,
+    SettingProvider
   ]
 })
 export class AppModule { }
