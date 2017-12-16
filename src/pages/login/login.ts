@@ -46,8 +46,8 @@ export class Login {
         this.api.startEcho();
       })
       .catch((err) => {
-        console.error(err.error);
-        if (err.error === 401) {
+        console.error(err);
+        if (err.status === 401) {
           let alert = this.alertCtrl.create({
             title: "Error",
             subTitle: 'Usuario y Contraseña Invalidos',

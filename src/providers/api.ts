@@ -78,7 +78,7 @@ export class Api {
           this.storage.set('settings', this.settings);
           this.getLang();
         }, error => {
-          return reject(this.handleData(error));
+          return reject(error);
         });
     });
   }
@@ -102,7 +102,7 @@ export class Api {
         .subscribe(data => {
           resolve(data);
         }, error => {
-          return reject(this.handleData(error));
+          return reject(error);
         });
     });
   }
@@ -114,7 +114,7 @@ export class Api {
         .subscribe(data => {
           resolve(data);
         }, error => {
-          return reject(this.handleData(error));
+          return reject(error);
         });
     });
   }
@@ -126,7 +126,7 @@ export class Api {
         .subscribe(data => {
           resolve(data);
         }, error => {
-          return reject(this.handleData(error));
+          return reject(error);
         });
     });
   }
@@ -138,7 +138,7 @@ export class Api {
         .subscribe(data => {
           resolve(data);
         }, error => {
-          return reject(this.handleData(error));
+          return reject(error);
         });
     });
   }
@@ -170,7 +170,7 @@ export class Api {
             });
           });
         }, error => {
-          return reject(this.handleData(error));
+          return reject(error);
         });
     });
   }
@@ -192,7 +192,7 @@ export class Api {
         .subscribe(data => {
           resolve(data);
         }, error => {
-          return reject(this.handleData(error));
+          return reject(error);
         });
     });
   }
@@ -465,21 +465,20 @@ export class Api {
   }
 
   Error(error) {
-    console.error(error)
     var message = "";
-    if (error.error == 500 || error.errorStatus == 500) {
+    if (error.status == 500) {
       message = this.trans("__.Internal Server Error")
     }
-    if (error.error == 404 || error.errorStatus == 404) {
+    if (error.status == 404) {
       message = this.trans("__.Not Found")
     }
-    if (error.error == 401 || error.errorStatus == 401) {
+    if (error.status == 401) {
       message = this.trans("__.Unauthorized")
     }
     this.alert.create({
       title: this.trans("__.Network Error"),
       subTitle: error.error,
-      message: message + " " + error.message,
+      message: message + ":" + error.statusText,
       buttons: ["OK"],
 
     }).present();
@@ -494,20 +493,6 @@ export class Api {
     return headers;
   }
 
-  private handleData(res) {
-    if (res.statusText == "Ok") {
-      return { status: "No Parace haber conexión con el servidor" };
-    }
-
-    // If request fails, throw an Error that will be caught
-    if (res.status < 200 || res.status >= 300) {
-      return { error: res.status }
-    }
-    // If everything went fine, return the response
-    else {
-      return res;
-    }
-  }
 
   playSoundNotfication() {
     this.sound = new Audio('assets/sounds/notifcations.mp3');
