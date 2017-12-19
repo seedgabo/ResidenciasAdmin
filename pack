@@ -6,7 +6,17 @@ if [ -z "$1" ]
     exit
 fi
 cd ./platforms/browser/www
-rsync --exclude=assets/header.js -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$1/admin" 
 
+# rsync --exclude=assets/header.js -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$1/admin"
+
+b="with-header"
+if [ "$2" == "$b" ]
+  then
+    echo "Including header.js"
+    rsync -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$1/admin"
+  else
+    echo "Excluding header.js"
+    rsync --exclude=assets/header.js -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$1/admin" 
+fi
 echo "syncronized"
 cd ../../../
