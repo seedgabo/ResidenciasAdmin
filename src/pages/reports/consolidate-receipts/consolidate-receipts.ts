@@ -1,15 +1,11 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Api } from '../../../providers/api';
+import {Component} from '@angular/core';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {Api} from '../../../providers/api';
 import * as moment from 'moment';
+import {SettingProvider} from '../../../providers/setting/setting';
 
-@IonicPage({
-  defaultHistory: ["DashPage",]
-})
-@Component({
-  selector: 'page-consolidate-receipts',
-  templateUrl: 'consolidate-receipts.html',
-})
+@IonicPage({defaultHistory: ["DashPage"]})
+@Component({selector: 'page-consolidate-receipts', templateUrl: 'consolidate-receipts.html'})
 export class ConsolidateReceiptsPage {
   receipts = []
   products = {}
@@ -20,17 +16,24 @@ export class ConsolidateReceiptsPage {
   total = 0;
   user;
   residence
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api) {
-    this.receipts = this.navParams.get('invoices');
+  constructor(public navCtrl : NavController, public navParams : NavParams, public api : Api, public setting : SettingProvider) {
+    this.receipts = this
+      .navParams
+      .get('invoices');
 
     if (this.navParams.get('print')) {
-      this.printing = this.navParams.get('print');
+      this.printing = this
+        .navParams
+        .get('print');
     }
 
-
     if (this.navParams.get('user')) {
-      this.user = this.navParams.get('user');
-      this.residence = this.navParams.get('residence');
+      this.user = this
+        .navParams
+        .get('user');
+      this.residence = this
+        .navParams
+        .get('residence');
     } else {
       this.user = this.api.user;
       this.residence = this.api.residence;
@@ -50,17 +53,24 @@ export class ConsolidateReceiptsPage {
       this.to = moment(this.receipts[this.receipts.length - 1].created_at)
     }
 
-    this.receipts.forEach((inv) => {
-      inv.items.forEach(item => {
-        if (!this.products[item.concept]) {
-          this.products[item.concept] = { quantity: item.quantity, amount: item.amount };
-        } else {
-          this.products[item.concept].quantity += item.quantity;
-        }
-      });
-      this.total += inv.amount;
-      this.getPaymentsFromInvoices(inv);
-    })
+    this
+      .receipts
+      .forEach((inv) => {
+        inv
+          .items
+          .forEach(item => {
+            if (!this.products[item.concept]) {
+              this.products[item.concept] = {
+                quantity: item.quantity,
+                amount: item.amount
+              };
+            } else {
+              this.products[item.concept].quantity += item.quantity;
+            }
+          });
+        this.total += inv.amount;
+        this.getPaymentsFromInvoices(inv);
+      })
   }
 
   print() {
@@ -74,11 +84,12 @@ export class ConsolidateReceiptsPage {
       return;
     }
     if (this.isJson(payment)) {
-      JSON.parse(payment).forEach(pay => {
-        this.addTosums(pay.method, pay.amount)
-      });
-    }
-    else {
+      JSON
+        .parse(payment)
+        .forEach(pay => {
+          this.addTosums(pay.method, pay.amount)
+        });
+    } else {
 
       this.addTosums(payment, invoice.total)
     }

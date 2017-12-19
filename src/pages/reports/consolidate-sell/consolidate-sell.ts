@@ -1,15 +1,11 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Api } from '../../../providers/api';
+import {Component} from '@angular/core';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {Api} from '../../../providers/api';
 import * as moment from 'moment';
+import {SettingProvider} from '../../../providers/setting/setting';
 
-@IonicPage({
-  defaultHistory: ["DashPage",]
-})
-@Component({
-  selector: 'page-consolidate-sell',
-  templateUrl: 'consolidate-sell.html',
-})
+@IonicPage({defaultHistory: ["DashPage"]})
+@Component({selector: 'page-consolidate-sell', templateUrl: 'consolidate-sell.html'})
 export class ConsolidateSellPage {
   invoices = []
   products = {}
@@ -22,20 +18,29 @@ export class ConsolidateSellPage {
   user;
   residence
   cash_desk = null;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api) {
-    this.invoices = this.navParams.get('invoices');
+  constructor(public navCtrl : NavController, public navParams : NavParams, public api : Api, public setting : SettingProvider) {
+    this.invoices = this
+      .navParams
+      .get('invoices');
 
     if (this.navParams.get('print')) {
-      this.printing = this.navParams.get('print');
+      this.printing = this
+        .navParams
+        .get('print');
     }
     if (this.navParams.get('close')) {
-      this.close = this.navParams.get('close');
+      this.close = this
+        .navParams
+        .get('close');
     }
 
-
     if (this.navParams.get('user')) {
-      this.user = this.navParams.get('user');
-      this.residence = this.navParams.get('residence');
+      this.user = this
+        .navParams
+        .get('user');
+      this.residence = this
+        .navParams
+        .get('residence');
     } else {
       this.user = this.api.user;
       this.residence = this.api.residence;
@@ -47,14 +52,24 @@ export class ConsolidateSellPage {
     if (this.close) {
       var data = {
         user_id: this.api.user.id,
-        from: this.from.format('Y-M-D H:mm:ss'),
-        to: this.to.format('Y-M-D H:mm:ss'),
+        from: this
+          .from
+          .format('Y-M-D H:mm:ss'),
+        to: this
+          .to
+          .format('Y-M-D H:mm:ss'),
         invoices: []
       }
-      this.invoices.forEach((inv) => {
-        data.invoices.push(inv.id)
-      })
-      this.api.post('cash_desks', data)
+      this
+        .invoices
+        .forEach((inv) => {
+          data
+            .invoices
+            .push(inv.id)
+        })
+      this
+        .api
+        .post('cash_desks', data)
         .then((resp) => {
           this.cash_desk = resp;
           setTimeout(() => {
@@ -62,7 +77,9 @@ export class ConsolidateSellPage {
           }, 300)
         })
         .catch((err) => {
-          this.api.Error(err)
+          this
+            .api
+            .Error(err)
         })
     }
   }
@@ -76,17 +93,24 @@ export class ConsolidateSellPage {
       this.to = moment(this.invoices[this.invoices.length - 1].created_at)
     }
 
-    this.invoices.forEach((inv) => {
-      inv.items.forEach(item => {
-        if (!this.products[item.concept]) {
-          this.products[item.concept] = { quantity: Number(item.quantity), amount: Number(item.amount) };
-        } else {
-          this.products[item.concept].quantity += Number(item.quantity);
-        }
-      });
-      this.total += Number(inv.total);
-      this.getPaymentsFromInvoices(inv);
-    })
+    this
+      .invoices
+      .forEach((inv) => {
+        inv
+          .items
+          .forEach(item => {
+            if (!this.products[item.concept]) {
+              this.products[item.concept] = {
+                quantity: Number(item.quantity),
+                amount: Number(item.amount)
+              };
+            } else {
+              this.products[item.concept].quantity += Number(item.quantity);
+            }
+          });
+        this.total += Number(inv.total);
+        this.getPaymentsFromInvoices(inv);
+      })
   }
   print() {
     window.print()
@@ -99,11 +123,12 @@ export class ConsolidateSellPage {
       return;
     }
     if (this.isJson(payment)) {
-      JSON.parse(payment).forEach(pay => {
-        this.addTosums(pay.method, pay.amount)
-      });
-    }
-    else {
+      JSON
+        .parse(payment)
+        .forEach(pay => {
+          this.addTosums(pay.method, pay.amount)
+        });
+    } else {
 
       this.addTosums(payment, invoice.total)
     }
