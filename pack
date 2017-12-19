@@ -5,4 +5,7 @@ if [ -z "$1" ]
     echo "No argument supplied"
     exit
 fi
-rsync --exclude assets/header.js -avz --delete ./platforms/browser/www/ "eyc_proveedores@newton.eycproveedores.com:htdocs/$1/admin" 
+cd ./platforms/browser
+rsync --exclude assets/* -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$1/admin" 
+
+echo "syncronized"
