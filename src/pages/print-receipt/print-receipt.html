@@ -217,8 +217,8 @@
     <div class="separator"></div>
     <br>
     <div *ngIf="receipt.person">
-      {{'literals.person' | trans }}: {{ receipt.person.full_name }}
-      <span *ngIf="receipt.person.residence">{{ receipt.person.residence.name }}</span>
+      {{'literals.person' | trans }}: {{ receipt.person.name }}
+      <span *ngIf="receipt.person.residence"> - {{ receipt.person.residence.name }}</span>
       <br> {{'literals.document' | trans }}: {{ receipt.person.document }}
       <span *ngIf="receipt.person.phone_number">
         <br> {{'literals.phone_number' | trans }}: {{receipt.person.phone_number}}</span>

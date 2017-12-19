@@ -15,8 +15,8 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-  <ion-list *ngIf="invoices.length > 0" [ngClass]="{'no-print': setting.print_type == 'pos'}" id="toPrint" [virtualScroll]="invoices">
+<ion-content [ngClass]="{'no-print': setting.print_type == 'pos'}">
+  <ion-list *ngIf="invoices.length > 0" id="toPrint" [virtualScroll]="invoices">
     <button ion-item *virtualItem="let invoice" (click)="actions(invoice)" text-wrap>
       <span item-left>
         {{invoice.number}}

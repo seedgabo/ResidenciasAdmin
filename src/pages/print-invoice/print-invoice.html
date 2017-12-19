@@ -223,8 +223,8 @@
     </table>
     <br>
     <div *ngIf="invoice.person">
-      {{'literals.person' | trans }}: {{ invoice.person.full_name }}
-      <span *ngIf="invoice.person.residence">{{ invoice.person.residence.name }}</span>
+      {{'literals.person' | trans }}: {{ invoice.person.name }}
+      <span *ngIf="invoice.person.residence"> - {{ invoice.person.residence.name }}</span>
       <br> {{'literals.document' | trans }}: {{ invoice.person.document }}
       <span *ngIf="invoice.person.phone_number">
         <br> {{'literals.phone_number' | trans }}: {{invoice.person.phone_number}}</span>
