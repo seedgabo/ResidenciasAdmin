@@ -46,6 +46,23 @@
   }
 }
 
+.punto {
+  width: 210pt !important;
+  margin: 0;
+  padding: 0;
+}
+
+.pos-items {
+  font-size: smaller;
+}
+
+.separator {
+  border: .4px solid black;
+  min-width: 200pt;
+  width: 200pt;
+  text-align: center;
+}
+
 .signature {
   border: 0;
   border-bottom: 1px solid #000;
