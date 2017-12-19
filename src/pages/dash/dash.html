@@ -90,6 +90,14 @@
         </div>
       </ion-col>
 
+
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="canAccounter()">
+        <div tappable class="dash-card" padding no-margin (click)="openPage('SettingsPage')">
+          <ion-icon class="dash-icon" large color="primary" name="settings"></ion-icon>
+          <h1 class="dash-title"> {{ api.trans('literals.settings') }}</h1>
+        </div>
+      </ion-col>
+
     </ion-row>
   </ion-grid>
 </ion-content>

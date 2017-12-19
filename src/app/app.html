@@ -46,7 +46,7 @@
           {{ api.trans('literals.settings') }}
         </ion-item-divider>
 
-        <button menuClose ion-item (click)="openPage({component:'SettingsPage'})" icon-left>
+        <button *ngIf="canAccounter()" menuClose ion-item (click)="openPage({component:'SettingsPage'})" icon-left>
           <ion-icon name="settings"></ion-icon>
           {{ api.trans('literals.settings') }}
         </button>
