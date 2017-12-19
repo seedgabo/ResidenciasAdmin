@@ -1,6 +1,6 @@
 <ion-content>
 
-  <div class="printable" id="toPrint">
+  <div class="printable" *ngIf="setting.print_type !== 'pos'" id="toPrint">
     <div class="invoice-box" style="max-width: 800px;margin: auto;padding: 30px;border: 1px solid #eee;box-shadow: 0 0 10px rgba(0, 0, 0, .15);font-size: 16px;line-height: 24px;font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;color: #555;">
       <table cellpadding="0" cellspacing="0" style="width: 100%;line-height: inherit;text-align: left;">
 
@@ -151,7 +151,7 @@
   </div>
 
 
-  <div *ngIf="api.settings.print_type == 'pos'" class="printable punto" id="toPrintMini">
+  <div *ngIf="setting.print_type === 'pos'" class="printable punto" id="toPrintMini">
     <br>
     <div text-center>
       <img [src]="api.url + 'img/logo.png'" style="max-height:60pt; max-width:60pt;">
@@ -225,7 +225,7 @@
     <div *ngIf="invoice.person">
       {{'literals.person' | trans }}: {{ invoice.person.full_name }}
       <span *ngIf="invoice.person.residence">{{ invoice.person.residence.name }}</span>
-      <br> {{ invoice.person.document }}
+      <br> {{'literals.document' | trans }}: {{ invoice.person.document }}
       <span *ngIf="invoice.person.phone_number">
         <br> {{'literals.phone_number' | trans }}: {{invoice.person.phone_number}}</span>
     </div>
@@ -237,5 +237,9 @@
       </span>
     </div>
     <br>
+    <p text-center *ngIf="invoice.note">
+      <b>{{'literals.note' | trans }}</b>
+      <span>{{invoice.note}}</span>
+    </p>
   </div>
 </ion-content>

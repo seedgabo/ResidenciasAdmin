@@ -42,10 +42,20 @@
           {{ api.trans('literals.zones') }}
         </button>
 
+        <ion-item-divider color="light">
+          {{ api.trans('literals.settings') }}
+        </ion-item-divider>
+
+        <button menuClose ion-item (click)="openPage({component:'SettingsPage'})" icon-left>
+          <ion-icon name="settings"></ion-icon>
+          {{ api.trans('literals.settings') }}
+        </button>
+
         <button menuClose ion-item (click)="logout()" icon-left>
           <ion-icon color="primary" name="log-out"></ion-icon>
           {{ api.trans('literals.logout') }}
         </button>
+
       </ion-list>
     </ion-content>
   </ion-menu>

@@ -1,7 +1,7 @@
 <ion-content>
 
-  <div class="printable" id="toPrint">
-    <div class="invoice-box" style="max-width: 800px;margin: auto;padding: 30px;border: 1px solid #eee;box-shadow: 0 0 10px rgba(0, 0, 0, .15);font-size: 16px;line-height: 24px;font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;color: #555;">
+  <div class="printable" *ngIf="setting.print_type !== 'pos'" id="toPrint">
+    <div class="receipt-box" style="max-width: 800px;margin: auto;padding: 30px;border: 1px solid #eee;box-shadow: 0 0 10px rgba(0, 0, 0, .15);font-size: 16px;line-height: 24px;font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;color: #555;">
       <table cellpadding="0" cellspacing="0" style="width: 100%;line-height: inherit;text-align: left;">
 
         <tr class="top">
@@ -124,7 +124,117 @@
   </div>
 
 
-  <div *ngIf="api.settings.print_type == 'pos'" class="printable punto" id="toPrintMini">
+  <div *ngIf="setting.print_type === 'pos'" class="printable punto" id="toPrintMini">
+    <br>
+    <div text-center>
+      <img [src]="api.url + 'img/logo.png'" style="max-height:60pt; max-width:60pt;">
+    </div>
+    <h3 text-center no-margin>
+      {{api.settings.name}}
+    </h3>
+    <h6 text-center no-margin>
+      NIT: {{api.settings.document}}
+    </h6>
+    <p text-center no-margin>
+      {{api.settings.address}}
+    </p>
+    <p text-center no-margin>
+      {{api.settings.phone }}
+    </p>
+    <br>
+    <p no-margin>
+      <b>
+        {{'literals.receipt' | trans }} # {{ receipt.id }}
+      </b>
+    </p>
+    <p no-margin>
+      {{'literals.date' | trans }}: {{ receipt.created_at | amDateFormat:'DD MMMM YYYY - h:mm a'}}
+    </p>
+    <p no-margin>
+      <b>
+        {{'literals.seller' | trans }}:
+      </b>
+      <span>{{ api.user.name }}</span>
+    </p>
+    <p no-margin>
+      <b>
+        {{'literals.person' | trans }}:
+      </b>
+      <span>{{ receipt.person.name }}</span>
+      <span *ngIf="receipt.person.residence">
+        <br>
+        <b>{{'literals.residence' | trans }}</b>
+        {{ receipt.person.residence.name }}
+      </span>
+    </p>
+    <br>
+    <div class="separator"></div>
+    <table style="width:100%">
+      <tbody text-center class="pos-items">
+        <tr>
+          <th>
+            {{'literals.concept' | trans }}
+          </th>
+          <td>
+            {{ receipt.concept }}
+          </td>
+        </tr>
+
+        <tr>
+          <th>
+            {{'literals.amount' | trans }}
+          </th>
+          <td>
+            {{ receipt.amount | currency:'USD':true:'1.2-2' }}
+          </td>
+        </tr>
+
+        <tr *ngIf="receipt.transaction">
+          <th>
+            {{'literals.transaction' | trans }}
+          </th>
+          <td>
+            {{ receipt.transaction }}
+          </td>
+        </tr>
+
+        <tr *ngIf="receipt.person.residence">
+          <th>
+            {{'literals.residence' | trans }}
+          </th>
+          <td>
+            {{ receipt.person.residence.name }}
+          </td>
+        </tr>
+
+        <tr class="total">
+          <td colspan="4" style="padding: 5px;vertical-align: top; text-align: center;border-top: 2px solid #eee;font-weight: bold;">
+            {{ receipt.note }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="separator"></div>
+    <br>
+    <div *ngIf="receipt.person">
+      {{'literals.person' | trans }}: {{ receipt.person.full_name }}
+      <span *ngIf="receipt.person.residence">{{ receipt.person.residence.name }}</span>
+      <br> {{'literals.document' | trans }}: {{ receipt.person.document }}
+      <span *ngIf="receipt.person.phone_number">
+        <br> {{'literals.phone_number' | trans }}: {{receipt.person.phone_number}}</span>
+    </div>
+    <div *ngIf="!(receipt.person)">
+      {{'literals.person' | trans }}: _______________________________
+      <br> {{'literals.document' | trans }}: ______________________________
+      <span>
+        <br> {{'literals.phone_number' | trans }}: ___________________
+      </span>
+    </div>
+    <br>
+    <p text-center *ngIf="receipt.note">
+      <b>{{'literals.note' | trans }}</b>
+      <span>{{receipt.note}}</span>
+    </p>
   </div>
 
 </ion-content>
