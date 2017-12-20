@@ -32,10 +32,8 @@
 
 @media print {
   .no-print,
+  .no-printable,
   .back-button {
-    display: none !important;
-  }
-  .no-printable {
     display: none !important;
   }
   .print-only {

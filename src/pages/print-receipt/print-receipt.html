@@ -125,7 +125,6 @@
 
 
   <div *ngIf="setting.print_type === 'pos'" class="printable punto" id="toPrintMini">
-    <br>
     <div text-center>
       <img [src]="api.url + 'img/logo.png'" style="max-height:60pt; max-width:60pt;">
     </div>
@@ -208,7 +207,7 @@
         </tr>
 
         <tr class="total">
-          <td colspan="4" style="padding: 5px;vertical-align: top; text-align: center;border-top: 2px solid #eee;font-weight: bold;">
+          <td colspan="4" style="padding: 5px;vertical-align: top; text-align: center;border-top: 2px solid #eee;font-weight: bold;" text-wrap wrap>
             {{ receipt.note }}
           </td>
         </tr>
@@ -230,11 +229,6 @@
         <br> {{'literals.phone_number' | trans }}: ___________________
       </span>
     </div>
-    <br>
-    <p text-center *ngIf="receipt.note">
-      <b>{{'literals.note' | trans }}</b>
-      <span>{{receipt.note}}</span>
-    </p>
     <br>
     <div>
       <div text-center>

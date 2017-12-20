@@ -147,7 +147,6 @@
         </ion-row>
       </ion-grid>
     </div>
-
   </div>
 
 
@@ -237,7 +236,7 @@
       </span>
     </div>
     <br>
-    <p text-center *ngIf="invoice.note">
+    <p text-center *ngIf="invoice.note" text-wrap wrap>
       <b>{{'literals.note' | trans }}</b>
       <span>{{invoice.note}}</span>
     </p>

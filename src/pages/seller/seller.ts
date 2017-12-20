@@ -142,7 +142,7 @@ export class SellerPage {
 
   proccess() {
     this
-      .askNote(this.api.trans("__.recibo de anexo a su proxima :invoice", {
+      .askNote(this.api.trans("__.recibo de anexo a su siguiente :invoice", {
       invoice: this
         .api
         .trans('literals.invoice')
@@ -334,7 +334,7 @@ export class SellerPage {
         ? note
         : this
           .api
-          .trans("__.recibo de anexo a su proxima :invoice", {
+          .trans("__.recibo de anexo a su siguiente :invoice", {
             invoice: this
               .api
               .trans('literals.invoice')
