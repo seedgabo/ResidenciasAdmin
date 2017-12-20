@@ -162,7 +162,7 @@
       <span>{{ receipt.person.name }}</span>
       <span *ngIf="setting.show_customer_type && receipt.person.type">
         <br> {{'literals.type' | trans }}: {{'literals.' + receipt.person.type | trans }}
-        <span *ngIf="receipt.person.relationship">({{'literals.relationship' | trans }})</span>
+        <span *ngIf="receipt.person.relationship">({{ receipt.person.relationship }})</span>
       </span>
       <span *ngIf="receipt.person.residence">
         <br>
@@ -224,7 +224,7 @@
       {{'literals.customer' | trans }}: {{ receipt.person.name }}
       <span *ngIf="setting.show_customer_type && receipt.person.type">
         <br> {{'literals.type' | trans }}: {{'literals.' + receipt.person.type | trans }}
-        <span *ngIf="receipt.person.relationship">({{'literals.relationship' | trans }})</span>
+        <span *ngIf="receipt.person.relationship">({{ receipt.person.relationship }})</span>
       </span>
       <span *ngIf="receipt.person.residence">
         <br> {{'literals.residence' | trans }} {{ receipt.person.residence.name }}
