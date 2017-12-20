@@ -181,12 +181,6 @@
     <p no-margin>
       {{'literals.date' | trans }}: {{ invoice.created_at | amDateFormat:'DD MMMM YYYY - h:mm a'}}
     </p>
-    <p no-margin>
-      <b>
-        {{'literals.seller' | trans }}:
-      </b>
-      <span>{{ api.user.name }}</span>
-    </p>
     <span *ngIf="payments">
       <p *ngFor="let pay of payments">
         <b>{{'literals.'+ pay.method | trans }}</b>
