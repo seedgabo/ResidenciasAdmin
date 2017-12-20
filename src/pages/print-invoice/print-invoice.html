@@ -39,7 +39,7 @@
                 <td *ngIf="invoice.person" style="padding: 4px;vertical-align: top;text-align: right;padding-bottom: 10px;">
                   {{ invoice.person.name }}
                   <span *ngIf="setting.show_customer_type && invoice.person.type">
-                    {{'literals.type'}}: ({{'literals.' + invoice.person.type }})
+                    {{'literals.type' | trans }}: {{'literals.' + invoice.person.type | trans }}
                   </span>
                   <span *ngIf="invoice.person.residence">
                     <span *ngIf="invoice.person.residence">
@@ -230,7 +230,7 @@
     <div *ngIf="invoice.person">
       {{'literals.customer' | trans }}: {{ invoice.person.name }}
       <span *ngIf="setting.show_customer_type && invoice.person.type">
-        <br> {{'literals.type'}}: ({{'literals.' + invoice.person.type }})
+        <br> {{'literals.type' | trans }}: {{'literals.' + invoice.person.type | trans }}
       </span>
       <span *ngIf="invoice.person.residence">
         <br> {{'literals.residence' | trans }}: {{ invoice.person.residence.name }}
