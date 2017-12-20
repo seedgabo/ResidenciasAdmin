@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 import {
   NavController,
   NavParams,
@@ -7,11 +7,11 @@ import {
   ModalController,
   ActionSheetController
 } from 'ionic-angular';
-import {Api} from '../../providers/api';
+import { Api } from '../../providers/api';
 import moment from 'moment';
-import {ProductSearchPage} from '../product-search/product-search';
-import {Printer} from '@ionic-native/printer';
-@Component({selector: 'page-seller', templateUrl: 'seller.html'})
+import { ProductSearchPage } from '../product-search/product-search';
+import { Printer } from '@ionic-native/printer';
+@Component({ selector: 'page-seller', templateUrl: 'seller.html' })
 export class SellerPage {
   charge = {
     residence_id: null,
@@ -26,7 +26,7 @@ export class SellerPage {
   toPrint;
   invoices_history = [];
   receipts_history = [];
-  constructor(public navCtrl : NavController, public navParams : NavParams, public loading : LoadingController, public alert : AlertController, public modal : ModalController, public actionsheet : ActionSheetController, public printer : Printer, public api : Api) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public printer: Printer, public api: Api) { }
 
   ionViewDidEnter() {
     this
@@ -50,7 +50,7 @@ export class SellerPage {
     if (this.mode !== 'restricted') {
       this
         .items
-        .push({concept: '', amount: 0, quantity: 0});
+        .push({ concept: '', amount: 0, quantity: 0 });
     }
   }
 
@@ -129,7 +129,7 @@ export class SellerPage {
     modal.onDidDismiss((data, role) => {
       if (role !== 'cancel') {
         console.log(data, role);
-        this._addItem({concept: data.name, amount: data.price, quantity: 1})
+        this._addItem({ concept: data.name, amount: data.price, quantity: 1 })
       }
     });
   }
@@ -143,10 +143,10 @@ export class SellerPage {
   proccess() {
     this
       .askNote(this.api.trans("__.recibo de anexo a su siguiente :invoice", {
-      invoice: this
-        .api
-        .trans('literals.invoice')
-    }))
+        invoice: this
+          .api
+          .trans('literals.invoice')
+      }))
       .then((note) => {
         var procesing = 0;
         var loading = this
@@ -214,7 +214,7 @@ export class SellerPage {
                   .trans('__.procesando')
               });
             loading.present();
-            var data : any = {
+            var data: any = {
               items: this.items,
               type: 'normal',
               payment: transaction,
@@ -230,16 +230,16 @@ export class SellerPage {
             this
               .api
               .post('invoices', data)
-              .then((invoice : any) => {
+              .then((invoice: any) => {
                 this
                   .api
-                  .post(`invoices/${invoice.id}/Payment`, {transaction: transaction})
-                  .then((data : any) => {
+                  .post(`invoices/${invoice.id}/Payment`, { transaction: transaction })
+                  .then((data: any) => {
                     if (this.charge.user_id) {
                       var added;
-                      if (this.items.length === 1) 
+                      if (this.items.length === 1)
                         added = `${this.items[0].concept}: ${this.items[0].quantity * this.items[0].amount} $`
-                      else 
+                      else
                         added = this.total(invoice) + "$";
                       this.sendPush("Compra Realizada! " + added, this.charge.user_id);
                     }
@@ -287,33 +287,18 @@ export class SellerPage {
     };
     invoice.person = this.person;
     this.saveInvoice(this.toPrint);
-    this
-      .navCtrl
-      .push("PrintInvoicePage", {
-        invoice: invoice,
-        receipt: receipt
-      });
+    this.navCtrl.push("PrintInvoicePage", { invoice: invoice, receipt: receipt });
     this.clear();
   }
 
   saveInvoice(invoice) {
-    this
-      .invoices_history
-      .push(invoice);
-    this
-      .api
-      .storage
-      .set('invoices_history', this.invoices_history);
+    this.invoices_history.push(invoice);
+    this.api.storage.set('invoices_history', this.invoices_history);
   }
 
   saveReceipt(receipt) {
-    this
-      .receipts_history
-      .push(receipt);
-    this
-      .api
-      .storage
-      .set('receipts_history', this.receipts_history);
+    this.receipts_history.push(receipt);
+    this.api.storage.set('receipts_history', this.receipts_history);
   }
 
   complete(items, note) {
@@ -324,7 +309,7 @@ export class SellerPage {
         concept += element.concept + "(x" + element.quantity + "), "
       });
     this.person.type = this.type;
-    var receipt : any = {
+    var receipt: any = {
       items: items,
       person: this.person,
       concept: concept.substring(0, concept.length - 2),
@@ -347,12 +332,12 @@ export class SellerPage {
     this
       .api
       .post('receipts', receipt)
-      .then((data : any) => {
+      .then((data: any) => {
         receipt.id = data.id
         this.saveReceipt(receipt);
         this
           .navCtrl
-          .push("PrintReceiptPage", {receipt: receipt});
+          .push("PrintReceiptPage", { receipt: receipt });
         this.clear();
       })
       .catch((err) => {
@@ -385,8 +370,8 @@ export class SellerPage {
           title: this
             .api
             .trans('crud.select') + " " + this
-            .api
-            .trans('literals.method'),
+              .api
+              .trans('literals.method'),
           inputs: [
             {
               type: 'radio',
@@ -476,8 +461,8 @@ export class SellerPage {
           title: this
             .api
             .trans('crud.add') + " " + this
-            .api
-            .trans('literals.note'),
+              .api
+              .trans('literals.note'),
           inputs: [
             {
               type: 'text',
@@ -517,9 +502,9 @@ export class SellerPage {
 
   total(invoice = null) {
     var items;
-    if (invoice == null) 
+    if (invoice == null)
       items = this.items
-    else 
+    else
       items = invoice.items
     var total = 0;
     items.forEach((item) => {
@@ -529,12 +514,12 @@ export class SellerPage {
   }
 
   sendPush(message, user_id = this.charge.user_id) {
-    if (!user_id) 
+    if (!user_id)
       return;
     this
       .api
-      .post('push/' + user_id + '/notification', {message: message})
-      .then(() => {})
+      .post('push/' + user_id + '/notification', { message: message })
+      .then(() => { })
       .catch((error) => {
         console.error(error);
       })
@@ -611,6 +596,6 @@ export class SellerPage {
   gotoReceipts(ev) {
     this
       .navCtrl
-      .push("ReceiptsReportPage", {receipts: this.receipts_history})
+      .push("ReceiptsReportPage", { receipts: this.receipts_history })
   }
 }
