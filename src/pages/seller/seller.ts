@@ -75,6 +75,7 @@ export class SellerPage {
         this.charge.residence_id = data.person.residence_id;
       }
       this.person = data.person;
+      this.person.type = data.type
       this.type = data.type;
     })
 
@@ -199,83 +200,63 @@ export class SellerPage {
   }
 
   proccessWithInvoice() {
-    this
-      .askForPayment()
-      .then((transaction) => {
-        this
-          .askNote()
-          .then((note) => {
+    this.askForPayment().then((transaction) => {
+      this.askNote().then((note) => {
 
-            var loading = this
-              .loading
-              .create({
-                content: this
-                  .api
-                  .trans('__.procesando')
-              });
-            loading.present();
-            var data: any = {
-              items: this.items,
-              type: 'normal',
-              payment: transaction,
-              note: note,
-              date: (new Date())
-                .toISOString()
-                .substring(0, 10)
-            };
-            data[this.type + '_id'] = this.person.id;
-            if (this.type == 'user') {
-              data.residence_id = this.charge.residence_id;
-            }
-            this
-              .api
-              .post('invoices', data)
-              .then((invoice: any) => {
-                this
-                  .api
-                  .post(`invoices/${invoice.id}/Payment`, { transaction: transaction })
-                  .then((data: any) => {
-                    if (this.charge.user_id) {
-                      var added;
-                      if (this.items.length === 1)
-                        added = `${this.items[0].concept}: ${this.items[0].quantity * this.items[0].amount} $`
-                      else
-                        added = this.total(invoice) + "$";
-                      this.sendPush("Compra Realizada! " + added, this.charge.user_id);
-                    }
-                    invoice.status = 'paid';
-                    loading
-                      .dismiss()
-                      .then(() => {
-                        this.goPrint(invoice, data.receipt);
-                      });
-                  })
-                  .catch((err) => {
-                    console.error(err);
-                    loading.dismiss();
-                    this
-                      .alert
-                      .create({
-                        title: "ERROR",
-                        message: JSON.stringify(err)
-                      })
-                      .present();
-                  });
+        var loading = this.loading.create({
+          content: this.api.trans('__.procesando')
+        });
+        loading.present();
+        var data: any = {
+          items: this.items,
+          type: 'normal',
+          payment: transaction,
+          note: note,
+          date: (new Date()).toISOString().substring(0, 10)
+        };
+        data[this.type + '_id'] = this.person.id;
+        if (this.type == 'user') {
+          data.residence_id = this.charge.residence_id;
+        }
+        this.api.post('invoices', data)
+          .then((invoice: any) => {
+            this.api.post(`invoices/${invoice.id}/Payment`, { transaction: transaction })
+              .then((data: any) => {
+                if (this.charge.user_id) {
+                  var added;
+                  if (this.items.length === 1)
+                    added = `${this.items[0].concept}: ${this.items[0].quantity * this.items[0].amount} $`
+                  else
+                    added = this.total(invoice) + "$";
+                  this.sendPush("Compra Realizada! " + added, this.charge.user_id);
+                }
+                invoice.status = 'paid';
+                loading.dismiss().then(() => {
+                  this.goPrint(invoice, data.receipt);
+                });
               })
               .catch((err) => {
                 console.error(err);
                 loading.dismiss();
-                this
-                  .alert
-                  .create({
-                    title: "ERROR",
-                    message: JSON.stringify(err)
-                  })
+                this.alert.create({
+                  title: "ERROR",
+                  message: JSON.stringify(err)
+                })
                   .present();
               });
           })
-          .catch(console.warn);
+          .catch((err) => {
+            console.error(err);
+            loading.dismiss();
+            this.alert.create({
+              title: "ERROR",
+              message: JSON.stringify(err)
+            })
+              .present();
+          });
       })
+        .catch(console.warn);
+    })
       .catch(console.warn);
   }
 
@@ -303,11 +284,7 @@ export class SellerPage {
 
   complete(items, note) {
     var concept = ""
-    this
-      .items
-      .forEach((element) => {
-        concept += element.concept + "(x" + element.quantity + "), "
-      });
+    this.items.forEach((element) => { concept += element.concept + "(x" + element.quantity + "), " });
     this.person.type = this.type;
     var receipt: any = {
       items: items,
@@ -315,23 +292,13 @@ export class SellerPage {
       concept: concept.substring(0, concept.length - 2),
       date: moment().toDate(),
       amount: this.total(),
-      note: note
-        ? note
-        : this
-          .api
-          .trans("__.recibo de anexo a su siguiente :invoice", {
-            invoice: this
-              .api
-              .trans('literals.invoice')
-          }),
-      transaction: this
-        .api
-        .trans("__.compra")
+      note: note ? note : this.api.trans("__.recibo de anexo a su siguiente :invoice", {
+        invoice: this.api.trans('literals.invoice')
+      }),
+      transaction: this.api.trans("__.compra")
     }
 
-    this
-      .api
-      .post('receipts', receipt)
+    this.api.post('receipts', receipt)
       .then((data: any) => {
         receipt.id = data.id
         this.saveReceipt(receipt);
@@ -367,11 +334,7 @@ export class SellerPage {
       this
         .alert
         .create({
-          title: this
-            .api
-            .trans('crud.select') + " " + this
-              .api
-              .trans('literals.method'),
+          title: this.api.trans('crud.select') + " " + this.api.trans('literals.method'),
           inputs: [
             {
               type: 'radio',
@@ -545,9 +508,7 @@ export class SellerPage {
     }
 
     buttons.push({
-      text: this
-        .api
-        .trans('__.Facturar Ahora'),
+      text: this.api.trans('__.Facturar Ahora'),
       icon: 'print',
       cssClass: 'icon-secondary',
       handler: () => {

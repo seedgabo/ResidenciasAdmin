@@ -38,6 +38,9 @@
                 </td>
                 <td *ngIf="invoice.person" style="padding: 4px;vertical-align: top;text-align: right;padding-bottom: 10px;">
                   {{ invoice.person.name }}
+                  <span *ngIf="setting.show_customer_type && invoice.person.type">
+                    {{'literals.type'}}: ({{'literals.' + invoice.person.type }})
+                  </span>
                   <span *ngIf="invoice.person.residence">
                     <span *ngIf="invoice.person.residence">
                       <br>
@@ -130,7 +133,7 @@
         <span>{{invoice.note}}</span>
       </p>
       <br>
-      <ion-grid class="print-only">
+      <ion-grid *ngIf="setting.show_signature" class="print-only">
         <ion-row>
           <ion-col col-6 text-center>
             <div class="signature"></div>
@@ -226,6 +229,9 @@
     </div>
     <div *ngIf="invoice.person">
       {{'literals.customer' | trans }}: {{ invoice.person.name }}
+      <span *ngIf="setting.show_customer_type && invoice.person.type">
+        <br> {{'literals.type'}}: ({{'literals.' + invoice.person.type }})
+      </span>
       <span *ngIf="invoice.person.residence">
         <br> {{'literals.residence' | trans }}: {{ invoice.person.residence.name }}
       </span>
@@ -249,7 +255,7 @@
     </p>
     <br>
     <br>
-    <div>
+    <div *ngIf="setting.show_signature">
       <div text-center>
         <div class="signature"></div>
         <span>

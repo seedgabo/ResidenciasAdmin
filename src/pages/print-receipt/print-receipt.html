@@ -38,6 +38,9 @@
                 </td>
                 <td *ngIf="receipt.person" style="padding: 5px;vertical-align: top;text-align: right;padding-bottom: 40px;">
                   {{ receipt.person.name }}
+                  <span *ngIf="setting.show_customer_type && receipt.person.type">
+                    {{'literals.type'}}: ({{'literals.' + receipt.person.type }})
+                  </span>
                   <span *ngIf="receipt.person.residence">
                     <span *ngIf="receipt.person.residence">
                       <br>
@@ -103,7 +106,7 @@
       <br>
       <br>
       <br>
-      <ion-grid class="print-only">
+      <ion-grid *ngIf="setting.show_signature" class="print-only">
         <ion-row>
           <ion-col col-6 text-center>
             <div class="signature"></div>
@@ -233,7 +236,7 @@
       </span>
     </div>
     <br>
-    <div>
+    <div *ngIf="setting.show_signature">
       <div text-center>
         <div class="signature"></div>
         <span>

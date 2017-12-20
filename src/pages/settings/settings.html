@@ -30,5 +30,16 @@
         <ion-radio (ionSelect)="save()" value="pos"></ion-radio>
       </ion-item>
     </div>
+
+    <ion-item>
+      <ion-label>{{'__.Mostrar tipo de cliente en las facturas' | trans }}</ion-label>
+      <ion-toggle (ionChange)="save()" [(ngModel)]="setting.show_customer_type"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>{{'__.Mostrar campo para firmas en las facturas' | trans }}</ion-label>
+      <ion-toggle (ionChange)="save()" [(ngModel)]="setting.show_signature"></ion-toggle>
+    </ion-item>
+
   </ion-list>
 </ion-content>

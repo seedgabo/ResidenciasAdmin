@@ -1,15 +1,15 @@
-import {Api} from './../../providers/api';
-import {Printer} from '@ionic-native/printer';
-import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
-import {SettingProvider} from '../../providers/setting/setting';
+import { Api } from './../../providers/api';
+import { Printer } from '@ionic-native/printer';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { SettingProvider } from '../../providers/setting/setting';
 @IonicPage()
-@Component({selector: 'page-print-invoice', templateUrl: 'print-invoice.html'})
+@Component({ selector: 'page-print-invoice', templateUrl: 'print-invoice.html' })
 export class PrintInvoicePage {
-  invoice : any = {};
-  receipt : any = {};
+  invoice: any = {};
+  receipt: any = {};
   payments = null;
-  constructor(public platform : Platform, public navCtrl : NavController, public navParams : NavParams, public api : Api, public printer : Printer, public setting : SettingProvider) {
+  constructor(public platform: Platform, public navCtrl: NavController, public navParams: NavParams, public api: Api, public printer: Printer, public setting: SettingProvider) {
     this.invoice = navParams.get('invoice');
     this.receipt = navParams.get('receipt');
     if (navParams.get('user')) {
@@ -19,16 +19,20 @@ export class PrintInvoicePage {
       this.invoice.receipt = navParams.get('receipt');
     }
     this.prepare();
+    console.log(this.invoice.person.type)
   }
   prepare() {
     if (this.invoice.user) {
       this.invoice.person = this.invoice.user
+      this.invoice.person.type = "user"
     }
     if (this.invoice.visitor) {
       this.invoice.person = this.invoice.visitor
+      this.invoice.person.type = "visitor"
     }
     if (this.invoice.worker) {
       this.invoice.person = this.invoice.worker
+      this.invoice.person.type = "worker"
     }
     if (this.isJson(this.invoice.payment)) {
       this.payments = JSON.parse(this.invoice.payment);
@@ -58,7 +62,7 @@ export class PrintInvoicePage {
       };
       this
         .printer
-        .print(document.getElementById('toPrint'), {name: 'invoice'})
+        .print(document.getElementById('toPrint'), { name: 'invoice' })
         .then(() => {
           this.complete();
         })
