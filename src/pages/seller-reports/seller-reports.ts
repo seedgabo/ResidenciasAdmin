@@ -1,15 +1,16 @@
-import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams, PopoverController} from 'ionic-angular';
-import {Api} from '../../providers/api';
-import {ModalController} from 'ionic-angular/components/modal/modal-controller';
-import {ActionSheetController} from 'ionic-angular/components/action-sheet/action-sheet-controller';
-import {Platform} from 'ionic-angular/platform/platform';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, PopoverController, Content } from 'ionic-angular';
+import { Api } from '../../providers/api';
+import { ModalController } from 'ionic-angular/components/modal/modal-controller';
+import { ActionSheetController } from 'ionic-angular/components/action-sheet/action-sheet-controller';
+import { Platform } from 'ionic-angular/platform/platform';
 import * as moment from 'moment';
-import {Printer} from '@ionic-native/printer';
-import {SettingProvider} from '../../providers/setting/setting';
+import { Printer } from '@ionic-native/printer';
+import { SettingProvider } from '../../providers/setting/setting';
 @IonicPage()
-@Component({selector: 'page-seller-reports', templateUrl: 'seller-reports.html'})
+@Component({ selector: 'page-seller-reports', templateUrl: 'seller-reports.html' })
 export class SellerReportsPage {
+  @ViewChild(Content) content: Content;
   _invoices = [];
   invoices = [];
   printing = false;
@@ -20,7 +21,7 @@ export class SellerReportsPage {
   loading = false;
   from;
   to;
-  constructor(public navCtrl : NavController, public navParams : NavParams, public api : Api, public setting : SettingProvider, public modal : ModalController, public actionsheet : ActionSheetController, public popover : PopoverController, public platform : Platform, public printer : Printer) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public setting: SettingProvider, public modal: ModalController, public actionsheet: ActionSheetController, public popover: PopoverController, public platform: Platform, public printer: Printer) {
     this.invoices = navParams.get('invoices');
     this._invoices = navParams.get('invoices');
   }
@@ -30,8 +31,11 @@ export class SellerReportsPage {
     this.calculate();
     console.log(this.invoices);
   }
+  ionViewDidEnter() {
+    this.content.resize()
+  }
 
-  prepare() {}
+  prepare() { }
 
   calculate() {
     var total = 0;
@@ -43,9 +47,9 @@ export class SellerReportsPage {
     this
       .invoices
       .forEach((inv) => {
-        if (inv.status !== 'cancelled') 
+        if (inv.status !== 'cancelled')
           total += Number(inv.total);
-        }
+      }
       )
 
     this.total = total;
@@ -54,7 +58,7 @@ export class SellerReportsPage {
   printInvoice(data) {
     this
       .navCtrl
-      .push("PrintInvoicePage", {invoice: data});
+      .push("PrintInvoicePage", { invoice: data });
   }
 
   print(clear = true) {
@@ -67,12 +71,12 @@ export class SellerReportsPage {
       if (this.api.settings.print_type == "pos") {
         promise = this
           .printer
-          .print(document.getElementById('toPrintMini'), {name: 'invoice'})
+          .print(document.getElementById('toPrintMini'), { name: 'invoice' })
 
       } else {
         promise = this
           .printer
-          .print(document.getElementById('toPrint'), {name: 'invoice'})
+          .print(document.getElementById('toPrint'), { name: 'invoice' })
       }
       promise.then(() => {
         this.printing = false;
@@ -87,12 +91,12 @@ export class SellerReportsPage {
   toPrintCallback(clear = true) {
     setTimeout(() => {
       window.print();
-      if (clear) 
+      if (clear)
         setTimeout(() => {
           this.printing = false;
         }, 100);
-      }
-    , 300);
+    }
+      , 300);
   }
 
   actions(invoice) {
@@ -102,8 +106,8 @@ export class SellerReportsPage {
         title: this
           .api
           .trans("literals.actions") + " " + this
-          .api
-          .trans('literals.invoice')
+            .api
+            .trans('literals.invoice')
       })
 
     sheet.addButton({
@@ -121,8 +125,8 @@ export class SellerReportsPage {
         text: this
           .api
           .trans('crud.cancel') + " " + this
-          .api
-          .trans('literals.invoice'),
+            .api
+            .trans('literals.invoice'),
         icon: 'remove-circle',
         handler: () => {
           this.cancelInvoice(invoice)
@@ -136,7 +140,7 @@ export class SellerReportsPage {
         .trans('crud.cancel'),
       icon: "close",
       role: "cancel",
-      handler: () => {}
+      handler: () => { }
 
     }).present();
   }
@@ -232,8 +236,8 @@ export class SellerReportsPage {
         title: this
           .api
           .trans("literals.generate") + " " + this
-          .api
-          .trans('literals.report')
+            .api
+            .trans('literals.report')
       })
 
     sheet.addButton({
@@ -244,7 +248,7 @@ export class SellerReportsPage {
       handler: () => {
         this
           .navCtrl
-          .push("ConsolidateSellPage", {invoices: this.invoices});
+          .push("ConsolidateSellPage", { invoices: this.invoices });
       }
     })
 
@@ -269,8 +273,8 @@ export class SellerReportsPage {
       text: this
         .api
         .trans('crud.clear') + " " + this
-        .api
-        .trans('literals.invoices'),
+          .api
+          .trans('literals.invoices'),
       icon: "remove-circle",
       role: 'destructive',
       cssClass: "icon-danger",
@@ -285,7 +289,7 @@ export class SellerReportsPage {
         .trans('crud.cancel'),
       icon: "close",
       role: "cancel",
-      handler: () => {}
+      handler: () => { }
     }).present();
   }
 
@@ -298,7 +302,7 @@ export class SellerReportsPage {
     this
       .api
       .get(`invoices?where[created_by]=${this.api.user.id}&&whereDategte[created_at]=${start}&whereDatelwe[created_at]=${end}&with[]=user&with[]=visitor&with[]=worker&with[]=items`)
-      .then((data : any) => {
+      .then((data: any) => {
         console.log(data);
         this.loading = false;
         this.invoices = data;
@@ -328,13 +332,13 @@ export class SellerReportsPage {
         from: this.from,
         to: this.to
       })
-    popover.present({ev: ev});
+    popover.present({ ev: ev });
     popover.onWillDismiss((data) => {
-      if (!data) 
+      if (!data)
         return
-      if (data.action == 'search') 
+      if (data.action == 'search')
         this.findByDate(data.from, data.to, data.only_user);
-      if (data.action == 'clear') 
+      if (data.action == 'clear')
         this.clearByDate();
       this.from = data.from
       this.to = data.to

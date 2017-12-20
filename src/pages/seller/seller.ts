@@ -1,18 +1,13 @@
-import { Component } from '@angular/core';
-import {
-  NavController,
-  NavParams,
-  LoadingController,
-  AlertController,
-  ModalController,
-  ActionSheetController
-} from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, NavParams, LoadingController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { Api } from '../../providers/api';
 import moment from 'moment';
 import { ProductSearchPage } from '../product-search/product-search';
 import { Printer } from '@ionic-native/printer';
+import { Content } from 'ionic-angular';
 @Component({ selector: 'page-seller', templateUrl: 'seller.html' })
 export class SellerPage {
+  @ViewChild(Content) content: Content;
   charge = {
     residence_id: null,
     user_id: null,
@@ -29,28 +24,21 @@ export class SellerPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public printer: Printer, public api: Api) { }
 
   ionViewDidEnter() {
-    this
-      .api
-      .storage
-      .get('invoices_history')
+    this.content.resize()
+    this.api.storage.get('invoices_history')
       .then((history) => {
         if (history) {
           this.invoices_history = history;
         }
       })
-    this
-      .api
-      .storage
-      .get('receipts_history')
+    this.api.storage.get('receipts_history')
       .then((history) => {
         if (history) {
           this.receipts_history = history;
         }
       })
     if (this.mode !== 'restricted') {
-      this
-        .items
-        .push({ concept: '', amount: 0, quantity: 0 });
+      this.items.push({ concept: '', amount: 0, quantity: 0 });
     }
   }
 
