@@ -165,7 +165,7 @@
       {{api.settings.address}}
     </p>
     <p text-center no-margin>
-      {{api.settings.phone }}
+      {{'literals.phone_number' | trans }}: {{api.settings.phone }}
     </p>
     <br>
     <p no-margin>
@@ -227,7 +227,7 @@
     <div *ngIf="invoice.person">
       {{'literals.customer' | trans }}: {{ invoice.person.name }}
       <span *ngIf="invoice.person.residence">
-        <br> {{'literals.residence' | trans }} {{ invoice.person.residence.name }}
+        <br> {{'literals.residence' | trans }}: {{ invoice.person.residence.name }}
       </span>
       <br> {{'literals.document' | trans }}: {{ invoice.person.document }}
 

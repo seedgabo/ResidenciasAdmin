@@ -31,7 +31,7 @@
                   {{api.settings.name}}
                   <br> {{api.settings.document}}
                   <br> {{api.settings.address}}
-                  <br> {{api.settings.phone}}
+                  <br> {{'literals.phone_number'}}: {{api.settings.phone}}
 
                 </td>
                 <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
@@ -41,7 +41,7 @@
                   <span *ngIf="receipt.person.residence">
                     <span *ngIf="receipt.person.residence">
                       <br>
-                      <b>{{'literals.residence' | trans }}</b>
+                      <b>{{'literals.residence' | trans }}: </b>
                       {{ receipt.person.residence.name }}
                     </span>
                   </span>
