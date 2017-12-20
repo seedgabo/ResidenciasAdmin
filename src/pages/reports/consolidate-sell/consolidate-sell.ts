@@ -1,11 +1,11 @@
-import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {Api} from '../../../providers/api';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Api } from '../../../providers/api';
 import * as moment from 'moment';
-import {SettingProvider} from '../../../providers/setting/setting';
+import { SettingProvider } from '../../../providers/setting/setting';
 
-@IonicPage({defaultHistory: ["DashPage"]})
-@Component({selector: 'page-consolidate-sell', templateUrl: 'consolidate-sell.html'})
+@IonicPage({ defaultHistory: ["DashPage"] })
+@Component({ selector: 'page-consolidate-sell', templateUrl: 'consolidate-sell.html' })
 export class ConsolidateSellPage {
   invoices = []
   products = {}
@@ -18,7 +18,7 @@ export class ConsolidateSellPage {
   user;
   residence
   cash_desk = null;
-  constructor(public navCtrl : NavController, public navParams : NavParams, public api : Api, public setting : SettingProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public setting: SettingProvider) {
     this.invoices = this
       .navParams
       .get('invoices');
@@ -52,30 +52,19 @@ export class ConsolidateSellPage {
     if (this.close) {
       var data = {
         user_id: this.api.user.id,
-        from: this
-          .from
-          .format('Y-M-D H:mm:ss'),
-        to: this
-          .to
-          .format('Y-M-D H:mm:ss'),
+        from: this.from.format('Y-M-D H:mm:ss'),
+        to: this.to.format('Y-M-D H:mm:ss'),
         invoices: []
       }
-      this
-        .invoices
-        .forEach((inv) => {
-          data
-            .invoices
-            .push(inv.id)
-        })
-      this
-        .api
-        .post('cash_desks', data)
-        .then((resp) => {
-          this.cash_desk = resp;
-          setTimeout(() => {
-            this.print();
-          }, 300)
-        })
+      this.invoices.forEach((inv) => {
+        data.invoices.push(inv.id)
+      })
+      this.api.post('cash_desks', data).then((resp) => {
+        this.cash_desk = resp;
+        setTimeout(() => {
+          this.print();
+        }, 300)
+      })
         .catch((err) => {
           this
             .api
