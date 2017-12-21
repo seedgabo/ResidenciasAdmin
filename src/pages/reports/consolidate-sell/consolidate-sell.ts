@@ -10,6 +10,7 @@ export class ConsolidateSellPage {
   invoices = []
   products = {}
   sums = {}
+  counts = {}
   printing = true;
   from;
   to;
@@ -19,28 +20,18 @@ export class ConsolidateSellPage {
   residence
   cash_desk = null;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public setting: SettingProvider) {
-    this.invoices = this
-      .navParams
-      .get('invoices');
+    this.invoices = this.navParams.get('invoices');
 
     if (this.navParams.get('print')) {
-      this.printing = this
-        .navParams
-        .get('print');
+      this.printing = this.navParams.get('print');
     }
     if (this.navParams.get('close')) {
-      this.close = this
-        .navParams
-        .get('close');
+      this.close = this.navParams.get('close');
     }
 
     if (this.navParams.get('user')) {
-      this.user = this
-        .navParams
-        .get('user');
-      this.residence = this
-        .navParams
-        .get('residence');
+      this.user = this.navParams.get('user');
+      this.residence = this.navParams.get('residence');
     } else {
       this.user = this.api.user;
       this.residence = this.api.residence;
@@ -82,25 +73,22 @@ export class ConsolidateSellPage {
       this.to = moment(this.invoices[this.invoices.length - 1].created_at)
     }
 
-    this
-      .invoices
-      .forEach((inv) => {
-        inv
-          .items
-          .forEach(item => {
-            if (!this.products[item.concept]) {
-              this.products[item.concept] = {
-                quantity: Number(item.quantity),
-                amount: Number(item.amount)
-              };
-            } else {
-              this.products[item.concept].quantity += Number(item.quantity);
-            }
-          });
-        this.total += Number(inv.total);
-        this.getPaymentsFromInvoices(inv);
-      })
+    this.invoices.forEach((inv) => {
+      inv.items.forEach(item => {
+        if (!this.products[item.concept]) {
+          this.products[item.concept] = {
+            quantity: Number(item.quantity),
+            amount: Number(item.amount)
+          };
+        } else {
+          this.products[item.concept].quantity += Number(item.quantity);
+        }
+      });
+      this.total += Number(inv.total);
+      this.getPaymentsFromInvoices(inv);
+    })
   }
+
   print() {
     window.print()
   }
@@ -131,11 +119,15 @@ export class ConsolidateSellPage {
     }
     return true;
   }
+
+
   addTosums(method, amount) {
     if (!this.sums[method]) {
       this.sums[method] = Number(amount);
+      this.counts[method] = 1
     } else {
       this.sums[method] += Number(amount);
+      this.counts[method]++
     }
   }
 
