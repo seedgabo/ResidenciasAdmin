@@ -51,6 +51,11 @@
           {{ api.trans('literals.settings') }}
         </button>
 
+        <button menuClose ion-item (click)="openPage({component:'AboutPage'})" icon-left>
+          <ion-icon name="information-circle"></ion-icon>
+          {{ api.trans('literals.about') }}
+        </button>
+
         <button menuClose ion-item (click)="logout()" icon-left>
           <ion-icon color="primary" name="log-out"></ion-icon>
           {{ api.trans('literals.logout') }}
