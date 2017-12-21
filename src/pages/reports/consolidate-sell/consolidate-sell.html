@@ -64,7 +64,7 @@
       <ion-item *ngFor="let sum of (sums|keys)">
         <b>{{'literals.'+ sum.key | trans }}:</b>
         <p>
-          {{ counts[sum.key] }} {{ ('literals.invoice' + (counts[sum.key]==1 ?'1':'') ) | trans }}
+          {{ counts[sum.key] }} {{ ('literals.invoice' + (counts[sum.key]>1 ?'s':'') ) | trans }}
         </p>
         <p item-right>{{sum.value | currency:'USD':true:'1.2-2'}}</p>
       </ion-item>
