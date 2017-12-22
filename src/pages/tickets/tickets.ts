@@ -36,7 +36,7 @@ export class TicketsPage {
   getWaitingTickets(refresher = null) {
     this.loading = true
     this.api.ready.then(() => {
-      this.api.get(`tickets?${this.mode == 'pendings' ? "scope[waiting]=" : ""}&paginate=150&with[]=user&with[]=user.residence&order[created_at]=desc${this.query != '' ? `&whereLike[subject]=${this.query}orWhereLike[text]=${this.query}` : ''}`)
+      this.api.get(`tickets?${this.mode == 'pendings' ? "scope[waiting]=" : ""}&paginate=150&with[]=user&with[]=user.residence&order[created_at]=desc${this.query != '' ? `&orWhereLike[subject]=${this.query}orWhereLike[text]=${this.query}` : ''}`)
         .then((data) => {
           console.log(data)
           this._tickets = data;
