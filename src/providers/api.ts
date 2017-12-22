@@ -466,6 +466,7 @@ export class Api {
 
   Error(error) {
     var message = "";
+    console.log(error);
     if (error.status == 500) {
       message = this.trans("__.Internal Server Error")
     }

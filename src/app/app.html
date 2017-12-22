@@ -25,6 +25,12 @@
           {{ api.trans('literals.panic logs') }}
         </button>
 
+
+        <button *ngIf="canTickets()" menuClose ion-item (click)="openPage({component:'TicketsPage'})" icon-left>
+          <ion-icon color="primary" name="easel"></ion-icon>
+          {{ api.trans('literals.tickets') }}
+        </button>
+
         <button *ngIf="CanCorrespondence()" menuClose ion-item (click)="openPage({component:'CorrespondencesPage'})" icon-left>
 
           <ion-icon color="primary" name="cube"></ion-icon>

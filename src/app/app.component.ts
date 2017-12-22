@@ -127,6 +127,15 @@ export class MyApp {
       }
     return false;
   }
+  canTickets() {
+    if (this.api.roles && this.api.modules && this.api.modules.tickets)
+      for (var i = 0; i < this.api.roles.length; i++) {
+        if (this.api.roles[i].name == 'Manage tickets' || this.api.roles[i].name == 'SuperAdmin') {
+          return true;
+        }
+      }
+    return false;
+  }
   canZones() {
     if (this.api.roles && this.api.modules && this.api.modules.reservations)
       for (var i = 0; i < this.api.roles.length; i++) {
