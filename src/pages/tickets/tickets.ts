@@ -11,7 +11,7 @@ export class TicketsPage {
   @ViewChild(Refresher) refresher: Refresher;
   _tickets: any = { data: [] }
   query = ""
-  mode = 'all'
+  mode = 'pendings'
   translations = {
     'today': 'Hoy',
     'yesterday': 'Ayer',
@@ -36,7 +36,7 @@ export class TicketsPage {
   getWaitingTickets(refresher = null) {
     this.loading = true
     this.api.ready.then(() => {
-      this.api.get(`tickets?scope[waiting]=&paginate=100&with[]=user&with[]=user.residence&order[created_at]=desc${this.query != '' ? `&whereLike[subject]=${this.query}orWhereLike[text]=${this.query}` : ''}`)
+      this.api.get(`tickets?${this.mode == 'pendings' ? "scope[waiting]=" : ""}&paginate=150&with[]=user&with[]=user.residence&order[created_at]=desc${this.query != '' ? `&whereLike[subject]=${this.query}orWhereLike[text]=${this.query}` : ''}`)
         .then((data) => {
           console.log(data)
           this._tickets = data;
@@ -115,12 +115,15 @@ export class TicketsPage {
           text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.pendings'),
           handler: () => {
             this.mode = 'pendings'
+            this.getWaitingTickets()
+
           }
         },
         {
           text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.all'),
           handler: () => {
             this.mode = 'all'
+            this.getWaitingTickets()
           }
         },
         {

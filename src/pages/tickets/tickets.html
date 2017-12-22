@@ -5,6 +5,9 @@
     </button>
     <ion-title>{{ 'literals.tickets' | trans }}</ion-title>
     <ion-buttons end>
+      <b *ngIf="_tickets.total" color="light" ion-text>
+        {{ _tickets.data?.length }} {{'__.of' | trans }} {{ _tickets.total }}
+      </b>
       <button ion-button icon-only (click)="more($event)">
         <ion-icon name="funnel"></ion-icon>
       </button>
