@@ -1,13 +1,16 @@
 import { Api } from './../../providers/api';
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ActionSheetController, Events } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, ActionSheetController, Events, Refresher } from 'ionic-angular';
+import * as moment from 'moment'
 @IonicPage()
 @Component({
   selector: 'page-correspondences',
   templateUrl: 'correspondences.html',
 })
 export class CorrespondencesPage {
+  @ViewChild(Refresher) refresher: Refresher;
 
+  order_by = 'date'
   query = "";
   correspondences = [];
   handler = (data) => {
@@ -15,11 +18,24 @@ export class CorrespondencesPage {
   }
   filter_status = '';
   filtered = [];
+  translations = {
+    'today': 'Hoy',
+    'yesterday': 'Ayer',
+    'week': 'Esta Semana',
+    'last_week': 'La Semana Pasada',
+    'month': 'Este Mes',
+    'last_month': 'El Mes Pasado',
+    'older': 'Antiguos'
+  }
+  groups = {}
   constructor(public navCtrl: NavController, public navParams: NavParams, public action: ActionSheetController, public api: Api, public events: Events) {
   }
 
   ionViewDidLoad() {
-    this.getCorrespondences();
+    this.refresher._top = "50px"
+    this.refresher.state = "refreshing"
+    this.refresher._beginRefresh()
+    // this.getCorrespondences();
     this.events.subscribe("CorrespondenceCreated", this.handler);
   }
 
@@ -28,22 +44,33 @@ export class CorrespondencesPage {
   }
 
   getCorrespondences(refresher = null) {
-    this.api.get('correspondences?order[status]=desc&order[id]=desc&with[]=user&with[]=residence&with[]=receptor&limit=1000')
-      .then((data: any) => {
-        console.log(data);
-        this.correspondences = data;
-        this.filter();
-        if (refresher) {
-          refresher.complete();
-        }
-      })
-      .catch((err) => {
-        this.api.Error(err);
-        if (refresher) {
-          refresher.complete();
-        }
-        console.error(err);
-      })
+    this.api.ready.then(() => {
+      this.api.get('correspondences?order[status]=desc&order[id]=desc&with[]=user&with[]=residence&with[]=receptor&limit=500')
+        .then((data: any) => {
+          console.log(data);
+          this.correspondences = data;
+          this.filter();
+          if (refresher) {
+            refresher.complete();
+          }
+        })
+        .catch((err) => {
+          this.api.Error(err);
+          if (refresher) {
+            refresher.complete();
+          }
+          console.error(err);
+        })
+    })
+  }
+
+  changeOrder() {
+    if (this.order_by == 'date') {
+      this.order_by = 'status'
+    }
+    else {
+      this.order_by = 'date'
+    }
   }
 
   filter() {
@@ -52,16 +79,55 @@ export class CorrespondencesPage {
         return corres.status.toLowerCase().indexOf(this.filter_status) > -1
       });
     }
-    var finder = this.query.toLowerCase();
-    this.filtered = this.correspondences.filter((corres) => {
-      return corres.status.toLowerCase().indexOf(this.filter_status) > -1
-        && (corres.item.toLowerCase().indexOf(finder) > -1
-          || (corres.user && corres.user.name.toLowerCase().indexOf(finder) > -1)
-          || (corres.residence && corres.residence.name.toLowerCase().indexOf(finder) > -1)
-          || (corres.residence && corres.residence.name.toLowerCase().indexOf(finder) > -1)
-          || (corres.receptor && corres.receptor.name.toLowerCase().indexOf(finder) > -1)
-        )
-    });
+    else {
+      var finder = this.query.toLowerCase();
+      this.filtered = this.correspondences.filter((corres) => {
+        return corres.status.toLowerCase().indexOf(this.filter_status) > -1
+          && (corres.item.toLowerCase().indexOf(finder) > -1
+            || (corres.user && corres.user.name.toLowerCase().indexOf(finder) > -1)
+            || (corres.residence && corres.residence.name.toLowerCase().indexOf(finder) > -1)
+            || (corres.residence && corres.residence.name.toLowerCase().indexOf(finder) > -1)
+            || (corres.receptor && corres.receptor.name.toLowerCase().indexOf(finder) > -1)
+          )
+      });
+    }
+    this.groups = this.groupByDates(this.filtered, 'created_at');
+  }
+
+  groupByDates(array, key) {
+    if (key == null) {
+      key = 'date';
+    }
+    var now = moment();
+    var ordered = {
+      today: [],
+      yesterday: [],
+      week: [],
+      last_week: [],
+      month: [],
+      last_month: [],
+      older: []
+    };
+    for (var i = 0, len = array.length; i < len; i++) {
+      var item = array[i];
+      var date = moment(item[key]);
+      if (now.isSame(date, 'day')) {
+        ordered.today[ordered.today.length] = item;
+      } else if (now.clone().subtract(1, 'day').isSame(date, 'day')) {
+        ordered.yesterday[ordered.yesterday.length] = item;
+      } else if (now.clone().isSame(date, 'week')) {
+        ordered.week[ordered.week.length] = item;
+      } else if (now.clone().subtract(1, 'week').isSame(date, 'week')) {
+        ordered.last_week[ordered.last_week.length] = item;
+      } else if (now.clone().isSame(date, 'month')) {
+        ordered.month[ordered.month.length] = item;
+      } else if (now.clone().subtract(1, 'month').isSame(date, 'month')) {
+        ordered.last_month[ordered.last_month.length] = item;
+      } else {
+        ordered.older[ordered.older.length] = item;
+      }
+    }
+    return ordered;
   }
 
   addCorrespondece() {
