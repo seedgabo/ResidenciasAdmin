@@ -68,21 +68,21 @@
                 {{corres.item}}
                 <span *ngIf="corres.quantity > 1"> ({{corres.quantity}})</span>
               </h2>
-              <p *ngIf="corres.user">
+              <h3 *ngIf="corres.user">
                 {{ corres.user.name}}
                 <span *ngIf="corres.user.residence"> - {{ corres.user.residence.name }} </span>
-              </p>
-              <ion-note>
-                {{ corres.created_at | amDateFormat:'LLL' }}
-              </ion-note>
+              </h3>
               <p *ngIf="corres.receptor">
                 <b>{{'literals.receptor' | trans }}</b>
                 {{corres.receptor.name}}
               </p>
-              <p text-left text-wrap *ngIf="corres.delivered_at">
-                <b>{{'literals.delivered_at' | trans }}</b>
+              <ion-note>
+                {{ corres.created_at | amDateFormat:'LLL' }}
+              </ion-note>
+              <ion-note text-left text-wrap *ngIf="corres.delivered_at">
+                <b>{{'literals.delivered at' | trans }}</b>
                 {{ corres.delivered_at | amCalendar }}
-              </p>
+              </ion-note>
               <ion-badge item-right [ngClass]="corres.status">
                 {{ 'literals.'+ corres.status | trans }}
               </ion-badge>
