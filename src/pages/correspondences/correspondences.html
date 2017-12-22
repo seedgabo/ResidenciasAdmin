@@ -2,13 +2,14 @@
   <ion-navbar color="primary">
     <ion-title>{{'literals.correspondences' | trans}}</ion-title>
     <ion-buttons end>
+      <button ion-button icon-only (click)="changeOrder()">
+        <ion-icon [name]="order_by == 'date' ? 'calendar' : 'list'"></ion-icon>
+      </button>
+
       <button ion-button icon-only (click)="filterActions()">
         <ion-icon name="more"></ion-icon>
       </button>
 
-      <button ion-button icon-only (click)="changeOrder()">
-        <ion-icon [name]="order_by == 'date' ? 'calendar' : 'list'"></ion-icon>
-      </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
