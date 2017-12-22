@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{ticket.subject}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="actions()">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-card>
+    <ion-card-header text-center>
+      {{ticket.subject}}
+    </ion-card-header>
+    <ion-card-content>
+      <div [innerHTML]="ticket.text"></div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card-header>
+    <b>
+      <span ion-text color="primary">{{'literals.status' | trans }}</span>
+    </b>
+    <span>{{'literals.'+ ticket.status | trans }}</span>
+  </ion-card-header>
+
+  <div class="form-add-comment" *ngIf="adding">
+    <ion-item>
+      <ion-label floating>{{'literals.comment' | trans }}</ion-label>
+      <ion-textarea [(ngModel)]="new_comment.text"></ion-textarea>
+    </ion-item>
+    <button ion-button color="secondary" full clear (click)="addComment()" [disabled]="loading || !canAddComment()">{{'crud.save'| trans }}</button>
+  </div>
+
+  <div text-center>
+    <button ion-button color="primary" clear small (click)="adding=true" item-right>
+      {{ 'crud.add' | trans }} {{ 'literals.comment' | trans }}
+    </button>
+  </div>
+  <ion-card-header color="primary">
+    {{'literals.comments' | trans }}
+  </ion-card-header>
+
+  <ion-card *ngIf="ticket.comments">
+    <ion-list>
+      <ion-item *ngFor="let comment of ticket.comments">
+        <p>
+          {{ comment.text }}
+        </p>
+        <p *ngIf="comment.user" text-right>
+          <ion-avatar item-lef *ngIf="comment.user && comment.user.image_url" t>
+            <img [src]="comment.user.image_url" alt="profile" style="width:40px;height:40px; border-radius:50%">
+          </ion-avatar>
+          {{comment.user.name}}
+          <span *ngIf="comment.user.residence">
+            - {{comment.user.residence.name}}
+          </span>
+        </p>
+        <small text-right>
+          {{comment.created_at | amCalendar}}
+        </small>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+</ion-content>

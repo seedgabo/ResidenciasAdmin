@@ -1,22 +1,33 @@
 <ion-header>
   <ion-navbar color="primary">
+    <button ion-button menuToggle icon-only>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>{{ 'literals.tickets' | trans }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="more($event)">
+        <ion-icon name="funnel"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
-
 </ion-header>
+
 <ion-content>
+  <ion-searchbar [debounce]="1500" (ionBlur)="getWaitingTickets()" [(ngModel)]="query" (ionChange)="filter()">
+  </ion-searchbar>
   <ion-refresher (ionRefresh)="query = '';getWaitingTickets($event)" [enabled]="!loading" color="primary">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
   <div text-center>
-    <ion-spinner color="primary" *ngIf="loading"></ion-spinner>
     <div *ngIf="!loading && _tickets && _tickets.data.length === 0">
-      <img src=".assets/logo-happy.png" alt="no ticktes">
+      <img src="/assets/logo-happy.png" alt="no ticktes">
       <h4 ion-text color="primary">
         {{'__.No hay tickets Pendientes' | trans }}
       </h4>
     </div>
   </div>
+
   <div *ngFor="let group of groups | keys">
     <div *ngIf="group.value.length > 0">
       <ion-card-header color="primary">

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ActionSheetController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, ActionSheetController, Refresher } from 'ionic-angular';
 import { Api } from '../../providers/api';
 import * as moment from 'moment';
 @IonicPage()
@@ -8,8 +8,10 @@ import * as moment from 'moment';
   templateUrl: 'tickets.html',
 })
 export class TicketsPage {
-  _tickets: any = { data: [] };
+  @ViewChild(Refresher) refresher: Refresher;
+  _tickets: any = { data: [] }
   query = ""
+  mode = 'all'
   translations = {
     'today': 'Hoy',
     'yesterday': 'Ayer',
@@ -24,14 +26,17 @@ export class TicketsPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public actionsheet: ActionSheetController) {
   }
 
-  ionViewDidLoad() {
-    this.getWaitingTickets()
+  ionViewDidEnter() {
+    this.refresher._top = "50px"
+    this.refresher.state = "refreshing"
+    this.refresher._beginRefresh()
+    // this.getWaitingTickets()
   }
 
   getWaitingTickets(refresher = null) {
     this.loading = true
     this.api.ready.then(() => {
-      this.api.get(`tickets?scope[waiting]=&paginate=100&with[]=user&with[]=user.residence&order[created_at]=asc${this.query != '' ? `&whereLike[subject]=${this.query}orWhereLike[text]=${this.query}` : ''}`)
+      this.api.get(`tickets?scope[waiting]=&paginate=100&with[]=user&with[]=user.residence&order[created_at]=desc${this.query != '' ? `&whereLike[subject]=${this.query}orWhereLike[text]=${this.query}` : ''}`)
         .then((data) => {
           console.log(data)
           this._tickets = data;
@@ -100,6 +105,30 @@ export class TicketsPage {
       }
     }
     return ordered;
+  }
+
+  more(ev) {
+    this.actionsheet.create({
+      title: this.api.trans('literals.actions'),
+      buttons: [
+        {
+          text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.pendings'),
+          handler: () => {
+            this.mode = 'pendings'
+          }
+        },
+        {
+          text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.all'),
+          handler: () => {
+            this.mode = 'all'
+          }
+        },
+        {
+          text: this.api.trans('crud.cancel'),
+          role: 'cancel',
+        },
+      ]
+    }).present()
   }
 
   actions(ticket) {
@@ -171,7 +200,7 @@ export class TicketsPage {
 
   openTicket(ticket) {
     console.log(ticket)
-    this.navCtrl.push('TicktPage', { ticket: ticket }, { animation: 'ios' });
+    this.navCtrl.push('TicketPage', { ticket: ticket }, { animation: 'ios' });
   }
 
 }
