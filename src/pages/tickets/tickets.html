@@ -16,7 +16,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-searchbar [debounce]="1500" (ionBlur)="getWaitingTickets()" [(ngModel)]="query" (ionChange)="filter()">
+  <ion-searchbar [debounce]="1500" [(ngModel)]="query" (ionChange)="getWaitingTickets()">
   </ion-searchbar>
   <ion-refresher (ionRefresh)="query = '';getWaitingTickets($event)" [enabled]="!loading" color="primary">
     <ion-refresher-content></ion-refresher-content>
@@ -24,7 +24,7 @@
 
   <div text-center>
     <div *ngIf="!loading && _tickets && _tickets.data.length === 0">
-      <img src="/assets/logo-happy.png" alt="no ticktes">
+      <img src="./assets/logo-happy.png" alt="no tickets" style="width:100%;max-width:300px;">
       <h4 ion-text color="primary">
         {{'__.No hay tickets Pendientes' | trans }}
       </h4>
