@@ -11,7 +11,8 @@
 
 
 <ion-content>
-
+  <ion-refresher (ionRefresh)="sync($event)">
+  </ion-refresher>
 
   <div padding text-center class="background">
     <img src="http://residenciasonline.com/residencias/public/img/logo.png" class="logo">
