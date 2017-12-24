@@ -16,7 +16,7 @@
 
                   <br> {{ 'literals.date' | trans }}: {{invoice.date | amDateFormat:'LLL'}}
                   <br> {{'date.from'| trans }} {{invoice.created_at | amDateFormat:'LLL'}}
-                  <br> {{'literals.worker' | trans }} {{ api.user.full_name }}
+                  <br> {{'literals.seller' | trans }} {{ api.user.name }}
                 </td>
               </tr>
             </table>
@@ -31,13 +31,18 @@
                   {{api.settings.name}}
                   <br> {{api.settings.document}}
                   <br> {{api.settings.address}}
-                  <br> {{api.settings.phone}}
+                  <br> {{'literals.phone_number' | trans }} {{api.settings.phone}}
 
                 </td>
                 <td style="padding: 4px;vertical-align: top;padding-bottom: 10px;">
                 </td>
                 <td *ngIf="invoice.person" style="padding: 4px;vertical-align: top;text-align: right;padding-bottom: 10px;">
                   {{ invoice.person.name }}
+                  <span *ngIf="setting.show_customer_type && invoice.person.type">
+                    {{'literals.type' | trans }}: {{'literals.' + invoice.person.type | trans }}
+                    <span *ngIf="invoice.person.relationship">({{ 'literals.'+ invoice.person.relationship | trans }})</span>
+
+                  </span>
                   <span *ngIf="invoice.person.residence">
                     <span *ngIf="invoice.person.residence">
                       <br>
@@ -130,12 +135,12 @@
         <span>{{invoice.note}}</span>
       </p>
       <br>
-      <ion-grid class="print-only">
+      <ion-grid *ngIf="setting.show_signature" class="print-only">
         <ion-row>
           <ion-col col-6 text-center>
             <div class="signature"></div>
             <span>
-              {{'literals.signature' | trans }} {{'literals.person' | trans }}
+              {{'literals.signature' | trans }} {{'literals.customer' | trans }}
             </span>
           </ion-col>
           <ion-col col-6 text-center>
@@ -147,7 +152,6 @@
         </ion-row>
       </ion-grid>
     </div>
-
   </div>
 
 
@@ -166,22 +170,16 @@
       {{api.settings.address}}
     </p>
     <p text-center no-margin>
-      {{api.settings.phone }}
+      {{'literals.phone_number' | trans }}: {{api.settings.phone }}
     </p>
     <br>
     <p no-margin>
       <b>
-        {{'literals.invoices' | trans }} # {{invoice.number }}
+        {{'literals.invoice' | trans }} # {{invoice.number }}
       </b>
     </p>
     <p no-margin>
       {{'literals.date' | trans }}: {{ invoice.created_at | amDateFormat:'DD MMMM YYYY - h:mm a'}}
-    </p>
-    <p no-margin>
-      <b>
-        {{'literals.worker' | trans }}:
-      </b>
-      <span>{{ api.user.full_name }}</span>
     </p>
     <span *ngIf="payments">
       <p *ngFor="let pay of payments">
@@ -222,31 +220,44 @@
       </tr>
     </table>
     <br>
+    <div>
+      {{'literals.seller' | trans }}: {{ invoice.creator ? invoice.creator.name : api.user.name }}
+    </div>
     <div *ngIf="invoice.person">
-      {{'literals.person' | trans }}: {{ invoice.person.name }}
-      <span *ngIf="invoice.person.residence"> - {{ invoice.person.residence.name }}</span>
+      {{'literals.customer' | trans }}: {{ invoice.person.name }}
+      <span *ngIf="setting.show_customer_type && invoice.person.type">
+        <br> {{'literals.type' | trans }}: {{'literals.' + invoice.person.type | trans }}
+        <span *ngIf="invoice.person.relationship">({{ 'literals.'+ invoice.person.relationship | trans }})</span>
+
+      </span>
+      <span *ngIf="invoice.person.residence">
+        <br> {{'literals.residence' | trans }}: {{ invoice.person.residence.name }}
+      </span>
       <br> {{'literals.document' | trans }}: {{ invoice.person.document }}
+
       <span *ngIf="invoice.person.phone_number">
-        <br> {{'literals.phone_number' | trans }}: {{invoice.person.phone_number}}</span>
+        <br> {{'literals.phone_number' | trans }}: {{invoice.person.phone_number}}
+      </span>
     </div>
     <div *ngIf="!(invoice.person)">
-      {{'literals.person' | trans }}: _______________________________
+      {{'literals.customer' | trans }}: _______________________________
       <br> {{'literals.document' | trans }}: ______________________________
       <span>
         <br> {{'literals.phone_number' | trans }}: ___________________
       </span>
     </div>
     <br>
-    <p text-center *ngIf="invoice.note">
+    <p text-center *ngIf="invoice.note" text-wrap wrap>
       <b>{{'literals.note' | trans }}</b>
       <span>{{invoice.note}}</span>
     </p>
     <br>
-    <div>
+    <br>
+    <div *ngIf="setting.show_signature">
       <div text-center>
         <div class="signature"></div>
         <span>
-          {{'literals.signature' | trans }} {{'literals.person' | trans }}
+          {{'literals.signature' | trans }} {{'literals.customer' | trans }}
         </span>
       </div>
       <br>

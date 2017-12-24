@@ -78,7 +78,7 @@ export class VisitorPage {
       relationship: this.visitor.relationship
     };
     if (this.action == 'create') {
-      this.api.post('visitors', data).then((response) => {
+      this.api.post('visitors?with[]=residence', data).then((response) => {
         console.log(response);
         this.viewCtrl.dismiss(response);
         this.loading = false;
@@ -88,7 +88,7 @@ export class VisitorPage {
       });
     }
     if (this.action == 'update') {
-      this.api.put('visitors/' + this.visitor.id, data).then((response) => {
+      this.api.put('visitors/' + this.visitor.id + "?with[]=residence", data).then((response) => {
         console.log(response);
         this.loading = false;
         this.viewCtrl.dismiss(response);

@@ -31,7 +31,7 @@
                   {{api.settings.name}}
                   <br> {{api.settings.document}}
                   <br> {{api.settings.address}}
-                  <br> {{api.settings.phone}}
+                  <br> {{'literals.phone_number'}}: {{api.settings.phone}}
 
                 </td>
                 <td style="padding: 5px;vertical-align: top;padding-bottom: 40px;">
@@ -41,7 +41,7 @@
                   <span *ngIf="receipt.person.residence">
                     <span *ngIf="receipt.person.residence">
                       <br>
-                      <b>{{'literals.residence' | trans }}</b>
+                      <b>{{'literals.residence' | trans }}: </b>
                       {{ receipt.person.residence.name }}
                     </span>
                   </span>
@@ -103,12 +103,12 @@
       <br>
       <br>
       <br>
-      <ion-grid class="print-only">
+      <ion-grid *ngIf="setting.show_signature" class="print-only">
         <ion-row>
           <ion-col col-6 text-center>
             <div class="signature"></div>
             <span>
-              {{'literals.signature' | trans }} {{'literals.person' | trans }}
+              {{'literals.signature' | trans }} {{'literals.customer' | trans }}
             </span>
           </ion-col>
           <ion-col col-6 text-center>
@@ -125,7 +125,6 @@
 
 
   <div *ngIf="setting.print_type === 'pos'" class="printable punto" id="toPrintMini">
-    <br>
     <div text-center>
       <img [src]="api.url + 'img/logo.png'" style="max-height:60pt; max-width:60pt;">
     </div>
@@ -139,7 +138,7 @@
       {{api.settings.address}}
     </p>
     <p text-center no-margin>
-      {{api.settings.phone }}
+      {{'literals.phone_number' | trans }} {{api.settings.phone }}
     </p>
     <br>
     <p no-margin>
@@ -158,9 +157,13 @@
     </p>
     <p no-margin>
       <b>
-        {{'literals.person' | trans }}:
+        {{'literals.customer' | trans }}:
       </b>
       <span>{{ receipt.person.name }}</span>
+      <span *ngIf="setting.show_customer_type && receipt.person.type">
+        <br> {{'literals.type' | trans }}: {{'literals.' + receipt.person.type | trans }}
+        <span *ngIf="receipt.person.relationship">({{ 'literals.'+ receipt.person.relationship | trans }})</span>
+      </span>
       <span *ngIf="receipt.person.residence">
         <br>
         <b>{{'literals.residence' | trans }}</b>
@@ -208,7 +211,8 @@
         </tr>
 
         <tr class="total">
-          <td colspan="4" style="padding: 5px;vertical-align: top; text-align: center;border-top: 2px solid #eee;font-weight: bold;">
+          <td colspan="4" style="padding: 5px;vertical-align: top; text-align: center;border-top: 2px solid #eee;font-weight: bold;"
+            text-wrap wrap>
             {{ receipt.note }}
           </td>
         </tr>
@@ -217,30 +221,31 @@
     <div class="separator"></div>
     <br>
     <div *ngIf="receipt.person">
-      {{'literals.person' | trans }}: {{ receipt.person.name }}
-      <span *ngIf="receipt.person.residence"> - {{ receipt.person.residence.name }}</span>
+      {{'literals.customer' | trans }}: {{ receipt.person.name }}
+      <span *ngIf="setting.show_customer_type && receipt.person.type">
+        <br> {{'literals.type' | trans }}: {{'literals.' + receipt.person.type | trans }}
+        <span *ngIf="receipt.person.relationship">({{ 'literals.'+ receipt.person.relationship | trans }})</span>
+      </span>
+      <span *ngIf="receipt.person.residence">
+        <br> {{'literals.residence' | trans }} {{ receipt.person.residence.name }}
+      </span>
       <br> {{'literals.document' | trans }}: {{ receipt.person.document }}
       <span *ngIf="receipt.person.phone_number">
         <br> {{'literals.phone_number' | trans }}: {{receipt.person.phone_number}}</span>
     </div>
     <div *ngIf="!(receipt.person)">
-      {{'literals.person' | trans }}: _______________________________
+      {{'literals.customer' | trans }}: _______________________________
       <br> {{'literals.document' | trans }}: ______________________________
       <span>
         <br> {{'literals.phone_number' | trans }}: ___________________
       </span>
     </div>
     <br>
-    <p text-center *ngIf="receipt.note">
-      <b>{{'literals.note' | trans }}</b>
-      <span>{{receipt.note}}</span>
-    </p>
-    <br>
-    <div>
+    <div *ngIf="setting.show_signature">
       <div text-center>
         <div class="signature"></div>
         <span>
-          {{'literals.signature' | trans }} {{'literals.person' | trans }}
+          {{'literals.signature' | trans }} {{'literals.customer' | trans }}
         </span>
       </div>
       <br>

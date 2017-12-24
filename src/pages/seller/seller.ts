@@ -1,18 +1,13 @@
-import {Component} from '@angular/core';
-import {
-  NavController,
-  NavParams,
-  LoadingController,
-  AlertController,
-  ModalController,
-  ActionSheetController
-} from 'ionic-angular';
-import {Api} from '../../providers/api';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, NavParams, LoadingController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
+import { Api } from '../../providers/api';
 import moment from 'moment';
-import {ProductSearchPage} from '../product-search/product-search';
-import {Printer} from '@ionic-native/printer';
-@Component({selector: 'page-seller', templateUrl: 'seller.html'})
+import { ProductSearchPage } from '../product-search/product-search';
+import { Printer } from '@ionic-native/printer';
+import { Content } from 'ionic-angular';
+@Component({ selector: 'page-seller', templateUrl: 'seller.html' })
 export class SellerPage {
+  @ViewChild(Content) content: Content;
   charge = {
     residence_id: null,
     user_id: null,
@@ -26,31 +21,24 @@ export class SellerPage {
   toPrint;
   invoices_history = [];
   receipts_history = [];
-  constructor(public navCtrl : NavController, public navParams : NavParams, public loading : LoadingController, public alert : AlertController, public modal : ModalController, public actionsheet : ActionSheetController, public printer : Printer, public api : Api) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public printer: Printer, public api: Api) { }
 
   ionViewDidEnter() {
-    this
-      .api
-      .storage
-      .get('invoices_history')
+    this.content.resize()
+    this.api.storage.get('invoices_history')
       .then((history) => {
         if (history) {
           this.invoices_history = history;
         }
       })
-    this
-      .api
-      .storage
-      .get('receipts_history')
+    this.api.storage.get('receipts_history')
       .then((history) => {
         if (history) {
           this.receipts_history = history;
         }
       })
     if (this.mode !== 'restricted') {
-      this
-        .items
-        .push({concept: '', amount: 0, quantity: 0});
+      this.items.push({ concept: '', amount: 0, quantity: 0 });
     }
   }
 
@@ -75,6 +63,7 @@ export class SellerPage {
         this.charge.residence_id = data.person.residence_id;
       }
       this.person = data.person;
+      this.person.type = data.type
       this.type = data.type;
     })
 
@@ -129,7 +118,7 @@ export class SellerPage {
     modal.onDidDismiss((data, role) => {
       if (role !== 'cancel') {
         console.log(data, role);
-        this._addItem({concept: data.name, amount: data.price, quantity: 1})
+        this._addItem({ concept: data.name, amount: data.price, quantity: 1 })
       }
     });
   }
@@ -142,11 +131,11 @@ export class SellerPage {
 
   proccess() {
     this
-      .askNote(this.api.trans("__.recibo de anexo a su proxima :invoice", {
-      invoice: this
-        .api
-        .trans('literals.invoice')
-    }))
+      .askNote(this.api.trans("__.recibo de anexo a su siguiente :invoice", {
+        invoice: this
+          .api
+          .trans('literals.invoice')
+      }))
       .then((note) => {
         var procesing = 0;
         var loading = this
@@ -199,83 +188,63 @@ export class SellerPage {
   }
 
   proccessWithInvoice() {
-    this
-      .askForPayment()
-      .then((transaction) => {
-        this
-          .askNote()
-          .then((note) => {
+    this.askForPayment().then((transaction) => {
+      this.askNote().then((note) => {
 
-            var loading = this
-              .loading
-              .create({
-                content: this
-                  .api
-                  .trans('__.procesando')
-              });
-            loading.present();
-            var data : any = {
-              items: this.items,
-              type: 'normal',
-              payment: transaction,
-              note: note,
-              date: (new Date())
-                .toISOString()
-                .substring(0, 10)
-            };
-            data[this.type + '_id'] = this.person.id;
-            if (this.type == 'user') {
-              data.residence_id = this.charge.residence_id;
-            }
-            this
-              .api
-              .post('invoices', data)
-              .then((invoice : any) => {
-                this
-                  .api
-                  .post(`invoices/${invoice.id}/Payment`, {transaction: transaction})
-                  .then((data : any) => {
-                    if (this.charge.user_id) {
-                      var added;
-                      if (this.items.length === 1) 
-                        added = `${this.items[0].concept}: ${this.items[0].quantity * this.items[0].amount} $`
-                      else 
-                        added = this.total(invoice) + "$";
-                      this.sendPush("Compra Realizada! " + added, this.charge.user_id);
-                    }
-                    invoice.status = 'paid';
-                    loading
-                      .dismiss()
-                      .then(() => {
-                        this.goPrint(invoice, data.receipt);
-                      });
-                  })
-                  .catch((err) => {
-                    console.error(err);
-                    loading.dismiss();
-                    this
-                      .alert
-                      .create({
-                        title: "ERROR",
-                        message: JSON.stringify(err)
-                      })
-                      .present();
-                  });
+        var loading = this.loading.create({
+          content: this.api.trans('__.procesando')
+        });
+        loading.present();
+        var data: any = {
+          items: this.items,
+          type: 'normal',
+          payment: transaction,
+          note: note,
+          date: (new Date()).toISOString().substring(0, 10)
+        };
+        data[this.type + '_id'] = this.person.id;
+        if (this.type == 'user') {
+          data.residence_id = this.charge.residence_id;
+        }
+        this.api.post('invoices', data)
+          .then((invoice: any) => {
+            this.api.post(`invoices/${invoice.id}/Payment`, { transaction: transaction })
+              .then((data: any) => {
+                if (this.charge.user_id) {
+                  var added;
+                  if (this.items.length === 1)
+                    added = `${this.items[0].concept}: ${this.items[0].quantity * this.items[0].amount} $`
+                  else
+                    added = this.total(invoice) + "$";
+                  this.sendPush("Compra Realizada! " + added, this.charge.user_id);
+                }
+                invoice.status = 'paid';
+                loading.dismiss().then(() => {
+                  this.goPrint(invoice, data.receipt);
+                });
               })
               .catch((err) => {
                 console.error(err);
                 loading.dismiss();
-                this
-                  .alert
-                  .create({
-                    title: "ERROR",
-                    message: JSON.stringify(err)
-                  })
+                this.alert.create({
+                  title: "ERROR",
+                  message: JSON.stringify(err)
+                })
                   .present();
               });
           })
-          .catch(console.warn);
+          .catch((err) => {
+            console.error(err);
+            loading.dismiss();
+            this.alert.create({
+              title: "ERROR",
+              message: JSON.stringify(err)
+            })
+              .present();
+          });
       })
+        .catch(console.warn);
+    })
       .catch(console.warn);
   }
 
@@ -287,72 +256,43 @@ export class SellerPage {
     };
     invoice.person = this.person;
     this.saveInvoice(this.toPrint);
-    this
-      .navCtrl
-      .push("PrintInvoicePage", {
-        invoice: invoice,
-        receipt: receipt
-      });
+    this.navCtrl.push("PrintInvoicePage", { invoice: invoice, receipt: receipt });
     this.clear();
   }
 
   saveInvoice(invoice) {
-    this
-      .invoices_history
-      .push(invoice);
-    this
-      .api
-      .storage
-      .set('invoices_history', this.invoices_history);
+    this.invoices_history.push(invoice);
+    this.api.storage.set('invoices_history', this.invoices_history);
   }
 
   saveReceipt(receipt) {
-    this
-      .receipts_history
-      .push(receipt);
-    this
-      .api
-      .storage
-      .set('receipts_history', this.receipts_history);
+    this.receipts_history.push(receipt);
+    this.api.storage.set('receipts_history', this.receipts_history);
   }
 
   complete(items, note) {
     var concept = ""
-    this
-      .items
-      .forEach((element) => {
-        concept += element.concept + "(x" + element.quantity + "), "
-      });
+    this.items.forEach((element) => { concept += element.concept + "(x" + element.quantity + "), " });
     this.person.type = this.type;
-    var receipt : any = {
+    var receipt: any = {
       items: items,
       person: this.person,
       concept: concept.substring(0, concept.length - 2),
       date: moment().toDate(),
       amount: this.total(),
-      note: note
-        ? note
-        : this
-          .api
-          .trans("__.recibo de anexo a su proxima :invoice", {
-            invoice: this
-              .api
-              .trans('literals.invoice')
-          }),
-      transaction: this
-        .api
-        .trans("__.compra")
+      note: note ? note : this.api.trans("__.recibo de anexo a su siguiente :invoice", {
+        invoice: this.api.trans('literals.invoice')
+      }),
+      transaction: this.api.trans("__.compra")
     }
 
-    this
-      .api
-      .post('receipts', receipt)
-      .then((data : any) => {
+    this.api.post('receipts', receipt)
+      .then((data: any) => {
         receipt.id = data.id
         this.saveReceipt(receipt);
         this
           .navCtrl
-          .push("PrintReceiptPage", {receipt: receipt});
+          .push("PrintReceiptPage", { receipt: receipt });
         this.clear();
       })
       .catch((err) => {
@@ -382,11 +322,7 @@ export class SellerPage {
       this
         .alert
         .create({
-          title: this
-            .api
-            .trans('crud.select') + " " + this
-            .api
-            .trans('literals.method'),
+          title: this.api.trans('crud.select') + " " + this.api.trans('literals.method'),
           inputs: [
             {
               type: 'radio',
@@ -476,8 +412,8 @@ export class SellerPage {
           title: this
             .api
             .trans('crud.add') + " " + this
-            .api
-            .trans('literals.note'),
+              .api
+              .trans('literals.note'),
           inputs: [
             {
               type: 'text',
@@ -517,9 +453,9 @@ export class SellerPage {
 
   total(invoice = null) {
     var items;
-    if (invoice == null) 
+    if (invoice == null)
       items = this.items
-    else 
+    else
       items = invoice.items
     var total = 0;
     items.forEach((item) => {
@@ -529,12 +465,12 @@ export class SellerPage {
   }
 
   sendPush(message, user_id = this.charge.user_id) {
-    if (!user_id) 
+    if (!user_id)
       return;
     this
       .api
-      .post('push/' + user_id + '/notification', {message: message})
-      .then(() => {})
+      .post('push/' + user_id + '/notification', { message: message })
+      .then(() => { })
       .catch((error) => {
         console.error(error);
       })
@@ -560,9 +496,7 @@ export class SellerPage {
     }
 
     buttons.push({
-      text: this
-        .api
-        .trans('__.Facturar Ahora'),
+      text: this.api.trans('__.Facturar Ahora'),
       icon: 'print',
       cssClass: 'icon-secondary',
       handler: () => {
@@ -611,6 +545,6 @@ export class SellerPage {
   gotoReceipts(ev) {
     this
       .navCtrl
-      .push("ReceiptsReportPage", {receipts: this.receipts_history})
+      .push("ReceiptsReportPage", { receipts: this.receipts_history })
   }
 }

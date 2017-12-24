@@ -12,6 +12,7 @@
 
 
 <ion-content [ngClass]="{'punto': setting.print_type == 'pos'}">
+  <!-- Header -->
   <ion-card color="light">
     <ion-grid>
       <ion-row wrap>
@@ -42,6 +43,9 @@
       </ion-row>
     </ion-grid>
   </ion-card>
+
+
+  <!-- Product List -->
   <ion-list>
     <ion-item *ngFor="let item of (products|keys)">
       <h2>{{ item.key }}</h2>
@@ -52,11 +56,16 @@
       </span>
     </ion-item>
   </ion-list>
+
+  <!-- Payment Resume -->
   <ion-card color="light">
     <ion-card-header>{{'literals.payments' | trans }}</ion-card-header>
     <ion-list>
       <ion-item *ngFor="let sum of (sums|keys)">
         <b>{{'literals.'+ sum.key | trans }}:</b>
+        <p>
+          {{ counts[sum.key] }} {{ ('literals.invoice' + (counts[sum.key]>1 ?'s':'') ) | trans }}
+        </p>
         <p item-right>{{sum.value | currency:'USD':true:'1.0-0'}}</p>
       </ion-item>
       <ion-item>
@@ -66,7 +75,29 @@
     </ion-list>
   </ion-card>
 
-  <div class="print-only" text-center>
+  <!-- Total Counts -->
+  <ion-card color="light">
+    <ion-card-header>{{'literals.invoices' | trans }}</ion-card-header>
+    <ion-list>
+      <ion-item>
+        <b>
+          {{'literals.quantity' | trans }}
+        </b>
+        <p item-right>
+          {{ invoices.length }}
+        </p>
+      </ion-item>
+      <ion-item text-wrap>
+        <p text-wrap>
+          <span *ngFor="let inv of invoices">{{inv.number}},</span>
+        </p>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+
+  <!-- Signature -->
+  <div class="print-only" *ngIf="setting.show_signature" text-center>
     <br>
     <br>
     <br>

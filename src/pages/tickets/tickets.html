@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle icon-only>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{ 'literals.tickets' | trans }}</ion-title>
+    <ion-buttons end>
+      <b *ngIf="_tickets.total" color="light" ion-text>
+        {{ _tickets.data?.length }} {{'__.of' | trans }} {{ _tickets.total }}
+      </b>
+      <button ion-button icon-only (click)="more($event)">
+        <ion-icon name="funnel"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar [debounce]="1500" [(ngModel)]="query" (ionChange)="getWaitingTickets()">
+  </ion-searchbar>
+  <ion-refresher (ionRefresh)="query = '';getWaitingTickets($event)" [enabled]="!loading" color="primary">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div text-center>
+    <div *ngIf="!loading && _tickets && _tickets.data.length === 0">
+      <img src="./assets/logo-happy.png" alt="no tickets" style="width:100%;max-width:300px;">
+      <h4 ion-text color="primary">
+        {{'__.No hay tickets Pendientes' | trans }}
+      </h4>
+    </div>
+  </div>
+
+  <div *ngFor="let group of groups | keys">
+    <div *ngIf="group.value.length > 0">
+      <ion-card-header color="primary">
+        {{ translations[group.key] }}
+      </ion-card-header>
+      <ion-card>
+        <ion-list>
+          <button ion-item class="ticket-item" (click)="actions(ticket)" [ngClass]="ticket.status" *ngFor="let ticket of group.value">
+            <span item-left class="indicator"></span>
+            <h2 text-wrap> {{ ticket.subject }} </h2>
+            <p *ngIf="ticket.user">
+              {{ ticket.user.name}}
+              <span *ngIf="ticket.user.residence"> - {{ ticket.user.residence.name }} </span>
+            </p>
+            <ion-note>
+              {{ ticket.created_at | amDateFormat:'LLL' }}
+            </ion-note>
+            <ion-badge item-right [ngClass]="ticket.status">
+              {{ 'literals.'+ ticket.status | trans }}
+            </ion-badge>
+          </button>
+        </ion-list>
+      </ion-card>
+    </div>
+  </div>
+
+</ion-content>

@@ -29,6 +29,7 @@ import { VisitPage } from "../pages/visit/visit";
 import { SellerPage } from "../pages/seller/seller";
 import { ProductSearchPage } from '../pages/product-search/product-search';
 import { SettingProvider } from '../providers/setting/setting';
+import { NewtonProvider } from '../providers/newton/newton';
 @NgModule({
   declarations: [
     MyApp,
@@ -80,7 +81,8 @@ import { SettingProvider } from '../providers/setting/setting';
     AppMinimize,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Api,
-    SettingProvider
+    SettingProvider,
+    NewtonProvider
   ]
 })
 export class AppModule { }

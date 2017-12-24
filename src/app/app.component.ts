@@ -96,7 +96,7 @@ export class MyApp {
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.push(page.component)
+    this.nav.setRoot(page.component)
     // this.nav.setRoot(page.component);
   }
 
@@ -122,6 +122,15 @@ export class MyApp {
     if (this.api.roles && this.api.modules && this.api.modules.invoices)
       for (var i = 0; i < this.api.roles.length; i++) {
         if (this.api.roles[i].name == 'Accounter' || this.api.roles[i].name == 'SuperAdmin') {
+          return true;
+        }
+      }
+    return false;
+  }
+  canTickets() {
+    if (this.api.roles && this.api.modules && this.api.modules.tickets)
+      for (var i = 0; i < this.api.roles.length; i++) {
+        if (this.api.roles[i].name == 'Manage tickets' || this.api.roles[i].name == 'SuperAdmin') {
           return true;
         }
       }

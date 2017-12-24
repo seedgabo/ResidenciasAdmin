@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title color="secondary" text-capitalize>
+      {{'literals.about' | trans }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-refresher (ionRefresh)="sync($event)">
+  </ion-refresher>
+
+  <div padding text-center class="background">
+    <img src="http://residenciasonline.com/residencias/public/img/logo.png" class="logo">
+  </div>
+
+  <div text-center *ngIf="store">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <b ion-text color="primary">
+            {{'Version'}}
+          </b>
+          <ion-card-content>
+            {{ store }}
+          </ion-card-content>
+        </ion-col>
+
+        <ion-col>
+          <b ion-text color="primary">
+            {{'Live'}}
+          </b>
+          <ion-card-content>
+            {{ live }}
+          </ion-card-content>
+        </ion-col>
+
+
+      </ion-row>
+    </ion-grid>
+  </div>
+
+
+  <div padding text-center>
+    <p>
+      <b>
+        {{'literals.phone' | trans }}
+      </b>
+      3046664147
+    </p>
+    <small>
+      ® 2017 Residentes Online
+    </small>
+    <p>
+      All rights reserved
+    </p>
+  </div>
+
+  <div paddin text-center>
+    <img src="http://residenciasonline.com/residencias/public/img/icon.png" class="icon">
+  </div>
+
+
+</ion-content>
