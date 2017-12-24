@@ -31,7 +31,7 @@
         {{receipt.person.document}}
       </p>
       <span item-right>
-        {{ receipt.amount | currency:'USD':true:'1.2-2' }}
+        {{ receipt.amount | currency:'USD':true:'1.0-0' }}
       </span>
     </button>
   </ion-list>
@@ -61,7 +61,7 @@
           <th></th>
           <th>{{'literals.total' | trans }}:</th>
 
-          <th>{{ total | number:'1.2-2' }}</th>
+          <th>{{ total | number:'1.0-0' }}</th>
         </tr>
       </tfoot>
     </table>
@@ -82,7 +82,7 @@
         <ion-col>
           <b>{{'literals.total' | trans }}:</b>
 
-          <span>{{ total | currency:'USD':true:'1.2-2' }}</span>
+          <span>{{ total | currency:'USD':true:'1.0-0' }}</span>
         </ion-col>
         <ion-col class="no-print">
           <button [disabled]="loading" *ngIf="!from" ion-button full color="secondary" (click)="print()">

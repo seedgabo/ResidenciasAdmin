@@ -207,8 +207,8 @@
         <tr *ngFor="let item of invoice.items">
           <td>{{ item.quantity }}</td>
           <td style="width:50pt">{{item.concept}}</td>
-          <td>{{item.amount | number: '1.2-2'}}</td>
-          <td> {{(item.quantity * item.amount) | number:'1.2-2' }}</td>
+          <td>{{item.amount | number: '1.0-0'}}</td>
+          <td> {{(item.quantity * item.amount) | number:'1.0-0' }}</td>
         </tr>
       </tbody>
     </table>
@@ -218,7 +218,7 @@
     <table style="width:100%">
       <tr>
         <th> Total:</th>
-        <th> {{ invoice.total | number: '1.2-2'}} </th>
+        <th> {{ invoice.total | number: '1.0-0'}} </th>
       </tr>
     </table>
     <br>

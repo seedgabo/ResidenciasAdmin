@@ -58,7 +58,7 @@ export class PersonFinderPage {
   }
 
   search() {
-    this.api.get(`users?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&with[]=image&with[]=residence&paginate=25`)
+    this.api.get(`users?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&orWhereHas[residence][whereLike][name]=${this.query}&with[]=residence&paginate=25`)
       .then((data) => {
         this.results.users = data;
         this.api.storage.set('recent_users', data);
@@ -69,7 +69,7 @@ export class PersonFinderPage {
 
 
     if (this.findFor.visitors) {
-      this.api.get(`visitors?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&with[]=image&with[]=residence&paginate=25`)
+      this.api.get(`visitors?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&orWhereHas[residence][whereLike][name]=${this.query}&with[]=residence&paginate=25`)
         .then((data) => {
           this.results.visitors = data;
           this.api.storage.set('recent_visitors', data);
@@ -79,7 +79,7 @@ export class PersonFinderPage {
 
 
     if (this.findFor.workers) {
-      this.api.get(`workers?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&with[]=image&with[]=residence&paginate=25`)
+      this.api.get(`workers?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&orWhereHas[residence][whereLike][name]=${this.query}&with[]=residence&paginate=25`)
         .then((data) => {
           this.results.workers = data;
           this.api.storage.set('recent_workers', data);

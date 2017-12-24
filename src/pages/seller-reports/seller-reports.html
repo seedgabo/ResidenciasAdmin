@@ -34,7 +34,7 @@
         {{ "literals." + invoice.status | trans }}
       </p>
       <span item-right>
-        {{ invoice.total | currency:'USD':true:'1.2-2' }}
+        {{ invoice.total | currency:'USD':true:'1.0-0' }}
       </span>
     </button>
   </ion-list>
@@ -65,7 +65,7 @@
           <th></th>
           <th>{{'literals.total' | trans }}:</th>
 
-          <th>{{ total | number:'1.2-2' }}</th>
+          <th>{{ total | number:'1.0-0' }}</th>
         </tr>
       </tfoot>
     </table>
@@ -81,7 +81,7 @@
   <br>
   <div class="print-only">
     <b>{{'literals.total' | trans }}:</b>
-    <span>{{ total | currency:'USD':true:'1.2-2' }}</span>
+    <span>{{ total | currency:'USD':true:'1.0-0' }}</span>
   </div>
 
 </ion-content>
@@ -94,7 +94,7 @@
         <ion-col>
           <b>{{'literals.total' | trans }}:</b>
 
-          <span>{{ total | currency:'USD':true:'1.2-2' }}</span>
+          <span>{{ total | currency:'USD':true:'1.0-0' }}</span>
         </ion-col>
         <ion-col class="no-print">
           <button [disabled]="loading" ion-button full color="secondary" (click)="print()">

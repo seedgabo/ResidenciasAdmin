@@ -12,15 +12,15 @@
 </ion-header>
 
 <ion-content>
-  <ion-searchbar debounce="900" (ionInput)="search($event)" [(ngModel)]="query"></ion-searchbar>
+  <ion-searchbar debounce="1200" (ionInput)="search($event)" [(ngModel)]="query"></ion-searchbar>
 
   <ion-list *ngIf="findFor.users && results.users && results.users.data">
 
 
     <ion-list-header>{{'literals.users'|trans}}</ion-list-header>
     <button ion-item (click)="select(person,'user')" *ngFor="let person of results.users.data">
-      <ion-avatar item-left *ngIf="person.image">
-        <img [src]="person.image.url" alt="image person">
+      <ion-avatar item-left *ngIf="person.image_url">
+        <img [src]="person.image_url" alt="image person">
       </ion-avatar>
       <h2>
         {{person.name}}
@@ -37,8 +37,8 @@
   <ion-list *ngIf="findFor.visitors && results.visitors && results.visitors.data">
     <ion-list-header>{{'literals.visitors'|trans}}</ion-list-header>
     <button ion-item (click)="select(person,'visitor')" *ngFor="let person of results.visitors.data">
-      <ion-avatar item-left *ngIf="person.image">
-        <img [src]="person.image.url" alt="image person">
+      <ion-avatar item-left *ngIf="person.image_url">
+        <img [src]="person.image_url" alt="image person">
       </ion-avatar>
       <h2>
         {{person.name}}
@@ -55,8 +55,8 @@
 
     <ion-list-header>{{'literals.workers'|trans}}</ion-list-header>
     <button ion-item (click)="select(person,'worker')" *ngFor="let person of results.workers.data">
-      <ion-avatar item-left *ngIf="person.image">
-        <img [src]="person.image.url" alt="image person">
+      <ion-avatar item-left *ngIf="person.image_url">
+        <img [src]="person.image_url" alt="image person">
       </ion-avatar>
       <h2>
         {{person.name}}
