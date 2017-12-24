@@ -24,7 +24,7 @@ export class HomePage {
   }
 
   loadVisitors(refresher = null) {
-    this.api.get('visitors?with[]=residence&with[]=image').then((data: any) => {
+    this.api.get('visitors?with[]=residence').then((data: any) => {
       console.log(data);
       this.api.visitors = data;
       if (refresher) refresher.complete();

@@ -17,6 +17,9 @@
   </div>
   <ion-list [virtualScroll]="visits">
     <button ion-item (click)="actions(visit)" *virtualItem="let visit">
+      <ion-avatar item-left *ngIf="visit.visitor && visit.visitor.image_url">
+        <img [src]="visit.visitor.image_url">
+      </ion-avatar>
       <h2 *ngIf="visit.visitor">
         {{visit.visitor.name }}
         <br>
@@ -42,13 +45,12 @@
       <p *ngIf="visit.vehicle" text-wrap>
         {{ visit.vehicle.name }} - {{visit.vehicle.plate}}
       </p>
-      <span item-right>
-        {{ visit.created_at |amCalendar }}
-        <br>
-        <span ion-text [color]="visit.status == 'approved' ? 'secondary' : visit.status == 'rejected' ? 'danger' : ''">
-          {{ 'literals.'+ visit.status | trans }}
-        </span>
+      <span ion-text [color]="visit.status == 'approved' ? 'secondary' : visit.status == 'rejected' ? 'danger' : ''">
+        {{ 'literals.'+ visit.status | trans }}
       </span>
+      <ion-note item-right>
+        {{ visit.created_at |amCalendar }}
+      </ion-note>
     </button>
   </ion-list>
 </ion-content>
