@@ -160,4 +160,9 @@ export class ListPage {
     });
   }
 
+  errorHandler(event) {
+    console.debug(event);
+    event.target.src = "https://cdn.browshot.com/static/images/not-found.png";
+  }
+
 }

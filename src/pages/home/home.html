@@ -77,7 +77,7 @@
           <ion-list>
             <button ion-item *ngFor="let visitor of getVisitors()" (click)="actions(visitor)">
               <ion-thumbnail item-left>
-                <img [src]="visitor.image_url">
+                <img [src]="visitor.image_url" onerror="this.style.display = 'none'">
               </ion-thumbnail>
               <h2>
                 {{visitor.name}}
