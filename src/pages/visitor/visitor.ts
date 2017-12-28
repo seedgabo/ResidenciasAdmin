@@ -80,6 +80,9 @@ export class VisitorPage {
     if (this.action == 'create') {
       this.api.post('visitors?with[]=residence', data).then((response) => {
         console.log(response);
+        if (this.api.objects.visitors) {
+          this.api.objects.visitors.push(response)
+        }
         this.viewCtrl.dismiss(response);
         this.loading = false;
       }).catch((err) => {
@@ -90,6 +93,13 @@ export class VisitorPage {
     if (this.action == 'update') {
       this.api.put('visitors/' + this.visitor.id + "?with[]=residence", data).then((response) => {
         console.log(response);
+        if (this.api.objects.visitors) {
+          this.api.objects.visitors.forEach((v) => {
+            if (v.id == this.visitor.id) {
+              v = response;
+            }
+          })
+        }
         this.loading = false;
         this.viewCtrl.dismiss(response);
       }).catch((err) => {

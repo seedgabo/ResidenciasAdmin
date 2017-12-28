@@ -13,177 +13,177 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 .visit-approved {
-    .alert-title,
-    .alert-button {
-        color: color($colors, "secondary");
-    }
+  .alert-title,
+  .alert-button {
+    color: color($colors, "secondary");
+  }
 }
 
 .visit-rejected {
-    .alert-title,
-    .alert-button {
-        color: color($colors, "danger");
-    }
+  .alert-title,
+  .alert-button {
+    color: color($colors, "danger");
+  }
 }
 
 .print-only {
-    display: none;
+  display: none;
 }
 
 @media print {
-    .no-print,
-    .no-printable,
-    .back-button {
-        display: none !important;
-    }
-    .print-only {
-        display: block;
-    }
-     ::-webkit-scrollbar {
-        display: none;
-    }
+  .no-print,
+  .no-printable,
+  .back-button {
+    display: none !important;
+  }
+  .print-only {
+    display: block;
+  }
+   ::-webkit-scrollbar {
+    display: none !important;
+  }
 }
 
 .punto {
-    width: 210pt !important;
-    margin: 0;
-    padding: 0;
-    h1 {
-        font-size: 16px;
-    }
-    h2 {
-        font-size: 14px;
-    }
-    h3 {
-        font-size: 13px;
-    }
-    h3 {
-        font-size: 12px;
-    }
+  width: 210pt !important;
+  margin: 0;
+  padding: 0;
+  h1 {
+    font-size: 16px;
+  }
+  h2 {
+    font-size: 14px;
+  }
+  h3 {
+    font-size: 13px;
+  }
+  h3 {
+    font-size: 12px;
+  }
 }
 
 .icon-primary {
-    ion-icon {
-        color: color($colors, 'primary');
-    }
+  ion-icon {
+    color: color($colors, 'primary');
+  }
 }
 
 .icon-warning {
-    ion-icon {
-        color: color($colors, 'warning');
-    }
+  ion-icon {
+    color: color($colors, 'warning');
+  }
 }
 
 .icon-secondary {
-    ion-icon {
-        color: color($colors, 'secondary');
-    }
+  ion-icon {
+    color: color($colors, 'secondary');
+  }
 }
 
 .icon-favorite {
-    ion-icon {
-        color: color($colors, 'favorite');
-    }
+  ion-icon {
+    color: color($colors, 'favorite');
+  }
 }
 
 .icon-danger {
-    ion-icon {
-        color: color($colors, 'danger');
-    }
+  ion-icon {
+    color: color($colors, 'danger');
+  }
 }
 
 // INVOICE
 .pos-items {
-    font-size: smaller;
+  font-size: smaller;
 }
 
 .separator {
-    border: .4px solid black;
-    min-width: 200pt;
-    width: 200pt;
-    text-align: center;
+  border: .4px solid black;
+  min-width: 200pt;
+  width: 200pt;
+  text-align: center;
 }
 
 .signature {
-    border: 0;
-    border-bottom: 1px solid #000;
-    max-width: 300px;
-    margin: 0 auto;
+  border: 0;
+  border-bottom: 1px solid #000;
+  max-width: 300px;
+  margin: 0 auto;
 }
 
 .invoice-box {
-    max-width: 800px;
-    margin: auto;
-    padding: 30px;
-    border: 1px solid #eee;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .15);
-    font-size: 16px;
-    line-height: 24px;
-    font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
-    color: #555;
+  max-width: 800px;
+  margin: auto;
+  padding: 30px;
+  border: 1px solid #eee;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+  font-size: 16px;
+  line-height: 24px;
+  font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+  color: #555;
 }
 
 .invoice-box table {
-    width: 100%;
-    line-height: inherit;
-    text-align: left;
+  width: 100%;
+  line-height: inherit;
+  text-align: left;
 }
 
 .invoice-box table td {
-    padding: 5px;
-    vertical-align: top;
+  padding: 5px;
+  vertical-align: top;
 }
 
 .invoice-box table tr td:nth-child(2) {
-    text-align: right;
+  text-align: right;
 }
 
 .invoice-box table tr.top table td {
-    padding-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .invoice-box table tr.top table td.title {
-    font-size: 45px;
-    line-height: 45px;
-    color: #333;
+  font-size: 45px;
+  line-height: 45px;
+  color: #333;
 }
 
 .invoice-box table tr.information table td {
-    padding-bottom: 40px;
+  padding-bottom: 40px;
 }
 
 .invoice-box table tr.heading td {
-    background: #eee;
-    border-bottom: 1px solid #ddd;
-    font-weight: bold;
+  background: #eee;
+  border-bottom: 1px solid #ddd;
+  font-weight: bold;
 }
 
 .invoice-box table tr.details td {
-    padding-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .invoice-box table tr.item td {
-    border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eee;
 }
 
 .invoice-box table tr.item.last td {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .invoice-box table tr.total td:nth-child(2) {
-    border-top: 2px solid #eee;
-    font-weight: bold;
+  border-top: 2px solid #eee;
+  font-weight: bold;
 }
 
 @media only screen and (max-width: 600px) {
-    .invoice-box table tr.top table td {
-        width: 100%;
-        display: block;
-        text-align: center;
-    }
-    .invoice-box table tr.information table td {
-        width: 100%;
-        display: block;
-        text-align: center;
-    }
+  .invoice-box table tr.top table td {
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+  .invoice-box table tr.information table td {
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
 }

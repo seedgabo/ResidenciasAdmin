@@ -26,7 +26,7 @@ export class Api {
   password = "";
   user;
   langs: any = langs;
-
+  objects: any = {}
   residences_collection = {};
   residences = [];
   parkings = [];
@@ -94,6 +94,47 @@ export class Api {
         console.error('error trying to download translations', err);
       })
   }
+
+  load(resource) {
+    console.time("load " + resource)
+    return new Promise((resolve, reject) => {
+      if (this.objects[resource]) {
+        this.objects[resource].promise
+          .then((resp) => {
+            resolve(resp);
+            console.timeEnd("load " + resource)
+          })
+          .catch(reject)
+        return
+      }
+      this.storage.get(resource + "_resource")
+        .then((data) => {
+          this.objects[resource] = []
+          if (data) {
+            this.objects[resource] = data;
+          }
+          var promise, query = "";
+          if (resource == 'users' || resource == 'workers' || resource == 'visitors' || resource == 'pets' || resource == 'vehicles') {
+            query = "?with[]=residence"
+          }
+          if (resource == 'residences') {
+            query = "?with[]=owner"
+          }
+          this.objects[resource].promise = promise = this.get(resource + query)
+          this.objects[resource].promise.then((resp) => {
+            this.objects[resource].pomise = promise;
+            this.storage.set(resource + "_resource", resp);
+            console.timeEnd("load " + resource)
+            return resolve(this.objects[resource]);
+          })
+            .catch((err) => {
+              reject(err);
+              this.Error(err)
+            })
+        })
+    })
+  }
+
 
   get(uri) {
     return new Promise((resolve, reject) => {

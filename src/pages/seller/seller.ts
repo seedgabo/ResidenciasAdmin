@@ -21,7 +21,14 @@ export class SellerPage {
   toPrint;
   invoices_history = [];
   receipts_history = [];
-  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public printer: Printer, public api: Api) { }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public printer: Printer, public api: Api) {
+    this.api.ready.then(() => {
+      this.api.load("users");
+      this.api.load("visitors");
+      this.api.load("workers");
+    })
+
+  }
 
   ionViewDidEnter() {
     this.content.resize()
