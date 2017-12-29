@@ -13,7 +13,6 @@ export class VisitCreatorPage {
     status: "waiting for confirmation",
   }
   vehicle;
-  parkings = [];
   statutes = ['waiting for confirmation', 'approved', 'rejected', 'departured'];
   loading = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public viewCtrl: ViewController, public modal: ModalController) {
@@ -22,16 +21,11 @@ export class VisitCreatorPage {
   }
 
   ionViewDidLoad() {
+    this.api.load('parkings')
     this.loadParkings();
   }
 
   loadParkings() {
-    this.api.get('parkings?where[status]=available&limit=500')
-      .then((parkings: any) => {
-        this.parkings = parkings;
-      }).catch((err) => {
-        console.error(err);
-      })
   }
 
   dismiss() {

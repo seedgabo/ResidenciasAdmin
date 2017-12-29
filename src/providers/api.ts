@@ -114,8 +114,11 @@ export class Api {
             this.objects[resource] = data;
           }
           var promise, query = "";
-          if (resource == 'users' || resource == 'workers' || resource == 'visitors' || resource == 'pets' || resource == 'vehicles') {
+          if (resource == 'users' || resource == 'workers' || resource == 'visitors' || resource == 'pets') {
             query = "?with[]=residence"
+          }
+          if (resource == 'vehicles') {
+            query = "?with[]=owner&with[]=residence"
           }
           if (resource == 'residences') {
             query = "?with[]=owner"

@@ -12,23 +12,25 @@
     <ion-searchbar (ionInput)="search()" [debounce]="750" [(ngModel)]="query"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
-<ion-content>
-  <ion-content no-padding no-margin>
-    <input type="file" name="filer" accept="image/*" (change)="readFile($event)" id="input-file" style="display:none;">
-    <ion-list inset no-lines>
-      <button ion-item (press)="actions(vehicle)" (click)="select(vehicle)" *ngFor="let vehicle of vehicles.data">
-        <ion-thumbnail item-left *ngIf="vehicle.image">
-          <img [src]="vehicle.image.url">
-        </ion-thumbnail>
-        <h3>{{vehicle.plate}}</h3>
-        <p>{{vehicle.model}}</p>
-        <p>{{vehicle.make}}</p>
-        <p>{{vehicle.color}}</p>
-      </button>
-    </ion-list>
-    <ion-fab bottom right>
-      <button ion-fab color="primary" (click)="addQuickVehicle()">
-        <ion-icon name="add"></ion-icon>
-      </button>
-    </ion-fab>
-  </ion-content>
+<ion-content no-padding>
+  <div text-center>
+    <ion-spinner *ngIf="loading || !ready"></ion-spinner>
+  </div>
+  <input type="file" name="filer" accept="image/*" (change)="readFile($event)" id="input-file" style="display:none;">
+  <ion-list inset no-lines>
+    <button ion-item (press)="actions(vehicle)" (click)="select(vehicle)" *ngFor="let vehicle of vehicles">
+      <ion-thumbnail item-left>
+        <img *ngIf="vehicle.image_url" [src]="vehicle.image_url">
+      </ion-thumbnail>
+      <h3>{{vehicle.plate}}</h3>
+      <p>{{vehicle.model}}</p>
+      <p>{{vehicle.make}}</p>
+      <p>{{vehicle.color}}</p>
+    </button>
+  </ion-list>
+  <ion-fab bottom right>
+    <button ion-fab color="primary" (click)="addQuickVehicle()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>

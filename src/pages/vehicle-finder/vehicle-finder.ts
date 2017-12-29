@@ -8,8 +8,10 @@ import { NavController, NavParams, ViewController, ModalController, ActionSheetC
 })
 export class VehicleFinderPage {
   vehicle_image: any;
-  vehicles: any = {};
-  query = [];
+  vehicles: any = [];
+  query = "";
+  loading = false;
+  ready = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewctrl: ViewController, public api: Api, public modal: ModalController, public actionsheet: ActionSheetController,
     public toast: ToastController) {
     this.api.storage.get('recent_vehicles')
@@ -18,18 +20,41 @@ export class VehicleFinderPage {
           this.vehicles = recent_vehicles;
         }
       });
+    this.api.load('vehicles')
+      .then((resp) => {
+        this.search();
+        this.ready = true;
+      })
   }
 
   ionViewDidLoad() {
   }
 
   search() {
-    this.api.get(`vehicles?orWhereLike[model]=${this.query}&orWhereLike[color]=${this.query}&orWhereLike[make]=${this.query}&orWhereLike[plate]=${this.query}&paginate=50&with[]=image`)
-      .then((data: any) => {
-        this.vehicles = data;
-        this.api.storage.set('recent_vehicles', data);
-      })
-      .catch(console.error)
+    this.loading = true;
+    var limit = 100;
+    var filter = this.query.toLowerCase()
+    var results = [];
+    for (var i = 0; i < this.api.objects.vehicles.length; i++) {
+      var item = this.api.objects.vehicles[i];
+      if (
+        (item.name && item.name.toLowerCase().indexOf(filter) > -1) ||
+        (item.plate && item.plate.toLowerCase().indexOf(filter) > -1) ||
+        (item.make && item.make.toLowerCase().indexOf(filter) > -1) ||
+        (item.model && item.model.toLowerCase().indexOf(filter) > -1) ||
+        (item.color && item.color.toLowerCase().indexOf(filter) > -1) ||
+        (item.residence && item.residence.name && item.residence.name.toLowerCase().indexOf(filter) > -1)
+      ) {
+        results.push(item);
+      }
+      if (results.length == limit) {
+        break;
+      }
+
+    }
+    this.vehicles = results
+    this.api.storage.set('recent_vehicles', this.vehicles);
+    this.loading = false;
   }
 
   cancel() {

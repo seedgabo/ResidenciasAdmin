@@ -19,12 +19,13 @@
       <ion-label floating>{{'literals.name' | trans}}</ion-label>
       <ion-input type="text" [(ngModel)]="visitor.name"></ion-input>
     </ion-item>
-    <button ion-item (click)="selectResidence()">
-      <h2 *ngIf="!residence">
-        {{'literals.select' | trans }} {{'literals.residence' | trans }}
-      </h2>
-      <ion-avatar item-left *ngIf="residence && residence.image">
-        <img [src]="residence.image.url" alt="">
+
+    <button ion-item (click)="selectResidence()" padding-vertical>
+      <span *ngIf="!residence">
+        {{'literals.residence' | trans }}
+      </span>
+      <ion-avatar item-left *ngIf="residence && residence.image_url">
+        <img [src]="residence.image_url" alt="">
       </ion-avatar>
       <span *ngIf="residence">{{ residence.name }}</span>
       <ion-icon item-end name="arrow-dropdown"></ion-icon>

@@ -12,14 +12,18 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <div text-center>
+    <ion-spinner *ngIf="loading || !ready"></ion-spinner>
+  </div>
   <ion-list inset no-lines>
-    <button ion-item (click)="select(residence)" *ngFor="let residence of residences.data">
-      <ion-thumbnail item-left *ngIf="residence.image">
-        <img [src]="residence.image.url">
-      </ion-thumbnail>
+    <button ion-item (click)="select(residence)" *ngFor="let residence of residences">
+      <!-- <ion-thumbnail item-left>
+        <img [src]="residence.image_url" *ngIf="residence.image_url">
+      </ion-thumbnail> -->
       <h2>{{residence.name}}</h2>
+      <h3>{{residence.owner?.name}}</h3>
       <h4>{{'literals.'+ residence.type | trans }}</h4>
-      <p>{{'literals.'+residence.status | trans }}
+      <p [ngClass]="residence.status">{{'literals.'+residence.status | trans }}
         <span *ngIf="residence.is_disabled">{{'literals.disabled' | trans }}</span>
       </p>
     </button>
