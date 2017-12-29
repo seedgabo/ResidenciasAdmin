@@ -26,6 +26,7 @@ export class SellerPage {
       this.api.load("users");
       this.api.load("visitors");
       this.api.load("workers");
+      this.api.load("products");
     })
 
   }

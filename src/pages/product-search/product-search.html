@@ -12,8 +12,11 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <div text-center>
+    <ion-spinner *ngIf="loading || !ready"></ion-spinner>
+  </div>
   <ion-list inset no-lines>
-    <button ion-item (click)="select(product)" *ngFor="let product of products.data">
+    <button ion-item (click)="select(product)" *ngFor="let product of products">
       <ion-thumbnail item-left *ngIf="product.image">
         <img [src]="product.image.url">
       </ion-thumbnail>

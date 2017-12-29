@@ -140,7 +140,7 @@ export class PersonFinderPage {
           (item.document && item.document.toLowerCase().indexOf(filter) > -1) ||
           (item.residence && item.residence.name && item.residence.name.toLowerCase().indexOf(filter) > -1)
         ) {
-          console.log(item)
+          // console.log(item)
           results.push(item);
         }
         if (results.length == limit) {

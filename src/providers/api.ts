@@ -120,12 +120,16 @@ export class Api {
           if (resource == 'vehicles') {
             query = "?with[]=owner&with[]=residence"
           }
+          if (resource == 'products') {
+            query = "?with[]=category"
+          }
           if (resource == 'residences') {
             query = "?with[]=owner"
           }
           this.objects[resource].promise = promise = this.get(resource + query)
           this.objects[resource].promise.then((resp) => {
-            this.objects[resource].pomise = promise;
+            this.objects[resource] = resp;
+            this.objects[resource].promise = promise;
             this.storage.set(resource + "_resource", resp);
             console.timeEnd("load " + resource)
             return resolve(this.objects[resource]);
