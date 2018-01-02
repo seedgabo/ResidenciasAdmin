@@ -529,6 +529,7 @@ export class SellerPage {
     let popover = this.popover.create("PopoverSellerPage", {})
     popover.present({ ev: ev });
     popover.onWillDismiss((data, role) => {
+      console.log(data, role)
       if (role == 'accept') {
         if (data.action == 'invoices')
           this.gotoReports(ev)

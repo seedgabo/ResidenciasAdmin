@@ -264,12 +264,8 @@ export class SellerReportsPage {
   findByDate(date, to = null, only_user = true) {
     this.loading = true;
     var start = moment(date).format("YYYY-MM-DD")
-    var end = (to
-      ? moment(to).add(1, 'day').format('YYYY-MM-DD')
-      : moment(date).add(1, 'day').format("YYYY-MM-DD"))
-    this
-      .api
-      .get(`invoices?where[created_by]=${this.api.user.id}&&whereDategte[created_at]=${start}&whereDatelwe[created_at]=${end}&with[]=user&with[]=visitor&with[]=worker&with[]=items`)
+    var end = (to ? moment(to).add(1, 'day').format('YYYY-MM-DD') : moment(date).add(1, 'day').format("YYYY-MM-DD"))
+    this.api.get(`invoices?where[created_by]=${this.api.user.id}&&whereDategte[created_at]=${start}&whereDatelwe[created_at]=${end}&with[]=user&with[]=visitor&with[]=worker&with[]=items`)
       .then((data: any) => {
         console.log(data);
         this.loading = false;

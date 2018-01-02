@@ -16,15 +16,16 @@ export class ConsolidateSellPage {
   from;
   to;
   total = 0;
+  total_receipts = 0;
   close = false;
   user;
   residence
   cash_desk = null;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public setting: SettingProvider) {
     this.invoices = this.navParams.get('invoices');
-
     if (this.navParams.get('receipts')) {
-      this.printing = this.navParams.get('receipts');
+      this.receipts = this.navParams.get('receipts');
+      this.calculateReceipts();
     }
 
     if (this.navParams.get('print')) {
@@ -50,10 +51,14 @@ export class ConsolidateSellPage {
         user_id: this.api.user.id,
         from: this.from.format('Y-M-D H:mm:ss'),
         to: this.to.format('Y-M-D H:mm:ss'),
-        invoices: []
+        invoices: [],
+        receipts: []
       }
       this.invoices.forEach((inv) => {
         data.invoices.push(inv.id)
+      })
+      this.receipts.forEach((rec) => {
+        data.receipts.push(rec.id)
       })
       this.api.post('cash_desks', data).then((resp) => {
         this.cash_desk = resp;
@@ -91,6 +96,13 @@ export class ConsolidateSellPage {
       });
       this.total += Number(inv.total);
       this.getPaymentsFromInvoices(inv);
+    })
+  }
+
+  calculateReceipts() {
+    this.total_receipts = 0;
+    this.receipts.forEach((rec) => {
+      this.total_receipts += rec.amount
     })
   }
 
