@@ -181,23 +181,15 @@ export class SellerReportsPage {
   }
 
   clearData() {
-    this
-      .api
-      .alert
+    this.api.alert
       .create({
-        title: this
-          .api
-          .trans("__.are you sure"),
+        title: this.api.trans("__.are you sure"),
         buttons: [
           {
-            text: this
-              .api
-              .trans("literals.yes"),
+            text: this.api.trans("literals.yes"),
             handler: () => {
-              this
-                .api
-                .storage
-                .set("invoices_history", [])
+              this.api.storage.set("receipts_history", [])
+              this.api.storage.set("invoices_history", [])
                 .then(() => {
                   this.invoices = [];
                   this._invoices = [];
