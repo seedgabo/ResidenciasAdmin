@@ -8,6 +8,7 @@ import { SettingProvider } from '../../../providers/setting/setting';
 @Component({ selector: 'page-consolidate-sell', templateUrl: 'consolidate-sell.html' })
 export class ConsolidateSellPage {
   invoices = []
+  receipts = []
   products = {}
   sums = {}
   counts = {}
@@ -21,6 +22,10 @@ export class ConsolidateSellPage {
   cash_desk = null;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public setting: SettingProvider) {
     this.invoices = this.navParams.get('invoices');
+
+    if (this.navParams.get('receipts')) {
+      this.printing = this.navParams.get('receipts');
+    }
 
     if (this.navParams.get('print')) {
       this.printing = this.navParams.get('print');
@@ -119,7 +124,6 @@ export class ConsolidateSellPage {
     }
     return true;
   }
-
 
   addTosums(method, amount) {
     if (!this.sums[method]) {

@@ -1,0 +1,11 @@
+<ion-list>
+  <button ion-item (click)="action('invoices')">
+    <ion-icon name="copy" item-left></ion-icon>
+    {{'literals.invoices' | trans }}
+  </button>
+
+  <button ion-item (click)="action('receipts')">
+    <ion-icon name="ios-paper" item-left></ion-icon>
+    {{'literals.receipts' | trans }}
+  </button>
+</ion-list>

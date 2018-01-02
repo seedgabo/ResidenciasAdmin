@@ -100,20 +100,12 @@ export class SellerReportsPage {
   }
 
   actions(invoice) {
-    var sheet = this
-      .actionsheet
-      .create({
-        title: this
-          .api
-          .trans("literals.actions") + " " + this
-            .api
-            .trans('literals.invoice')
-      })
+    var sheet = this.actionsheet.create({
+      title: this.api.trans("literals.actions") + " " + this.api.trans('literals.invoice')
+    })
 
     sheet.addButton({
-      text: this
-        .api
-        .trans('literals.print'),
+      text: this.api.trans('literals.print'),
       icon: 'print',
       handler: () => {
         this.printInvoice(invoice)
@@ -122,11 +114,7 @@ export class SellerReportsPage {
 
     if (invoice.status !== 'cancelled') {
       sheet.addButton({
-        text: this
-          .api
-          .trans('crud.cancel') + " " + this
-            .api
-            .trans('literals.invoice'),
+        text: this.api.trans('crud.cancel') + " " + this.api.trans('literals.invoice'),
         icon: 'remove-circle',
         handler: () => {
           this.cancelInvoice(invoice)
@@ -135,13 +123,10 @@ export class SellerReportsPage {
     }
 
     sheet.addButton({
-      text: this
-        .api
-        .trans('crud.cancel'),
+      text: this.api.trans('crud.cancel'),
       icon: "close",
       role: "cancel",
       handler: () => { }
-
     }).present();
   }
 
@@ -230,51 +215,36 @@ export class SellerReportsPage {
   }
 
   more() {
-    var sheet = this
-      .actionsheet
-      .create({
-        title: this
-          .api
-          .trans("literals.generate") + " " + this
-            .api
-            .trans('literals.report')
-      })
+    var sheet = this.actionsheet.create({
+      title: this.api.trans("literals.generate") + " " + this.api.trans('literals.report')
+    })
 
     sheet.addButton({
-      text: this
-        .api
-        .trans('__.Consolidado de ventas por producto'),
+      text: this.api.trans('__.Consolidado de ventas por producto'),
       icon: "paper",
       handler: () => {
-        this
-          .navCtrl
-          .push("ConsolidateSellPage", { invoices: this.invoices });
+        this.api.storage.get('receipts_history')
+          .then((receipts) => {
+            this.navCtrl.push("ConsolidateSellPage", { invoices: this.invoices, 'receipts': receipts });
+          })
       }
     })
 
     if (this.from == null) {
       sheet.addButton({
-        text: this
-          .api
-          .trans('literals.cash desk'),
+        text: this.api.trans('literals.cash desk'),
         icon: "paper",
         handler: () => {
-          this
-            .navCtrl
-            .push("ConsolidateSellPage", {
-              invoices: this.invoices,
-              close: true
-            });
+          this.api.storage.get('receipts_history')
+            .then((receipts) => {
+              this.navCtrl.push("ConsolidateSellPage", { invoices: this.invoices, 'receipts': receipts, close: true });
+            })
         }
       })
     }
 
     sheet.addButton({
-      text: this
-        .api
-        .trans('crud.clear') + " " + this
-          .api
-          .trans('literals.invoices'),
+      text: this.api.trans('crud.clear') + " " + this.api.trans('literals.invoices'),
       icon: "remove-circle",
       role: 'destructive',
       cssClass: "icon-danger",
@@ -284,9 +254,7 @@ export class SellerReportsPage {
     })
 
     sheet.addButton({
-      text: this
-        .api
-        .trans('crud.cancel'),
+      text: this.api.trans('crud.cancel'),
       icon: "close",
       role: "cancel",
       handler: () => { }

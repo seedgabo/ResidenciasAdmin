@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, LoadingController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, AlertController, ModalController, ActionSheetController, PopoverController } from 'ionic-angular';
 import { Api } from '../../providers/api';
 import moment from 'moment';
 import { ProductSearchPage } from '../product-search/product-search';
@@ -21,7 +21,7 @@ export class SellerPage {
   toPrint;
   invoices_history = [];
   receipts_history = [];
-  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public printer: Printer, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, public alert: AlertController, public modal: ModalController, public actionsheet: ActionSheetController, public popover: PopoverController, public printer: Printer, public api: Api) {
     this.api.ready.then(() => {
       this.api.load("users");
       this.api.load("visitors");
@@ -132,63 +132,52 @@ export class SellerPage {
   }
 
   removeItem(index) {
-    this
-      .items
-      .splice(index, 1);
+    this.items.splice(index, 1);
   }
 
   proccess() {
-    this
-      .askNote(this.api.trans("__.recibo de anexo a su siguiente :invoice", {
-        invoice: this
-          .api
-          .trans('literals.invoice')
-      }))
+    this.askNote(this.api.trans("__.recibo de anexo a su siguiente :invoice", {
+      invoice: this.api.trans('literals.invoice')
+    }))
       .then((note) => {
         var procesing = 0;
         var loading = this
           .loading
           .create({
-            content: this
-              .api
-              .trans('__.procesando') + procesing + '  de ' + this.items.length
+            content: this.api.trans('__.procesando') + procesing + '  de ' + this.items.length
           });
         loading.present();
-        this
-          .items
-          .forEach(element => {
-            this
-              .api
-              .post('charges', {
-                'residence_id': this.charge.residence_id,
-                'concept': element.concept + "(x" + element.quantity + ")",
-                amount: element.amount * element.quantity,
-                month: moment().month() + 1,
-                year: moment().year(),
-                type: "unique"
-              })
-              .then((data) => {
-                loading.setContent(this.api.trans('__.procesando') + ++procesing + '  de ' + this.items.length);
-                if (procesing == this.items.length) {
-                  if (this.charge.user_id) {
-                    this.sendPush("Se ha generado un nuevo cargo a su factura", this.charge.user_id);
-                  }
-                  loading.dismiss();
-                  this.complete(this.items, note);
+        this.items.forEach(element => {
+          this.api.post('charges', {
+            'residence_id': this.charge.residence_id,
+            'concept': element.concept + "(x" + element.quantity + ")",
+            amount: element.amount * element.quantity,
+            month: moment().month() + 1,
+            year: moment().year(),
+            type: "unique"
+          })
+            .then((data) => {
+              loading.setContent(this.api.trans('__.procesando') + ++procesing + '  de ' + this.items.length);
+              if (procesing == this.items.length) {
+                if (this.charge.user_id) {
+                  this.sendPush("Se ha generado un nuevo cargo a su factura", this.charge.user_id);
                 }
-              })
-              .catch((err) => {
-                console.error(err);
                 loading.dismiss();
-                this
-                  .alert
-                  .create({
-                    title: "ERROR",
-                    message: JSON.stringify(err)
-                  })
-                  .present();
-              })
-          });
+                this.complete(this.items, note);
+              }
+            })
+            .catch((err) => {
+              console.error(err);
+              loading.dismiss();
+              this
+                .alert
+                .create({
+                  title: "ERROR",
+                  message: JSON.stringify(err)
+                })
+                .present();
+            })
+        });
 
       })
       .catch(console.warn)
@@ -412,6 +401,7 @@ export class SellerPage {
         .present();
     })
   }
+
   askNote(note = null) {
     return new Promise((resolve, reject) => {
       this
@@ -533,6 +523,19 @@ export class SellerPage {
         buttons: buttons
       })
       .present();
+  }
+
+  more(ev) {
+    let popover = this.popover.create("PopoverSellerPage", {})
+    popover.present({ ev: ev });
+    popover.onWillDismiss((data, role) => {
+      if (role == 'accept') {
+        if (data.action == 'invoices')
+          this.gotoReports(ev)
+        if (data.action == 'receipts')
+          this.gotoReceipts(ev)
+      }
+    })
   }
 
   gotoReports(ev) {
