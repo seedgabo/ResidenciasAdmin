@@ -9,14 +9,14 @@
 
 <ion-content>
   <ion-searchbar (ionInput)="filter()" [(ngModel)]="query" [placeholder]="'crud.search' | trans" debounce="700"></ion-searchbar>
-  <ion-list>
-    <button ion-item *ngFor="let parking of parkings" (click)="park(parking)">
-        <h2> {{parking.name}} </h2>
-        <p *ngIf="parking.user"> {{parking.user.full_name}}</p>
-        <p *ngIf="!parking.user">Public</p>
-        <span item-right ion-text [color]="parking.status == 'available' ? 'success' : 'danger' ">
-          {{ parking.status == 'available' ? ('literals.available' | trans ) : ('literals.occuped' | trans )  }}
-        </span>
+  <ion-list [virtualScroll]="parkings">
+    <button ion-item *virtualItem="let parking" (click)="park(parking)">
+      <h2> {{parking.name}} </h2>
+      <p *ngIf="parking.user"> {{parking.user.full_name}}</p>
+      <p *ngIf="!parking.user">Public</p>
+      <span item-right ion-text [color]="parking.status == 'available' ? 'success' : 'danger' ">
+        {{ parking.status == 'available' ? ('literals.available' | trans ) : ('literals.occuped' | trans ) }}
+      </span>
     </button>
   </ion-list>
 </ion-content>

@@ -120,11 +120,14 @@ export class Api {
           if (resource == 'vehicles') {
             query = "?with[]=owner&with[]=residence"
           }
+          if (resource == 'parkings') {
+            query = "?with[]=user"
+          }
           if (resource == 'products') {
             query = "?with[]=category"
           }
           if (resource == 'residences') {
-            query = "?with[]=owner"
+            query = "?with[]=owner&with[]=users"
           }
           this.objects[resource].promise = promise = this.get(resource + query)
           this.objects[resource].promise.then((resp) => {

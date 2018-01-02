@@ -53,12 +53,12 @@
         </ion-item-divider>
 
         <button *ngIf="canAccounter()" menuClose ion-item (click)="openPage({component:'SettingsPage'})" icon-left>
-          <ion-icon name="settings"></ion-icon>
+          <ion-icon color="primary" name="settings"></ion-icon>
           {{ api.trans('literals.settings') }}
         </button>
 
         <button menuClose ion-item (click)="openPage({component:'AboutPage'})" icon-left>
-          <ion-icon name="information-circle"></ion-icon>
+          <ion-icon color="primary" name="information-circle"></ion-icon>
           {{ api.trans('literals.about') }}
         </button>
 

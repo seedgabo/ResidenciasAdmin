@@ -6,6 +6,9 @@
 
 
 <ion-content>
+  <div text-center>
+    <ion-spinner color="primary" *ngIf="loading"></ion-spinner>
+  </div>
   <ion-refresher (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -17,6 +20,12 @@
         <b text-right ion-text [color]="res.status==='solvent' ? 'secondary' : 'danger' "> {{ 'literals.'+ res.status | trans }}
         </b>
       </h2>
+      <h3>
+        <b>
+          {{ 'literals.owner' | trans }}:
+        </b>
+        <span *ngIf="res.owner">{{ res.owner.name }}</span>
+      </h3>
       <p text-justify>
         <span *ngFor="let user of res.users ">
           {{user.name}},

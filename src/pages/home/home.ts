@@ -12,6 +12,7 @@ import { VisitPage } from "../visit/visit";
 export class HomePage {
   query: string = "";
   visitor_image;
+  visitors = [];
   constructor(public navCtrl: NavController, public api: Api, public actionsheet: ActionSheetController, public modal: ModalController, public toast: ToastController) {
   }
 
@@ -24,22 +25,24 @@ export class HomePage {
   }
 
   loadVisitors(refresher = null) {
-    this.api.get('visitors?with[]=residence').then((data: any) => {
-      console.log(data);
-      this.api.visitors = data;
-      if (refresher) refresher.complete();
-    }).catch((err) => {
-      console.error(err);
-      if (refresher) refresher.complete();
-    });
+    this.api.load('visitors')
+      .then(() => {
+        this.api.objects.visitors;
+        if (refresher) refresher.complete();
+        this.getVisitors()
+      })
+      .catch((err) => {
+        console.error(err);
+        if (refresher) refresher.complete();
+      })
   }
 
 
   getVisitors() {
     if (this.query == "")
-      return this.api.visitors.slice(0, 100);
+      return this.visitors = this.api.objects.visitors.slice(0, 100);
 
-    return this.api.visitors.filter((visitor) => {
+    return this.visitors = this.api.objects.visitors.filter((visitor) => {
       if (visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1
         || visitor.document.toLowerCase().indexOf(this.query.toLowerCase()) > -1)
         return true;

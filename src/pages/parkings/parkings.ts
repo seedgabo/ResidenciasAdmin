@@ -10,23 +10,35 @@ export class ParkingsPage {
   selectedItem: any;
   query = "";
   parkings = [];
+  loading = false
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api) {
   }
 
   ionViewDidLoad() {
-    this.api.get('parkings?with[]=user')
-      .then((parkings: any) => {
-        this.api.parkings = parkings;
-        this.parkings = parkings;
-      }).catch((err) => {
-        console.error(err);
+    this.api.ready.then(() => {
+      this.getParkings();
+    })
+  }
+
+  getParkings() {
+    this.loading = true;
+    this.api.load('parkings')
+      .then(() => {
+        this.parkings = this.api.objects.parkings;
+        this.filter()
+      })
+      .catch((err) => {
+        this.api.Error(err)
       })
   }
 
   filter() {
-    if (this.query == "")
-      return this.parkings = this.api.parkings;
-    this.parkings = this.api.parkings.filter((park) => {
+    if (this.query == "") {
+      this.loading = false;
+      return this.parkings = this.api.parkings = this.api.objects.parkings;
+    }
+
+    this.parkings = this.api.objects.parkings.filter((park) => {
       if (park.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1)
         return true;
       if (park.user && park.user.full_name.toLowerCase().indexOf(this.query.toLowerCase()) > -1)
@@ -34,6 +46,7 @@ export class ParkingsPage {
 
       return false;
     });
+    this.loading = false;
   }
 
 

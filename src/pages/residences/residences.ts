@@ -17,44 +17,33 @@ export class ResidencesPage {
 
 
   ionViewDidLoad() {
+    this.loading = true
     this.api.ready.then(() => {
-      this.refresh();
+      this.api.load('residences').then(() => {
+        this.refresh()
+      })
     })
   }
 
   refresh(refresher = null) {
-    this.loading = true
-    this.api.get('residences?with[]=users')
-      .then((data: any) => {
-        this._residences = data;
-        this.loading = false
-        if (refresher) {
-          refresher.complete();
-        }
-        this.filter();
-      })
-      .catch((err) => {
-        this.loading = false
-        if (refresher) {
-          refresher.complete();
-        }
-      });
+    this._residences = this.api.objects.residences;
+    this.filter()
+    this.loading = false
+    if (refresher) refresher.complete()
   }
 
   filter() {
-    console.time("filtering")
-    var max = 20;
+    var max = 50;
     if (this.query == "") {
-      console.timeEnd("filtering")
-      return this.residences = this._residences;
+      return this.residences = this.api.objects.residences;
     }
     var response = [];
     var lower = this.query.toLowerCase()
-    for (let i = 0; i < this._residences.length; i++) {
+    for (let i = 0; i < this.api.objects.residences.length; i++) {
       if (response.length == max) {
         break;
       }
-      let res = this._residences[i];
+      let res = this.api.objects.residences[i];
       if (res.name.toLowerCase().indexOf(lower) > -1) {
         response[response.length] = res;
         continue;
@@ -68,7 +57,6 @@ export class ResidencesPage {
       }
     }
 
-    console.timeEnd("filtering")
     return this.residences = response;
   }
 
