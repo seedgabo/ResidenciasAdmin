@@ -69,7 +69,7 @@
             {{'literals.amount' | trans }}
           </th>
           <td style="text-align:center;padding: 5px;vertical-align: top;background: #eee;border-bottom: 1px solid #ddd;font-weight: bold;">
-            {{ receipt.amount | currency:'USD':true:'1.0-0' }}
+            {{ receipt.amount | currency:'COP':'symbol-narrow':'1.0-0' }}
           </td>
         </tr>
 
@@ -188,7 +188,7 @@
             {{'literals.amount' | trans }}
           </th>
           <td>
-            {{ receipt.amount | currency:'USD':true:'1.0-0' }}
+            {{ receipt.amount | currency:'COP':'symbol-narrow':'1.0-0' }}
           </td>
         </tr>
 

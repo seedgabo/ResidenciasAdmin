@@ -43,7 +43,7 @@
       <h3>{{item.value.amount | number:'1.0-0' }}</h3>
       <span item-right text-right>
         {{item.value.quantity}}
-        <h4 text-center>{{ (item.value.quantity * item.value.amount) | currency:'USD':true:'1.0-0' }}</h4>
+        <h4 text-center>{{ (item.value.quantity * item.value.amount) | currency:'COP':'symbol-narrow':'1.0-0' }}</h4>
       </span>
     </ion-item>
   </ion-list>
@@ -52,7 +52,7 @@
     <ion-list>
       <ion-item>
         <b>{{'literals.total' | trans }}:</b>
-        <span item-right>{{ total | currency:'USD':true:'1.0-0' }} </span>
+        <span item-right>{{ total | currency:'COP':'symbol-narrow':'1.0-0' }} </span>
       </ion-item>
     </ion-list>
   </ion-card>

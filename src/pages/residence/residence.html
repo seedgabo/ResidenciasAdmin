@@ -38,7 +38,7 @@
 
         <ion-item *ngIf="residence.debt">
           <p>{{'literals.debt' | trans }}</p>
-          <span item-right>{{ residence.debt | currency:'USD':true:'1.0-0' }}</span>
+          <span item-right>{{ residence.debt | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
         </ion-item>
 
       </ion-list>

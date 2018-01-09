@@ -52,7 +52,7 @@
       <h3>{{item.value.amount | number:'1.0-0' }}</h3>
       <span item-right text-right>
         {{item.value.quantity}}
-        <h4 text-center>{{ (item.value.quantity * item.value.amount) | currency:'USD':true:'1.0-0' }}</h4>
+        <h4 text-center>{{ (item.value.quantity * item.value.amount) | currency:'COP':'symbol-narrow':'1.0-0' }}</h4>
       </span>
     </ion-item>
   </ion-list>
@@ -66,11 +66,11 @@
         <p>
           {{ counts[sum.key] }} {{ ('literals.invoice' + (counts[sum.key]>1 ?'s':'') ) | trans }}
         </p>
-        <p item-right>{{sum.value | currency:'USD':true:'1.0-0'}}</p>
+        <p item-right>{{sum.value | currency:'COP':'symbol-narrow':'1.0-0'}}</p>
       </ion-item>
       <ion-item>
         <b>{{'literals.total' | trans }}:</b>
-        <span item-right>{{ total | currency:'USD':true:'1.0-0' }} </span>
+        <span item-right>{{ total | currency:'COP':'symbol-narrow':'1.0-0' }} </span>
       </ion-item>
     </ion-list>
   </ion-card>
@@ -113,11 +113,11 @@
             {{receipt.person.residence.name}}
           </p>
         </span>
-        <p item-right>{{ receipt.amount | currency:'USD':true:'1.0-0'}}</p>
+        <p item-right>{{ receipt.amount | currency:'COP':'symbol-narrow':'1.0-0'}}</p>
       </ion-item>
       <ion-item>
         <b>{{'literals.total' | trans }}:</b>
-        <span item-right>{{ total_receipts | currency:'USD':true:'1.0-0' }} </span>
+        <span item-right>{{ total_receipts | currency:'COP':'symbol-narrow':'1.0-0' }} </span>
       </ion-item>
     </ion-list>
   </ion-card>
