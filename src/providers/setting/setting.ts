@@ -7,6 +7,7 @@ export class SettingProvider {
   language = 'es';
   show_customer_type = true
   show_signature = true
+  panic = true
   constructor(private storage: Storage) {
     this.storage.get('setting').then((data) => {
       if (data) {
@@ -16,6 +17,8 @@ export class SettingProvider {
           this.show_customer_type = data.show_customer_type
         if (this.show_signature !== undefined)
           this.show_signature = data.show_signature || true
+        if (this.panic !== undefined)
+          this.panic = data.panic || true
       }
     })
   }
@@ -25,7 +28,8 @@ export class SettingProvider {
       print_type: this.print_type,
       language: this.language,
       show_customer_type: this.show_customer_type,
-      show_signature: this.show_signature
+      show_signature: this.show_signature,
+      panic: this.panic
     })
   }
 
@@ -34,6 +38,7 @@ export class SettingProvider {
     this.print_type = 'normal'
     this.show_customer_type = true
     this.show_signature = true
+    this.panic = true
     this.save()
   }
 

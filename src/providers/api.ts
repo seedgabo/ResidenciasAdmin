@@ -11,6 +11,7 @@ import { AlertController, ToastController, ModalController, Events } from "ionic
 import langs from "../assets/langs";
 window.Pusher = Pusher;
 import { Vibration } from '@ionic-native/vibration';
+import { SettingProvider } from './setting/setting';
 
 @Injectable()
 export class Api {
@@ -38,7 +39,7 @@ export class Api {
   ready: Promise<any> = new Promise((resolve) => {
     this.resolve = resolve;
   });
-  constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController, public vibration: Vibration, public modal: ModalController, public events: Events) {
+  constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController, public vibration: Vibration, public modal: ModalController, public events: Events, public setting:SettingProvider) {
     storage.ready().then(() => {
       storage.get('url').then(url_data => {
         if (url_data)
@@ -507,12 +508,14 @@ export class Api {
   }
 
   handlePanic(data, open = true) {
-    data.sound = this.playSoundSOS();
-    if (open == true) {
-      var modal = this.modal.create(PanicPage, data);
-      modal.present();
+    if(this.setting.panic) {
+      data.sound = this.playSoundSOS();
+      if (open == true) {
+        var modal = this.modal.create(PanicPage, data);
+        modal.present();
+      }
+      this.events.publish("panic", data);
     }
-    this.events.publish("panic", data);
   }
 
   Error(error) {
