@@ -507,11 +507,15 @@ export class Api {
   }
 
   handlePanic(data, open = true) {
+    var out = false;
     if (this.roles && this.modules && this.modules.panic) {
       for (var i = 0; i < this.roles.length; i++) {
         if (this.roles[i].name == 'Manage panic logs' || this.roles[i].name == 'SuperAdmin') {
-          return true;
+          out = true;
         }
+      }
+      if(out){
+        return
       }
     }
 
