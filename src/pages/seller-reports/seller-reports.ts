@@ -236,7 +236,7 @@ export class SellerReportsPage {
     }
 
     sheet.addButton({
-      text: this.api.trans('crud.clear') + " " + this.api.trans('literals.invoices'),
+      text: this.api.trans('crud.clear') + " " + this.api.trans('literals.invoices') + " & " + this.api.trans('literals.receipts'),
       icon: "remove-circle",
       role: 'destructive',
       cssClass: "icon-danger",
