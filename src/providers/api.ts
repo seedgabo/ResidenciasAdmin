@@ -134,6 +134,7 @@ export class Api {
           this.objects[resource].promise.then((resp) => {
             this.objects[resource] = resp;
             this.objects[resource].promise = promise;
+            this.objects[resource].collection = this.mapToCollection(resp);
             this.storage.set(resource + "_resource", resp);
             console.timeEnd("load " + resource)
             return resolve(this.objects[resource]);
@@ -546,6 +547,14 @@ export class Api {
     else
       headers.append("Authorization", "Basic " + btoa(this.username + ":" + this.password));
     return headers;
+  }
+
+  private mapToCollection(array, key ="id"){
+    var collection = {}
+      array.forEach(element => {
+          collection[element[key]] = element  
+      });
+      return collection;
   }
 
 
