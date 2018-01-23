@@ -40,10 +40,10 @@ export class Login {
       .then((data: any) => {
         console.log(data);
         loading.dismiss();
-        this.goTo()
         this.api.getData();
         this.api.getLang();
         this.api.startEcho();
+        this.goTo()
       })
       .catch((err) => {
         console.error(err);
@@ -172,7 +172,9 @@ export class Login {
   */
 
   goTo() {
-    this.navCtrl.setRoot(DashPage);
+    setTimeout(() => {
+      this.navCtrl.setRoot(DashPage);
+    }, 55);
   }
 
 }
