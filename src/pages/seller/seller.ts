@@ -108,14 +108,8 @@ export class SellerPage {
     }
   }
 
-  _addItem(item = {
-    concept: '',
-    amount: 0,
-    quantity: 0
-  }) {
-    this
-      .items
-      .push(item);
+  _addItem(item = { concept: '', amount: 0, quantity: 0, category_id: null }) {
+    this.items.push(item);
   }
 
   findProduct() {
@@ -126,7 +120,8 @@ export class SellerPage {
     modal.onDidDismiss((data, role) => {
       if (role !== 'cancel') {
         console.log(data, role);
-        this._addItem({ concept: data.name, amount: data.price, quantity: 1 })
+        this._addItem({ 
+          concept: data.name, amount: data.price, quantity: 1, category_id: data.category_id })
       }
     });
   }

@@ -50,7 +50,10 @@ export class CashDesksPage {
             }
           },
           {
-            text: this.api.trans('literals.print') + " - " + this.api.trans('__.Consolidado de Categorias')
+            text: this.api.trans('literals.print') + " - " + this.api.trans('__.Consolidado de Categorias'),
+            handler: ()=>{
+              this.printCashDesk(cashdesk,true)
+            }
           }
         ]
     })
@@ -58,8 +61,8 @@ export class CashDesksPage {
     sheet.present()
   }
 
-  printCashDesk(cashdesk){
-    this.navCtrl.push("ConsolidateSellPage", { invoices: cashdesk.invoices, 'receipts': cashdesk.receipts, cashdesk: cashdesk });
+  printCashDesk(cashdesk, show_categories = false){
+    this.navCtrl.push("ConsolidateSellPage", { invoices: cashdesk.invoices, 'receipts': cashdesk.receipts, cashdesk: cashdesk, show_categories: show_categories, show_products:!show_categories });
   }
 
 }

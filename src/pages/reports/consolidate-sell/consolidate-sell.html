@@ -12,6 +12,9 @@
 
 
 <ion-content [ngClass]="{'punto': setting.print_type == 'pos'}">
+  <div text-center *ngIf="loading">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
   <!-- Header -->
   <ion-card color="light">
     <ion-grid>
@@ -28,7 +31,7 @@
         <ion-col col-6 col-sm class="print-only" text-right>
           <div style="clear:both">
             <h1 *ngIf="cash_desk">
-              {{'literals.cash desk' | trans }} # {{cash_desk.id}}
+              {{'literals.cash_desk' | trans }} # {{cash_desk.id}}
             </h1>
           </div>
           <div style="float:right">
@@ -46,7 +49,7 @@
 
 
   <!-- Product List -->
-  <ion-list>
+  <ion-list *ngIf="show_products">
     <ion-item *ngFor="let item of (products|keys)">
       <h2>{{ item.key }}</h2>
       <h3>{{item.value.amount | number:'1.0-0' }}</h3>
@@ -56,6 +59,26 @@
       </span>
     </ion-item>
   </ion-list>
+
+
+  <!-- Categories List -->
+  <ion-card color="light">
+    <ion-card-header>{{'literals.categories' | trans }}</ion-card-header>
+    <ion-list *ngIf="show_categories">
+      <ng-container *ngFor="let cat of (categories|keys)">
+        <ion-item *ngIf="cat.value.total > 0" >
+          <h2>{{ cat.value._category.name }}</h2>
+          <h3>
+            {{ cat.value.quantity }} {{ 'literals.products'  |trans }}
+          </h3>
+          <span item-right text-right>
+            <h4 text-center>{{ (cat.value.total) | currency:'COP':'symbol-narrow':'1.0-0' }}</h4>
+          </span>
+        </ion-item>
+      </ng-container>
+    </ion-list>
+  </ion-card>
+
 
   <!-- Payment Resume -->
   <ion-card color="light">
@@ -121,7 +144,6 @@
       </ion-item>
     </ion-list>
   </ion-card>
-
 
 
   <!-- Signature -->

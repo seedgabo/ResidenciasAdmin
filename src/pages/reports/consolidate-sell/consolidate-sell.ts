@@ -10,6 +10,16 @@ export class ConsolidateSellPage {
   invoices = []
   receipts = []
   products = {}
+  categories = {
+    "0": {
+      total: 0,
+      quantity: 0,
+      _category: {
+        name: '---'
+      }
+    }
+  }
+
   sums = {}
   counts = {}
   printing = true;
@@ -21,6 +31,9 @@ export class ConsolidateSellPage {
   user;
   residence
   cash_desk = null;
+  show_products = true;
+  show_categories = false;
+  loading = false
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public setting: SettingProvider) {
     this.invoices = this.navParams.get('invoices');
     if (this.navParams.get('receipts')) {
@@ -32,11 +45,19 @@ export class ConsolidateSellPage {
       this.printing = this.navParams.get('print');
     }
 
+    if (this.navParams.get('show_categories')) {
+      this.show_categories = this.navParams.get('show_categories');
+    }
+
+    if (this.navParams.get('show_products')) {
+      this.show_products = this.navParams.get('show_products');
+    }
+
     if (this.navParams.get('close')) {
       this.close = this.navParams.get('close');
     }
-    
-    if (this.navParams.get('cashdesk')) {
+
+    else if (this.navParams.get('cashdesk')) {
       this.cash_desk = this.navParams.get('cashdesk');
     }
 
@@ -51,6 +72,9 @@ export class ConsolidateSellPage {
 
   ionViewDidLoad() {
     this.calculate()
+    if(this.show_categories){
+      this.calculateCategories()
+    }
     if (this.close) {
       var data = {
         user_id: this.api.user.id,
@@ -94,7 +118,8 @@ export class ConsolidateSellPage {
           if (!this.products[item.concept]) {
             this.products[item.concept] = {
               quantity: Number(item.quantity),
-              amount: Number(item.amount)
+              amount: Number(item.amount),
+              _product: item
             };
           } else {
             this.products[item.concept].quantity += Number(item.quantity);
@@ -110,6 +135,43 @@ export class ConsolidateSellPage {
     this.total_receipts = 0;
     this.receipts.forEach((rec) => {
       this.total_receipts += rec.amount
+    })
+  }
+
+  calculateCategories() {
+    this.loading =true
+    var categories_ids = []
+    Object.keys(this.products).forEach((key)=>{
+      var prod = this.products[key]._product
+      var category_id  = prod.category_id
+      categories_ids.push(category_id);
+      if(category_id == null){
+        this.categories["0"].total += Number(prod.quantity * prod.amount);
+        this.categories["0"].quantity += Number(prod.quantity);
+      }
+      else if (!this.categories[category_id]) {
+        this.categories[category_id] = {
+          total: Number(prod.quantity * prod.amount),
+          quantity: Number(prod.quantity),
+        };
+      } else {
+        this.categories[category_id].total += Number(prod.quantity * prod.amount);
+        this.categories[category_id].quantity += Number(prod.quantity);
+      }
+      
+    })
+    this.api.load('categories')
+    .then((categories:any)=>{
+      for (const i in this.categories) {
+        if (categories.collection[this.categories[i]])
+        this.categories[i]._category = categories.collection[this.categories[i]]
+      }
+      console.log(this.categories)
+      this.loading =false
+    })
+    .catch((err)=>{
+      this.loading =false
+      this.api.Error(err)
     })
   }
 
