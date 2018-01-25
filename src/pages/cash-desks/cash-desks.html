@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-title> {{'literals.cash_desks' | trans }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-refresher (ionRefresh)="getCashDesks($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-list-header>
+      {{'__.mys' | trans}} {{'literals.cash_desks' | trans }}
+    </ion-list-header>
+    <button ion-item *ngFor="let cd of cash_desks" (click)="actions(cd)">
+        <h2 item-left>{{'literals.#' | trans}} {{cd.id}}</h2>
+        <h3>
+          <b>{{'date.from' | trans }}</b> {{cd.from | amDateFormat:'LLLL'}}
+        </h3>
+        <h4>
+          <b>{{'literals.invoices' | trans }}</b>: {{ cd.invoices?.length }} 
+        </h4>
+        <h4 item-right>
+          {{'literals.total' | trans  }}: {{ cd.total | currency:'COP':'symbol-narrow':'4.2-2' }}
+        </h4>
+    </button>
+  </ion-list>
+</ion-content>

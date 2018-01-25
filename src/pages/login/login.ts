@@ -1,4 +1,3 @@
-import { DashPage } from './../dash/dash';
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, MenuController } from 'ionic-angular';
 import { Api } from "../../providers/api";
@@ -173,7 +172,7 @@ export class Login {
 
   goTo() {
     setTimeout(() => {
-      this.navCtrl.setRoot(DashPage);
+      this.navCtrl.setRoot("DashPage");
     }, 55);
   }
 

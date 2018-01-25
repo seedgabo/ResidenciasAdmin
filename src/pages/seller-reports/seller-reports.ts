@@ -131,18 +131,11 @@ export class SellerReportsPage {
   }
 
   cancelInvoice(invoice) {
-    this
-      .api
-      .alert
-      .create({
-        title: this
-          .api
-          .trans("__.nota de cancelacion"),
+    this .api .alert .create({
+        title: this .api .trans("__.nota de cancelacion"),
         inputs: [
           {
-            label: this
-              .api
-              .trans('literals.note'),
+            label: this .api .trans('literals.note'),
             placeholder: this
               .api
               .trans('literals.note'),

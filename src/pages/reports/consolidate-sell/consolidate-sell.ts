@@ -31,8 +31,13 @@ export class ConsolidateSellPage {
     if (this.navParams.get('print')) {
       this.printing = this.navParams.get('print');
     }
+
     if (this.navParams.get('close')) {
       this.close = this.navParams.get('close');
+    }
+    
+    if (this.navParams.get('cashdesk')) {
+      this.cash_desk = this.navParams.get('cashdesk');
     }
 
     if (this.navParams.get('user')) {

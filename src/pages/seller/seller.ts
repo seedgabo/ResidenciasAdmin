@@ -535,17 +535,19 @@ export class SellerPage {
           this.gotoReports(ev)
         if (data.action == 'receipts')
           this.gotoReceipts(ev)
+        if (data.action == 'cash desks')
+          this.gotoCashDesks()
       }
     })
   }
 
+  gotoCashDesks(){
+    this.navCtrl.push("CashDesksPage")
+  }
+
   gotoReports(ev) {
-    this
-      .navCtrl
-      .push("SellerReportsPage", {
-        invoices: this
-          .invoices_history
-          .map((data) => {
+    this .navCtrl .push("SellerReportsPage", {
+        invoices: this .invoices_history .map((data) => {
             var invoice = Object.assign({}, data.invoice)
             invoice.receipt = data.receipt
             invoice.person = data.user
@@ -555,8 +557,6 @@ export class SellerPage {
   }
 
   gotoReceipts(ev) {
-    this
-      .navCtrl
-      .push("ReceiptsReportPage", { receipts: this.receipts_history })
+    this.navCtrl.push("ReceiptsReportPage", { receipts: this.receipts_history })
   }
 }
