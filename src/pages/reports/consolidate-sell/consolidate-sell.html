@@ -63,10 +63,10 @@
     <ion-list>
       <ion-item *ngFor="let sum of (sums|keys)">
         <b>{{'literals.'+ sum.key | trans }}:</b>
-        <p>
+        <h3>
           {{ counts[sum.key] }} {{ ('literals.invoice' + (counts[sum.key]>1 ?'s':'') ) | trans }}
-        </p>
-        <p item-right>{{sum.value | currency:'COP':'symbol-narrow':'1.0-0'}}</p>
+        </h3>
+        <h3 item-right>{{sum.value | currency:'COP':'symbol-narrow':'1.0-0'}}</h3>
       </ion-item>
       <ion-item>
         <b>{{'literals.total' | trans }}:</b>
@@ -90,9 +90,9 @@
         </p>
       </ion-item>
       <ion-item text-wrap>
-        <p text-wrap>
+        <h3 text-wrap>
           <span *ngFor="let inv of invoices">{{inv.number}},</span>
-        </p>
+        </h3>
       </ion-item>
     </ion-list>
   </ion-card>
