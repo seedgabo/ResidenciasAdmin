@@ -62,10 +62,11 @@
 
 
   <!-- Categories List -->
-  <ion-card color="light">
+  <ion-card color="light" *ngIf="!loading && show_categories">
+
     <ion-card-header>{{'literals.categories' | trans }}</ion-card-header>
-    <ion-list *ngIf="show_categories">
-      <ng-container *ngFor="let cat of (categories|keys)">
+    <ion-list>
+      <div *ngFor="let cat of (categories|keys)">
         <ion-item *ngIf="cat.value.total > 0" >
           <h2>{{ cat.value._category.name }}</h2>
           <h3>
@@ -75,7 +76,7 @@
             <h4 text-center>{{ (cat.value.total) | currency:'COP':'symbol-narrow':'1.0-0' }}</h4>
           </span>
         </ion-item>
-      </ng-container>
+      </div>
     </ion-list>
   </ion-card>
 

@@ -217,7 +217,7 @@ export class SellerReportsPage {
 
     if (this.from == null) {
       sheet.addButton({
-        text: this.api.trans('literals.cash desk'),
+        text: this.api.trans('literals.cash_desk'),
         icon: "paper",
         handler: () => {
           this.api.storage.get('receipts_history')

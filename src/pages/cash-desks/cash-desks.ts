@@ -62,7 +62,7 @@ export class CashDesksPage {
   }
 
   printCashDesk(cashdesk, show_categories = false){
-    this.navCtrl.push("ConsolidateSellPage", { invoices: cashdesk.invoices, 'receipts': cashdesk.receipts, cashdesk: cashdesk, show_categories: show_categories, show_products:!show_categories });
+    this.navCtrl.push("ConsolidateSellPage", { invoices: cashdesk.invoices, 'receipts': cashdesk.receipts, cashdesk: cashdesk, show_categories: show_categories, show_products: !show_categories });
   }
 
 }

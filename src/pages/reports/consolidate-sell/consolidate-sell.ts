@@ -41,15 +41,15 @@ export class ConsolidateSellPage {
       this.calculateReceipts();
     }
 
-    if (this.navParams.get('print')) {
+    if (this.navParams.get('print') !== undefined) {
       this.printing = this.navParams.get('print');
     }
 
-    if (this.navParams.get('show_categories')) {
+    if (this.navParams.get('show_categories') !== undefined) {
       this.show_categories = this.navParams.get('show_categories');
     }
 
-    if (this.navParams.get('show_products')) {
+    if (this.navParams.get('show_products') !== undefined) {
       this.show_products = this.navParams.get('show_products');
     }
 
@@ -140,11 +140,9 @@ export class ConsolidateSellPage {
 
   calculateCategories() {
     this.loading =true
-    var categories_ids = []
     Object.keys(this.products).forEach((key)=>{
       var prod = this.products[key]._product
       var category_id  = prod.category_id
-      categories_ids.push(category_id);
       if(category_id == null){
         this.categories["0"].total += Number(prod.quantity * prod.amount);
         this.categories["0"].quantity += Number(prod.quantity);
@@ -162,12 +160,13 @@ export class ConsolidateSellPage {
     })
     this.api.load('categories')
     .then((categories:any)=>{
-      for (const i in this.categories) {
-        if (categories.collection[this.categories[i]])
-        this.categories[i]._category = categories.collection[this.categories[i]]
-      }
+      Object.keys(this.categories).forEach((i) =>{
+        if (categories.collection[i]){
+          this.categories[i]._category = categories.collection[i]
+        }
+      })
       console.log(this.categories)
-      this.loading =false
+      this.loading = false
     })
     .catch((err)=>{
       this.loading =false
