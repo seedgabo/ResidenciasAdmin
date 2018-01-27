@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Api } from '../../../providers/api';
 import * as moment from 'moment';
@@ -34,7 +34,7 @@ export class ConsolidateSellPage {
   show_products = true;
   show_categories = false;
   loading = false
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public setting: SettingProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public setting: SettingProvider, public zone: NgZone) {
     this.invoices = this.navParams.get('invoices');
     if (this.navParams.get('receipts')) {
       this.receipts = this.navParams.get('receipts');
@@ -72,7 +72,7 @@ export class ConsolidateSellPage {
 
   ionViewDidLoad() {
     this.calculate()
-    if(this.show_categories){
+    if (this.show_categories) {
       this.calculateCategories()
     }
     if (this.close) {
@@ -139,11 +139,11 @@ export class ConsolidateSellPage {
   }
 
   calculateCategories() {
-    this.loading =true
-    Object.keys(this.products).forEach((key)=>{
+    this.loading = true
+    Object.keys(this.products).forEach((key) => {
       var prod = this.products[key]._product
-      var category_id  = prod.category_id
-      if(category_id == null){
+      var category_id = prod.category_id
+      if (category_id == null) {
         this.categories["0"].total += Number(prod.quantity * prod.amount);
         this.categories["0"].quantity += Number(prod.quantity);
       }
@@ -156,22 +156,25 @@ export class ConsolidateSellPage {
         this.categories[category_id].total += Number(prod.quantity * prod.amount);
         this.categories[category_id].quantity += Number(prod.quantity);
       }
-      
+
     })
     this.api.load('categories')
-    .then((categories:any)=>{
-      Object.keys(this.categories).forEach((i) =>{
-        if (categories.collection[i]){
-          this.categories[i]._category = categories.collection[i]
-        }
+      .then((categories: any) => {
+        Object.keys(this.categories).forEach((i) => {
+          if (categories.collection[i]) {
+            this.categories[i]._category = categories.collection[i]
+          }
+        })
+        console.log(this.categories)
+        setTimeout(() => {
+          this.loading = false
+        }, 300)
       })
-      console.log(this.categories)
-      this.loading = false
-    })
-    .catch((err)=>{
-      this.loading =false
-      this.api.Error(err)
-    })
+      .catch((err) => {
+        this.loading = false
+        this.api.Error(err)
+      })
+
   }
 
   print() {
