@@ -18,7 +18,7 @@
 <ion-content class="no-printable" no-padding>
   <button ion-item (click)="selectPerson()">
     <h2 *ngIf="!person">
-      {{'literals.select :person' | trans:{person: api.trans('literals.person')} }}
+      {{'literals.select' | trans }} {{ 'literals.person' | trans }}
     </h2>
     <ion-avatar item-left>
       <img [src]="person.image_url" alt="" *ngIf="person && person.image_url">
