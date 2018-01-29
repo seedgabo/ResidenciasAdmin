@@ -45,13 +45,10 @@ export class SellerReportsPage {
       this.last_date = moment(this.invoices[this.invoices.length - 1].created_at)
     }
 
-    this
-      .invoices
-      .forEach((inv) => {
+    this.invoices.forEach((inv) => {
         if (inv.status !== 'cancelled')
           total += Number(inv.total);
-      }
-      )
+      })
 
     this.total = total;
   }
@@ -201,7 +198,6 @@ export class SellerReportsPage {
   }
 
   sync_invoices_with_server (date = null){
-    this.loading = true;
     if(date == null){
       date = moment()
     }else{
@@ -209,7 +205,6 @@ export class SellerReportsPage {
     }
     this.api.get(`invoices?where[created_by]=${this.api.user.id}&whereDategte[created_at]=${date.format("YYYY-MM-DD")}&whereDatelew[created_at]=${date.clone().add(1,'day').format("YYYY-MM-DD")}&with[]=user.residence&with[]=worker.residence&with[]=visitor.residence&with[]=items&with[]=receipts&append[]=person`)
     .then((resp:any)=>{
-        this.loading = false;
         var toSave = []
         var data  =  resp.map((d)=>{
           var item = d
@@ -228,8 +223,9 @@ export class SellerReportsPage {
         console.log("syncing invoices:",data)
         this.invoices = data;
         this.api.storage.set('invoices_history', toSave);
-        this.prepare();
-        this.calculate();
+        this.navCtrl.pop().then(()=>{
+          this.navCtrl.push("SellerReportsPage", { invoices: data})
+        })
       })
       .catch((err)=>{
         this.api.Error(err)
