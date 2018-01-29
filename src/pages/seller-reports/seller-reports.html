@@ -16,7 +16,10 @@
 </ion-header>
 
 <ion-content [ngClass]="{'no-print': setting.print_type == 'pos'}">
-  <ion-list *ngIf="invoices.length > 0" id="toPrint" [virtualScroll]="invoices">
+  <div text-center *ngIf="loading">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <ion-list *ngIf="!loading && invoices.length > 0" id="toPrint" [virtualScroll]="invoices">
     <button ion-item *virtualItem="let invoice" (click)="actions(invoice)" text-wrap>
       <span item-left>
         {{invoice.number}}
