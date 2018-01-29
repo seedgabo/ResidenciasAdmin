@@ -19,7 +19,6 @@ export class ConsolidateSellPage {
       }
     }
   }
-
   sums = {}
   counts = {}
   printing = true;
