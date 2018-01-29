@@ -542,7 +542,7 @@ export class SellerPage {
 
   gotoReports(ev) {
     this .navCtrl .push("SellerReportsPage", {
-        invoices: this .invoices_history .map((data) => {
+        invoices: this.invoices_history .map((data) => {
             var invoice = Object.assign({}, data.invoice)
             invoice.receipt = data.receipt
             invoice.person = data.user

@@ -31,6 +31,7 @@ export class SellerReportsPage {
     this.calculate();
     console.log(this.invoices);
   }
+
   ionViewDidEnter() {
     this.content.resize()
   }
@@ -199,6 +200,40 @@ export class SellerReportsPage {
       .present()
   }
 
+  sync_invoices_with_server (date = null){
+     if(date == null){
+       date = moment()
+     }else{
+       date = moment(date)
+     }
+    this.api.get(`invoices?where[created_by]=${this.api.user.id}&whereDategte[created_at]=${date.format("YYYY-MM-DD")}&whereDatelew[created_at]=${date.clone().add(1,'day').format("YYYY-MM-DD")}&with[]=user.residence&with[]=worker.residence&with[]=visitor.residence&with[]=items&with[]=receipts&append[]=person`)
+     .then((resp:any)=>{
+        var toSave = []
+        var data  =  resp.map((d)=>{
+            var item = d
+            var itemTosave = {
+              invoice:d,
+              user: d.person,
+              receipt: null
+            }
+            if(item.receipts.length > 0) {
+              item.receipt =  item.receipts[0]
+              itemTosave.receipt = item.receipts[0]
+            }
+            toSave[toSave.length] = itemTosave
+            return item
+        })
+        console.log("syncing invoices:",data)
+        this.invoices = data;
+        this.api.storage.set('invoices_history', toSave);
+        this.prepare();
+        this.calculate();
+     })
+     .catch((err)=>{
+       this.api.Error(err)
+     })
+  } 
+
   more() {
     var sheet = this.actionsheet.create({
       title: this.api.trans("literals.generate") + " " + this.api.trans('literals.report')
@@ -235,6 +270,16 @@ export class SellerReportsPage {
       cssClass: "icon-danger",
       handler: () => {
         this.clearData();
+      }
+    })
+
+    sheet.addButton({
+      text: this.api.trans('literals.sync') + " " + this.api.trans('literals.invoices') + " " + this.api.trans('literals.with') + " " +  this.api.trans('literals.server'),
+      icon: "sync",
+      role: 'sync',
+      cssClass: "icon-secondary",
+      handler: ()=>{
+        this.sync_invoices_with_server()
       }
     })
 

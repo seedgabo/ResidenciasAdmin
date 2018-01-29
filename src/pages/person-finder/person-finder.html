@@ -16,7 +16,7 @@
     <ion-spinner *ngIf="loading || !ready"></ion-spinner>
   </div>
 
-  <ion-searchbar debounce="1200" (ionInput)="search($event)" [(ngModel)]="query"></ion-searchbar>
+  <ion-searchbar debounce="700" (ionInput)="search($event)" [(ngModel)]="query"></ion-searchbar>
 
   <ion-list *ngIf="findFor.users && results.users && results.users.data">
 
