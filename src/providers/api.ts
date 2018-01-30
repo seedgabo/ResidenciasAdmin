@@ -270,6 +270,51 @@ export class Api {
 
       this.Echo.private('Application')
 
+        // user Events
+        .listen('UserCreated', (data) => {
+          console.log("created user:", data);
+          if (this.objects.users) {
+            this.zone.run(() => {
+              var user = this.objects.users[this.objects.users.length] = data.user;
+              this.objects.users.collection[data.user.id] = user
+              if (data.image)
+                user.image = data.image;
+            })
+          }
+        })
+        .listen('UserUpdated', (data) => {
+          console.log("updated user:", data);
+          var user_index = this.objects.users.findIndex((user) => {
+            return user.id === data.user.id;
+          });
+          if (this.objects.users) {
+            this.zone.run(() => {
+              var user;
+              if (user_index > -1)
+                user = this.objects.users[user_index] = data.user;
+              else {
+                user = this.objects.users[this.objects.users.length] = data.user;
+              }
+              if (data.image) {
+                user.image = data.image;
+              }
+            });
+          }
+        })
+        .listen('UserDeleted', (data) => {
+          console.log("deleted user:", data);
+          var user = this.objects.users.findIndex((user) => {
+            return user.id === data.user.id;
+          });
+          if (this.objects.user)
+            this.zone.run(() => {
+              if (user >= 0) {
+                this.objects.users.splice(user, 1);
+                delete (this.objects.user[data.user.id])
+              }
+            })
+        })
+        
         // Parking Events
         .listen('ParkingCreated', (data) => {
           console.log("created parking:", data);
@@ -406,7 +451,16 @@ export class Api {
             })
         })
 
+        // Correspondence Events
+        .listen('CorrespondenceCreated', (data) => {
+          console.log("correspondence created:", data);
+          this.events.publish("CorrespondenceCreated", data);
+          this.zone.run(() => {
+          })
+        })
 
+
+        // Visit Events
         .listen('VisitCreated', (data) => {
           console.log("visit created:", data);
           this.zone.run(() => {
@@ -456,23 +510,15 @@ export class Api {
             }
           })
         })
-
-        .listen('CorrespondenceCreated', (data) => {
-          console.log("correspondence created:", data);
-          this.events.publish("CorrespondenceCreated", data);
-          this.zone.run(() => {
-          })
-        })
-
         .listen('VisitConfirmed', (data) => {
           this.VisitConfirmed(data);
         })
 
+        // Panic Events
         .listen('Panic', (data) => {
           console.log("panic", data)
           this.handlePanic(data);
         })
-
         .listen('PanicUpdate', (data) => {
           console.log("panic", data)
           this.handlePanic(data, false);
