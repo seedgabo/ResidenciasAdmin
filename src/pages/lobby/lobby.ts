@@ -131,6 +131,8 @@ export class LobbyPage {
       message: this.api.trans("literals.done"),
       duration: 3000
     }).present();
+    this.person = null;
+    this.type = null;
   }
 
   more(v){
