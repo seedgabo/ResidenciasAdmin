@@ -15,12 +15,17 @@ export class VisitorPage {
   parking = null;
   parkings = [];
   loading = false;
+  dirty= false
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public viewCtrl: ViewController, public modal: ModalController) {
     var visitor = navParams.get('visitor');
-    if (visitor) {
+    var residence = navParams.get('residence');
+    if (visitor)
       this.visitor = visitor;
+    if(visitor.id)
       this.action = 'update';
-    }
+      
+    if (residence) 
+      this.residence = residence;
 
 
   }
@@ -150,6 +155,7 @@ export class VisitorPage {
   }
 
   addVisit(visitor) {
+    this.loading = true
     var visit: any = {
       status: "waiting for confirmation",
       visitor_id: visitor.id,

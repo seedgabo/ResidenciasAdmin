@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-navbar color="primary">
+      <button icon-only menuToggle ion-button>
+          <ion-icon name="menu"></ion-icon>
+      </button>
+    <ion-title>{{ api.trans('literals.lobby') }}</ion-title>
+  </ion-navbar>
+  <ion-toolbar >
+    <ion-searchbar *ngIf="ready" (ionInput)="searchVisitor()" [(ngModel)]="query"  debounce="700" [placeholder]="'literals.document' | trans"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <div text-center *ngIf="loading || !ready">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+
+  <div *ngIf="person" padding>
+    <ion-card-header text-center>
+      <img [src]="person.image_url" class="img-person">
+    </ion-card-header>
+    <ion-list>
+      <ion-item>
+        <b item-left>{{'literals.name' | trans }}</b>
+        <span item-right>{{person.name}}</span>
+      </ion-item>
+
+      <ion-item>
+        <b item-left>{{'literals.document' | trans }}</b>
+        <span item-right>{{person.document}}</span>
+      </ion-item>
+
+      <ion-item>
+        <b item-left>{{'literals.relationship' | trans }}</b>
+        <span item-right>{{person.relationship}}</span>
+      </ion-item>
+
+      <ion-item>
+        <b item-left>{{'literals.residence' | trans }}</b>
+        <span item-right>{{person.residence?.name}}</span>
+      </ion-item>
+
+
+    </ion-list>
+    <div text-right>
+        <button [disabled]="loading && person.id" ion-button  outline color="primary" (click)="addVisit(person)">
+          {{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}
+        </button>
+        <button ion-button color="secondary" (click)="visitorModal(person)" icon-left [disabled]="!canSave() || loading">
+          <ion-icon class="fa fa-edit"></ion-icon>
+          {{'crud.edit'  | trans }}
+        </button>
+    </div>
+  </div>
+
+  <div text-center *ngIf="no_results">
+      <img src="./assets/logo-sad.png" alt="no results" style="width:100%;max-width:300px;">
+      <h4 ion-text color="primary">
+        {{'__.No hay coincidencias' | trans }}
+      </h4>
+      <div text-right>
+         <button (click)="visitorModal({document:query, sex:'male'})" ion-button clear color="secondary"> {{'crud.add' | trans}} {{ 'literals.visitor' | trans}}</button>
+      </div>
+  </div>
+
+</ion-content>

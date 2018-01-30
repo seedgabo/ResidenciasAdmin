@@ -33,6 +33,7 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
+      { title: 'literals.lobby', component: "LobbyPage", icon: "people" },
       { title: 'literals.visitors', component: HomePage, icon: "contacts" },
       { title: 'literals.visits', component: ListPage, icon: "list" },
       { title: 'literals.parkings', component: ParkingsPage, icon: "car" },
@@ -44,8 +45,8 @@ export class MyApp {
   initializeApp() {
     this.api.ready.then(() => {
       if (this.api.user) {
-        // if (!this.nav.getActive())
-        this.rootPage = "DashPage";
+        if (!this.nav.getActive())
+          this.rootPage = "DashPage";
         this.api.getData();
         this.api.getLang();
         this.api.startEcho();
@@ -109,6 +110,7 @@ export class MyApp {
       this.api.url = null
     this.nav.setRoot(Login);
   }
+
   canVisitors() {
     if (this.api.roles && this.api.modules && this.api.modules.visits)
       for (var i = 0; i < this.api.roles.length; i++) {
