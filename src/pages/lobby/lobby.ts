@@ -19,6 +19,7 @@ export class LobbyPage {
   type
   /** 
    * TODO:
+   * Image Capture and upload
    * Pre Approved visits
    * Fingerprint integration
    * Users and workers 
