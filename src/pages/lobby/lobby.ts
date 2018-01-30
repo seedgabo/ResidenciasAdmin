@@ -18,6 +18,12 @@ export class LobbyPage {
   person
   visitors = [];
   type
+  /** 
+   * TODO:
+   * Pre Approved visits
+   * Fingerprint integration
+   * Users and workers 
+  **/
   constructor(public navCtrl: NavController, public navParams: NavParams, public api:Api, public modal:ModalController, public toast:ToastController) {
     this.api.ready.then(()=>{
       var promises = [
@@ -39,9 +45,10 @@ export class LobbyPage {
 
   searchVisitor() {
     if(this.query == ""){
-      this.person = null;
-      this.type = null;
+      this.person = null
+      this.type = null
       this.no_results = false
+      return
     }
     this.loading = true
     this.person = null;

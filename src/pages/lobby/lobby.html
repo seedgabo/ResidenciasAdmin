@@ -19,6 +19,12 @@
     <ion-card-header text-center>
       <img [src]="person.image_url" class="img-person">
     </ion-card-header>
+    <ion-card-header text-center>
+      <button  ion-button large round  full clear icon-left [disabled]="true">
+        <ion-icon name="finger-print"></ion-icon>
+         {{'literals.fingerprint' | trans }}
+      </button>
+    </ion-card-header>
     <ion-list>
       <ion-item>
         <b item-left>{{'literals.name' | trans }}</b>
