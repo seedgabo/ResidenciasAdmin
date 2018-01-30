@@ -4,6 +4,11 @@
           <ion-icon name="menu"></ion-icon>
       </button>
     <ion-title>{{ api.trans('literals.lobby') }}</ion-title>
+    <ion-buttons end>
+      <button ion-button clear icon-only (click)="more($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
   <ion-toolbar >
     <ion-searchbar *ngIf="ready" (ionInput)="searchVisitor()" [(ngModel)]="query"  debounce="700" [placeholder]="'literals.document' | trans"></ion-searchbar>
@@ -55,6 +60,10 @@
         <button ion-button color="secondary" (click)="visitorModal(person)" icon-left [disabled]="!canSave() || loading">
           <ion-icon class="fa fa-edit"></ion-icon>
           {{'crud.edit'  | trans }}
+        </button>
+        <br><br>
+        <button ion-button (click)="visitModal(person)" color="favorite" small clear icon-left [disabled]="!canSave() || loading">
+           {{'crud.add' | trans }} {{'__.advanced visit' | trans }}
         </button>
     </div>
   </div>

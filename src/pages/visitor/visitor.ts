@@ -17,15 +17,17 @@ export class VisitorPage {
   loading = false;
   dirty= false
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public viewCtrl: ViewController, public modal: ModalController) {
-    var visitor = navParams.get('visitor');
-    var residence = navParams.get('residence');
+    var visitor = navParams.get('visitor')
+    var residence = navParams.get('residence')
+    
     if (visitor)
-      this.visitor = visitor;
-    if(visitor.id)
-      this.action = 'update';
+      this.visitor = visitor
+
+    if(this.visitor.id)
+      this.action = 'update'
       
     if (residence) 
-      this.residence = residence;
+      this.residence = residence
 
 
   }

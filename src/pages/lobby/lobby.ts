@@ -1,9 +1,8 @@
-import { ToastController } from 'ionic-angular';
-import { ModalController } from 'ionic-angular/components/modal/modal-controller';
+import { VisitCreatorPage } from './../visit-creator/visit-creator';
 import { VisitorPage } from './../visitor/visitor';
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ActionSheetController, ModalController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -24,7 +23,7 @@ export class LobbyPage {
    * Fingerprint integration
    * Users and workers 
   **/
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api:Api, public modal:ModalController, public toast:ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api:Api, public modal:ModalController, public toast:ToastController, public actionsheet:ActionSheetController) {
     this.api.ready.then(()=>{
       var promises = [
         this.api.load("users"),
@@ -85,20 +84,6 @@ export class LobbyPage {
     this.no_results = false
   }
 
-  visitorModal(visitor = null) {
-    var residence
-    if(visitor.residence){
-      residence = visitor.residence
-    }
-    var modal = this.modal.create(VisitorPage, { visitor: visitor, residence: residence }, { showBackdrop: true, enableBackdropDismiss: true })
-    modal.present();
-    modal.onDidDismiss((data) => {
-      if (data) {
-        this.type="visitor"
-        this.person = data;
-      }
-    })
-  }
 
   addVisit(visitor) {
     this.loading = true
@@ -146,5 +131,62 @@ export class LobbyPage {
       duration: 3000
     }).present();
   }
+
+  more(v){
+    var buttons = [
+      {
+        text: this.api.trans('crud.add') + " " + this.api.trans('literals.person'),
+        icon: 'person-add',
+        cssClass: 'icon-primary',
+        handler: () => { this.visitorModal() }
+      },
+      {
+        text: this.api.trans('crud.add') + " " + this.api.trans('literals.delivery'),
+        icon: 'basket',
+        cssClass: 'icon-favorite',
+        handler: () => {
+          var modal = this.modal.create("CreateVisitGuestPage", {})
+          modal.present();
+          modal.onWillDismiss(() => {
+          })
+        }
+      }
+    ];
+    if(this.person){
+      buttons.push({
+        text: this.api.trans('crud.add') + " " + this.api.trans('__.advanced visit'),
+        icon: 'more',
+        cssClass: 'icon-secondary',
+        handler: () => { this.visitModal(this.person)}
+      })
+    }
+    this.actionsheet.create({
+      title: this.api.trans('literals.actions'),
+      buttons: buttons
+    }).present();
+  }
+
+
+  visitorModal(visitor = null) {
+    var residence
+    if (visitor && visitor.residence) {
+      residence = visitor.residence
+    }
+    var modal = this.modal.create(VisitorPage, { visitor: visitor, residence: residence }, { showBackdrop: true, enableBackdropDismiss: true })
+    modal.present();
+    modal.onDidDismiss((data) => {
+      if (data) {
+        this.type = "visitor"
+        this.person = data;
+      }
+    })
+  }
+
+  visitModal(visitor = null) {
+    this.modal.create(VisitCreatorPage, { visitor: visitor }, { showBackdrop: true, enableBackdropDismiss: true }).present();
+
+  }
+
+  
 
 }

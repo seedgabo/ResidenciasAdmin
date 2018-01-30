@@ -15,13 +15,13 @@
 <ion-content padding>
   <ion-list>
     <ion-item>
-      <ion-label> {{'literals.visitor' | trans }} </ion-label>
+      <ion-label floating> {{'literals.visitor' | trans }} </ion-label>
       <ion-select [(ngModel)]="visitor.id" disabled="true">
         <ion-option [value]="visitor.id">{{visitor.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label> {{'literals.status' | trans }} </ion-label>
+      <ion-label floating> {{'literals.status' | trans }} </ion-label>
       <ion-select [(ngModel)]="visit.status">
         <ion-option [value]="status" *ngFor="let status of statutes">{{ 'literals.' + status | trans }} </ion-option>
       </ion-select>
@@ -35,7 +35,7 @@
     </button>
 
     <ion-item *ngIf="api.objects.parkings">
-      <ion-label> {{'literals.parking' | trans }} </ion-label>
+      <ion-label floating> {{'literals.parking' | trans }} </ion-label>
       <ion-select [(ngModel)]="visit.parking_id">
         <ion-option [value]="parking.id" *ngFor="let parking of api.objects.parkings">{{ parking.name }} </ion-option>
       </ion-select>
