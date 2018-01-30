@@ -52,6 +52,7 @@ export class Api {
       storage.get('roles').then(roles => { this.roles = roles });
       storage.get('residence').then(residence => { this.residence = residence });
       storage.get('langs').then(langs => { this.langs = langs; console.log(langs) });
+      storage.get('visits_approved').then(visits_approved => { this.visits_approved = visits_approved });
       storage.get('user').then(user => {
         this.user = user
         this.resolve(user);

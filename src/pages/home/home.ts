@@ -17,10 +17,6 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    this.api.storage.get('visits_approved').then((visits_approved) => {
-      if (visits_approved)
-        this.api.visits_approved = visits_approved
-    });
     this.loadVisitors();
   }
 
@@ -111,14 +107,7 @@ export class HomePage {
     }).present();
   }
 
-  viewVisit(visit, index) {
-    this.navCtrl.push(VisitPage, {
-      visit: visit,
-      done: () => {
-        this.dismissPreApproved(visit, index)
-      }
-    });
-  }
+
 
   visitorModal(visitor = null) {
     this.modal.create(VisitorPage, { visitor: visitor }, { showBackdrop: true, enableBackdropDismiss: true }).present();
@@ -137,8 +126,18 @@ export class HomePage {
 
   }
 
+  viewVisit(visit, index) {
+    this.navCtrl.push(VisitPage, {
+      visit: visit,
+      done: () => {
+        this.dismissPreApproved(visit, index)
+      }
+    });
+  }
+
   dismissPreApproved(visit, index) {
     this.api.visits_approved.splice(index, 1);
+    this.api.storage.set('visits_approved', this.api.visits_approved);
   }
 
 

@@ -1,3 +1,4 @@
+import { VisitPage } from './../visit/visit';
 import { VisitCreatorPage } from './../visit-creator/visit-creator';
 import { VisitorPage } from './../visitor/visitor';
 import { Api } from './../../providers/api';
@@ -36,6 +37,7 @@ export class LobbyPage {
   }
 
   ionViewDidLoad() {
+    
   }
 
   ionViewDidEnter(){
@@ -186,6 +188,21 @@ export class LobbyPage {
   visitModal(visitor = null) {
     this.modal.create(VisitCreatorPage, { visitor: visitor }, { showBackdrop: true, enableBackdropDismiss: true }).present();
 
+  }
+
+
+  viewVisit(visit, index) {
+    this.navCtrl.push(VisitPage, {
+      visit: visit,
+      done: () => {
+        this.dismissPreApproved(visit, index)
+      }
+    });
+  }
+
+  dismissPreApproved(visit, index) {
+    this.api.visits_approved.splice(index, 1);
+    this.api.storage.set('visits_approved', this.api.visits_approved);
   }
 
 

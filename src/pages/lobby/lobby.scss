@@ -5,4 +5,31 @@ page-lobby {
         border-radius: 50%;
         margin: 0 auto;
     }
+    .attention{
+        animation-name: attention;
+        animation-duration:  1s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+
+    }
+
+}
+@keyframes attention {
+  from {
+    background-color: color($colors, 'danger');
+    color: white;
+    p {
+        color: white;
+    }
+
+  }
+  to {
+    background-color: color($colors, 'light');
+    color: color($colors, 'danger');
+
+    p {
+      color: black;
+    }
+
+  }
 }

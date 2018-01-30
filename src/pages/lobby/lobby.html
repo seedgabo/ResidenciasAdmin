@@ -15,68 +15,128 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-
   <div text-center *ngIf="loading || !ready">
     <ion-spinner color="primary"></ion-spinner>
   </div>
   <input type="file" name="filer" accept="image/*" (change)="readFile($event)" id="input-file-person" style="display:none;">
 
-  <div *ngIf="person" padding>
-    <ion-card-header text-center>
-      <img [src]="person.image_url" (click)="askFile()" tappable class="img-person">
-    </ion-card-header>
-    <ion-card-header text-center>
-      <button  ion-button large round  full clear icon-left [disabled]="true">
-        <ion-icon name="finger-print"></ion-icon>
-         {{ 'literals.fingerprint' | trans }}
-      </button>
-    </ion-card-header>
-    <ion-list>
-      <ion-item>
-        <b item-left>{{'literals.name' | trans }}</b>
-        <span item-right>{{person.name}}</span>
-      </ion-item>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+          <div *ngIf="person" padding>
+            <ion-card-header text-center>
+              <img [src]="person.image_url" (click)="askFile()" tappable class="img-person">
+            </ion-card-header>
+            <ion-card-header text-center>
+              <button ion-button large round full clear icon-left [disabled]="true">
+                <ion-icon name="finger-print"></ion-icon>
+                {{ 'literals.fingerprint' | trans }}
+              </button>
+            </ion-card-header>
+            <ion-list>
+              <ion-item>
+                <b item-left>{{'literals.name' | trans }}</b>
+                <span item-right>{{person.name}}</span>
+              </ion-item>
+          
+              <ion-item>
+                <b item-left>{{'literals.document' | trans }}</b>
+                <span item-right>{{person.document}}</span>
+              </ion-item>
+          
+              <ion-item>
+                <b item-left>{{'literals.relationship' | trans }}</b>
+                <span item-right>{{person.relationship}}</span>
+              </ion-item>
+          
+              <ion-item>
+                <b item-left>{{'literals.residence' | trans }}</b>
+                <span item-right>{{person.residence?.name}}</span>
+              </ion-item>
+          
+          
+            </ion-list>
+            <div text-right>
+              <button [disabled]="loading && person.id" ion-button outline color="primary" (click)="addVisit(person)">
+                {{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}
+              </button>
+              <button ion-button color="secondary" (click)="visitorModal(person)" icon-left [disabled]="!canSave() || loading">
+                <ion-icon class="fa fa-edit"></ion-icon>
+                {{'crud.edit' | trans }}
+              </button>
+              <br>
+              <br>
+              <button ion-button (click)="visitModal(person)" color="favorite" small clear icon-left [disabled]="!canSave() || loading">
+                {{'crud.add' | trans }} {{'__.advanced visit' | trans }}
+              </button>
+            </div>
+          </div>
+          
+          <div text-center *ngIf="no_results">
+            <img src="./assets/logo-sad.png" alt="no results" style="width:100%;max-width:300px;">
+            <h4 ion-text color="primary">
+              {{'__.No hay coincidencias' | trans }}
+            </h4>
+            <div text-right>
+              <button (click)="visitorModal({document:query, sex:'male'})" ion-button clear color="secondary"> {{'crud.add' | trans}} {{ 'literals.visitor' | trans}}</button>
+            </div>
+          </div>
+      </ion-col>
+      <ion-col col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 *ngIf="api.visits_approved && api.visits_approved.length>0">
+        <ion-card>
+          <ion-card-header> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-card-header>
+          <ion-list>
+            <ion-item-sliding *ngFor="let visit of api.visits_approved;let i= index">
+              <button ion-item (tap)="viewVisit(visit,i)" [ngClass]="{attention: visit.visitor?.id == person?.id }" >
+                <ion-thumbnail *ngIf="visit.visitor?.image_url" item-left (click)="askFile(visit.visitor);$event.stopPropagation()">
+                  <img [src]="visit.visitor.image_url">
+                </ion-thumbnail>
+                <ion-thumbnail item-left *ngIf="visit.guest?.image_url">
+                  <img [src]="visit.guest.image_url">
+                </ion-thumbnail>
+                <div *ngIf="visit.visitor">
+                  <span>
+                    {{visit.visitor.name }}
+                  </span>
+                  <span *ngIf="visit.visitors && visit.visitors.length > 1">{{'__.and others' | trans }} {{visit.visitors.length - 1}}</span>
+                  <p *ngIf="api.residences_collection[visit.residence_id]" text-left>
+                    {{api.residences_collection[visit.residence_id].name}}
+                  </p>
+                  <p>
+                    {{visit.note}}
+                  </p>
+                  <small *ngIf="visit.user">{{'literals.user' | trans }}: {{visit.user.name}}</small>
+                  <p>
+                    {{ visit.created_at | amCalendar }}
+                  </p>
+                </div>
+                <div *ngIf="visit.guest">
 
-      <ion-item>
-        <b item-left>{{'literals.document' | trans }}</b>
-        <span item-right>{{person.document}}</span>
-      </ion-item>
-
-      <ion-item>
-        <b item-left>{{'literals.relationship' | trans }}</b>
-        <span item-right>{{person.relationship}}</span>
-      </ion-item>
-
-      <ion-item>
-        <b item-left>{{'literals.residence' | trans }}</b>
-        <span item-right>{{person.residence?.name}}</span>
-      </ion-item>
-
-
-    </ion-list>
-    <div text-right>
-        <button [disabled]="loading && person.id" ion-button  outline color="primary" (click)="addVisit(person)">
-          {{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}
-        </button>
-        <button ion-button color="secondary" (click)="visitorModal(person)" icon-left [disabled]="!canSave() || loading">
-          <ion-icon class="fa fa-edit"></ion-icon>
-          {{'crud.edit'  | trans }}
-        </button>
-        <br><br>
-        <button ion-button (click)="visitModal(person)" color="favorite" small clear icon-left [disabled]="!canSave() || loading">
-           {{'crud.add' | trans }} {{'__.advanced visit' | trans }}
-        </button>
-    </div>
-  </div>
-
-  <div text-center *ngIf="no_results">
-      <img src="./assets/logo-sad.png" alt="no results" style="width:100%;max-width:300px;">
-      <h4 ion-text color="primary">
-        {{'__.No hay coincidencias' | trans }}
-      </h4>
-      <div text-right>
-         <button (click)="visitorModal({document:query, sex:'male'})" ion-button clear color="secondary"> {{'crud.add' | trans}} {{ 'literals.visitor' | trans}}</button>
-      </div>
-  </div>
-
+                  <span>
+                    {{visit.guest.name }}
+                  </span>
+                  <p *ngIf="api.residences_collection[visit.residence_id]" text-left>
+                    {{api.residences_collection[visit.residence_id].name}}
+                  </p>
+                  <p>
+                    {{visit.note}}
+                  </p>
+                  <small *ngIf="visit.user">{{'literals.user' | trans }}: {{visit.user.name}}</small>
+                  <p>
+                    {{ visit.created_at | amCalendar }}
+                  </p>
+                </div>
+              </button>
+              <ion-item-options side="right">
+                <button ion-button color="secondary" (click)="dismissPreApproved(visit,i)">
+                  <ion-icon name="checkbox-outline"></ion-icon>
+                  {{ 'literals.done' | trans }}
+                </button>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
