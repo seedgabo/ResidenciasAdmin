@@ -19,10 +19,11 @@
   <div text-center *ngIf="loading || !ready">
     <ion-spinner color="primary"></ion-spinner>
   </div>
+  <input type="file" name="filer" accept="image/*" (change)="readFile($event)" id="input-file-person" style="display:none;">
 
   <div *ngIf="person" padding>
     <ion-card-header text-center>
-      <img [src]="person.image_url" class="img-person">
+      <img [src]="person.image_url" (click)="askFile()" tappable class="img-person">
     </ion-card-header>
     <ion-card-header text-center>
       <button  ion-button large round  full clear icon-left [disabled]="true">

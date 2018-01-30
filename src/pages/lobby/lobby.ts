@@ -188,6 +188,38 @@ export class LobbyPage {
 
   }
 
+
+  askFile() {
+    var filer: any = document.querySelector("#input-file-person")
+    filer.click();
+  }
+
+  readFile(event) {
+    try {
+      var reader: any = new FileReader();
+      reader.readAsDataURL(event.target.files[0])
+      reader.onload = (result) => {
+        this.person.image_url = result.target.result;
+        this.uploadImage(this.person.id)
+      };
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  uploadImage(id) {
+    return this.api.post('images/upload/visitor/' + id, { image: this.person.image_url })
+      .then((data: any) => {
+        console.log(data);
+        this.person.image = data.image;
+        this.toast.create({
+          message: this.api.trans("literals.image") + " " + this.api.trans("crud.updated"),
+          duration: 1500,
+          showCloseButton: true,
+        }).present();
+      })
+      .catch(console.error)
+  }
   
 
 }
