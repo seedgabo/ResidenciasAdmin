@@ -1,4 +1,4 @@
-<ion-split-pane>
+<!-- <ion-split-pane> -->
 
   <ion-menu [content]="content" [enabled]="api.user" class="no-printable">
 
@@ -73,7 +73,7 @@
 
   <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
   <ion-nav [root]="rootPage" main #content swipeBackEnabled="false"></ion-nav>
-</ion-split-pane>
+<!-- </ion-split-pane> -->
 <ion-footer *ngIf="api.Echo && !api.Echo.connector.socket.connected && rootPage=='DashPage'" class="no-printable">
 
 

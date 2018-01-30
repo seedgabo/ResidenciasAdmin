@@ -31,7 +31,7 @@ export class LobbyPage {
 
   ionViewDidLoad() {
   }
-  
+
   ionViewDidEnter(){
     if(this.ready)
       this.searchVisitor()
@@ -131,34 +131,6 @@ export class LobbyPage {
 
   canSave(){
     return this.person.name && this.person.name.length > 3 && this.person.document && this.person.residence_id;
-  }
-
-  save(){
-    this.loading = true
-    var uri = this.type + "s"
-    var promise
-    var data ={
-      name: this.person.name,
-      document: this.person.document,
-      relationship: this.person.relationship,
-      residence_id: this.person.residence_id,
-    }
-
-    if(this.person.id){
-      promise = this.api.put(uri+"/"+this.person.id,data)
-    }else{
-      promise = this.api.post(uri,data)
-    }
-    promise.then((resp)=>{
-      this.person.id = resp.id
-      this.done()
-      this.loading = false
-    })
-    .catch((err)=>{
-       this.api.Error(err)
-       this.loading = false
-    })
-    return promise
   }
 
   private done(){

@@ -169,7 +169,7 @@ export class VisitorPage {
     }
     this.api.post(`visitors/${visitor.id}/visit`, visit).then((response) => {
       console.log(response);
-      this.viewCtrl.dismiss();
+      this.viewCtrl.dismiss({visitor: visitor, visit: response, residence: this.residence});
       this.loading = false;
     }).catch((err) => {
       this.api.Error(err)
