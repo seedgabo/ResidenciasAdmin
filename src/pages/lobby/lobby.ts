@@ -31,6 +31,11 @@ export class LobbyPage {
 
   ionViewDidLoad() {
   }
+  
+  ionViewDidEnter(){
+    if(this.ready)
+      this.searchVisitor()
+  }
 
   searchVisitor() {
     if(this.query == ""){
