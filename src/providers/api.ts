@@ -4,6 +4,7 @@ import { Http, Headers } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import 'rxjs/add/operator/map';
 
+import moment from 'moment';
 import Echo from 'laravel-echo';
 declare var window: any;
 import Pusher from 'pusher-js';
@@ -52,7 +53,12 @@ export class Api {
       storage.get('roles').then(roles => { this.roles = roles });
       storage.get('residence').then(residence => { this.residence = residence });
       storage.get('langs').then(langs => { this.langs = langs; console.log(langs) });
-      storage.get('visits_approved').then(visits_approved => { this.visits_approved = visits_approved });
+      storage.get('visits_approved').then(visits_approved => { 
+        this.visits_approved = visits_approved.filter((v)=>{
+          return moment().isSame(moment(v.created_at),'day')
+        })
+
+      });
       storage.get('user').then(user => {
         this.user = user
         this.resolve(user);
