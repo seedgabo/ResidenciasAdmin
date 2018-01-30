@@ -252,7 +252,7 @@ export class Api {
 
   startEcho() {
     this.ready.then(() => {
-      console.log(this.user.hostEcho)
+      // console.log(this.user.hostEcho)
       this.Echo = new Echo({
         key: '807bbfb3ca20f7bb886e',
         authEndpoint: this.url + 'broadcasting/auth',
@@ -266,81 +266,146 @@ export class Api {
               }
           }
 
-      });
+      })
+
       this.Echo.private('Application')
+
+        // Parking Events
         .listen('ParkingCreated', (data) => {
           console.log("created parking:", data);
-          this.zone.run(() => {
-            data.parking.user = data.user;
-            data.parking.residence = data.residence;
-            this.parkings[this.parkings.length] = data.parking;
-          })
+          if (this.objects.parkings) {
+            this.zone.run(() => {
+              var parking = this.objects.parkings[this.objects.parkings.length] = data.parking;
+              this.objects.parkings.collection[data.parking.id] = parking
+              if (data.image)
+                parking.image = data.image;
+            })
+          }
         })
         .listen('ParkingUpdated', (data) => {
           console.log("updated parking:", data);
-          var parking = this.parkings.findIndex((parking) => {
+          var parking_index = this.objects.parkings.findIndex((parking) => {
             return parking.id === data.parking.id;
           });
-          this.zone.run(() => {
-            data.parking.user = data.user;
-            data.parking.residence = data.residence;
-            if (parking >= 0) {
-              this.parkings[parking] = data.parking;
-
-            }
-            else {
-              this.parkings[this.parkings.length] = data.parking;
-            }
-          });
+          if (this.objects.parkings) {
+            this.zone.run(() => {
+              var parking;
+              if (parking_index > -1)
+                parking = this.objects.parkings[parking_index] = data.parking;
+              else {
+                parking = this.objects.parkings[this.objects.parkings.length] = data.parking;
+              }
+              if (data.image) {
+                parking.image = data.image;
+              }
+            });
+          }
         })
         .listen('ParkingDeleted', (data) => {
           console.log("deleted parking:", data);
-          var parking = this.parkings.findIndex((parking) => {
+          var parking = this.objects.parkings.findIndex((parking) => {
             return parking.id === data.parking.id;
           });
+          if (this.objects.parking)
+            this.zone.run(() => {
+              if (parking >= 0) {
+                this.objects.parkings.splice(parking, 1);
+                delete (this.objects.parking[data.parking.id])
+              }
+            })
+        })
+
+        // Visitor Events
+        .listen('VisitorCreated', (data) => {
+          console.log("created visitor:", data);
+          if(this.objects.visitors){
+            this.zone.run(() => {
+              var visitor = this.objects.visitors[this.objects.visitors.length] = data.visitor;
+              this.objects.visitors.collection[data.visitor.id] = visitor
+              if (data.image)
+                visitor.image = data.image;
+            })
+          }
+        })
+        .listen('VisitorUpdated', (data) => {
+          console.log("updated visitor:", data);
+          var visitor_index = this.objects.visitors.findIndex((visitor) => {
+            return visitor.id === data.visitor.id;
+          });
+          if(this.objects.visitors){
+            this.zone.run(() => {
+              var visitor;
+              if (visitor_index > -1)
+                visitor = this.objects.visitors[visitor_index] = data.visitor;
+              else {
+                visitor = this.objects.visitors[this.objects.visitors.length] = data.visitor;
+              }
+              if (data.image) {
+                visitor.image = data.image;
+              }
+            });
+          }
+        })
+        .listen('VisitorDeleted', (data) => {
+          console.log("deleted visitor:", data);
+          var visitor = this.objects.visitors.findIndex((visitor) => {
+            return visitor.id === data.visitor.id;
+          });
+          if(this.objects.visitor)
           this.zone.run(() => {
-            if (parking >= 0) {
-              this.parkings.splice(parking, 1);
+            if (visitor >= 0) {
+              this.objects.visitors.splice(visitor, 1);
+              delete (this.objects.visitor[data.visitor.id])
             }
           })
         })
 
-        .listen('VisitorCreated', (data) => {
-          console.log("created visitor:", data);
-          this.zone.run(() => {
-            var visitor = this.visitors[this.visitors.length] = data.visitor;
-            if (data.image)
-              visitor.image = data.image;
-          })
+
+        // Worker Events
+        .listen('WorkerCreated', (data) => {
+          console.log("created worker:", data);
+          if (this.objects.workers) {
+            this.zone.run(() => {
+              var worker = this.objects.workers[this.objects.workers.length] = data.worker;
+              this.objects.workers.collection[data.worker.id] = worker
+              if (data.image)
+                worker.image = data.image;
+            })
+          }
         })
-        .listen('VisitorUpdated', (data) => {
-          console.log("updated visitor:", data);
-          var visitor_index = this.visitors.findIndex((visitor) => {
-            return visitor.id === data.visitor.id;
+        .listen('WorkerUpdated', (data) => {
+          console.log("updated worker",data.worker) 
+          var worker_index = this.objects.workers.findIndex((worker) => {
+            return worker.id === data.worker.id;
           });
-          this.zone.run(() => {
-            var visitor;
-            if (visitor_index > -1)
-              visitor = this.visitors[visitor_index] = data.visitor;
-            else {
-              visitor = this.visitors[this.visitors.length] = data.visitor;
-            }
-            if (data.image) {
-              visitor.image = data.image;
-            }
-          });
+          if (this.objects.workers) {
+            this.zone.run(() => {
+              var worker;
+              if (worker_index > -1)
+                worker = this.objects.workers[worker_index] = data.worker;
+              else {
+                worker = this.objects.workers[this.objects.workers.length] = data.worker;
+              }
+              if (data.image) {
+                worker.image = data.image;
+              }
+            });
+          }
         })
-        .listen('VisitorDeleted', (data) => {
-          console.log("deleted visitor:", data);
-          var visitor = this.visitors.findIndex((visitor) => {
-            return visitor.id === data.visitor.id;
+        .listen('WorkerDeleted', (data) => {
+          console.log("deleted worker:", data);
+          var worker = this.objects.workers.findIndex((worker) => {
+            return worker.id === data.worker.id;
           });
-          this.zone.run(() => {
-            if (visitor >= 0) {
-              this.visitors.splice(visitor, 1);
-            }
-          })
+          if (this.objects.worker)
+            this.zone.run(() => {
+              if (worker >= 0) {
+                this.objects.workers.splice(worker, 1);
+                delete(this.objects.worker[data.worker.id])
+              }
+            })
         })
+
 
         .listen('VisitCreated', (data) => {
           console.log("visit created:", data);
