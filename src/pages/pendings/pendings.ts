@@ -11,9 +11,6 @@ export class PendingsPage {
   invoices ={data:[], total:null}
   reservations ={data:[], total:null}
   debts = {data:[], total:null}
-  ticket_count
-  invoices_count
-  reservations_count
   constructor(public navCtrl: NavController, public navParams: NavParams, public api:Api) {
 
   }
@@ -41,16 +38,6 @@ export class PendingsPage {
     .catch((err)=>{
       this.api.Error(err)
     })
-  }
-
-  countTickets(){
-    this.api.get('tickets?scope[pending]=&with[]=user.residence&with[]=comments.user&count=1')
-      .then((data: any) => {
-        this.tickets_count = data
-      })
-      .catch((err) => {
-        this.api.Error(err)
-      })
   }
   
   loadInvoices(){
