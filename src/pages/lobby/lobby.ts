@@ -21,7 +21,7 @@ export class LobbyPage {
   /** 
    * TODO:
    * Fingerprint integration
-   * Users and workers 
+   * Register entries for worker and users
   **/
   constructor(public navCtrl: NavController, public navParams: NavParams, public api:Api, public modal:ModalController, public toast:ToastController, public actionsheet:ActionSheetController) {
     this.api.ready.then(()=>{
@@ -43,7 +43,39 @@ export class LobbyPage {
       this.searchVisitor()
   }
 
+  searchPerson(){
+    this.loading = true
+    this.person = null;
+    this.type = null
+    if (this.query == "") {
+      this.no_results = false
+      return
+    }
+
+    this.searchVisitor()
+    if(!this.person)
+      this.searchUser()
+      if(!this.person)
+      this.searchWorker()
+
+    this.person ? this.no_results = false : this.no_results = true;
+    this.loading = false;
+    console.log(this.person)
+  }
+
   searchVisitor() {
+
+    for (var i = 0; i < this.api.objects.visitors.length; i++) {
+      var item = this.api.objects.visitors[i];
+      if(this.query.toLowerCase() == item.document.toLowerCase()){
+        this.person = item
+        break;
+      }
+    }
+    (this.person)? this.type = "visitor" : null;
+  }
+
+  searchUser() {
     if(this.query == ""){
       this.person = null
       this.type = null
@@ -52,15 +84,37 @@ export class LobbyPage {
     }
     this.loading = true
     this.person = null;
-    for (var i = 0; i < this.api.objects.visitors.length; i++) {
-      var item = this.api.objects.visitors[i];
+    for (var i = 0; i < this.api.objects.users.length; i++) {
+      var item = this.api.objects.users[i];
       if(this.query.toLowerCase() == item.document.toLowerCase()){
         this.person = item
         break;
       }
     }
     (this.person)? this.no_results = false : this.no_results = true;
-    (this.person)? this.type = "visitor" : null;
+    (this.person)? this.type = "user" : null;
+    this.loading = false
+    console.log(this.person)
+  }
+
+  searchWorker() {
+    if(this.query == ""){
+      this.person = null
+      this.type = null
+      this.no_results = false
+      return
+    }
+    this.loading = true
+    this.person = null;
+    for (var i = 0; i < this.api.objects.workers.length; i++) {
+      var item = this.api.objects.workers[i];
+      if(this.query.toLowerCase() == item.document.toLowerCase()){
+        this.person = item
+        break;
+      }
+    }
+    (this.person)? this.no_results = false : this.no_results = true;
+    (this.person)? this.type = "user" : null;
     this.loading = false
     console.log(this.person)
   }
@@ -104,19 +158,20 @@ export class LobbyPage {
   }
 
   findPerson() {
-    var modal = this .modal .create('PersonFinderPage', {
+    var modal = this.modal.create('PersonFinderPage', {
         users: true,
         visitors: true,
         workers: true
       })
     modal.present();
     modal.onDidDismiss((data) => {
-      if (!data) {
+      if (!data || !data.person) {
         this.person = null;
+        this.type = null;
         return;
       }
       console.log(data);
-      this.person = data;
+      this.person = data.person;
       this.type = data.type
     })
 
@@ -157,7 +212,7 @@ export class LobbyPage {
     ];
     if(this.person){
       buttons.push({
-        text: this.api.trans('crud.add') + " " + this.api.trans('__.advanced visit'),
+        text: this.api.trans('literals.configure') + " " + this.api.trans('literals.visit'),
         icon: 'more',
         cssClass: 'icon-secondary',
         handler: () => { this.visitModal(this.person)}

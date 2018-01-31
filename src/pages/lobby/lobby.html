@@ -5,13 +5,16 @@
       </button>
     <ion-title>{{ api.trans('literals.lobby') }}</ion-title>
     <ion-buttons end>
+      <button ion-button icon-only clear (click)="findPerson()">
+        <ion-icon name="search"></ion-icon>
+      </button>
       <button ion-button clear icon-only (click)="more($event)">
         <ion-icon name="more"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
-  <ion-toolbar >
-    <ion-searchbar *ngIf="ready" (ionInput)="searchVisitor()" [(ngModel)]="query"  debounce="700" [placeholder]="'literals.document' | trans"></ion-searchbar>
+  <ion-toolbar>
+    <ion-searchbar *ngIf="ready" (ionInput)="searchVisitor()" [(ngModel)]="query"  debounce="700" [placeholder]="('literals.search' | trans)  + ' ' + ('literals.document' | trans)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -23,16 +26,25 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-          <div *ngIf="person" padding>
+          <div *ngIf="person">
+
+            <!-- Image and type -->
             <ion-card-header text-center>
+              <div text-right>
+                <ion-badge color="primary">{{'literals.'+ type | trans}}</ion-badge>
+              </div>
               <img [src]="person.image_url" (click)="askFile()" tappable class="img-person">
             </ion-card-header>
+            
+            <!-- Fingerprint -->
             <ion-card-header text-center>
               <button ion-button large round full clear icon-left [disabled]="true">
                 <ion-icon name="finger-print"></ion-icon>
                 {{ 'literals.fingerprint' | trans }}
               </button>
             </ion-card-header>
+            
+            <!-- Person Data -->
             <ion-list>
               <ion-item>
                 <b item-left>{{'literals.name' | trans }}</b>
@@ -44,10 +56,16 @@
                 <span item-right>{{person.document}}</span>
               </ion-item>
           
-              <ion-item>
+              <ion-item *ngIf="type != 'worker';else workerWorkField">
                 <b item-left>{{'literals.relationship' | trans }}</b>
                 <span item-right>{{person.relationship}}</span>
               </ion-item>
+              <ng-template #workerWorkField>
+              <ion-item>
+                <b item-left>{{'literals.work' | trans }}</b>
+                <span item-right>{{person.work}}</span>
+              </ion-item>                  
+              </ng-template>
           
               <ion-item>
                 <b item-left>{{'literals.residence' | trans }}</b>
@@ -56,7 +74,10 @@
           
           
             </ion-list>
-            <div text-right>
+
+
+            <!-- Visitor Actions -->
+            <div text-right *ngIf="type === 'visitor'">
               <button [disabled]="loading && person.id" ion-button outline color="primary" (click)="addVisit(person)">
                 {{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}
               </button>
@@ -67,11 +88,12 @@
               <br>
               <br>
               <button ion-button (click)="visitModal(person)" color="favorite" small clear icon-left [disabled]="!canSave() || loading">
-                {{'crud.add' | trans }} {{'__.advanced visit' | trans }}
+                {{'literals.configure' | trans }} {{'literals.visit' | trans }}
               </button>
             </div>
           </div>
           
+          <!-- No Results -->
           <div text-center *ngIf="no_results">
             <img src="./assets/logo-sad.png" alt="no results" style="width:100%;max-width:300px;">
             <h4 ion-text color="primary">
@@ -81,7 +103,9 @@
               <button (click)="visitorModal({document:query, sex:'male'})" ion-button clear color="secondary"> {{'crud.add' | trans}} {{ 'literals.visitor' | trans}}</button>
             </div>
           </div>
+
       </ion-col>
+
       <ion-col col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 *ngIf="api.visits_approved && api.visits_approved.length>0">
         <ion-card>
           <ion-card-header> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-card-header>
