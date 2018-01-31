@@ -31,9 +31,9 @@ export class CreateVisitGuestPage {
 
 
     if (navParams.get('user')) {
-      this.visit.user_id = navParams.get('residence').id;
+      this.visit.creator_id = navParams.get('residence').id;
     } else {
-      this.visit.user_id = this.api.user.id;
+      this.visit.creator_id = this.api.user.id;
     }
 
     if (navParams.get('status')) {
