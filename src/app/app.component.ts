@@ -28,6 +28,15 @@ export class MyApp {
   SellerPage = SellerPage;
   ZonesAdminPage = ZonesAdminPage;
   PanicLogsPage = PanicLogsPage;
+  permissions = {
+    visitors: false,
+    accounter: false,
+    tickets: false,
+    zones: false,
+    panics: false,
+    parkings: false,
+    correspondences: false,
+  }
   constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush, public backgroundmode: BackgroundMode, public minimize: AppMinimize) {
     this.initializeApp();
 
@@ -47,6 +56,7 @@ export class MyApp {
       if (this.api.user) {
         if (!this.nav.getActive())
           this.rootPage = "DashPage";
+        this.SeedPermissions()
         this.api.getData();
         this.api.getLang();
         this.api.startEcho();
@@ -110,68 +120,31 @@ export class MyApp {
       this.api.url = null
     this.nav.setRoot(Login);
   }
-
-  canVisitors() {
+  
+  SeedPermissions() {
     if (this.api.roles && this.api.modules && this.api.modules.visits)
       for (var i = 0; i < this.api.roles.length; i++) {
         if (this.api.roles[i].name == 'Celator' || this.api.roles[i].name == 'SuperAdmin') {
-          return true;
+          this.permissions.visitors = true
         }
-      }
-    return false;
-  }
-  canAccounter() {
-    if (this.api.roles && this.api.modules && this.api.modules.invoices)
-      for (var i = 0; i < this.api.roles.length; i++) {
         if (this.api.roles[i].name == 'Accounter' || this.api.roles[i].name == 'SuperAdmin') {
-          return true;
+          this.permissions.accounter = true
         }
-      }
-    return false;
-  }
-  canTickets() {
-    if (this.api.roles && this.api.modules && this.api.modules.tickets)
-      for (var i = 0; i < this.api.roles.length; i++) {
         if (this.api.roles[i].name == 'Manage tickets' || this.api.roles[i].name == 'SuperAdmin') {
-          return true;
+          this.permissions.tickets = true
         }
-      }
-    return false;
-  }
-  canZones() {
-    if (this.api.roles && this.api.modules && this.api.modules.reservations)
-      for (var i = 0; i < this.api.roles.length; i++) {
         if (this.api.roles[i].name == 'Manage zones' || this.api.roles[i].name == 'SuperAdmin') {
-          return true;
+          this.permissions.zones = true
         }
-      }
-    return false;
-  }
-  canPanic() {
-    if (this.api.roles && this.api.modules && this.api.modules.panic)
-      for (var i = 0; i < this.api.roles.length; i++) {
         if (this.api.roles[i].name == 'Manage panic logs' || this.api.roles[i].name == 'SuperAdmin') {
-          return true;
+          this.permissions.panics = true
         }
-      }
-    return false;
-  }
-  CanParking() {
-    if (this.api.roles && this.api.modules && this.api.modules.parkings)
-      for (var i = 0; i < this.api.roles.length; i++) {
         if (this.api.roles[i].name == 'Manage parkings' || this.api.roles[i].name == 'SuperAdmin') {
           return true;
         }
-      }
-    return false;
-  }
-  CanCorrespondence() {
-    if (this.api.roles && this.api.modules && this.api.modules.correspondences)
-      for (var i = 0; i < this.api.roles.length; i++) {
-        if (this.api.roles[i].name == 'Celator' || this.api.roles[i].name == 'SuperAdmin') {
+        if (this.api.roles[i].name == 'Manage correspondences' || this.api.roles[i].name == 'SuperAdmin') {
           return true;
         }
       }
-    return false;
   }
 }

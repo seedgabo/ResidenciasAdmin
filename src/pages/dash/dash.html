@@ -27,71 +27,71 @@
   <ion-grid no-margin>
     <ion-row align-items-center justify-content-center>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="canVisitors()">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.visitors">
         <div tappable class="dash-card" padding no-margin (click)="openPage('LobbyPage')">
           <ion-icon class="dash-icon" large color="primary" name="people"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.lobby')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="canVisitors()">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.visitors">
         <div tappable class="dash-card" padding no-margin (click)="openPage(VistorsPage)">
           <ion-icon class="dash-icon" large color="primary" name="contacts"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.visitors')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="canVisitors()">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.visitors">
         <div tappable class="dash-card" padding no-margin (click)="openPage(VisitsPage)">
           <ion-icon class="dash-icon" large color="primary" name="list"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.visits')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="canParking()">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.parkings">
         <div tappable class="dash-card" padding no-margin (click)="openPage(ParkingsPage)">
           <ion-icon class="dash-icon" large color="primary" name="car"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.parkings')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="canVisitors()">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.visitors">
         <div tappable class="dash-card" padding no-margin (click)="openPage('ResidencesPage')">
           <ion-icon class="dash-icon" large color="primary" name="home"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.residences')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="CanCorrespondence()">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.correspondences">
         <div tappable class="dash-card" padding no-margin (click)="openPage('CorrespondencesPage')">
           <ion-icon class="dash-icon" large color="primary" name="cube"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.correspondences')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="canPanic()">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.panics">
         <div tappable class="dash-card" padding no-margin (click)="openPage(PanicLogsPage)">
           <ion-icon class="dash-icon" large color="primary" name="help-buoy"></ion-icon>
-          <h1 class="dash-title">{{api.trans('literals.panic logs')}}</h1>
+          <h1 class="dash-title">{{api.trans('literals.panic_logs')}}</h1>
         </div>
       </ion-col>
 
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="canTickets()">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.tickets">
         <div tappable class="dash-card" padding no-margin (click)="openPage('TicketsPage')">
           <ion-icon class="dash-icon" large color="primary" name="easel"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.tickets')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="canAccounter()">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.accounter">
         <div tappable class="dash-card" padding no-margin (click)="openPage(SellerPage)">
           <ion-icon class="dash-icon" large color="primary" name="card"></ion-icon>
           <h1 class="dash-title"> {{ api.trans('__.Punto de Venta') }}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="canZones()">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.zones">
         <div tappable class="dash-card" padding no-margin (click)="openPage(ZonesAdminPage)">
           <ion-icon class="dash-icon" large color="primary" name="partly-sunny"></ion-icon>
           <h1 class="dash-title"> {{ api.trans('literals.zones') }}</h1>
@@ -99,7 +99,7 @@
       </ion-col>
 
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="canAccounter()">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.accounter">
         <div tappable class="dash-card" padding no-margin (click)="openPage('SettingsPage')">
           <ion-icon class="dash-icon" large color="primary" name="settings"></ion-icon>
           <h1 class="dash-title"> {{ api.trans('literals.settings') }}</h1>

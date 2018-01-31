@@ -47,24 +47,34 @@ export class Api {
           this.url = url_data;
         else if (window.url)
           this.url = window.url;
+        storage.get('modules').then(modules => { 
+          this.modules = modules 
+          storage.get('settings').then(settings => { 
+            this.settings = settings 
+            storage.get('roles').then(roles => { 
+              this.roles = roles 
+              storage.get('residence').then(residence => { 
+                this.residence = residence 
+                storage.get('langs').then(langs => { 
+                  this.langs = langs; 
+                  storage.get('user').then(user => {
+                    this.user = user
+                    this.resolve(user);
+                  });
+                });
+              });
+            });
+          });
+        });
       });
-      storage.get('modules').then(modules => { this.modules = modules });
-      storage.get('settings').then(settings => { this.settings = settings });
-      storage.get('roles').then(roles => { this.roles = roles });
-      storage.get('residence').then(residence => { this.residence = residence });
-      storage.get('langs').then(langs => { this.langs = langs; console.log(langs) });
-      storage.get('visits_approved').then(visits_approved => { 
+
+      storage.get('visits_approved').then(visits_approved => {
+        if(!visits_approved) return
         this.visits_approved = visits_approved.filter((v)=>{
           return moment().isSame(moment(v.created_at),'day')
         })
-
-      });
-      storage.get('user').then(user => {
-        this.user = user
-        this.resolve(user);
       });
       window.$api = this;
-
     });
   }
 

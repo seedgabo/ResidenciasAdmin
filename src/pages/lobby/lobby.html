@@ -13,8 +13,9 @@
       </button>
     </ion-buttons>
   </ion-navbar>
+
   <ion-toolbar>
-    <ion-searchbar *ngIf="ready" (ionInput)="searchVisitor()" [(ngModel)]="query"  debounce="700" [placeholder]="('literals.search' | trans)  + ' ' + ('literals.document' | trans)"></ion-searchbar>
+    <ion-searchbar *ngIf="ready" (ionInput)="searchPerson()" [(ngModel)]="query"  debounce="700" [placeholder]="('literals.search' | trans)  + ' ' + ('literals.document' | trans)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 <ion-content>

@@ -40,7 +40,7 @@ export class LobbyPage {
 
   ionViewDidEnter(){
     if(this.ready)
-      this.searchVisitor()
+      this.searchPerson()
   }
 
   searchPerson(){
@@ -52,22 +52,21 @@ export class LobbyPage {
       return
     }
 
-    this.searchVisitor()
+    var query = this.query.toLowerCase()
+    this.searchVisitor(query)
     if(!this.person)
-      this.searchUser()
-      if(!this.person)
-      this.searchWorker()
+      this.searchUser(query)
+    if(!this.person)
+      this.searchWorker(query)
 
     this.person ? this.no_results = false : this.no_results = true;
     this.loading = false;
-    console.log(this.person)
   }
 
-  searchVisitor() {
-
+  searchVisitor(query) {
     for (var i = 0; i < this.api.objects.visitors.length; i++) {
       var item = this.api.objects.visitors[i];
-      if(this.query.toLowerCase() == item.document.toLowerCase()){
+      if(item.document && query == item.document.toLowerCase()){
         this.person = item
         break;
       }
@@ -75,48 +74,29 @@ export class LobbyPage {
     (this.person)? this.type = "visitor" : null;
   }
 
-  searchUser() {
-    if(this.query == ""){
-      this.person = null
-      this.type = null
-      this.no_results = false
-      return
-    }
-    this.loading = true
-    this.person = null;
+  searchUser(query) {
     for (var i = 0; i < this.api.objects.users.length; i++) {
       var item = this.api.objects.users[i];
-      if(this.query.toLowerCase() == item.document.toLowerCase()){
+      if(item.document && query == item.document.toLowerCase()){
         this.person = item
         break;
       }
     }
-    (this.person)? this.no_results = false : this.no_results = true;
-    (this.person)? this.type = "user" : null;
-    this.loading = false
-    console.log(this.person)
+    this.person ? this.type = "user" : null;
   }
 
-  searchWorker() {
-    if(this.query == ""){
-      this.person = null
-      this.type = null
-      this.no_results = false
-      return
-    }
+  searchWorker(query) {
     this.loading = true
     this.person = null;
     for (var i = 0; i < this.api.objects.workers.length; i++) {
       var item = this.api.objects.workers[i];
-      if(this.query.toLowerCase() == item.document.toLowerCase()){
+      if(item.document && query == item.document.toLowerCase()){
         this.person = item
         break;
       }
     }
-    (this.person)? this.no_results = false : this.no_results = true;
-    (this.person)? this.type = "user" : null;
-    this.loading = false
-    console.log(this.person)
+    this.person? this.type = "user" : null;
+
   }
 
   selectResidence() {

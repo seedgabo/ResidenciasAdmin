@@ -1,4 +1,4 @@
-<!-- <ion-split-pane> -->
+<ion-split-pane>
 
   <ion-menu [content]="content" [enabled]="api.user" class="no-printable">
 
@@ -14,36 +14,36 @@
           <ion-icon color="primary" name="home"></ion-icon>
           {{ api.trans('__.home') }}
         </button>
-        <div *ngIf="canVisitors()">
+        <div *ngIf="permissions.visitors">
           <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)" icon-left>
             <ion-icon color="primary" [name]="p.icon"></ion-icon>
             {{ api.trans(p.title) }}
           </button>
         </div>
-        <button *ngIf="canPanic()" menuClose ion-item (click)="openPage({component:PanicLogsPage})" icon-left>
+        <button *ngIf="permissions.panics" menuClose ion-item (click)="openPage({component:PanicLogsPage})" icon-left>
           <ion-icon color="primary" name="help-buoy"></ion-icon>
-          {{ api.trans('literals.panic logs') }}
+          {{ api.trans('literals.panic_logs') }}
         </button>
 
 
-        <button *ngIf="canTickets()" menuClose ion-item (click)="openPage({component:'TicketsPage'})" icon-left>
+        <button *ngIf="permissions.tickets" menuClose ion-item (click)="openPage({component:'TicketsPage'})" icon-left>
           <ion-icon color="primary" name="easel"></ion-icon>
           {{ api.trans('literals.tickets') }}
         </button>
 
-        <button *ngIf="CanCorrespondence()" menuClose ion-item (click)="openPage({component:'CorrespondencesPage'})" icon-left>
+        <button *ngIf="permissions.correspondences" menuClose ion-item (click)="openPage({component:'CorrespondencesPage'})" icon-left>
 
           <ion-icon color="primary" name="cube"></ion-icon>
 
           {{ api.trans('literals.correspondences') }}
         </button>
 
-        <button *ngIf="canAccounter()" menuClose ion-item (click)="openPage({component:SellerPage})" icon-left>
+        <button *ngIf="permissions.accounter" menuClose ion-item (click)="openPage({component:SellerPage})" icon-left>
           <ion-icon color="primary" name="card"></ion-icon>
           {{ api.trans('__.Punto de Venta') }}
         </button>
 
-        <button *ngIf="canZones()" menuClose ion-item (click)="openPage({component:ZonesAdminPage})" icon-left>
+        <button *ngIf="permissions.zones" menuClose ion-item (click)="openPage({component:ZonesAdminPage})" icon-left>
           <ion-icon color="primary" name="partly-sunny"></ion-icon>
           {{ api.trans('literals.zones') }}
         </button>
@@ -52,7 +52,7 @@
           {{ api.trans('literals.settings') }}
         </ion-item-divider>
 
-        <button *ngIf="canAccounter()" menuClose ion-item (click)="openPage({component:'SettingsPage'})" icon-left>
+        <button *ngIf="permissions.accounter" menuClose ion-item (click)="openPage({component:'SettingsPage'})" icon-left>
           <ion-icon color="primary" name="settings"></ion-icon>
           {{ api.trans('literals.settings') }}
         </button>
@@ -73,7 +73,8 @@
 
   <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
   <ion-nav [root]="rootPage" main #content swipeBackEnabled="false"></ion-nav>
-<!-- </ion-split-pane> -->
+</ion-split-pane>
+
 <ion-footer *ngIf="api.Echo && !api.Echo.connector.socket.connected && rootPage=='DashPage'" class="no-printable">
 
 
