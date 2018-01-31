@@ -15,7 +15,7 @@
           {{ api.trans('__.home') }}
         </button>
 
-        <button *ngIf="permissions.tickets || permissions.accounter" menuClose ion-item (click)="openPage({component:'PendingsPage'})"
+        <button *ngIf="permissions.tickets || permissions.accounter || permissions.zones" menuClose ion-item (click)="openPage({component:'PendingsPage'})"
           icon-left>
           <ion-icon color="primary" name="clock"></ion-icon>
           {{ api.trans('literals.pendings') }}
