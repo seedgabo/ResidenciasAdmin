@@ -14,9 +14,12 @@ export class PendingsPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public api:Api) {
 
   }
+  ionViewDidEnter(){
+    this.refresh()
+  }
 
-  ionViewDidLoad() {
-    this.api.ready.then(()=>{
+  refresh(){
+    this.api.ready.then(() => {
       if (this.canTickets()) {
         this.loadTickets();
       }
@@ -76,7 +79,7 @@ export class PendingsPage {
   }
   
   invoiceAction(invoice){
-    
+    this.navCtrl.push('InvoicePage',{invoice:invoice})
   }
   
   reservationAction(reservation){

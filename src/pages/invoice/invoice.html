@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-navbar color="secondary">
+    <ion-title>{{ 'literals.invoice' | trans }} {{invoice.name}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only clear (click)="actions()">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+
+  <ion-card>
+    <ion-list>
+      <ion-item>
+        <p>{{'literals.status' | trans }}:</p>
+        <b item-right> {{'literals.' + invoice.status | trans }} </b>
+        <span color="secondary" ion-text *ngIf="invoice.status!=='paid' && invoice.status!=='cancelled' && invoice.in_discount">
+          ({{'literals.in discount' | trans }})
+        </span>
+
+        <span color="danger" ion-text *ngIf="invoice.status!=='paid' && invoice.status!=='cancelled' && invoice.in_interest">
+          ({{ 'literals.in interest' | trans }})"
+        </span>
+      </ion-item>
+  
+      <ion-item>
+          {{ 'literals.person' | trans }}
+          <b item-right>{{ invoice.person?.name }}</b>
+      </ion-item>
+  
+      <ion-item>
+          {{ 'literals.residence' | trans }}
+          <b item-right>{{ invoice.residence?.name }}</b>
+      </ion-item>
+  
+      <ion-item *ngIf="invoice.note" text-wrap>
+        {{invoice.note}}
+      </ion-item>
+  
+
+    </ion-list>
+  </ion-card>
+
+  <ion-card>
+    <ion-list>
+      <ion-list-header text-capitalize>
+        {{'literals.items' | trans }}
+      </ion-list-header>
+      <ion-item *ngFor="let item of invoice.items">
+        <b>{{item.concept}}</b>
+        <small>({{item.quantity}})</small>
+        <span item-right>{{ item.amount | currency:'COP':'symbol-narrow':'1.2-2' }}</span>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div text-right>
+      <b>{{'literals.total' | trans}}: </b>
+      <span>{{ invoice.total | currency:'USD':'symbol-narrow':'1.2-2' }}</span>
+    </div>
+  </ion-toolbar>
+</ion-footer>

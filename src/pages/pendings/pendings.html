@@ -38,7 +38,7 @@
             <ion-note item-end color="favorite">{{ invoices.total}}</ion-note>
           </ion-card-header>
           <ion-list>
-            <button ion-item *ngFor="let invoice of invoices.data">
+            <button ion-item *ngFor="let invoice of invoices.data" (click)="invoiceAction(invoice)">
               <h2>{{invoice.name}}</h2>
               <p>{{'literals.'+ invoice.status | trans}}</p>
               <ion-note text-right>
@@ -80,7 +80,7 @@
             <ion-note item-end color="favorite">{{ debts.total}}</ion-note>
           </ion-card-header>
           <ion-list>
-            <button ion-item *ngFor="let debt of debts.data">
+            <button ion-item *ngFor="let debt of debts.data" (click)="invoiceAction(debt)">
               <h2 text-wrap>{{ debt.name}} </h2>
               <p>{{'literals.' + debt.status | trans }}</p>
               <ion-note text-right>
