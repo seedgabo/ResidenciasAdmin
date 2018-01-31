@@ -75,7 +75,7 @@
           <div text-center *ngIf="no_results">
             <img src="./assets/logo-sad.png" alt="no results" style="width:100%;max-width:300px;">
             <h4 ion-text color="primary">
-              {{'__.No hay coincidencias' | trans }}
+              {{'__.No hay coincidencias exactas en el campo' | trans }} {{ 'literals.document' | trans }}
             </h4>
             <div text-right>
               <button (click)="visitorModal({document:query, sex:'male'})" ion-button clear color="secondary"> {{'crud.add' | trans}} {{ 'literals.visitor' | trans}}</button>

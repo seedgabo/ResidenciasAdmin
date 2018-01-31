@@ -66,19 +66,19 @@
   </ion-card>
 
 
-  <ion-card *ngIf="visit.user">
+  <ion-card *ngIf="visit.creator">
     <ion-card-header>
-      <ion-card-title>{{'literals.user' | trans }}</ion-card-title>
+      <ion-card-title>{{'literals.creator' | trans }}</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
       <div>
         <div text-center>
-          <img [src]="visit.user.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
+          <img [src]="visit.creator.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
         </div>
         <ion-item>
           <ion-icon name="person"></ion-icon>
-          <span item-right>{{visit.user.name}}</span>
+          <span item-right>{{visit.creator.name}}</span>
         </ion-item>
       </div>
 
