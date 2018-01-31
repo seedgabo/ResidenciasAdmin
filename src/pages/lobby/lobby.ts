@@ -170,7 +170,6 @@ export class LobbyPage {
         this.type = null;
         return;
       }
-      console.log(data);
       this.person = data.person;
       this.type = data.type
     })

@@ -58,7 +58,7 @@
           
               <ion-item *ngIf="type != 'worker';else workerWorkField">
                 <b item-left>{{'literals.relationship' | trans }}</b>
-                <span item-right>{{person.relationship}}</span>
+                <span item-right>{{'literals.' + person.relationship}}</span>
               </ion-item>
               <ng-template #workerWorkField>
               <ion-item>
