@@ -49,6 +49,7 @@ export class LobbyPage {
     this.type = null
     if (this.query == "") {
       this.no_results = false
+      this.loading = false
       return
     }
 
@@ -60,7 +61,7 @@ export class LobbyPage {
       this.searchWorker(query)
 
     this.person ? this.no_results = false : this.no_results = true;
-    this.loading = false;
+    this.loading = false
   }
 
   searchVisitor(query) {
