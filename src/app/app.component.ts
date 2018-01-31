@@ -54,7 +54,7 @@ export class MyApp {
   initializeApp() {
     this.api.ready.then(() => {
       if (this.api.user) {
-        if (!this.nav.getActive())
+        // if (!this.nav.getActive())
           this.rootPage = "DashPage";
         this.SeedPermissions()
         this.api.getData();

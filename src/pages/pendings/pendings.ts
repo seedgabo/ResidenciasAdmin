@@ -7,29 +7,34 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'pendings.html',
 })
 export class PendingsPage {
-  tickets =[]
-  invoices =[]
-  reservations =[]
-  debts =[]
+  tickets ={data:[], total:null}
+  invoices ={data:[], total:null}
+  reservations ={data:[], total:null}
+  debts = {data:[], total:null}
+  ticket_count
+  invoices_count
+  reservations_count
   constructor(public navCtrl: NavController, public navParams: NavParams, public api:Api) {
 
   }
 
   ionViewDidLoad() {
-    if (this.canTickets()) {
-      this.loadTickets();
-    }
-    if (this.canReservations()) {
-      this.loadReservations();
-    }
-    if (this.canInvoices()) {
-      this.loadInvoices();
-      this.loadDebts();
-    }
+    this.api.ready.then(()=>{
+      if (this.canTickets()) {
+        this.loadTickets();
+      }
+      if (this.canReservations()) {
+        this.loadReservations();
+      }
+      if (this.canInvoices()) {
+        this.loadInvoices();
+        this.loadDebts();
+      }
+    })
   }
 
   loadTickets(){
-    this.api.get('tickets?scope[pending]=&with[]=user.residence&with[]=comments.user')
+    this.api.get('tickets?scope[pending]=&with[]=user.residence&with[]=comments.user&paginate=50')
     .then((data:any)=>{
       this.tickets = data
     })
@@ -37,29 +42,39 @@ export class PendingsPage {
       this.api.Error(err)
     })
   }
+
+  countTickets(){
+    this.api.get('tickets?scope[pending]=&with[]=user.residence&with[]=comments.user&count=1')
+      .then((data: any) => {
+        this.tickets_count = data
+      })
+      .catch((err) => {
+        this.api.Error(err)
+      })
+  }
   
   loadInvoices(){
-    this.api.get('invoices?scope[waitingApproval]=&with[]=user.residence&append[]=person')
+    this.api.get('invoices?scope[waitingApproval]=&with[]=user.residence&append[]=person&paginate=50')
       .then((data:any)=>{
         this.invoices = data
       })
       .catch((err)=>{
         this.api.Error(err)
       })
-    }
+  }
+
+  loadReservations(){
+    this.api.get('reservations?scope[waiting]=&with[]=user.residence&with[]=zone&paginate=50')
+    .then((data:any)=>{
+      this.reservations = data
+    })
+    .catch((err)=>{
+      this.api.Error(err)
+    })
+  }
     
-    loadReservations(){
-      this.api.get('reservations?scope[waiting]=&with[]=user.residence&with[]=zone')
-      .then((data:any)=>{
-        this.reservations = data
-      })
-      .catch((err)=>{
-        this.api.Error(err)
-      })
-    }
-    
-    loadDebts(){
-      this.api.get('invoices?scope[InDebt]=&with[]=user.residence&with[]=residence&append[]=person')
+  loadDebts(){
+    this.api.get('invoices?scope[InDebt]=&with[]=user.residence&with[]=residence&append[]=person&paginate=50')
         .then((data:any)=>{
           this.debts = data
         })
@@ -69,7 +84,20 @@ export class PendingsPage {
 
   }
 
+  ticketAction(ticket){
+    this.navCtrl.push("TicketPage",{ticket: ticket})
+  }
+  
+  invoiceAction(invoice){
+    
+  }
+  
+  reservationAction(reservation){
+    this.navCtrl.push("ReservationPage",{reservation: reservation})
+  }
 
+
+  
   private canInvoices() {
     if (this.api.roles && this.api.modules && this.api.modules.invoices)
       for (var i = 0; i < this.api.roles.length; i++) {

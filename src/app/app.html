@@ -14,12 +14,20 @@
           <ion-icon color="primary" name="home"></ion-icon>
           {{ api.trans('__.home') }}
         </button>
+
+        <button *ngIf="permissions.tickets || permissions.accounter" menuClose ion-item (click)="openPage({component:'PendingsPage'})"
+          icon-left>
+          <ion-icon color="primary" name="clock"></ion-icon>
+          {{ api.trans('literals.pendings') }}
+        </button>
+
         <div *ngIf="permissions.visitors">
           <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)" icon-left>
             <ion-icon color="primary" [name]="p.icon"></ion-icon>
             {{ api.trans(p.title) }}
           </button>
         </div>
+
         <button *ngIf="permissions.panics" menuClose ion-item (click)="openPage({component:PanicLogsPage})" icon-left>
           <ion-icon color="primary" name="help-buoy"></ion-icon>
           {{ api.trans('literals.panic_logs') }}

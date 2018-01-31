@@ -1,18 +1,97 @@
-<!--
-  Generated template for the PendingsPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>Pendings</ion-title>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle icon-ony>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title *ngIf="api.user"> {{ 'literals.pendings' | trans }}</ion-title>
   </ion-navbar>
-
 </ion-header>
+<ion-content>
+  <ion-grid no-padding>
+    <ion-row>
 
+      <ion-col *ngIf="tickets.data.length > 0" no-padding col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4>
+        <ion-card>
+          <ion-card-header color="primary">
+            <ion-icon class="fa fa-ticket" item-left></ion-icon>
+            {{'literals.tickets' | trans }}
+            <ion-note item-end color="favorite">{{ tickets.total}}</ion-note>
+          </ion-card-header>
+          <ion-list>
+            <button ion-item *ngFor="let ticket of tickets.data" (click)="ticketAction(ticket)">
+                <h2>{{ticket.subject}}</h2>
+                <p>{{'literals.'+ ticket.status | trans}}</p>
+              <ion-note text-right>
+                <img [src]="ticket.user?.image_url" class="avatar-xs"> 
+                {{ticket.user?.name}}
+              </ion-note>
+            </button>
+          </ion-list>
+        </ion-card>
+      </ion-col>
 
-<ion-content padding>
+      <ion-col *ngIf="invoices.data.length > 0" no-padding col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4>
+        <ion-card>
+          <ion-card-header color="primary">
+            <ion-icon name="document" item-left></ion-icon>
+            {{'literals.invoices' | trans }}
+            <ion-note item-end color="favorite">{{ invoices.total}}</ion-note>
+          </ion-card-header>
+          <ion-list>
+            <button ion-item *ngFor="let invoice of invoices.data">
+              <h2>{{invoice.name}}</h2>
+              <p>{{'literals.'+ invoice.status | trans}}</p>
+              <ion-note text-right>
+                <img [src]="invoice.person?.image_url" class="avatar-xs"> 
+                {{invoice.person?.name}}
+              </ion-note>
+            </button>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+
+      <ion-col *ngIf="reservations.data.length > 0" no-padding col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4>
+        <ion-card>
+          <ion-card-header color="primary">
+            <ion-icon name="partly-sunny" item-left></ion-icon>
+            {{'literals.reservations' | trans }}
+            <ion-note item-end color="favorite">{{ reservations.total}}</ion-note>
+          </ion-card-header>
+          <ion-list>
+            <button ion-item *ngFor="let reservation of reservations.data" (click)="reservationAction(reservation)">
+              <h2 text-wrap>{{ reservation.start | amDateFormat:'lll' }} </h2>
+
+              <p>{{'literals.' + reservation.status | trans}}</p>
+              
+              <ion-note text-right>
+                <img [src]="reservation.user?.image_url" class="avatar-xs">
+                {{reservation.user?.name}}
+              </ion-note>
+            </button>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+
+      <ion-col *ngIf="debts.data.length > 0" no-padding col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4>
+        <ion-card>
+          <ion-card-header color="primary">
+            <ion-icon name="partly-sunny" item-left></ion-icon>
+            {{'literals.debts' | trans }}
+            <ion-note item-end color="favorite">{{ debts.total}}</ion-note>
+          </ion-card-header>
+          <ion-list>
+            <button ion-item *ngFor="let debt of debts.data">
+              <h2 text-wrap>{{ debt.name}} </h2>
+              <p>{{'literals.' + debt.status | trans }}</p>
+              <ion-note text-right>
+                <img [src]="debt.person?.image_url" class="avatar-xs"> {{debt.person?.name}}
+              </ion-note>
+            </button>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
 
 </ion-content>
