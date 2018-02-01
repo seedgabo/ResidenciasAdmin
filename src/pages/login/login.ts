@@ -1,3 +1,4 @@
+import { Events } from 'ionic-angular';
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, MenuController } from 'ionic-angular';
 import { Api } from "../../providers/api";
@@ -13,7 +14,7 @@ export class Login {
   code = "";
   ready = false;
   preconfigured = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public menuCtrl: MenuController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public menuCtrl: MenuController, public events: Events) {
     if (window.url) {
       this.preconfigured = true;
       this.api.storage.set('url', window.url);
@@ -43,6 +44,7 @@ export class Login {
         this.api.getLang();
         this.api.startEcho();
         this.goTo()
+        this.events.publish('login', {})
       })
       .catch((err) => {
         console.error(err);
@@ -78,10 +80,12 @@ export class Login {
       this.api.storage.set('url', server.url);
     }
   }
+
   goBack() {
     this.api.url = null;
     this.api.storage.remove('url');
   }
+
   getServers() {
     this.api.http.get('http://residenciasonline.com/residencias/public/servers.json')
       .map(res => res.json())
