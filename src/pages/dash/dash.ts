@@ -54,26 +54,45 @@ export class DashPage {
   SeedPermissions() {
     if (this.api.roles && this.api.modules && this.api.modules.visits)
       for (var i = 0; i < this.api.roles.length; i++) {
-        if (this.api.roles[i].name == 'Celator' || this.api.roles[i].name == 'SuperAdmin') {
+        if (this.api.roles[i].name == 'SuperAdmin') {
+          this.permissions = {
+            visitors: true,
+            accounter: true,
+            tickets: true,
+            zones: true,
+            panics: true,
+            parkings: true,
+            correspondences: true,
+          }
+          return
+        }
+        else if (this.api.roles[i].name == 'Celator') {
           this.permissions.visitors = true
+
         }
-        if (this.api.roles[i].name == 'Accounter' || this.api.roles[i].name == 'SuperAdmin') {
+        else if (this.api.roles[i].name == 'Accounter') {
           this.permissions.accounter = true
+
         }
-        if (this.api.roles[i].name == 'Manage tickets' || this.api.roles[i].name == 'SuperAdmin') {
+        else if (this.api.roles[i].name == 'Manage tickets') {
           this.permissions.tickets = true
+
         }
-        if (this.api.roles[i].name == 'Manage zones' || this.api.roles[i].name == 'SuperAdmin') {
+        else if (this.api.roles[i].name == 'Manage zones') {
           this.permissions.zones = true
+
         }
-        if (this.api.roles[i].name == 'Manage panic logs' || this.api.roles[i].name == 'SuperAdmin') {
+        else if (this.api.roles[i].name == 'Manage panic logs') {
           this.permissions.panics = true
+
         }
-        if (this.api.roles[i].name == 'Manage parkings' || this.api.roles[i].name == 'SuperAdmin') {
-          return true;
+        else if (this.api.roles[i].name == 'Manage parkings') {
+          this.permissions.parkings = true
+
         }
-        if (this.api.roles[i].name == 'Manage correspondences' || this.api.roles[i].name == 'SuperAdmin') {
-          return true;
+        else if (this.api.roles[i].name == 'Manage correspondences') {
+          this.permissions.correspondences = true
+
         }
       }
   }

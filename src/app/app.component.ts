@@ -1,7 +1,7 @@
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { PanicLogsPage } from './../pages/panic-logs/panic-logs';
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, MenuController } from 'ionic-angular';
+import { Nav, Platform, MenuController, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AppMinimize } from '@ionic-native/app-minimize';
@@ -37,8 +37,12 @@ export class MyApp {
     parkings: false,
     correspondences: false,
   }
-  constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush, public backgroundmode: BackgroundMode, public minimize: AppMinimize) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush, public backgroundmode: BackgroundMode, public minimize: AppMinimize, public events: Events) {
     this.initializeApp();
+
+    this.events.subscribe('login', () => {
+      this.SeedPermissions()
+    })
 
     // used for an example of ngFor and navigation
     this.pages = [
@@ -52,10 +56,23 @@ export class MyApp {
   }
 
   initializeApp() {
+    var sync = () => {
+      this.codepush.sync({ updateDialog: false, ignoreFailedUpdates: false, }).subscribe(
+        (status) => {
+          console.log(status)
+          if (status == 8)
+            this.splashScreen.show();
+        }
+        , (err) => { console.warn(err) });
+
+    }
+    sync()
+    setTimeout(sync, 1000 * 60 * 60 * 6)
+
     this.api.ready.then(() => {
       if (this.api.user) {
         // if (!this.nav.getActive())
-          this.rootPage = "DashPage";
+        this.rootPage = "DashPage";
         this.SeedPermissions()
         this.api.getData();
         this.api.getLang();
@@ -84,18 +101,6 @@ export class MyApp {
         { icon: 'icon', text: "", title: "Residentes Online Administrador", color: "#42f459", bigText: true }
       );
       this.backgroundmode.excludeFromTaskList();
-      var sync = () => {
-        this.codepush.sync({ updateDialog: false, ignoreFailedUpdates: false, }).subscribe(
-          (status) => {
-            console.log(status)
-            if (status == 8)
-              this.splashScreen.show();
-          }
-          , (err) => { console.warn(err) });
-
-      }
-      sync();
-      setTimeout(sync, 1000 * 60 * 60 * 6)
     });
   }
 
@@ -120,30 +125,49 @@ export class MyApp {
       this.api.url = null
     this.nav.setRoot(Login);
   }
-  
+
   SeedPermissions() {
     if (this.api.roles && this.api.modules && this.api.modules.visits)
       for (var i = 0; i < this.api.roles.length; i++) {
-        if (this.api.roles[i].name == 'Celator' || this.api.roles[i].name == 'SuperAdmin') {
+        if (this.api.roles[i].name == 'SuperAdmin') {
+          this.permissions = {
+            visitors: true,
+            accounter: true,
+            tickets: true,
+            zones: true,
+            panics: true,
+            parkings: true,
+            correspondences: true,
+          }
+          return
+        }
+        else if (this.api.roles[i].name == 'Celator') {
           this.permissions.visitors = true
+
         }
-        if (this.api.roles[i].name == 'Accounter' || this.api.roles[i].name == 'SuperAdmin') {
+        else if (this.api.roles[i].name == 'Accounter') {
           this.permissions.accounter = true
+
         }
-        if (this.api.roles[i].name == 'Manage tickets' || this.api.roles[i].name == 'SuperAdmin') {
+        else if (this.api.roles[i].name == 'Manage tickets') {
           this.permissions.tickets = true
+
         }
-        if (this.api.roles[i].name == 'Manage zones' || this.api.roles[i].name == 'SuperAdmin') {
+        else if (this.api.roles[i].name == 'Manage zones') {
           this.permissions.zones = true
+
         }
-        if (this.api.roles[i].name == 'Manage panic logs' || this.api.roles[i].name == 'SuperAdmin') {
+        else if (this.api.roles[i].name == 'Manage panic logs') {
           this.permissions.panics = true
+
         }
-        if (this.api.roles[i].name == 'Manage parkings' || this.api.roles[i].name == 'SuperAdmin') {
-          return true;
+        else if (this.api.roles[i].name == 'Manage parkings') {
+          this.permissions.parkings = true
+
         }
-        if (this.api.roles[i].name == 'Manage correspondences' || this.api.roles[i].name == 'SuperAdmin') {
-          return true;
+        else if (this.api.roles[i].name == 'Manage correspondences') {
+          this.permissions.correspondences = true
+
         }
       }
   }
