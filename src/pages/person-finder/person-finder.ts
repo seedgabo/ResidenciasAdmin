@@ -203,7 +203,12 @@ export class PersonFinderPage {
   }
 
   visitorModal(visitor = null) {
-    var modal = this.modal.create(VisitorPage, { visitor: visitor }, { showBackdrop: true, enableBackdropDismiss: true })
+    var residence
+    if(visitor){
+      residence = visitor.residence
+      debugger
+    }
+    var modal = this.modal.create(VisitorPage, { visitor: visitor, residence:residence, show_visits_button: false})
     modal.present();
     modal.onDidDismiss((data) => {
       if (data) {

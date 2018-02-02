@@ -63,14 +63,13 @@
 <ion-footer>
   <ion-grid>
     <ion-row>
-      <ion-col col-12>
-        <button [disabled]="!canSave() || loading" ion-button color="secondary" block (click)="saveWithVisit()">{{'crud.save' | trans }} & {{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}</button>
+      <ion-col col-12 *ngIf="show_visits_button">
+        <button  [disabled]="!canSave() || loading" ion-button color="secondary" block (click)="saveWithVisit()">{{'crud.save' | trans }} & {{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}</button>
+        <button  *ngIf="!dirty && visitor.id" [disabled]="loading" ion-button color="primary" block (click)="addVisit(visitor)">{{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}</button>
       </ion-col>
 
       <ion-col>
-          <button *ngIf="!dirty && visitor.id" [disabled]="loading" ion-button color="primary" block (click)="addVisit(visitor)">{{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}</button>
-
-          <button *ngIf="dirty || !visitor.id" [disabled]="!canSave() || loading" ion-button color="primary" block (click)="save()">{{'crud.save' | trans }}</button>
+        <button [disabled]="!canSave() || loading" ion-button color="primary" block (click)="save()">{{'crud.save' | trans }}</button>
       </ion-col>
 
       <ion-col>
