@@ -215,6 +215,7 @@ export class PersonFinderPage {
         this.results.users = null;
         this.results.visitors = { data: [data] };
         this.results.workers = null;
+        this.api.storage.set('recent_visitors', { data: [data] });
       }
     })
   }

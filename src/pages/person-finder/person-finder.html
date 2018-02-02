@@ -52,7 +52,7 @@
         <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
         <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
       </p>
-        <button ion-button icon-only clear color="primary" (click)="visitorModal(person)" item-right>
+        <button ion-button icon-only clear color="primary" (click)="visitorModal(person);$event.stopPropagation()" item-right>
         <ion-icon name="create"></ion-icon>
       </button>
     </button>
