@@ -471,7 +471,7 @@ export class SellerPage {
 
   actions() {
     var buttons = [];
-    if (this.type == 'user') {
+    if (this.api.modules.receipts && this.type == 'user') {
       buttons.push({
         text: this
           .api
@@ -509,12 +509,8 @@ export class SellerPage {
       }
     })
 
-    this
-      .actionsheet
-      .create({
-        title: this
-          .api
-          .trans('__.¿Que desea hacer?'),
+    this .actionsheet .create({
+        title: this.api.trans('__.¿Que desea hacer?'),
         buttons: buttons
       })
       .present();
