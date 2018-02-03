@@ -49,6 +49,13 @@ export class Api {
     set: (key, value) => {
       if (!this.url) this.url = window.url
       return this._storage.set(this.url + key, value)
+    },
+    remove: (key) => {
+      if (!this.url) this.url = window.url
+      return this._storage.remove(this.url + key)
+    },
+    clear: () => {
+      return this._storage.clear();
     }
   }
 
