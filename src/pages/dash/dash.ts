@@ -31,6 +31,7 @@ export class DashPage {
     zones: false,
     panics: false,
     parkings: false,
+    vehicles: false,
     correspondences: false,
   }
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api) {
@@ -62,6 +63,7 @@ export class DashPage {
             zones: true,
             panics: true,
             parkings: true,
+            vehicles: true,
             correspondences: true,
           }
           return
@@ -88,6 +90,9 @@ export class DashPage {
         }
         else if (this.api.roles[i].name == 'Manage parkings') {
           this.permissions.parkings = true
+        }
+        else if (this.api.roles[i].name == 'Manage vehicles') {
+          this.permissions.vehicles = true
 
         }
         else if (this.api.roles[i].name == 'Manage correspondences') {

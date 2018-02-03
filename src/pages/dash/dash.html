@@ -56,9 +56,17 @@
         </div>
       </ion-col>
 
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.vehicles">
+        <div tappable class="dash-card" padding no-margin (click)="openPage('VehiclesPage')">
+          <ion-icon class="dash-icon" large color="primary" name="ios-car"></ion-icon>
+
+          <h1 class="dash-title">{{api.trans('literals.vehicles')}}</h1>
+        </div>
+      </ion-col>
+
       <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.parkings">
         <div tappable class="dash-card" padding no-margin (click)="openPage(ParkingsPage)">
-          <ion-icon class="dash-icon" large color="primary" name="car"></ion-icon>
+          <ion-icon class="dash-icon" large color="primary" name="md-car"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.parkings')}}</h1>
         </div>
       </ion-col>

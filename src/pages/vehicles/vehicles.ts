@@ -21,18 +21,16 @@ export class VehiclesPage {
   getVehicles(refresher = null) {
     this.loading = true;
     this.query = "";
-    this.vehicles = this.api.vehicles;
-    this.api.get("vehicles?with[]=residences&with[]=user&with[]=visitor")
+    this.api.load("vehicles")
       .then((data: any) => {
         this.vehicles = data;
         this._vehicles = data;
-        this.api.vehicles = data;
         this.loading = false;
         if (refresher)
           refresher.complete();
       })
       .catch((err) => {
-        console.error(err);
+        this.api.Error(err);
         this.loading = false;
         if (refresher)
           refresher.complete();

@@ -40,23 +40,23 @@ export class Api {
   ready: Promise<any> = new Promise((resolve) => {
     this.resolve = resolve;
   });
-  constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController, public vibration: Vibration, public modal: ModalController, public events: Events, public setting:SettingProvider) {
+  constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController, public vibration: Vibration, public modal: ModalController, public events: Events, public setting: SettingProvider) {
     storage.ready().then(() => {
       storage.get('url').then(url_data => {
         if (url_data)
           this.url = url_data;
         else if (window.url)
           this.url = window.url;
-        storage.get('modules').then(modules => { 
-          this.modules = modules 
-          storage.get('settings').then(settings => { 
-            this.settings = settings 
-            storage.get('roles').then(roles => { 
-              this.roles = roles 
-              storage.get('residence').then(residence => { 
-                this.residence = residence 
-                storage.get('langs').then(langs => { 
-                  this.langs = langs; 
+        storage.get('modules').then(modules => {
+          this.modules = modules
+          storage.get('settings').then(settings => {
+            this.settings = settings
+            storage.get('roles').then(roles => {
+              this.roles = roles
+              storage.get('residence').then(residence => {
+                this.residence = residence
+                storage.get('langs').then(langs => {
+                  this.langs = langs;
                   storage.get('user').then(user => {
                     this.user = user
                     this.resolve(user);
@@ -69,9 +69,9 @@ export class Api {
       });
 
       storage.get('visits_approved').then(visits_approved => {
-        if(!visits_approved) return
-        this.visits_approved = visits_approved.filter((v)=>{
-          return moment().isSame(moment(v.created_at),'day')
+        if (!visits_approved) return
+        this.visits_approved = visits_approved.filter((v) => {
+          return moment().isSame(moment(v.created_at), 'day')
         })
       });
       window.$api = this;
@@ -136,7 +136,7 @@ export class Api {
             query = "?with[]=residence"
           }
           if (resource == 'vehicles') {
-            query = "?with[]=owner&with[]=residence"
+            query = "?with[]=owner&with[]=visitor&with[]=residence"
           }
           if (resource == 'parkings') {
             query = "?with[]=user"
@@ -331,7 +331,7 @@ export class Api {
               }
             })
         })
-        
+
         // Parking Events
         .listen('ParkingCreated', (data) => {
           console.log("created parking:", data);
@@ -380,7 +380,7 @@ export class Api {
         // Visitor Events
         .listen('VisitorCreated', (data) => {
           console.log("created visitor:", data);
-          if(this.objects.visitors){
+          if (this.objects.visitors) {
             this.zone.run(() => {
               var visitor = this.objects.visitors[this.objects.visitors.length] = data.visitor;
               this.objects.visitors.collection[data.visitor.id] = visitor
@@ -394,7 +394,7 @@ export class Api {
           var visitor_index = this.objects.visitors.findIndex((visitor) => {
             return visitor.id === data.visitor.id;
           });
-          if(this.objects.visitors){
+          if (this.objects.visitors) {
             this.zone.run(() => {
               var visitor;
               if (visitor_index > -1)
@@ -413,13 +413,13 @@ export class Api {
           var visitor = this.objects.visitors.findIndex((visitor) => {
             return visitor.id === data.visitor.id;
           });
-          if(this.objects.visitor)
-          this.zone.run(() => {
-            if (visitor >= 0) {
-              this.objects.visitors.splice(visitor, 1);
-              delete (this.objects.visitor[data.visitor.id])
-            }
-          })
+          if (this.objects.visitor)
+            this.zone.run(() => {
+              if (visitor >= 0) {
+                this.objects.visitors.splice(visitor, 1);
+                delete (this.objects.visitor[data.visitor.id])
+              }
+            })
         })
 
 
@@ -436,7 +436,7 @@ export class Api {
           }
         })
         .listen('WorkerUpdated', (data) => {
-          console.log("updated worker",data.worker) 
+          console.log("updated worker", data.worker)
           var worker_index = this.objects.workers.findIndex((worker) => {
             return worker.id === data.worker.id;
           });
@@ -463,7 +463,7 @@ export class Api {
             this.zone.run(() => {
               if (worker >= 0) {
                 this.objects.workers.splice(worker, 1);
-                delete(this.objects.worker[data.worker.id])
+                delete (this.objects.worker[data.worker.id])
               }
             })
         })
@@ -637,7 +637,7 @@ export class Api {
   }
 
   handlePanic(data, open = true) {
-    if(this.setting.panic) {
+    if (this.setting.panic) {
       data.sound = this.playSoundSOS();
       if (open == true) {
         var modal = this.modal.create(PanicPage, data);
@@ -677,12 +677,12 @@ export class Api {
     return headers;
   }
 
-  private mapToCollection(array, key ="id"){
+  private mapToCollection(array, key = "id") {
     var collection = {}
-      array.forEach(element => {
-          collection[element[key]] = element  
-      });
-      return collection;
+    array.forEach(element => {
+      collection[element[key]] = element
+    });
+    return collection;
   }
 
 
