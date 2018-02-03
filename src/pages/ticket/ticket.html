@@ -22,6 +22,12 @@
     <ion-card-content>
       <div [innerHTML]="ticket.text"></div>
     </ion-card-content>
+    <ion-item-divider *ngIf="ticket.file">
+      <button ion-button color="primary" icon-left block (click)="downloadFile()">
+        <ion-icon name="cloud-download"></ion-icon>
+        {{'literals.download' | trans }} {{ticket.file.name}}
+      </button>
+    </ion-item-divider>
   </ion-card>
 
   <ion-card-header>

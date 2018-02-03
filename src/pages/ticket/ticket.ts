@@ -27,7 +27,7 @@ export class TicketPage {
 
   getTicket() {
     this.loading = true;
-    this.api.get(`tickets/${this.ticket.id}?with[]=user&with[]=user.residence&with[]=comments&with[]=comments.user&with[]=comments.user.residence`)
+    this.api.get(`tickets/${this.ticket.id}?with[]=user&with[]=user.residence&with[]=comments&with[]=comments.user&with[]=comments.user.residence&with[]=file`)
       .then((data) => {
         this.loading = false;
         this.ticket = data;
@@ -36,6 +36,16 @@ export class TicketPage {
         this.api.Error(err);
         this.loading = false;
       })
+  }
+
+  downloadFile() {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.ticket.file.url));
+    element.setAttribute('download', this.ticket.file.name);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   }
 
 
