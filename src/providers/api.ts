@@ -40,24 +40,36 @@ export class Api {
   ready: Promise<any> = new Promise((resolve) => {
     this.resolve = resolve;
   });
-  constructor(public http: Http, public storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController, public vibration: Vibration, public modal: ModalController, public events: Events, public setting: SettingProvider) {
-    storage.ready().then(() => {
-      storage.get('url').then(url_data => {
+  storage = {
+    ready: this._storage.ready,
+    get: (key) => {
+      if (!this.url) this.url = window.url
+      return this._storage.get(this.url + key)
+    },
+    set: (key, value) => {
+      if (!this.url) this.url = window.url
+      return this._storage.set(this.url + key, value)
+    }
+  }
+
+  constructor(public http: Http, public _storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController, public vibration: Vibration, public modal: ModalController, public events: Events, public setting: SettingProvider) {
+    this.storage.ready().then(() => {
+      this.storage.get('url').then(url_data => {
         if (url_data)
           this.url = url_data;
         else if (window.url)
           this.url = window.url;
-        storage.get('modules').then(modules => {
+        this.storage.get('modules').then(modules => {
           this.modules = modules
-          storage.get('settings').then(settings => {
+          this.storage.get('settings').then(settings => {
             this.settings = settings
-            storage.get('roles').then(roles => {
+            this.storage.get('roles').then(roles => {
               this.roles = roles
-              storage.get('residence').then(residence => {
+              this.storage.get('residence').then(residence => {
                 this.residence = residence
-                storage.get('langs').then(langs => {
+                this.storage.get('langs').then(langs => {
                   this.langs = langs;
-                  storage.get('user').then(user => {
+                  this.storage.get('user').then(user => {
                     this.user = user
                     this.resolve(user);
                   });
@@ -68,7 +80,7 @@ export class Api {
         });
       });
 
-      storage.get('visits_approved').then(visits_approved => {
+      this.storage.get('visits_approved').then(visits_approved => {
         if (!visits_approved) return
         this.visits_approved = visits_approved.filter((v) => {
           return moment().isSame(moment(v.created_at), 'day')
