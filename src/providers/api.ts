@@ -41,7 +41,7 @@ export class Api {
     this.resolve = resolve;
   });
   storage = {
-    ready: this._storage.ready,
+    ready: () => { return this._storage.ready() },
     get: (key) => {
       if (!this.url) this.url = window.url
       return this._storage.get(this.url + key)
