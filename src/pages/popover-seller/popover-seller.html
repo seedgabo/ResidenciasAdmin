@@ -4,12 +4,12 @@
     {{'literals.invoices' | trans }}
   </button>
 
-  <button ion-item (click)="action('receipts')">
+  <button *ngIf="api.modules.receipts" ion-item (click)="action('receipts')">
     <ion-icon name="ios-paper" item-left></ion-icon>
     {{'literals.receipts' | trans }}
   </button>
 
-  <button ion-item (click)="action('cash desks')">
+  <button *ngIf="api.modules.cashdesk" ion-item (click)="action('cash desks')">
     <ion-icon name="ios-list" item-left></ion-icon>
     {{'literals.cash_desks' | trans }}
   </button>

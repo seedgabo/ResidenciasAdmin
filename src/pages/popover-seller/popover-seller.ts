@@ -1,3 +1,4 @@
+import { Api } from './../../providers/api';
 import { ViewController } from 'ionic-angular/navigation/view-controller';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
@@ -9,7 +10,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class PopoverSellerPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewctrl: ViewController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewctrl: ViewController, public api:Api) {
   }
 
   ionViewDidLoad() {

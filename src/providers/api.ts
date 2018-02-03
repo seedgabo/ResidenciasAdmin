@@ -296,6 +296,8 @@ export class Api {
               this.objects.users.collection[data.user.id] = user
               if (data.image)
                 user.image = data.image;
+              if (this.objects.residences)
+                user.residence = this.objects.residences.collection[user.residence_id];
             })
           }
         })
@@ -307,10 +309,15 @@ export class Api {
           if (this.objects.users) {
             this.zone.run(() => {
               var user;
-              if (user_index > -1)
-                user = this.objects.users[user_index] = data.user;
+              if (user_index > -1){
+                user = this.objects.users[user_index];
+              }
+
               else {
                 user = this.objects.users[this.objects.users.length] = data.user;
+              }
+              if(this.objects.residences){
+                user.residence = this.objects.residences.collection[user.residence_id];
               }
               if (data.image) {
                 user.image = data.image;
@@ -341,6 +348,8 @@ export class Api {
               this.objects.parkings.collection[data.parking.id] = parking
               if (data.image)
                 parking.image = data.image;
+              if (this.objects.residences)
+                parking.residence = this.objects.residences.collection[parking.residence_id];
             })
           }
         })
@@ -360,6 +369,8 @@ export class Api {
               if (data.image) {
                 parking.image = data.image;
               }
+              if (this.objects.residences)
+                parking.residence = this.objects.residences.collection[parking.residence_id];
             });
           }
         })
@@ -386,6 +397,8 @@ export class Api {
               this.objects.visitors.collection[data.visitor.id] = visitor
               if (data.image)
                 visitor.image = data.image;
+              if (this.objects.residences)
+                visitor.residence = this.objects.residences.collection[visitor.residence_id];
             })
           }
         })
@@ -405,6 +418,8 @@ export class Api {
               if (data.image) {
                 visitor.image = data.image;
               }
+              if (this.objects.residences)
+                visitor.residence = this.objects.residences.collection[visitor.residence_id];
             });
           }
         })
@@ -432,6 +447,8 @@ export class Api {
               this.objects.workers.collection[data.worker.id] = worker
               if (data.image)
                 worker.image = data.image;
+              if (this.objects.residences)
+                worker.residence = this.objects.residences.collection[worker.residence_id];
             })
           }
         })
@@ -451,6 +468,8 @@ export class Api {
               if (data.image) {
                 worker.image = data.image;
               }
+              if (this.objects.residences)
+                worker.residence = this.objects.residences.collection[worker.residence_id];
             });
           }
         })
@@ -487,7 +506,8 @@ export class Api {
               visit.visitor = data.visitor;
               visit.guest = data.guest;
               visit.visitors = data.visitors;
-
+              if (this.objects.residences)
+                visit.residence = this.objects.residences.collection[visit.residence_id];
             }
 
             if (visit.status == 'approved') {
@@ -512,7 +532,8 @@ export class Api {
               visit.visitor = data.visitor;
               visit.visitors = data.visitors;
               visit.guest = data.guest;
-
+              if (this.objects.residences)
+                visit.residence = this.objects.residences.collection[visit.residence_id];
             }
           });
         })

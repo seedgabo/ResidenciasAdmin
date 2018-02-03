@@ -16,18 +16,23 @@ export class VisitorPage {
   parkings = [];
   loading = false;
   dirty= false
+  show_visits_button = true
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public viewCtrl: ViewController, public modal: ModalController) {
     var visitor = navParams.get('visitor')
     var residence = navParams.get('residence')
     
     if (visitor)
-      this.visitor = visitor
-
+    this.visitor = visitor
+    
     if(this.visitor.id)
-      this.action = 'update'
-      
+    this.action = 'update'
+    
     if (residence) 
       this.residence = residence
+    else if(this.api.objects.residences)
+      this.residence = this.api.objects.residence[visitor.residence_id]
+    if (navParams.get('show_visits_button') !== undefined)
+      this.show_visits_button = navParams.get('show_visits_button')
 
 
   }

@@ -59,16 +59,16 @@ export class HomePage {
           handler: () => { this.visitModal(visitor) }
         },
         {
-          text: this.api.trans('crud.edit') + " " + this.api.trans('literals.image'),
-          icon: 'camera',
-          cssClass: 'icon-secondary',
-          handler: () => { this.askFile(visitor) }
-        },
-        {
           text: this.api.trans('crud.edit'),
           icon: 'create',
           cssClass: 'icon-warning',
           handler: () => { this.visitorModal(visitor) }
+        },
+        {
+          text: this.api.trans('crud.edit') + " " + this.api.trans('literals.image'),
+          icon: 'camera',
+          cssClass: 'icon-secondary',
+          handler: () => { this.askFile(visitor) }
         },
         {
           text: this.api.trans('crud.delete'),

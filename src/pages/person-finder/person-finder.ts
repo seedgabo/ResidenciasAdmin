@@ -203,13 +203,18 @@ export class PersonFinderPage {
   }
 
   visitorModal(visitor = null) {
-    var modal = this.modal.create(VisitorPage, { visitor: visitor }, { showBackdrop: true, enableBackdropDismiss: true })
+    var residence
+    if(visitor){
+      residence = visitor.residence
+    }
+    var modal = this.modal.create(VisitorPage, { visitor: visitor, residence:residence, show_visits_button: false})
     modal.present();
     modal.onDidDismiss((data) => {
       if (data) {
         this.results.users = null;
         this.results.visitors = { data: [data] };
         this.results.workers = null;
+        this.api.storage.set('recent_visitors', { data: [data] });
       }
     })
   }
