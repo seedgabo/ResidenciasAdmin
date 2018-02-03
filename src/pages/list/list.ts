@@ -1,6 +1,6 @@
 import { VisitPage } from './../visit/visit';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ActionSheetController, ModalController } from 'ionic-angular';
+import { NavController, NavParams, ActionSheetController, ModalController, PopoverController } from 'ionic-angular';
 import { Api } from "../../providers/api";
 import { VisitorPage } from "../visitor/visitor";
 import moment from 'moment';
@@ -12,7 +12,13 @@ export class ListPage {
   query = "";
   visits = [];
   loading = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public actionsheet: ActionSheetController, public modal: ModalController) {
+  filters = {
+    residence: null,
+    visitor: null,
+    from: null,
+    to: null,
+  }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public actionsheet: ActionSheetController, public modal: ModalController, public popover: PopoverController) {
   }
 
   ionViewDidLoad() {
@@ -21,7 +27,7 @@ export class ListPage {
 
   getVisits() {
     this.loading = true
-    this.api.get('visits?with[]=residence&with[]=user&with[]=vehicle&with[]=visitor&withCount[]=visitors' + this.filters()).then((data: any) => {
+    this.api.get('visits?with[]=residence&with[]=user&with[]=vehicle&with[]=visitor&withCount[]=visitors' + this.append()).then((data: any) => {
       console.log(data);
       this.api.visits = data;
       this.loading = false
@@ -55,8 +61,21 @@ export class ListPage {
     return this.visits = array;
   }
 
-  filters() {
-    return "&append[]=guest&order[id]=desc&limit=5000";
+  append() {
+    var append = "&append[]=guest&order[id]=desc&limit=1000";
+    if (this.filters.residence) {
+      append += `&where[residence_id]=` + this.filters.residence.id
+    }
+    if (this.filters.visitor) {
+      append += `&where[visitor_id]=` + this.filters.visitor.id
+    }
+    if (this.filters.from) {
+      append += `&whereDategte[created_at]=` + moment(this.filters.from).format("YYYY-MM-DD")
+    }
+    if (this.filters.to) {
+      append += `&whereDatelwe[created_at]=` + moment(this.filters.to).format('YYYY-MM-DD')
+    }
+    return append;
   }
 
   actions(visit) {
@@ -107,6 +126,16 @@ export class ListPage {
     }).present();
   }
 
+  moreFilters(ev) {
+    var popover = this.popover.create("VisitPopoverFiltersPage", { filters: this.filters })
+    popover.present({ ev: ev })
+    popover.onWillDismiss((filters) => {
+      if (filters) {
+        this.filters = filters
+        this.getVisits()
+      }
+    })
+  }
 
 
   approve(visit) {

@@ -1,0 +1,60 @@
+<ion-content>
+  <ion-list>
+    <ion-item-divider>
+      {{'literals.filters' | trans }}
+      <button ion-button item-right small icon-only clear color="primary" (click)="search()">
+        <ion-icon name="checkmark"></ion-icon>
+      </button>
+    </ion-item-divider>
+
+    <button ion-item (click)="selectResidence()" padding-vertical>
+      <h2 *ngIf="!filters.residence">
+        {{'literals.select' | trans }} {{'literals.residence' | trans }}
+      </h2>
+      <ion-avatar item-left *ngIf="filters.residence && filters.residence.image_url">
+        <img [src]="filters.residence.image_url" alt="">
+      </ion-avatar>
+      <span *ngIf="filters.residence">
+        <span>{{filters.residence.name}}</span>
+      </span>
+      <ion-icon item-end name="arrow-dropdown"></ion-icon>
+    </button>
+
+    <button ion-item (click)="selectPerson()">
+      <h2 *ngIf="!filters.visitor">
+        {{'literals.select' | trans }} {{ 'literals.visitor' | trans }}
+      </h2>
+      <!-- <ion-avatar item-left>
+        <img [src]="filters.visitor.image_url" alt="" *ngIf="filters.visitor && filters.visitor.image_url">
+      </ion-avatar> -->
+      <span *ngIf="filters.visitor">
+        <span>{{filters.visitor.name}} {{filters.visitor.residence?.name}}</span>
+      </span>
+      <ion-icon item-end name="arrow-dropdown"></ion-icon>
+    </button>
+
+    <ion-item>
+      <ion-label>{{'date.from' | trans }}</ion-label>
+      <ion-datetime displayFormat="DD MMM YYYY" pickerFormat="DD MMM YY" [(ngModel)]="filters.from"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>{{'date.to' | trans }}</ion-label>
+      <ion-datetime displayFormat="DD MMM YYYY" pickerFormat="DD MMM YY" [(ngModel)]="filters.to"></ion-datetime>
+    </ion-item>
+  </ion-list>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <button ion-button clear icon-right color="dark" (click)="clear()">
+          {{'crud.clear' | trans}}
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button clear (click)="search()">
+          {{'crud.search' | trans}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

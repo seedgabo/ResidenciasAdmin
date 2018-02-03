@@ -4,6 +4,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>{{'literals.visits' | trans}}</ion-title>
+    <ion-buttons end>
+      <button ion-button clear icon-only (click)="moreFilters($event)">
+        <ion-icon name="funnel"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
   <ion-toolbar>
     <ion-searchbar [(ngModel)]="query" [debounce]="700" (ionInput)="filter()">
@@ -15,16 +20,23 @@
   <div text-center>
     <ion-spinner *ngIf="loading"></ion-spinner>
   </div>
-  <ion-list [virtualScroll]="visits">
+  <!-- No Results -->
+  <div text-center *ngIf="visits.length == 0 && !loading">
+    <img src="./assets/logo-sad.png" alt="no results" style="width:100%;max-width:300px;">
+    <h4 ion-text color="primary">
+      {{'__.No hay :visits' | trans:{visits: 'literals.visits' | trans } }}
+    </h4>
+  </div>
+  <ion-list [virtualScroll]="visits" approxItemHeight="100px">
     <button ion-item (click)="actions(visit)" *virtualItem="let visit">
-      <ion-avatar item-left *ngIf="visit.visitor && visit.visitor.image_url">
-        <img [src]="visit.visitor.image_url" onerror="this.style.display = 'none'">
+      <ion-avatar item-left>
+        <img *ngIf="visit.visitor && visit.visitor.image_url" [src]="visit.visitor.image_url" onerror="this.style.display = 'none'">
       </ion-avatar>
       <h2 *ngIf=" visit.visitor ">
         {{visit.visitor.name }}
         <br>
         <span *ngIf="visit.visitors_count> 1">
-          <br> {{ '__.and others' | trans }} {{visit.visitors_count - 1}}
+          {{ '__.and others' | trans }} {{visit.visitors_count - 1}}
         </span>
         <span *ngIf="visit.residence">{{visit.residence.name}}</span>
         <br>
@@ -38,10 +50,8 @@
           <b>{{'literals.reason' | trans }}</b>
           <span>{{visit.guest.reason}}</span>
         </p>
-        <br>
         <small>{{visit.guest.document}}</small>
       </h2>
-
       <p *ngIf="visit.vehicle" text-wrap>
         {{ visit.vehicle.name }} - {{visit.vehicle.plate}}
       </p>
