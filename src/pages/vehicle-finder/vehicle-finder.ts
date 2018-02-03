@@ -142,6 +142,19 @@ export class VehicleFinderPage {
       .catch(console.error)
   }
 
+  editQuickVehicle(vehicle) {
+    var modal = this.modal.create('VehicleEditorPage', { vehicle: null });
+    modal.present();
+    modal.onDidDismiss((data, role) => {
+      console.log(data);
+      if (data) {
+        if (this.canAddVehicle(data)) {
+          this.updateVehicle(vehicle, data);
+        }
+      }
+    });
+  }
+
   actions(vehicle) {
     this.actionsheet.create({
       title: this.api.trans('literals.actions') + " | " + vehicle.name,
@@ -203,18 +216,7 @@ export class VehicleFinderPage {
       .catch(console.error)
   }
 
-  editQuickVehicle(vehicle) {
-    var modal = this.modal.create('VehicleEditorPage', { vehicle: null });
-    modal.present();
-    modal.onDidDismiss((data, role) => {
-      console.log(data);
-      if (data) {
-        if (this.canAddVehicle(data)) {
-          this.updateVehicle(vehicle, data);
-        }
-      }
-    });
-  }
+
 
 
 

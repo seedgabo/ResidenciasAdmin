@@ -1,3 +1,4 @@
+import { ModalController } from 'ionic-angular';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { Api } from './../../providers/api';
@@ -8,7 +9,7 @@ import { Api } from './../../providers/api';
   templateUrl: 'vehicle-editor.html',
 })
 export class VehicleEditorPage {
-  vehicle = {
+  vehicle: any = {
     make: '',
     plate: '',
     model: '',
@@ -18,15 +19,71 @@ export class VehicleEditorPage {
     residence_id: null,
     visitor_id: null,
   }
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewctrl: ViewController, public api: Api) {
+  residence;
+  person;
+  type;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewctrl: ViewController, public api: Api, public modal: ModalController) {
     if (navParams.get('vehicle')) {
       this.vehicle = navParams.get('vehicle');
     }
+    if (this.vehicle.residence)
+      this.residence = this.vehicle.residence
+    else if (this.vehicle.residence && this.api.objects.residences)
+      this.residence = this.api.objects.residences.collection[this.vehicle.residence_id];
+
+    if (this.vehicle.owner)
+      this.person = this.vehicle.owner
+    if (this.vehicle.visitor)
+      this.person = this.vehicle.visitor
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad VehicleEditorPage');
   }
+
+  selectResidence() {
+    var modal = this.modal.create("ResidenceFinderPage", {});
+    modal.present()
+    modal.onDidDismiss((data) => {
+      if (data && data.id) {
+        this.residence = data;
+        this.vehicle.residence_id = data.id;
+      }
+      else {
+        this.vehicle.residence_id = null;
+        this.residence = null;
+      }
+    });
+  }
+
+  selectPerson() {
+    var modal = this.modal.create('PersonFinderPage', {
+      users: true,
+      visitors: true,
+      workers: false
+    })
+    modal.present();
+    modal.onDidDismiss((data) => {
+      if (!data) {
+        this.person = null;
+        this.type = null;
+        this.vehicle.visitor_id = null
+        this.vehicle.owner_id = null
+        return;
+      }
+
+      this.person = data.person;
+      if (data.type == 'visitor') {
+        this.vehicle.visitor_id = data.person.id
+      }
+      if (data.type == 'user') {
+        this.vehicle.owner_id = data.owner.id
+      }
+      this.person.type = data.type
+      this.type = data.type;
+    })
+
+  }
+
   confirm() {
     this.viewctrl.dismiss(this.vehicle, 'accept');
   }

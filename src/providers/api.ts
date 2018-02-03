@@ -309,14 +309,14 @@ export class Api {
           if (this.objects.users) {
             this.zone.run(() => {
               var user;
-              if (user_index > -1){
+              if (user_index > -1) {
                 user = this.objects.users[user_index];
               }
 
               else {
                 user = this.objects.users[this.objects.users.length] = data.user;
               }
-              if(this.objects.residences){
+              if (this.objects.residences) {
                 user.residence = this.objects.residences.collection[user.residence_id];
               }
               if (data.image) {
@@ -433,6 +433,59 @@ export class Api {
               if (visitor >= 0) {
                 this.objects.visitors.splice(visitor, 1);
                 delete (this.objects.visitor[data.visitor.id])
+              }
+            })
+        })
+
+
+        // Vehicle Events
+        .listen('VehicleCreated', (data) => {
+          console.log("created vehicle:", data);
+          if (this.objects.vehicles) {
+            this.zone.run(() => {
+              var vehicle = this.objects.vehicles[this.objects.vehicles.length] = data.vehicle;
+              this.objects.vehicles.collection[data.vehicle.id] = vehicle
+              if (data.image)
+                vehicle.image = data.image;
+              if (this.objects.residences)
+                vehicle.residence = this.objects.residences.collection[vehicle.residence_id];
+            })
+          }
+        })
+        .listen('VehicleUpdated', (data) => {
+          console.log("updated vehicle:", data);
+          var vehicle_index = this.objects.vehicles.findIndex((vehicle) => {
+            return vehicle.id === data.vehicle.id;
+          });
+          if (this.objects.vehicles) {
+            this.zone.run(() => {
+              var vehicle;
+              if (vehicle_index > -1) {
+                vehicle = this.objects.vehicles[vehicle_index];
+              }
+
+              else {
+                vehicle = this.objects.vehicles[this.objects.vehicles.length] = data.vehicle;
+              }
+              if (this.objects.residences) {
+                vehicle.residence = this.objects.residences.collection[vehicle.residence_id];
+              }
+              if (data.image) {
+                vehicle.image = data.image;
+              }
+            });
+          }
+        })
+        .listen('VehicleDeleted', (data) => {
+          console.log("deleted vehicle:", data);
+          var vehicle = this.objects.vehicles.findIndex((vehicle) => {
+            return vehicle.id === data.vehicle.id;
+          });
+          if (this.objects.vehicle)
+            this.zone.run(() => {
+              if (vehicle >= 0) {
+                this.objects.vehicles.splice(vehicle, 1);
+                delete (this.objects.vehicle[data.vehicle.id])
               }
             })
         })

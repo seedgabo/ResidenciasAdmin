@@ -1,6 +1,6 @@
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>{{ 'literals.vehicles' |trans }}</ion-title>
   </ion-navbar>
   <ion-toolbar>
@@ -11,23 +11,29 @@
 
 
 <ion-content>
+  <input type="file" name="filer" accept="image/*" (change)="readFile($event)" id="input-file-vehicle" style="display:none;">
   <ion-list [virtualScroll]="vehicles">
-    <button ion-item *virtualItem="let vehicle" (click)="actions(vehicle)">
-      <h2 text-wrap>{{vehicle.name}}</h2>
-      <span item-right>{{vehicle.plate}}</span>
-
-      <p *ngIf="vehicle.residence">
-        {{vehicle.residence.name}}
-      </p>
-
-      <p *ngIf="vehicle.user">
-        {{vehicle.user.name}}
-      </p>
-
-      <p *ngIf="vehicle.visitor">
-        {{vehicle.visitor.name}}
-      </p>
-
-    </button>
+    <ion-item *virtualItem="let vehicle" (click)="actions(vehicle)">
+      <ion-thumbnail item-left>
+        <img *ngIf="vehicle.image_url" [src]="vehicle.image_url">
+      </ion-thumbnail>
+      <h3>
+        {{vehicle.name}}
+      </h3>
+      <h4 *ngIf="vehicle.residence">
+        <b>{{'literals.residence' | trans }}:</b> {{vehicle.residence.name}}
+      </h4>
+      <h4 *ngIf="vehicle.owner">
+        <b>{{'literals.owner' | trans }}:</b> {{vehicle.owner.name}}
+      </h4>
+      <h4 *ngIf="vehicle.visitor">
+        <b>{{'literals.visitor' | trans }}:</b> {{vehicle.visitor.name}}
+      </h4>
+    </ion-item>
   </ion-list>
+    <ion-fab bottom right>
+      <button ion-fab color="primary" (click)="addQuickVehicle()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-fab>
 </ion-content>

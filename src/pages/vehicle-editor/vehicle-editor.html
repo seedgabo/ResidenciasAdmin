@@ -24,6 +24,36 @@
     </ion-item>
 
     <ion-item>
+      <ion-label floating>{{'literals.color'| trans }}</ion-label>
+      <ion-input [(ngModel)]="vehicle.color" type="text"></ion-input>
+    </ion-item>
+    <button ion-item (click)="selectResidence()" padding-vertical>
+      <h2 *ngIf="!residence">
+        {{'literals.select' | trans }} {{'literals.residence' | trans }}
+      </h2>
+      <ion-avatar item-left *ngIf="residence && residence.image_url">
+        <img [src]="residence.image_url" alt="">
+      </ion-avatar>
+      <span *ngIf="residence">
+        <span>{{residence.name}}</span>
+      </span>
+      <ion-icon item-end name="arrow-dropdown"></ion-icon>
+    </button>
+
+    <button ion-item (click)="selectPerson()">
+      <h2 *ngIf="!person">
+        {{'literals.select' | trans }} {{ 'literals.person' | trans }}
+      </h2>
+      <ion-avatar item-left>
+        <img [src]="person.image_url" alt="" *ngIf="person && person.image_url">
+      </ion-avatar>
+      <span *ngIf="person">
+        <span>{{person.name}} {{person.residence?.name}}</span>
+      </span>
+      <ion-icon item-end name="arrow-dropdown"></ion-icon>
+    </button>
+
+    <ion-item>
       <ion-label floating="">{{'literals.type' | trans }}</ion-label>
       <ion-select [(ngModel)]="vehicle.type">
         <ion-option value="car">{{'literals.car' | trans }}</ion-option>
@@ -37,10 +67,6 @@
       </ion-select>
     </ion-item>
 
-    <ion-item>
-      <ion-label floating>{{'literals.color'| trans }}</ion-label>
-      <ion-input [(ngModel)]="vehicle.color" type="text"></ion-input>
-    </ion-item>
 
   </ion-list>
 </ion-content>
@@ -48,7 +74,7 @@
   <ion-grid text-center>
     <ion-row>
       <ion-col>
-        <button ion-button full clear [disabled]="!canAdd()" (click)="confirm()" color="dark">{{'crud.save' | trans }}</button>
+        <button ion-button full [disabled]="!canAdd()" (click)="confirm()" color="primary">{{'crud.save' | trans }}</button>
       </ion-col>
       <ion-col>
         <button ion-button full clear (click)="cancel()" color="dark">{{'crud.cancel' | trans }}</button>
