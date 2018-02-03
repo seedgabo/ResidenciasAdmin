@@ -40,7 +40,7 @@ export class TicketPage {
 
   downloadFile() {
     var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.ticket.file.url));
+    element.setAttribute('href', this.api.url + "files/" + this.ticket.file.id);
     element.setAttribute('download', this.ticket.file.name);
     element.style.display = 'none';
     document.body.appendChild(element);

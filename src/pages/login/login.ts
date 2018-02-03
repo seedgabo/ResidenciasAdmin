@@ -73,11 +73,13 @@ export class Login {
     if (this.code == '-2121') {
       this.api.url = "http://localhost/residencias/public/";
       this.api.storage.set('url', this.api.url);
+      this.api._storage.set('url', this.api.url);
     }
     if (this.servers[this.code] !== undefined) {
       var server = this.servers[this.code]
       this.api.url = server.url;
       this.api.storage.set('url', server.url);
+      this.api._storage.set('url', server.url);
     }
   }
 

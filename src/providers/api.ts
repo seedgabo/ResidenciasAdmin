@@ -43,15 +43,12 @@ export class Api {
   storage = {
     ready: () => { return this._storage.ready() },
     get: (key) => {
-      if (!this.url) this.url = window.url
       return this._storage.get(this.url + key)
     },
     set: (key, value) => {
-      if (!this.url) this.url = window.url
       return this._storage.set(this.url + key, value)
     },
     remove: (key) => {
-      if (!this.url) this.url = window.url
       return this._storage.remove(this.url + key)
     },
     clear: () => {
@@ -61,7 +58,7 @@ export class Api {
 
   constructor(public http: Http, public _storage: Storage, public zone: NgZone, public alert: AlertController, public toast: ToastController, public vibration: Vibration, public modal: ModalController, public events: Events, public setting: SettingProvider) {
     this.storage.ready().then(() => {
-      this.storage.get('url').then(url_data => {
+      this._storage.get('url').then(url_data => {
         if (url_data)
           this.url = url_data;
         else if (window.url)
