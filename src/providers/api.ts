@@ -312,8 +312,8 @@ export class Api {
               this.objects.users.collection[data.user.id] = user
               if (data.image)
                 user.image = data.image;
-              if (this.objects.residences)
-                user.residence = this.objects.residences.collection[user.residence_id];
+              if (data.residence)
+                user.residence = data.residence;
             })
           }
         })
@@ -332,12 +332,10 @@ export class Api {
               else {
                 user = this.objects.users[this.objects.users.length] = data.user;
               }
-              if (this.objects.residences) {
-                user.residence = this.objects.residences.collection[user.residence_id];
-              }
-              if (data.image) {
+              if (data.residence)
+                user.residence = data.residence;
+              if (data.image)
                 user.image = data.image;
-              }
             });
           }
         })
@@ -364,8 +362,8 @@ export class Api {
               this.objects.parkings.collection[data.parking.id] = parking
               if (data.image)
                 parking.image = data.image;
-              if (this.objects.residences)
-                parking.residence = this.objects.residences.collection[parking.residence_id];
+              if (data.residence)
+                parking.residence = data.residence;
             })
           }
         })
@@ -382,11 +380,10 @@ export class Api {
               else {
                 parking = this.objects.parkings[this.objects.parkings.length] = data.parking;
               }
-              if (data.image) {
+              if (data.image)
                 parking.image = data.image;
-              }
-              if (this.objects.residences)
-                parking.residence = this.objects.residences.collection[parking.residence_id];
+              if (data.residence)
+                parking.residence = data.residence;
             });
           }
         })
@@ -413,8 +410,8 @@ export class Api {
               this.objects.visitors.collection[data.visitor.id] = visitor
               if (data.image)
                 visitor.image = data.image;
-              if (this.objects.residences)
-                visitor.residence = this.objects.residences.collection[visitor.residence_id];
+              if (data.residence)
+                visitor.residence = data.residence;
             })
           }
         })
@@ -431,11 +428,10 @@ export class Api {
               else {
                 visitor = this.objects.visitors[this.objects.visitors.length] = data.visitor;
               }
-              if (data.image) {
+              if (data.image)
                 visitor.image = data.image;
-              }
-              if (this.objects.residences)
-                visitor.residence = this.objects.residences.collection[visitor.residence_id];
+              if (data.residence)
+                visitor.residence = data.residence;
             });
           }
         })
@@ -463,8 +459,12 @@ export class Api {
               this.objects.vehicles.collection[data.vehicle.id] = vehicle
               if (data.image)
                 vehicle.image = data.image;
-              if (this.objects.residences)
-                vehicle.residence = this.objects.residences.collection[vehicle.residence_id];
+              if (data.residence)
+                vehicle.residence = data.residence;
+              if (data.owner)
+                vehicle.owner = data.owner;
+              if (data.visitor)
+                vehicle.visitor = data.visitor;
             })
           }
         })
@@ -483,12 +483,14 @@ export class Api {
               else {
                 vehicle = this.objects.vehicles[this.objects.vehicles.length] = data.vehicle;
               }
-              if (this.objects.residences) {
-                vehicle.residence = this.objects.residences.collection[vehicle.residence_id];
-              }
-              if (data.image) {
+              if (data.residence)
+                vehicle.residence = data.residence;
+              if (data.owner)
+                vehicle.owner = data.owner;
+              if (data.visitor)
+                vehicle.visitor = data.visitor;
+              if (data.image)
                 vehicle.image = data.image;
-              }
             });
           }
         })
@@ -516,8 +518,9 @@ export class Api {
               this.objects.workers.collection[data.worker.id] = worker
               if (data.image)
                 worker.image = data.image;
-              if (this.objects.residences)
-                worker.residence = this.objects.residences.collection[worker.residence_id];
+              if (data.residence)
+                worker.residence = data.residence;
+
             })
           }
         })
@@ -534,11 +537,10 @@ export class Api {
               else {
                 worker = this.objects.workers[this.objects.workers.length] = data.worker;
               }
-              if (data.image) {
+              if (data.image)
                 worker.image = data.image;
-              }
-              if (this.objects.residences)
-                worker.residence = this.objects.residences.collection[worker.residence_id];
+              if (data.residence)
+                worker.residence = data.residence;
             });
           }
         })
