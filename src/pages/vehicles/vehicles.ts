@@ -117,7 +117,7 @@ export class VehiclesPage {
     } else {
       promise = this.api.post('vehicles', dataToSend)
       promise.then((resp) => {
-        this.vehicles.push(resp);
+        // this.vehicles.push(resp);
       })
     }
 
