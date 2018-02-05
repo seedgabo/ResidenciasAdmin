@@ -36,7 +36,7 @@ export class MyApp {
     panics: false,
     parkings: false,
     correspondences: false,
-    live_support: false,
+    livesupport: false,
   }
   constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush, public backgroundmode: BackgroundMode, public minimize: AppMinimize, public events: Events) {
     this.initializeApp();
@@ -139,7 +139,7 @@ export class MyApp {
             panics: true,
             parkings: true,
             correspondences: true,
-            live_support: false
+            livesupport: false
           }
           return
         }
@@ -173,7 +173,7 @@ export class MyApp {
         }
       }
     }
-    if (this.api.modules.live_support)
-      this.permissions.live_support = true
+    if (this.api.modules.livesupport)
+      this.permissions.livesupport = true
   }
 }
