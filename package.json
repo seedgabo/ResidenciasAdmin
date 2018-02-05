@@ -1,8 +1,8 @@
 {
   "name": "residencias-admin",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "version": "1.0.0",
+  "author": "Gabriel  Bejarano",
+  "homepage": "http://residenciasonline.com",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
