@@ -105,14 +105,14 @@ export class MyApp {
   }
 
   goHome() {
-    this.nav.setRoot("DashPage");
-    this.nav.popToRoot();
+    this.rootPage = "DashPage"
+    // this.nav.setRoot("DashPage");
   }
 
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component)
+    this.rootPage = page.component
     // this.nav.setRoot(page.component);
   }
 
