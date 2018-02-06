@@ -1,10 +1,15 @@
-import { Events } from 'ionic-angular';
+import { Events, IonicPage } from 'ionic-angular';
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, MenuController } from 'ionic-angular';
 import { Api } from "../../providers/api";
 // import { Facebook } from '@ionic-native/facebook';
 // import { GooglePlus } from '@ionic-native/google-plus';
+
+
 declare var window: any;
+@IonicPage({
+  priority: "high"
+})
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',

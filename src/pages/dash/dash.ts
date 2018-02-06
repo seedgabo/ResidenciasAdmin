@@ -1,9 +1,3 @@
-import { ParkingsPage } from './../parkings/parkings';
-import { ListPage } from './../list/list';
-import { SellerPage } from './../seller/seller';
-import { ZonesAdminPage } from './../zones-admin/zones-admin';
-import { PanicLogsPage } from './../panic-logs/panic-logs';
-import { HomePage } from './../home/home';
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';

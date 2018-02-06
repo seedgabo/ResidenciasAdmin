@@ -1,21 +1,15 @@
 import { BackgroundMode } from '@ionic-native/background-mode';
-import { PanicLogsPage } from './../pages/panic-logs/panic-logs';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, MenuController, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AppMinimize } from '@ionic-native/app-minimize';
 
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { Storage } from '@ionic/storage';
 import { Api } from "../providers/api";
-import { Login } from "../pages/login/login";
-import { ParkingsPage } from "../pages/parkings/parkings";
 import { CodePush } from "@ionic-native/code-push";
-import { SellerPage } from '../pages/seller/seller';
-import { ZonesAdminPage } from '../pages/zones-admin/zones-admin';
 declare var window: any;
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -67,7 +61,7 @@ export class MyApp {
         this.api.startEcho();
       }
       else {
-        this.rootPage = Login;
+        this.rootPage = 'Login';
       }
     });
 
@@ -108,10 +102,10 @@ export class MyApp {
     this.api.storage.clear();
     this.api.stopEcho();
     this.api.user = null;
-    // this.rootPage = Login;
+    // this.rootPage = 'Login';
     if (!window.url)
       this.api.url = null
-    this.nav.setRoot(Login);
+    this.nav.setRoot('Login');
   }
   
   openLiveSupportChat() {
