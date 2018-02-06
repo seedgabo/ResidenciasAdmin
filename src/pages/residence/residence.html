@@ -13,7 +13,7 @@
     </ion-card-header>
     <ion-card-content>
       <ion-list>
-        <ion-item>
+        <ion-item *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
           <p>{{'literals.status' | trans }}</p>
           <span item-right>{{'literals.'+ residence.status | trans }}
             <span *ngIf="residence.is_disabled"> ({{'literals.disabled' | trans }})</span>
@@ -36,7 +36,7 @@
           <span item-right>{{ residence.alicuota }} %</span>
         </ion-item>
 
-        <ion-item *ngIf="residence.debt">
+        <ion-item *ngIf="residence.debt && (api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
           <p>{{'literals.debt' | trans }}</p>
           <span item-right>{{ residence.debt | currency:'USD':'symbol-narrow':'1.0-0' }}</span>
         </ion-item>

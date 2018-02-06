@@ -23,7 +23,7 @@
       <h2>{{residence.name}}</h2>
       <h3>{{residence.owner?.name}}</h3>
       <h4>{{'literals.'+ residence.type | trans }}</h4>
-      <p [ngClass]="residence.status">{{'literals.'+residence.status | trans }}
+      <p *ngIf="api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])" [ngClass]="residence.status">{{'literals.'+residence.status | trans }}
         <span *ngIf="residence.is_disabled">{{'literals.disabled' | trans }}</span>
       </p>
     </button>
