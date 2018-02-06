@@ -138,7 +138,6 @@ export class MyApp {
             panics: true,
             parkings: true,
             correspondences: true,
-            livesupport: false
           }
           return
         }
