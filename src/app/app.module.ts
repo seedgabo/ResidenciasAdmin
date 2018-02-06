@@ -1,5 +1,4 @@
 import { VehicleFinderPage } from './../pages/vehicle-finder/vehicle-finder';
-import { PanicLogsPage } from './../pages/panic-logs/panic-logs';
 import { PanicPage } from './../pages/panic/panic';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -31,7 +30,6 @@ import { NewtonProvider } from '../providers/newton/newton';
     VisitPage,
     VisitCreatorPage,
     PanicPage,
-    PanicLogsPage,
     ProductSearchPage,
     VehicleFinderPage,
   ],
@@ -49,7 +47,6 @@ import { NewtonProvider } from '../providers/newton/newton';
     VisitPage,
     VisitCreatorPage,
     PanicPage,
-    PanicLogsPage,
     ProductSearchPage,
     VehicleFinderPage,
   ],

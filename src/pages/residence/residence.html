@@ -68,7 +68,7 @@
   </ion-card>
 
 
-  <ion-card *ngIf="residence.users">
+  <ion-card *ngIf="residence.users && residence.users.length > 0 && hasRole('users')">
     <ion-card-header color="primary">
       {{'literals.users' | trans }}
     </ion-card-header>
@@ -86,7 +86,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="residence.visitors">
+  <ion-card *ngIf="residence.visitors && residence.visitors.length > 0 && hasRole('visitors')">
     <ion-card-header color="primary">
       {{'literals.visitors' | trans }}
     </ion-card-header>
@@ -105,7 +105,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="residence.workers">
+  <ion-card *ngIf="residence.workers && residence.workers.length > 0 && hasRole('workers')">
     <ion-card-header color="primary">
       {{'literals.workers' | trans }}
     </ion-card-header>
@@ -124,7 +124,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="residence.pets">
+  <ion-card *ngIf="residence.pets && residence.pets.length > 0 && hasRole('pts')">
     <ion-card-header color="primary">
       {{'literals.pets' | trans }}
     </ion-card-header>
@@ -143,7 +143,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="residence.vehicles">
+  <ion-card *ngIf="residence.vehicles && residence.vehicles.length > 0 && hasRole('vehicles')">
     <ion-card-header color="primary">
       {{'literals.vehicles' | trans }}
     </ion-card-header>
