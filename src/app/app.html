@@ -11,48 +11,48 @@
     <ion-content>
       <ion-list>
         <button menuClose ion-item (click)="goHome()" icon-left>
-          <ion-icon color="primary" name="home"></ion-icon>
+          <ion-icon color="neutral" name="home"></ion-icon>
           {{ api.trans('__.home') }}
         </button>
 
         <button *ngIf="permissions.tickets || permissions.accounter || permissions.zones" menuClose ion-item (click)="openPage({component:'PendingsPage'})"
           icon-left>
-          <ion-icon color="primary" name="clock"></ion-icon>
+          <ion-icon color="neutral" name="clock"></ion-icon>
           {{ api.trans('literals.pendings') }}
         </button>
 
         <div *ngIf="permissions.visitors">
           <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)" icon-left>
-            <ion-icon color="primary" [name]="p.icon"></ion-icon>
+            <ion-icon color="neutral" [name]="p.icon"></ion-icon>
             {{ api.trans(p.title) }}
           </button>
         </div>
 
         <button *ngIf="permissions.panics" menuClose ion-item (click)="openPage({component:PanicLogsPage})" icon-left>
-          <ion-icon color="primary" name="help-buoy"></ion-icon>
+          <ion-icon color="neutral" name="help-buoy"></ion-icon>
           {{ api.trans('literals.panic_logs') }}
         </button>
 
 
         <button *ngIf="permissions.tickets" menuClose ion-item (click)="openPage({component:'TicketsPage'})" icon-left>
-          <ion-icon color="primary" name="easel"></ion-icon>
+          <ion-icon color="neutral" name="easel"></ion-icon>
           {{ api.trans('literals.tickets') }}
         </button>
 
         <button *ngIf="permissions.correspondences" menuClose ion-item (click)="openPage({component:'CorrespondencesPage'})" icon-left>
 
-          <ion-icon color="primary" name="cube"></ion-icon>
+          <ion-icon color="neutral" name="cube"></ion-icon>
 
           {{ api.trans('literals.correspondences') }}
         </button>
 
         <button *ngIf="permissions.accounter" menuClose ion-item (click)="openPage({component:SellerPage})" icon-left>
-          <ion-icon color="primary" name="card"></ion-icon>
+          <ion-icon color="neutral" name="card"></ion-icon>
           {{ api.trans('__.Punto de Venta') }}
         </button>
 
         <button *ngIf="permissions.zones" menuClose ion-item (click)="openPage({component:ZonesAdminPage})" icon-left>
-          <ion-icon color="primary" name="partly-sunny"></ion-icon>
+          <ion-icon color="neutral" name="partly-sunny"></ion-icon>
           {{ api.trans('literals.zones') }}
         </button>
 
@@ -61,17 +61,22 @@
         </ion-item-divider>
 
         <button *ngIf="permissions.accounter" menuClose ion-item (click)="openPage({component:'SettingsPage'})" icon-left>
-          <ion-icon color="primary" name="settings"></ion-icon>
+          <ion-icon color="neutral" name="settings"></ion-icon>
           {{ api.trans('literals.settings') }}
         </button>
 
         <button menuClose ion-item (click)="openPage({component:'AboutPage'})" icon-left>
-          <ion-icon color="primary" name="information-circle"></ion-icon>
+          <ion-icon color="neutral" name="information-circle"></ion-icon>
           {{ api.trans('literals.about') }}
         </button>
 
+        <button ion-item menuClose icon-left *ngIf="api.modules?.livesupport" (click)="openLiveSupportChat()">
+          <ion-icon name="chatbubbles" color="secondary"></ion-icon>
+          {{api.trans('__.live support')}}
+        </button>
+
         <button menuClose ion-item (click)="logout()" icon-left>
-          <ion-icon color="primary" name="log-out"></ion-icon>
+          <ion-icon color="neutral" name="log-out"></ion-icon>
           {{ api.trans('literals.logout') }}
         </button>
 
