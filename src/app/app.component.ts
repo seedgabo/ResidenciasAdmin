@@ -36,7 +36,6 @@ export class MyApp {
     panics: false,
     parkings: false,
     correspondences: false,
-    livesupport: false,
   }
   constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush, public backgroundmode: BackgroundMode, public minimize: AppMinimize, public events: Events) {
     this.initializeApp();
@@ -128,7 +127,7 @@ export class MyApp {
   }
 
   SeedPermissions() {
-    if (this.api.roles && this.api.modules){
+    if (this.api.roles && this.api.modules) {
       for (var i = 0; i < this.api.roles.length; i++) {
         if (this.api.roles[i].name == 'SuperAdmin') {
           this.permissions = {
@@ -173,7 +172,20 @@ export class MyApp {
         }
       }
     }
-    if (this.api.modules.livesupport)
-      this.permissions.livesupport = true
+
+  }
+
+  openLiveSupportChat() {
+    // var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    // (function () {
+    //   var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+    //   s1.async = true;
+    //   s1.src = 'https://embed.tawk.to/5a784f55d7591465c707625d/default';
+    //   s1.charset = 'UTF-8';
+    //   s1.setAttribute('crossorigin', '*');
+    //   s0.parentNode.insertBefore(s1, s0);
+    // })();
+
+    var MyWindow = window.open('https://tawk.to/chat/5a784f55d7591465c707625d/default/?$_tawk_popout=true', 'livesupport', 'width=400,height=600'); return false;
   }
 }

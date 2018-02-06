@@ -70,11 +70,10 @@
           {{ api.trans('literals.about') }}
         </button>
 
-        <button ion-item menuClose icon-left  *ngIf="permissions.livesupport"
-         onClick="MyWindow=window.open('https://tawk.to/chat/5a784f55d7591465c707625d/default/?$_tawk_popout=true','livesupport','width=400,height=600');return false;">
-          <ion-icon name="chatbubbles" color="secondary" ></ion-icon>
+        <button ion-item menuClose icon-left *ngIf="api.modules?.livesupport" (click)="openLiveSupportChat()">
+          <ion-icon name="chatbubbles" color="secondary"></ion-icon>
           {{api.trans('__.live support')}}
-        </button>     
+        </button>
 
         <button menuClose ion-item (click)="logout()" icon-left>
           <ion-icon color="neutral" name="log-out"></ion-icon>
