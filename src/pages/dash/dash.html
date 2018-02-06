@@ -27,14 +27,14 @@
   <ion-grid no-margin>
     <ion-row align-items-center justify-content-center>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.visitors">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.visitors">
         <div tappable class="dash-card" padding no-margin (click)="openPage('LobbyPage')">
           <ion-icon class="dash-icon" large color="primary" name="people"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.lobby')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.tickets || permissions.accounter || permissions.zones">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.tickets || api.permissions.accounter || api.permissions.zones">
         <div tappable class="dash-card" padding no-margin (click)="openPage('PendingsPage')">
           <ion-icon class="dash-icon" large color="primary" name="clock"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.pendings')}}</h1>
@@ -42,21 +42,21 @@
       </ion-col>
 
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.visitors">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.visitors">
         <div tappable class="dash-card" padding no-margin (click)="openPage(VistorsPage)">
           <ion-icon class="dash-icon" large color="primary" name="contacts"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.visitors')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.visitors">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.visitors">
         <div tappable class="dash-card" padding no-margin (click)="openPage(VisitsPage)">
           <ion-icon class="dash-icon" large color="primary" name="list"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.visits')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.vehicles">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.vehicles">
         <div tappable class="dash-card" padding no-margin (click)="openPage('VehiclesPage')">
           <ion-icon class="dash-icon" large color="primary" name="ios-car"></ion-icon>
 
@@ -64,28 +64,28 @@
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.parkings">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.parkings">
         <div tappable class="dash-card" padding no-margin (click)="openPage(ParkingsPage)">
           <ion-icon class="dash-icon" large color="primary" name="md-car"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.parkings')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.visitors">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.visitors">
         <div tappable class="dash-card" padding no-margin (click)="openPage('ResidencesPage')">
           <ion-icon class="dash-icon" large color="primary" name="home"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.residences')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.correspondences">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.correspondences">
         <div tappable class="dash-card" padding no-margin (click)="openPage('CorrespondencesPage')">
           <ion-icon class="dash-icon" large color="primary" name="cube"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.correspondences')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.panics">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.panics">
         <div tappable class="dash-card" padding no-margin (click)="openPage(PanicLogsPage)">
           <ion-icon class="dash-icon" large color="primary" name="help-buoy"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.panic_logs')}}</h1>
@@ -93,21 +93,21 @@
       </ion-col>
 
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.tickets">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.tickets">
         <div tappable class="dash-card" padding no-margin (click)="openPage('TicketsPage')">
           <ion-icon class="dash-icon" large color="primary" name="easel"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.tickets')}}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.accounter">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.accounter">
         <div tappable class="dash-card" padding no-margin (click)="openPage(SellerPage)">
           <ion-icon class="dash-icon" large color="primary" name="card"></ion-icon>
           <h1 class="dash-title"> {{ api.trans('__.Punto de Venta') }}</h1>
         </div>
       </ion-col>
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.zones">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.zones">
         <div tappable class="dash-card" padding no-margin (click)="openPage(ZonesAdminPage)">
           <ion-icon class="dash-icon" large color="primary" name="partly-sunny"></ion-icon>
           <h1 class="dash-title"> {{ api.trans('literals.zones') }}</h1>
@@ -115,7 +115,7 @@
       </ion-col>
 
 
-      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="permissions.accounter">
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.accounter">
         <div tappable class="dash-card" padding no-margin (click)="openPage('SettingsPage')">
           <ion-icon class="dash-icon" large color="primary" name="settings"></ion-icon>
           <h1 class="dash-title"> {{ api.trans('literals.settings') }}</h1>

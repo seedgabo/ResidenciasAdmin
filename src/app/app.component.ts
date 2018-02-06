@@ -28,20 +28,11 @@ export class MyApp {
   SellerPage = SellerPage;
   ZonesAdminPage = ZonesAdminPage;
   PanicLogsPage = PanicLogsPage;
-  permissions = {
-    visitors: false,
-    accounter: false,
-    tickets: false,
-    zones: false,
-    panics: false,
-    parkings: false,
-    correspondences: false,
-  }
   constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush, public backgroundmode: BackgroundMode, public minimize: AppMinimize, public events: Events) {
     this.initializeApp();
 
     this.events.subscribe('login', () => {
-      this.SeedPermissions()
+      this.api.SeedPermissions()
     })
 
     // used for an example of ngFor and navigation
@@ -73,7 +64,7 @@ export class MyApp {
       if (this.api.user) {
         // if (!this.nav.getActive())
         this.rootPage = "DashPage";
-        this.SeedPermissions()
+        this.api.SeedPermissions()
         this.api.getData();
         this.api.getLang();
         this.api.startEcho();
@@ -126,53 +117,7 @@ export class MyApp {
     this.nav.setRoot(Login);
   }
 
-  SeedPermissions() {
-    if (this.api.roles && this.api.modules) {
-      for (var i = 0; i < this.api.roles.length; i++) {
-        if (this.api.roles[i].name == 'SuperAdmin') {
-          this.permissions = {
-            visitors: true,
-            accounter: true,
-            tickets: true,
-            zones: true,
-            panics: true,
-            parkings: true,
-            correspondences: true,
-          }
-          return
-        }
-        else if (this.api.roles[i].name == 'Celator') {
-          this.permissions.visitors = true
 
-        }
-        else if (this.api.roles[i].name == 'Accounter') {
-          this.permissions.accounter = true
-
-        }
-        else if (this.api.roles[i].name == 'Manage tickets') {
-          this.permissions.tickets = true
-
-        }
-        else if (this.api.roles[i].name == 'Manage zones') {
-          this.permissions.zones = true
-
-        }
-        else if (this.api.roles[i].name == 'Manage panic logs') {
-          this.permissions.panics = true
-
-        }
-        else if (this.api.roles[i].name == 'Manage parkings') {
-          this.permissions.parkings = true
-
-        }
-        else if (this.api.roles[i].name == 'Manage correspondences') {
-          this.permissions.correspondences = true
-
-        }
-      }
-    }
-
-  }
 
   openLiveSupportChat() {
     // var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();

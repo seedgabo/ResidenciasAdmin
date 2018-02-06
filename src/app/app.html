@@ -15,43 +15,47 @@
           {{ api.trans('literals.home') }}
         </button>
 
-        <button [color]="rootPage == 'PendingsPage' ?'primary':''" *ngIf="permissions.tickets || permissions.accounter || permissions.zones" menuClose ion-item (click)="openPage({component:'PendingsPage'})"
+        <button [color]="rootPage == 'PendingsPage' ?'primary':''" *ngIf="api.permissions.tickets || api.permissions.accounter || api.permissions.zones" menuClose ion-item (click)="openPage({component:'PendingsPage'})"
           icon-left>
           <ion-icon color="neutral" name="clock"></ion-icon>
           {{ api.trans('literals.pendings') }}
         </button>
 
-        <div *ngIf="permissions.visitors">
+        <div *ngIf="api.permissions.visitors">
           <button [color]="rootPage == p.component ?'primary':''" menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)" icon-left>
             <ion-icon color="neutral" [name]="p.icon"></ion-icon>
             {{ api.trans(p.title) }}
           </button>
         </div>
+        <button [color]="rootPage == 'VehiclesPage' ?'primary':''" menuClose ion-item  (click)="openPage({component:'VehiclesPage'})" icon-left>
+          <ion-icon color="neutral" name="md-car"></ion-icon>
+          {{ api.trans('literals.vehicles') }}
+        </button>
 
-        <button [color]="rootPage == PanicLogsPage ?'primary':''" *ngIf="permissions.panics" menuClose ion-item (click)="openPage({component:PanicLogsPage})" icon-left>
+        <button [color]="rootPage == PanicLogsPage ?'primary':''" *ngIf="api.permissions.panics" menuClose ion-item (click)="openPage({component:PanicLogsPage})" icon-left>
           <ion-icon color="neutral" name="help-buoy"></ion-icon>
           {{ api.trans('literals.panic_logs') }}
         </button>
 
 
-        <button [color]="rootPage == 'TicketsPage' ?'primary':''" *ngIf="permissions.tickets" menuClose ion-item (click)="openPage({component:'TicketsPage'})" icon-left>
+        <button [color]="rootPage == 'TicketsPage' ?'primary':''" *ngIf="api.permissions.tickets" menuClose ion-item (click)="openPage({component:'TicketsPage'})" icon-left>
           <ion-icon color="neutral" name="easel"></ion-icon>
           {{ api.trans('literals.tickets') }}
         </button>
 
-        <button [color]="rootPage == 'CorrespondencesPage' ?'primary':''" *ngIf="permissions.correspondences" menuClose ion-item (click)="openPage({component:'CorrespondencesPage'})" icon-left>
+        <button [color]="rootPage == 'CorrespondencesPage' ?'primary':''" *ngIf="api.permissions.correspondences" menuClose ion-item (click)="openPage({component:'CorrespondencesPage'})" icon-left>
 
           <ion-icon color="neutral" name="cube"></ion-icon>
 
           {{ api.trans('literals.correspondences') }}
         </button>
 
-        <button [color]="rootPage == SellerPage ?'primary':''" *ngIf="permissions.accounter" menuClose ion-item (click)="openPage({component:SellerPage})" icon-left>
+        <button [color]="rootPage == SellerPage ?'primary':''" *ngIf="api.permissions.accounter" menuClose ion-item (click)="openPage({component:SellerPage})" icon-left>
           <ion-icon color="neutral" name="card"></ion-icon>
           {{ api.trans('__.Punto de Venta') }}
         </button>
 
-        <button [color]="rootPage == 'ZonesAdminPage' ?'primary':''" *ngIf="permissions.zones" menuClose ion-item (click)="openPage({component:ZonesAdminPage})" icon-left>
+        <button [color]="rootPage == 'ZonesAdminPage' ?'primary':''" *ngIf="api.permissions.zones" menuClose ion-item (click)="openPage({component:ZonesAdminPage})" icon-left>
           <ion-icon color="neutral" name="partly-sunny"></ion-icon>
           {{ api.trans('literals.zones') }}
         </button>
@@ -60,7 +64,7 @@
           {{ api.trans('literals.settings') }}
         </ion-item-divider>
 
-        <button *ngIf="permissions.accounter" menuClose ion-item (click)="openPage({component:'SettingsPage'})" icon-left>
+        <button *ngIf="api.permissions.accounter" menuClose ion-item (click)="openPage({component:'SettingsPage'})" icon-left>
           <ion-icon color="neutral" name="settings"></ion-icon>
           {{ api.trans('literals.settings') }}
         </button>

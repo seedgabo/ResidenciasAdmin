@@ -40,6 +40,16 @@ export class Api {
   ready: Promise<any> = new Promise((resolve) => {
     this.resolve = resolve;
   });
+  permissions = {
+    visitors: true,
+    accounter: true,
+    tickets: true,
+    zones: true,
+    panics: true,
+    parkings: true,
+    vehicles: true,
+    correspondences: true,
+  }
   storage = {
     ready: () => { return this._storage.ready() },
     get: (key) => {
@@ -661,6 +671,52 @@ export class Api {
     this.Echo = undefined;
   }
 
+  SeedPermissions() {
+    if (this.roles && this.modules) {
+      if (this.roles.collection['SuperAdmin']) {
+        this.permissions = {
+          visitors: true,
+          accounter: true,
+          tickets: true,
+          zones: true,
+          panics: true,
+          parkings: true,
+          vehicles: true,
+          correspondences: true,
+        }
+        return
+      }
+      if (this.roles.collection['Celator']) {
+        this.permissions.visitors = true
+      }
+      if (this.roles.collection['Accounter']) {
+        this.permissions.accounter = true
+      }
+      if (this.roles.collection['Manage tickets']) {
+        this.permissions.tickets = true
+
+      }
+      if (this.roles.collection['Manage zones']) {
+        this.permissions.zones = true
+
+      }
+      if (this.roles.collection['Manage panic logs']) {
+        this.permissions.panics = true
+
+      }
+      if (this.roles.collection['Manage parkings']) {
+        this.permissions.parkings = true
+      }
+      if (this.roles.collection['Manage vehicles']) {
+        this.permissions.vehicles = true
+
+      }
+      if (this.roles.collection['Manage correspondences']) {
+        this.permissions.correspondences = true
+
+      }
+    }
+  }
 
   trans(value, args = null) {
     if (!this.langs) return value;
