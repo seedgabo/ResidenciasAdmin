@@ -1,6 +1,6 @@
 import { VisitPage } from './../visit/visit';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ActionSheetController, ModalController, PopoverController, IonicPage } from 'ionic-angular';
+import { NavController, NavParams, ActionSheetController, ModalController, PopoverController, IonicPage, Events } from 'ionic-angular';
 import { Api } from "../../providers/api";
 import { VisitorPage } from "../visitor/visitor";
 import moment from 'moment';
@@ -20,11 +20,23 @@ export class ListPage {
     from: null,
     to: null,
   }
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public actionsheet: ActionSheetController, public modal: ModalController, public popover: PopoverController) {
+  handler = ()=>{
+    this.getVisits()
+  }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api,public events:Events, public actionsheet: ActionSheetController, public modal: ModalController, public popover: PopoverController) {
   }
 
   ionViewDidLoad() {
     this.getVisits();
+    this.events.subscribe("VisitCreated", this.handler);
+    this.events.subscribe("VisitUpdated", this.handler);
+    this.events.subscribe("VisitDeleted", this.handler);
+  }
+
+  ionViewDidLeave() {
+    this.events.unsubscribe("VisitCreated", this.handler);
+    this.events.unsubscribe("VisitUpdated", this.handler);
+    this.events.unsubscribe("VisitDeleted", this.handler);
   }
 
   getVisits() {
@@ -42,7 +54,7 @@ export class ListPage {
 
   filter() {
     if (this.query == "") {
-      return this.visits = this.api.visits.slice(0, 200);
+      return this.visits = this.api.visits;
     }
     var array = [];
     for (var index = 0; index < this.api.visits.length; index++) {

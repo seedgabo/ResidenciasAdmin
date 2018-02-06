@@ -488,8 +488,7 @@ export class Api {
           if (this.objects.vehicles) {
             this.zone.run(() => {
               var vehicle;
-              if (vehicle_index > -1) {
-                vehicle = this.objects.vehicles[vehicle_index];
+              if (vehicle_index > -1) {                vehicle = this.objects.vehicles[vehicle_index];
               }
 
               else {
@@ -583,22 +582,24 @@ export class Api {
         .listen('VisitCreated', (data) => {
           console.log("visit created:", data);
           this.zone.run(() => {
-            this.visits.unshift(data.visit);
+            this.events.publish('VisitCreated',data)
             var visit = this.visits[0];
             if (data.visitor) {
               visit.visitor = data.visitor;
               visit.guest = data.guest;
               visit.visitors = data.visitors;
               if (this.objects.residences)
-                visit.residence = this.objects.residences.collection[visit.residence_id];
+              visit.residence = this.objects.residences.collection[visit.residence_id];
             }
-
+            this.visits.unshift(data.visit);
+            
             if (visit.status == 'approved') {
               this.visitPreApproved(visit);
             }
           })
         })
         .listen('VisitUpdated', (data) => {
+          this.events.publish('VisitCreated', data)
           console.log("visit updated:", data);
           var visit_index = this.visits.findIndex((visit) => {
             return visit.id === data.visit.id;
@@ -621,6 +622,7 @@ export class Api {
           });
         })
         .listen('VisitDeleted', (data) => {
+          this.events.publish('VisitDeleted', data)
           console.log("visit deleted:", data);
           var visit = this.visits.findIndex((visit) => {
             return visit.id === data.visit.id;
