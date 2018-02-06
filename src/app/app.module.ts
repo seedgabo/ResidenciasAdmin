@@ -6,16 +6,12 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpModule } from "@angular/http";
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { Login } from "../pages/login/login";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Api } from "../providers/api";
-import { ParkingsPage } from "../pages/parkings/parkings";
 import { VisitorPage } from "../pages/visitor/visitor";
 import { VisitCreatorPage } from "../pages/visit-creator/visit-creator";
-import { ZonesAdminPage } from "../pages/zones-admin/zones-admin";
 import { PipesModule } from '../pipes/pipes.module'
 import { IonicStorageModule } from '@ionic/storage';
 import { CodePush } from "@ionic-native/code-push";
@@ -26,23 +22,17 @@ import { AppMinimize } from '@ionic-native/app-minimize';
 
 
 import { VisitPage } from "../pages/visit/visit";
-import { SellerPage } from "../pages/seller/seller";
 import { ProductSearchPage } from '../pages/product-search/product-search';
 import { SettingProvider } from '../providers/setting/setting';
 import { NewtonProvider } from '../providers/newton/newton';
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
-    ListPage,
     Login,
-    ParkingsPage,
     VisitorPage,
     VisitPage,
     VisitCreatorPage,
     PanicPage,
-    SellerPage,
-    ZonesAdminPage,
     PanicLogsPage,
     ProductSearchPage,
     VehicleFinderPage,
@@ -57,16 +47,11 @@ import { NewtonProvider } from '../providers/newton/newton';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
-    ListPage,
     Login,
-    ParkingsPage,
     VisitorPage,
     VisitPage,
     VisitCreatorPage,
     PanicPage,
-    SellerPage,
-    ZonesAdminPage,
     PanicLogsPage,
     ProductSearchPage,
     VehicleFinderPage,
