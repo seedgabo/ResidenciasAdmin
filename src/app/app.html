@@ -32,7 +32,7 @@
           {{ api.trans('literals.vehicles') }}
         </button>
 
-        <button [color]="rootPage == PanicLogsPage ?'primary':''" *ngIf="api.permissions.panics" menuClose ion-item (click)="openPage({component:PanicLogsPage})" icon-left>
+        <button [color]="rootPage == 'PanicLogsPage' ?'primary':''" *ngIf="api.permissions.panics" menuClose ion-item (click)="openPage({component:'PanicLogsPage'})" icon-left>
           <ion-icon color="neutral" name="help-buoy"></ion-icon>
           {{ api.trans('literals.panic_logs') }}
         </button>
@@ -50,12 +50,12 @@
           {{ api.trans('literals.correspondences') }}
         </button>
 
-        <button [color]="rootPage == SellerPage ?'primary':''" *ngIf="api.permissions.accounter" menuClose ion-item (click)="openPage({component:SellerPage})" icon-left>
+        <button [color]="rootPage == 'SellerPage' ?'primary':''" *ngIf="api.permissions.accounter" menuClose ion-item (click)="openPage({component:'SellerPage'})" icon-left>
           <ion-icon color="neutral" name="card"></ion-icon>
           {{ api.trans('__.Punto de Venta') }}
         </button>
 
-        <button [color]="rootPage == 'ZonesAdminPage' ?'primary':''" *ngIf="api.permissions.zones" menuClose ion-item (click)="openPage({component:ZonesAdminPage})" icon-left>
+        <button [color]="rootPage == 'ZonesAdminPage' ?'primary':''" *ngIf="api.permissions.zones" menuClose ion-item (click)="openPage({component:'ZonesAdminPage'})" icon-left>
           <ion-icon color="neutral" name="partly-sunny"></ion-icon>
           {{ api.trans('literals.zones') }}
         </button>

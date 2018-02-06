@@ -18,12 +18,6 @@ import { IonicPage } from 'ionic-angular/navigation/ionic-page';
 export class DashPage {
   loading = false;
   sliders = [];
-  VistorsPage = HomePage;
-  VisitsPage = ListPage;
-  ParkingsPage = ParkingsPage;
-  PanicLogsPage = PanicLogsPage;
-  SellerPage = SellerPage;
-  ZonesAdminPage = ZonesAdminPage;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api) {
   }
 
@@ -38,6 +32,7 @@ export class DashPage {
         .catch(console.error)
     });
   }
+  
   openPage(page) {
     this.navCtrl.push(page);
   }

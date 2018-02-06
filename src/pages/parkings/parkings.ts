@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, IonicPage } from 'ionic-angular';
 import { Api } from "../../providers/api";
 
+@IonicPage()
 @Component({
   selector: 'page-parkings',
   templateUrl: 'parkings.html'

@@ -1,6 +1,8 @@
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
-import { NavController, NavParams, Platform } from 'ionic-angular';
+import { NavController, NavParams, Platform, IonicPage } from 'ionic-angular';
+
+@IonicPage()
 @Component({
   selector: 'page-panic-logs',
   templateUrl: 'panic-logs.html',

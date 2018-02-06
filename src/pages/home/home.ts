@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, ActionSheetController, ModalController, ToastController } from 'ionic-angular';
+import { NavController, ActionSheetController, ModalController, ToastController, IonicPage } from 'ionic-angular';
 import { Api } from "../../providers/api";
 import { VisitorPage } from "../visitor/visitor";
 import { VisitCreatorPage } from "../visit-creator/visit-creator";
 import { VisitPage } from "../visit/visit";
-
+@IonicPage()
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'

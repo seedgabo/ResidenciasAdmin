@@ -1,9 +1,11 @@
 import { VisitPage } from './../visit/visit';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ActionSheetController, ModalController, PopoverController } from 'ionic-angular';
+import { NavController, NavParams, ActionSheetController, ModalController, PopoverController, IonicPage } from 'ionic-angular';
 import { Api } from "../../providers/api";
 import { VisitorPage } from "../visitor/visitor";
 import moment from 'moment';
+
+@IonicPage()
 @Component({
   selector: 'page-list',
   templateUrl: 'list.html'

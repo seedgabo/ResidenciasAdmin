@@ -1,7 +1,8 @@
-import { AlertController, LoadingController } from 'ionic-angular';
+import { AlertController, LoadingController, IonicPage } from 'ionic-angular';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController, ActionSheetController } from 'ionic-angular';
 import { Api } from '../../providers/api';
+@IonicPage()
 @Component({ selector: 'page-zones-admin', templateUrl: 'zones-admin.html' })
 export class ZonesAdminPage {
   zones = [];

@@ -25,9 +25,6 @@ export class MyApp {
   rootPage: any;
 
   pages: Array<{ title: string, component: any, icon: string }>;
-  SellerPage = SellerPage;
-  ZonesAdminPage = ZonesAdminPage;
-  PanicLogsPage = PanicLogsPage;
   constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush, public backgroundmode: BackgroundMode, public minimize: AppMinimize, public events: Events) {
     this.initializeApp();
 
@@ -38,9 +35,9 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'literals.lobby', component: "LobbyPage", icon: "people" },
-      { title: 'literals.visitors', component: HomePage, icon: "contacts" },
-      { title: 'literals.visits', component: ListPage, icon: "list" },
-      { title: 'literals.parkings', component: ParkingsPage, icon: "car" },
+      { title: 'literals.visitors', component: 'HomePage', icon: "contacts" },
+      { title: 'literals.visits', component: 'ListPage', icon: "list" },
+      { title: 'literals.parkings', component: 'ParkingsPage', icon: "car" },
       { title: 'literals.residences', component: "ResidencesPage", icon: "home" },
     ];
 
@@ -116,9 +113,7 @@ export class MyApp {
       this.api.url = null
     this.nav.setRoot(Login);
   }
-
-
-
+  
   openLiveSupportChat() {
     // var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
     // (function () {
@@ -130,6 +125,6 @@ export class MyApp {
     //   s0.parentNode.insertBefore(s1, s0);
     // })();
 
-    var MyWindow = window.open('https://tawk.to/chat/5a784f55d7591465c707625d/default/?$_tawk_popout=true', 'livesupport', 'width=400,height=600'); return false;
+    window.MyWindow = window.open('https://tawk.to/chat/5a784f55d7591465c707625d/default/?$_tawk_popout=true', 'livesupport', 'width=400,height=600'); return false;
   }
 }

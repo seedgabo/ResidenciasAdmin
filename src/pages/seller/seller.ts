@@ -1,10 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, LoadingController, AlertController, ModalController, ActionSheetController, PopoverController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, AlertController, ModalController, ActionSheetController, PopoverController, IonicPage } from 'ionic-angular';
 import { Api } from '../../providers/api';
 import moment from 'moment';
 import { ProductSearchPage } from '../product-search/product-search';
 import { Printer } from '@ionic-native/printer';
 import { Content } from 'ionic-angular';
+@IonicPage({
+  priority: "high"
+})
 @Component({ selector: 'page-seller', templateUrl: 'seller.html' })
 export class SellerPage {
   @ViewChild(Content) content: Content;
