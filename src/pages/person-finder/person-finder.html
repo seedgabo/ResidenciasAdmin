@@ -32,10 +32,10 @@
       </h2>
       <p>{{person.document}}</p>
       <p *ngIf="person.residence">{{person.residence.name}}
-        <div *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
-          <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
-          <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
-        </div>
+          <span *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
+            <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
+            <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
+          </span>
       </p>
     </button>
   </ion-list>
@@ -51,10 +51,10 @@
       </h2>
       <p>{{person.document}}</p>
       <p *ngIf="person.residence">{{person.residence.name}}
-        <div *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
+        <span *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
           <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
           <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
-        </div>
+        </span>
       </p>
         <button ion-button icon-only clear color="primary" (click)="visitorModal(person);$event.stopPropagation()" item-right>
         <ion-icon name="create"></ion-icon>
@@ -74,10 +74,10 @@
       </h2>
       <p>{{person.document}}</p>
       <p *ngIf="person.residence">{{person.residence.name}}
-        <div *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
+        <span *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
           <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
           <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
-        </div>
+        </span>
       </p>
     </button>
 
