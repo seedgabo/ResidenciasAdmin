@@ -1,21 +1,23 @@
 #!/bin/bash
 # a Sample bash script
-read -s -p "Enter Password: " passwd
+echo -n Password: 
+read -s passwd
 cd ./platforms/browser/www
-$1 = 'plazueladetoscan'
-rsync --exclude=assets/header.js -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$1/admin" 
 
-$2 = 'cretaricaurte'
-rsync --exclude=assets/header.js -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$2/admin" 
+folder="plazueladetoscan"
+sshpass -p "$passwd" rsync --exclude=assets/header.js -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$folder/admin" 
 
-$3 = 'santoriniricaurte'
-rsync --exclude=assets/header.js -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$3/admin" 
+folder="cretaricaurte"
+sshpass -p "$passwd" rsync --exclude=assets/header.js -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$folder/admin" 
 
-$4 = 'bellasuiza'
-rsync --exclude=assets/header.js -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$4/admin" 
+folder="santoriniricaurte"
+sshpass -p "$passwd" rsync --exclude=assets/header.js -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$folder/admin" 
 
-$5 = 'horizontesdelcastillo'
-rsync --exclude=assets/header.js -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$4/admin" 
+folder="bellasuiza"
+sshpass -p "$passwd" rsync --exclude=assets/header.js -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$folder/admin" 
+
+folder="horizontesdelcastillo"
+sshpass -p "$passwd" rsync --exclude=assets/header.js -avz --delete . "eyc_proveedores@newton.eycproveedores.com:htdocs/$folder/admin" 
 
 echo "syncronized"
 cd ../../../

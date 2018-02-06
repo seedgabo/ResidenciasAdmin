@@ -580,9 +580,9 @@ export class Api {
 
         // Visit Events
         .listen('VisitCreated', (data) => {
+          this.events.publish('VisitCreated',data)
           console.log("visit created:", data);
           this.zone.run(() => {
-            this.events.publish('VisitCreated',data)
             var visit = this.visits[0];
             if (data.visitor) {
               visit.visitor = data.visitor;
@@ -599,7 +599,7 @@ export class Api {
           })
         })
         .listen('VisitUpdated', (data) => {
-          this.events.publish('VisitCreated', data)
+          this.events.publish('VisitUpdated', data)
           console.log("visit updated:", data);
           var visit_index = this.visits.findIndex((visit) => {
             return visit.id === data.visit.id;
