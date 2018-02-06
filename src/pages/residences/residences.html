@@ -13,11 +13,11 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-searchbar [(ngModel)]="query" debounce="750" (ionInput)="filter()"></ion-searchbar>
-  <ion-list [virtualScroll]="residences" [approxItemHeight]="'90px'" [virtualTrackBy]="trackBy">
-    <button ion-item (click)=" actions(res) " *virtualItem="let res ">
+  <ion-list [virtualScroll]="residences" approxItemHeight="90px" [virtualTrackBy]="trackBy">
+    <button ion-item (click)="actions(res)" *virtualItem="let res">
       <h2 text-wrap>{{ res.name }}
-        <span *ngIf="res.is_disabled " ion-text color="dark ">({{'literals.disabled' | trans }})</span>
-        <b text-right ion-text [color]="res.status==='solvent' ? 'secondary' : 'danger' "> {{ 'literals.'+ res.status | trans }}
+        <span *ngIf="res.is_disabled" ion-text color="dark">({{'literals.disabled' | trans }})</span>
+        <b text-right ion-text [color]="res.status==='solvent' ? 'secondary' : 'danger'"> {{ 'literals.'+ res.status | trans }}
         </b>
       </h2>
       <h3>
@@ -27,7 +27,7 @@
         <span *ngIf="res.owner">{{ res.owner.name }}</span>
       </h3>
       <p text-justify>
-        <span *ngFor="let user of res.users ">
+        <span *ngFor="let user of res.users">
           {{user.name}},
         </span>
       </p>

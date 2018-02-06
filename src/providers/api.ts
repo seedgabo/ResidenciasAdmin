@@ -104,6 +104,7 @@ export class Api {
           this.residence = data.residence
           this.modules = data.modules
           this.roles = data.roles
+          this.roles.collection = this.mapToCollection(data.roles,'name')
           this.settings = data.settings
           this.storage.set('user', data.user);
           this.storage.set('residence', data.residence);
@@ -241,6 +242,7 @@ export class Api {
           this.user.residences = data.residences;
           this.modules = data.modules;
           this.roles = data.roles;
+          this.roles.collection = this.mapToCollection(data.roles,'name')
           this.settings = data.settings;
           console.log(data.settings);
           this.storage.set('user', data.user);
