@@ -583,6 +583,7 @@ export class Api {
         .listen('VisitCreated', (data) => {
           this.events.publish('VisitCreated', data)
           console.log("visit created:", data);
+          this.visits.unshift(data.visit);
           this.zone.run(() => {
             var visit = this.visits[0];
             if (data.visitor) {
@@ -592,7 +593,6 @@ export class Api {
               if (this.objects.residences)
                 visit.residence = this.objects.residences.collection[visit.residence_id];
             }
-            this.visits.unshift(data.visit);
 
             if (visit.status == 'approved') {
               this.visitPreApproved(visit);
