@@ -31,7 +31,6 @@ export class MyApp {
       { title: 'literals.lobby', component: "LobbyPage", icon: "people" },
       { title: 'literals.visitors', component: 'HomePage', icon: "contacts" },
       { title: 'literals.visits', component: 'ListPage', icon: "list" },
-      { title: 'literals.parkings', component: 'ParkingsPage', icon: "car" },
       { title: 'literals.residences', component: "ResidencesPage", icon: "home" },
     ];
 
@@ -107,7 +106,7 @@ export class MyApp {
       this.api.url = null
     this.nav.setRoot('Login');
   }
-  
+
   openLiveSupportChat() {
     // var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
     // (function () {

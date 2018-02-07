@@ -41,14 +41,14 @@ export class Api {
     this.resolve = resolve;
   });
   permissions = {
-    visitors: true,
-    accounter: true,
-    tickets: true,
-    zones: true,
-    panics: true,
-    parkings: true,
-    vehicles: true,
-    correspondences: true,
+    visitors: false,
+    accounter: false,
+    tickets: false,
+    zones: false,
+    panics: false,
+    parkings: false,
+    vehicles: false,
+    correspondences: false,
   }
   storage = {
     ready: () => { return this._storage.ready() },
@@ -114,7 +114,7 @@ export class Api {
           this.residence = data.residence
           this.modules = data.modules
           this.roles = data.roles
-          this.roles.collection = this.mapToCollection(data.roles,'name')
+          this.roles.collection = this.mapToCollection(data.roles, 'name')
           this.settings = data.settings
           this.storage.set('user', data.user);
           this.storage.set('residence', data.residence);
@@ -252,7 +252,7 @@ export class Api {
           this.user.residences = data.residences;
           this.modules = data.modules;
           this.roles = data.roles;
-          this.roles.collection = this.mapToCollection(data.roles,'name')
+          this.roles.collection = this.mapToCollection(data.roles, 'name')
           this.settings = data.settings;
           console.log(data.settings);
           this.storage.set('user', data.user);
@@ -488,7 +488,8 @@ export class Api {
           if (this.objects.vehicles) {
             this.zone.run(() => {
               var vehicle;
-              if (vehicle_index > -1) {                vehicle = this.objects.vehicles[vehicle_index];
+              if (vehicle_index > -1) {
+                vehicle = this.objects.vehicles[vehicle_index];
               }
 
               else {
@@ -580,7 +581,7 @@ export class Api {
 
         // Visit Events
         .listen('VisitCreated', (data) => {
-          this.events.publish('VisitCreated',data)
+          this.events.publish('VisitCreated', data)
           console.log("visit created:", data);
           this.zone.run(() => {
             var visit = this.visits[0];
@@ -589,10 +590,10 @@ export class Api {
               visit.guest = data.guest;
               visit.visitors = data.visitors;
               if (this.objects.residences)
-              visit.residence = this.objects.residences.collection[visit.residence_id];
+                visit.residence = this.objects.residences.collection[visit.residence_id];
             }
             this.visits.unshift(data.visit);
-            
+
             if (visit.status == 'approved') {
               this.visitPreApproved(visit);
             }
@@ -677,44 +678,44 @@ export class Api {
     if (this.roles && this.modules) {
       if (this.roles.collection['SuperAdmin']) {
         this.permissions = {
-          visitors: true,
-          accounter: true,
-          tickets: true,
-          zones: true,
-          panics: true,
-          parkings: true,
-          vehicles: true,
-          correspondences: true,
+          visitors: this.modules.visits,
+          accounter: this.modules.finanze,
+          tickets: this.modules.tickets,
+          zones: this.modules.reservations,
+          panics: this.modules.panic,
+          parkings: this.modules.parkings,
+          vehicles: this.modules.vehicles,
+          correspondences: this.modules.correspondences,
         }
         return
       }
       if (this.roles.collection['Celator']) {
-        this.permissions.visitors = true
+        this.permissions.visitors = this.modules.visits
       }
       if (this.roles.collection['Accounter']) {
-        this.permissions.accounter = true
+        this.permissions.accounter = this.modules.finanze
       }
       if (this.roles.collection['Manage tickets']) {
-        this.permissions.tickets = true
+        this.permissions.tickets = this.modules.tickets
 
       }
       if (this.roles.collection['Manage zones']) {
-        this.permissions.zones = true
+        this.permissions.zones = this.modules.zones
 
       }
       if (this.roles.collection['Manage panic logs']) {
-        this.permissions.panics = true
+        this.permissions.panics = this.modules.panic
 
       }
       if (this.roles.collection['Manage parkings']) {
-        this.permissions.parkings = true
+        this.permissions.parkings = this.modules.parkings
       }
-      if (this.roles.collection['Manage vehicles']) {
-        this.permissions.vehicles = true
 
+      if (this.roles.collection['Manage vehicles']) {
+        this.permissions.vehicles = this.modules.vehicles
       }
       if (this.roles.collection['Manage correspondences']) {
-        this.permissions.correspondences = true
+        this.permissions.correspondences = this.modules.correspondences
 
       }
     }

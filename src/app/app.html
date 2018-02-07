@@ -26,10 +26,17 @@
             {{ api.trans(p.title) }}
           </button>
         </div>
-        <button [color]="rootPage == 'VehiclesPage' ?'primary':''" menuClose ion-item (click)="openPage({component:'VehiclesPage'})">
+
+        <button [color]="rootPage == 'ParkingsPage' ?'primary':''" *ngIf="api.permissions.parkings" menuClose ion-item (click)="openPage({component:'ParkingsPage'})">
+          <ion-icon item-left color="neutral" name="ios-car"></ion-icon>
+          {{ api.trans('literals.parkings') }}
+        </button>
+
+        <button [color]="rootPage == 'VehiclesPage' ?'primary':''" *ngIf="api.permissions.vehicles" menuClose ion-item (click)="openPage({component:'VehiclesPage'})">
           <ion-icon item-left color="neutral" name="md-car"></ion-icon>
           {{ api.trans('literals.vehicles') }}
         </button>
+
 
         <button [color]="rootPage == 'PanicLogsPage' ?'primary':''" *ngIf="api.permissions.panics" menuClose ion-item (click)="openPage({component:'PanicLogsPage'})">
           <ion-icon item-left color="neutral" name="help-buoy"></ion-icon>
