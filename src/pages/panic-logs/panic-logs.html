@@ -11,7 +11,7 @@
     <ion-spinner *ngIf="loading" color="primary"></ion-spinner>
   </div>
   <ion-list inset [virtualScroll]="panics.data">
-    <ion-item *virtualItem="let panic">
+    <button ion-item *virtualItem="let panic" (click)="actions(panic)">
       <h2 *ngIf="panic.residence">
         {{panic.residence.name}}
       </h2>
@@ -21,10 +21,14 @@
       <p>
         {{panic.created_at | amDateFormat:'LLLL' }}
       </p>
+      <span *ngIf="panic.note">
+        <b>{{ 'literals.note' | trans }}:</b>
+        {{panic.note}}
+      </span>
       <button icon-only clear color="dark" ion-button item-right *ngIf="panic.location" (click)="openMap(panic)">
 
         <ion-icon name="locate"></ion-icon>
       </button>
-    </ion-item>
+    </button>
   </ion-list>
 </ion-content>

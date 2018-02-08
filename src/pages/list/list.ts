@@ -1,6 +1,6 @@
 import { VisitPage } from './../visit/visit';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ActionSheetController, ModalController, PopoverController, IonicPage, Events } from 'ionic-angular';
+import { NavController, NavParams, ActionSheetController, ModalController, PopoverController, IonicPage, Events, AlertController } from 'ionic-angular';
 import { Api } from "../../providers/api";
 import { VisitorPage } from "../visitor/visitor";
 import moment from 'moment';
@@ -20,10 +20,10 @@ export class ListPage {
     from: null,
     to: null,
   }
-  handler = ()=>{
+  handler = () => {
     this.getVisits()
   }
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api,public events:Events, public actionsheet: ActionSheetController, public modal: ModalController, public popover: PopoverController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public events: Events, public actionsheet: ActionSheetController, public alert: AlertController, public modal: ModalController, public popover: PopoverController) {
   }
 
   ionViewDidLoad() {
@@ -93,7 +93,11 @@ export class ListPage {
   }
 
   actions(visit) {
-    var buttons = [];
+    var buttons: any = [{
+      text: this.api.trans('crud.add') + " " + this.api.trans('literals.note'),
+      icon: 'create',
+      handler: () => { this.addNote(visit) }
+    }];
     if (visit.status == 'waiting for confirmation') {
       buttons.push({
         text: this.api.trans('__.approve'),
@@ -133,6 +137,7 @@ export class ListPage {
     });
 
 
+
     this.actionsheet.create({
       title: this.api.trans('literals.visit') + " " + this.api.trans('__.from') + " " +
         (visit.visitor ? visit.visitor.name : visit.guest ? visit.guest.name : ''),
@@ -149,6 +154,33 @@ export class ListPage {
         this.getVisits()
       }
     })
+  }
+
+  addNote(visit) {
+    this.alert.create({
+      title: this.api.trans("crud.add") + " " + this.api.trans('literals.note'),
+      inputs: [{
+        name: 'note',
+        placeholder: this.api.trans('literals.note'),
+        value: visit.note
+      }],
+      buttons: [{
+        text: 'OK',
+        handler: (data) => {
+          if (data && data.note) {
+            this.api.put('visits/' + visit.id, { note: data.note })
+              .then((resp) => {
+                visit.note = data.note
+              })
+              .catch((err) => {
+                this.api.Error(err)
+              })
+          }
+        }
+      }, {
+        text: this.api.trans('crud.cancel')
+      }]
+    }).present();
   }
 
 
