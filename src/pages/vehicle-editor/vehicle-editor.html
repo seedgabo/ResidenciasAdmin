@@ -27,6 +27,8 @@
       <ion-label floating>{{'literals.color'| trans }}</ion-label>
       <ion-input [(ngModel)]="vehicle.color" type="text"></ion-input>
     </ion-item>
+
+
     <button ion-item (click)="selectResidence()" padding-vertical>
       <h2 *ngIf="!residence">
         {{'literals.select' | trans }} {{'literals.residence' | trans }}
@@ -67,6 +69,10 @@
       </ion-select>
     </ion-item>
 
+    <ion-item>
+      <ion-label floating>{{'literals.notes' | trans }}</ion-label>
+      <ion-textarea [(ngModel)]="vehicle.note"></ion-textarea>
+    </ion-item>
 
   </ion-list>
 </ion-content>
