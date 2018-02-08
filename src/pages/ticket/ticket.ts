@@ -16,6 +16,8 @@ export class TicketPage {
   }
   loading = false;
   adding = false;
+  file
+  file_name
   constructor(public navCtrl: NavController, public navParams: NavParams, public actionsheet: ActionSheetController, public api: Api) {
     this.ticket = navParams.get("ticket")
     this.new_comment.ticket_id = this.ticket.id;
@@ -27,7 +29,7 @@ export class TicketPage {
 
   getTicket() {
     this.loading = true;
-    this.api.get(`tickets/${this.ticket.id}?with[]=user&with[]=user.residence&with[]=comments&with[]=comments.user&with[]=comments.user.residence&with[]=file`)
+    this.api.get(`tickets/${this.ticket.id}?with[]=user&with[]=user.residence&with[]=comments&with[]=comments.user&with[]=comments.user.residence&with[]=comments.file&with[]=file`)
       .then((data) => {
         this.loading = false;
         this.ticket = data;
@@ -38,10 +40,13 @@ export class TicketPage {
       })
   }
 
-  downloadFile() {
+  downloadFile(file=null) {
+    if(!file){
+      file = this.ticket.file
+    }
     var element = document.createElement('a');
-    element.setAttribute('href', this.api.url + "files/" + this.ticket.file.id);
-    element.setAttribute('download', this.ticket.file.name);
+    element.setAttribute('href', this.api.url + "files/" + file.id);
+    element.setAttribute('download', file.name);
     element.style.display = 'none';
     document.body.appendChild(element);
     element.click();
@@ -62,6 +67,9 @@ export class TicketPage {
         this.loading = false;
         this.new_comment.text = "";
         this.adding = false;
+        if(this.file){
+          this.uploadFile(data.id)
+        }
       })
       .catch((err) => {
         this.api.Error(err);
@@ -97,6 +105,57 @@ export class TicketPage {
       }
     })
     sheet.present();
+  }
+
+  askFile() {
+    var filer: any = document.querySelector("#input-file-comment")
+    filer.click();
+  }
+
+  readFile(event) {
+    try {
+      var reader: any = new FileReader();
+      reader.readAsDataURL(event.target.files[0])
+      if (event.target.files[0].size / 1024 / 1024 > 5) {
+        return this.errorFile(event.target.files[0].size)
+      }
+      this.file = event.target.files[0];
+      this.file_name = event.target.files[0].name
+    } catch (error) {
+      this.file = null
+      console.error(error)
+    }
+  }
+
+  errorFile(size) {
+    this.api.toast.create({
+      message: this.api.trans('__.los archivos deben sen inferior a 5MB, (' + size / 1024 / 1024 + " MB)"),
+      duration: 4000
+    }).present()
+  }
+
+  uploadFile(id) {
+    var formData = new FormData();
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', this.api.url + "api/files/upload/comment/" + id, true);
+    formData.append('file', this.file, this.file_name);
+
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        this.api.toast.create({
+          message: this.api.trans("literals.file") + " " + this.api.trans("crud.updated"),
+          duration: 1500,
+          showCloseButton: true,
+        }).present();
+        this.file = null
+        this.file_name = null
+        this.getTicket()
+      } else {
+        this.api.Error({ status: xhr.status })
+      }
+    };
+    xhr.setRequestHeader("Auth-Token", this.api.user.token)
+    xhr.send(formData)
   }
 
 }

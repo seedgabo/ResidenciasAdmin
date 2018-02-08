@@ -38,6 +38,12 @@
   </ion-card-header>
 
   <div class="form-add-comment" *ngIf="adding">
+    <input type="file" id="input-file-comment" style="display:none;" (change)="readFile($event)">
+    <div text-right>
+      <button ion-button clear icon-only (click)="askFile()">
+        <ion-icon name="cloud-upload"></ion-icon>
+      </button> 
+    </div>
     <ion-item>
       <ion-label floating>{{'literals.comment' | trans }}</ion-label>
       <ion-textarea [(ngModel)]="new_comment.text"></ion-textarea>
@@ -46,10 +52,11 @@
   </div>
 
   <div text-center>
-    <button ion-button color="primary" clear small (click)="adding=true" item-right>
+    <button ion-button color="primary" clear small *ngIf="adding==false" (click)="adding=true" item-right>
       {{ 'crud.add' | trans }} {{ 'literals.comment' | trans }}
     </button>
   </div>
+
   <ion-card-header color="primary">
     {{'literals.comments' | trans }}
   </ion-card-header>
@@ -68,6 +75,12 @@
           <span *ngIf="comment.user.residence">
             - {{comment.user.residence.name}}
           </span>
+        </p>
+        <p *ngIf="comment.file">
+          <button ion-button color="primary" icon-left block (click)="downloadFile(comment.file)">
+            <ion-icon name="cloud-download"></ion-icon>
+            {{'literals.download' | trans }} {{'literals.file' | trans}}
+          </button>
         </p>
         <small text-right>
           {{comment.created_at | amCalendar}}
