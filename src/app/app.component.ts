@@ -20,7 +20,9 @@ export class MyApp {
 
   pages: Array<{ title: string, component: any, icon: string }>;
   constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush, public backgroundmode: BackgroundMode, public minimize: AppMinimize, public events: Events) {
-    this.initializeApp();
+    this.platform.ready().then(() => {
+      this.initializeApp();
+    })
 
     this.events.subscribe('login', () => {
       this.api.SeedPermissions()
@@ -44,7 +46,10 @@ export class MyApp {
           if (status == 8)
             this.splashScreen.show();
         }
-        , (err) => { console.warn(err) });
+        , (err) => {
+          console.warn(err)
+          this.splashScreen.hide();
+        });
 
     }
     sync()
