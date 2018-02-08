@@ -33,6 +33,13 @@ export class TicketPage {
       .then((data) => {
         this.loading = false;
         this.ticket = data;
+        this.api.get(`comments?where[ticket_id]=${this.ticket.id}&with[]=user.residence&with[]=file`)
+          .then((comments) => {
+            this.ticket.comments = comments
+          })
+          .catch((err) => {
+            this.api.Error(err);
+          })
       })
       .catch((err) => {
         this.api.Error(err);
