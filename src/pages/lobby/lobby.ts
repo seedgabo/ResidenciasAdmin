@@ -18,7 +18,7 @@ export class LobbyPage {
   person
   visitors = [];
   type
-  visits = { data: [], total: null };
+  visits = [];
   _visits = { data: [], total: null };
   /**
    * TODO:
@@ -152,13 +152,14 @@ export class LobbyPage {
 
   filter() {
     if (this.query == "") {
-      return this.visits = this._visits;
+      return this.visits = this._visits.data;
     }
     var array = [];
     for (var index = 0; index < this._visits.data.length; index++) {
       var element = this._visits.data[index];
       if (
         (element.visitor && element.visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
+        (element.visitor && element.visitor.document && element.visitor.document.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
         (element.guest && element.guest.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
         (element.residence && element.residence.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
         (element.user && element.user.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1)
@@ -170,7 +171,7 @@ export class LobbyPage {
       }
     }
     console.log(array);
-    return this.visits.data = array;
+    return this.visits = array;
   }
 
   append() {

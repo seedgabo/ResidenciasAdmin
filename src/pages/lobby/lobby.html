@@ -62,19 +62,24 @@
           <ion-list-header>
             <ion-icon name="list" item-left></ion-icon>
             {{'literals.visits' | trans }}
-            <ion-note color="favorite">{{ visits?.total}}</ion-note>
+            <ion-note color="favorite">{{ _visits?.total}}</ion-note>
             <button item-right ion-button clear icon-only (click)="gotoVisits()">
               <ion-icon name="search"></ion-icon>
             </button>
           </ion-list-header>
           <ion-list>
-            <button ion-item *ngFor="let visit of visits?.data.slice(0,10)">
+            <button ion-item *ngFor="let visit of visits.slice(0,10)">
               <ion-avatar item-left>
                 <img [src]="visit.visitor?.image_url" alt="">
               </ion-avatar>
               <h2>{{visit.visitor?.name}}</h2>
               <p>{{visit.visitor?.document}}</p>
               <span>{{visit.visitor?.residence?.name}}</span>
+              <span>
+                <span ion-text [color]="visit.status == 'approved' ? 'secondary' : visit.status == 'rejected' ? 'danger' : visit.status == 'waiting for confirmation' ? 'warning' : visit.status == 'departured' ? 'neutral' : ''">
+                  {{ 'literals.'+ visit.status | trans }}
+                </span>
+              </span>
               <p item-right text-right>
                 {{ visit.created_at | amDateFormat:'D MMMM YYYY, h:mm:ss a' }}
                 <br>
