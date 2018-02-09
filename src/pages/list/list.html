@@ -67,9 +67,16 @@
         <b>{{'literals.note' | trans }}:</b>
         {{visit.note}}
       </span>
-      <ion-note item-right>
-        {{ visit.created_at |amCalendar }}
-      </ion-note>
+      <p item-right text-right>
+        {{ visit.created_at | amDateFormat:'D MMMM YYYY, h:mm:ss a' }}
+        <br>
+        <span *ngIf="visit.departured_at">
+          <b>{{'literals.departured' | trans }}:</b>
+          <span>
+            {{visit.departured_at | amDateFormat:'D MMMM YYYY, h:mm:ss a' }}
+          </span>
+        </span>
+      </p>
     </button>
   </ion-list>
 </ion-content>

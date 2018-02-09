@@ -82,15 +82,15 @@
               <h2>
                 {{visitor.name}}
               </h2>
-              <h4 *ngIf="visitor.residence">
+              <h4 *ngIf="visitor.residence" item-right>
                 {{visitor.residence.name}}
               </h4>
               <p>
                 {{ visitor.document }}
               </p>
-              <p *ngIf="api.residences_collection[visitor.residence_id]" text-right>
-                {{api.residences_collection[visitor.residence_id].name}}
-              </p>
+              <span *ngIf="visitor.notes">
+                {{visitor.notes}}
+              </span>
             </button>
           </ion-list>
         </ion-card>

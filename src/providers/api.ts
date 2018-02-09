@@ -1,3 +1,4 @@
+import { langs } from './../assets/langs';
 import { PanicPage } from './../pages/panic/panic';
 import { Injectable, NgZone } from '@angular/core';
 import { Http, Headers } from '@angular/http';
@@ -9,7 +10,6 @@ import Echo from 'laravel-echo';
 declare var window: any;
 import Pusher from 'pusher-js';
 import { AlertController, ToastController, ModalController, Events } from "ionic-angular";
-import langs from "../assets/langs";
 window.Pusher = Pusher;
 import { Vibration } from '@ionic-native/vibration';
 import { SettingProvider } from './setting/setting';
