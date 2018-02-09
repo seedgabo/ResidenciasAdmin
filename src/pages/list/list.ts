@@ -61,7 +61,9 @@ export class ListPage {
       var element = this.api.visits[index];
       if (
         (element.visitor && element.visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
+        (element.visitor && element.visitor.document && element.visitor.document.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
         (element.guest && element.guest.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
+        (element.guest && element.guest.document && element.guest.document.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
         (element.residence && element.residence.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
         (element.user && element.user.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1)
       )
