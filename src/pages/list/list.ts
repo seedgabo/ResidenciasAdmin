@@ -77,6 +77,17 @@ export class ListPage {
     return this.visits = array;
   }
 
+  moreFilters(ev) {
+    var popover = this.popover.create("VisitPopoverFiltersPage", { filters: this.filters })
+    popover.present({ ev: ev })
+    popover.onWillDismiss((filters) => {
+      if (filters) {
+        this.filters = filters
+        this.getVisits()
+      }
+    })
+  }
+
   append() {
     var append = "&append[]=guest&order[id]=desc&limit=500";
     if (this.filters.residence) {
@@ -147,16 +158,6 @@ export class ListPage {
     }).present();
   }
 
-  moreFilters(ev) {
-    var popover = this.popover.create("VisitPopoverFiltersPage", { filters: this.filters })
-    popover.present({ ev: ev })
-    popover.onWillDismiss((filters) => {
-      if (filters) {
-        this.filters = filters
-        this.getVisits()
-      }
-    })
-  }
 
   addNote(visit) {
     this.alert.create({

@@ -1,8 +1,8 @@
 <ion-header>
   <ion-navbar color="primary">
-      <button icon-only menuToggle ion-button>
-          <ion-icon name="menu"></ion-icon>
-      </button>
+    <button icon-only menuToggle ion-button>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>{{ api.trans('literals.lobby') }}</ion-title>
     <ion-buttons end>
       <button ion-button icon-only clear (click)="findPerson()">
@@ -15,7 +15,7 @@
   </ion-navbar>
 
   <ion-toolbar>
-    <ion-searchbar *ngIf="ready" (ionInput)="searchPerson()" [(ngModel)]="query"  debounce="700" [placeholder]="('literals.search' | trans)  + ' ' + ('literals.document' | trans)"></ion-searchbar>
+    <ion-searchbar *ngIf="ready" (ionInput)="searchPerson();filter();getVisitors()" [(ngModel)]="query" debounce="700" [placeholder]="('literals.search' | trans)  + ' ' + ('literals.document' | trans)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -24,95 +24,178 @@
   </div>
   <input type="file" name="filer" accept="image/*" (change)="readFile($event)" id="input-file-person" style="display:none;">
 
+
+
   <ion-grid>
     <ion-row>
-      <ion-col>
-          <div *ngIf="person">
 
-            <!-- Image and type -->
-            <ion-card-header text-center>
-              <div text-right>
-                <ion-badge color="primary">{{'literals.'+ type | trans}}</ion-badge>
-              </div>
-              <img [src]="person.image_url" (click)="askFile()" tappable class="img-person">
-            </ion-card-header>
-            
-            <!-- Fingerprint -->
-            <ion-card-header text-center>
-              <button ion-button large round full clear icon-left [disabled]="true">
-                <ion-icon name="finger-print"></ion-icon>
-                {{ 'literals.fingerprint' | trans }}
+      <!-- Visitors -->
+      <ion-col col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 *ngIf="!person">
+        <ion-card>
+          <ion-list-header>
+            <ion-icon name="people" item-left></ion-icon>
+            {{'literals.visitors' | trans }}
+            <ion-note color="favorite">{{ api.objects.visitors?.length}}</ion-note>
+            <button ion-fab mini item-right color="primary" (click)="visitorModal()">
+              <ion-icon name="add"></ion-icon>
+            </button>
+          </ion-list-header>
+          <ion-list>
+            <button ion-item *ngFor="let visitor of visitors?.reverse().slice(0,10)" (click)="actions_visitor(visitor)">
+
+              <ion-avatar item-left>
+                <img [src]="visitor.image_url" alt="">
+              </ion-avatar>
+              <h2>{{visitor.name}}</h2>
+              <p>{{visitor.document}}</p>
+              <span>{{visitor.notes}}</span>
+              <p item-right>{{visitor.residence?.name}}</p>
+            </button>
+            <ion-item-divider text-capitalize>
+              <button ion-button block clear (click)="gotoVisitors()">
+                {{'crud.all' | trans }} {{'literals.visitors' | trans}}
               </button>
-            </ion-card-header>
-            
-            <!-- Person Data -->
-            <ion-list>
-              <ion-item>
-                <b item-left>{{'literals.name' | trans }}</b>
-                <span item-right>{{person.name}}</span>
-              </ion-item>
-          
-              <ion-item>
-                <b item-left>{{'literals.document' | trans }}</b>
-                <span item-right>{{person.document}}</span>
-              </ion-item>
-          
-              <ion-item *ngIf="type != 'worker';else workerWorkField">
-                <b item-left>{{'literals.relationship' | trans }}</b>
-                <span item-right>{{'literals.' + person.relationship}}</span>
-              </ion-item>
-              <ng-template #workerWorkField>
+            </ion-item-divider>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+
+      <!-- Visits -->
+      <ion-col col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 *ngIf="!person">
+        <ion-card>
+          <ion-list-header>
+            <ion-icon name="list" item-left></ion-icon>
+            {{'literals.visits' | trans }}
+            <ion-note color="favorite">{{ _visits?.total}}</ion-note>
+            <button item-right ion-button clear icon-only (click)="gotoVisits()">
+              <ion-icon name="search"></ion-icon>
+            </button>
+          </ion-list-header>
+          <ion-list>
+            <button ion-item *ngFor="let visit of visits.slice(0,10)" (click)="actions_visit(visit)">
+              <ion-avatar item-left>
+                <img [src]="visit.visitor?.image_url" alt="">
+              </ion-avatar>
+              <h2>{{visit.visitor?.name}}</h2>
+              <p>{{visit.visitor?.document}}</p>
+              <span>{{visit.visitor?.residence?.name}}</span>
+              <span>
+                <span ion-text [color]="visit.status == 'approved' ? 'secondary' : visit.status == 'rejected' ? 'danger' : visit.status == 'waiting for confirmation' ? 'warning' : visit.status == 'departured' ? 'neutral' : ''">
+                  {{ 'literals.'+ visit.status | trans }}
+                </span>
+              </span>
+              <p item-right text-right>
+                {{ visit.created_at | amDateFormat:'D MMMM YYYY, h:mm:ss a' }}
+                <br>
+                <span *ngIf="visit.departured_at">
+                  <b>{{'literals.departured' | trans }}:</b>
+                  <span>
+                    {{visit.departured_at | amDateFormat:'D MMMM YYYY, h:mm:ss a' }}
+                  </span>
+                </span>
+              </p>
+            </button>
+
+            <ion-item-divider text-capitalize>
+              <button ion-button block clear (click)="gotoVisits()">
+                {{'crud.all' | trans }} {{'literals.visits' | trans}}
+              </button>
+            </ion-item-divider>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+
+      <!-- Person -->
+      <ion-col col-12 col-sm8 col-md-8 col-lg-8 col-xl-8 *ngIf="person">
+
+
+        <div *ngIf="person">
+
+          <!-- Image and type -->
+          <ion-card-header text-center>
+            <div text-right>
+              <ion-badge color="primary">{{'literals.'+ type | trans}}</ion-badge>
+            </div>
+            <img [src]="person.image_url" (click)="askFile()" tappable class="img-person">
+          </ion-card-header>
+
+          <!-- Fingerprint -->
+          <ion-card-header text-center>
+            <button ion-button large round full clear icon-left [disabled]="true">
+              <ion-icon name="finger-print"></ion-icon>
+              {{ 'literals.fingerprint' | trans }}
+            </button>
+          </ion-card-header>
+
+          <!-- Person Data -->
+          <ion-list>
+            <ion-item>
+              <b item-left>{{'literals.name' | trans }}</b>
+              <span item-right>{{person.name}}</span>
+            </ion-item>
+
+            <ion-item>
+              <b item-left>{{'literals.document' | trans }}</b>
+              <span item-right>{{person.document}}</span>
+            </ion-item>
+
+            <ion-item *ngIf="type != 'worker';else workerWorkField">
+              <b item-left>{{'literals.relationship' | trans }}</b>
+              <span item-right>{{'literals.' + person.relationship}}</span>
+            </ion-item>
+            <ng-template #workerWorkField>
               <ion-item>
                 <b item-left>{{'literals.work' | trans }}</b>
                 <span item-right>{{person.work}}</span>
-              </ion-item>                  
-              </ng-template>
-          
-              <ion-item>
-                <b item-left>{{'literals.residence' | trans }}</b>
-                <span item-right>{{person.residence?.name}}</span>
               </ion-item>
-          
-          
-            </ion-list>
+            </ng-template>
+
+            <ion-item>
+              <b item-left>{{'literals.residence' | trans }}</b>
+              <span item-right>{{person.residence?.name}}</span>
+            </ion-item>
 
 
-            <!-- Visitor Actions -->
-            <div text-right *ngIf="type === 'visitor'">
-              <button [disabled]="loading && person.id" ion-button outline color="primary" (click)="addVisit(person)">
-                {{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}
-              </button>
-              <button ion-button color="secondary" (click)="visitorModal(person)" icon-left [disabled]="!canSave() || loading">
-                <ion-icon class="fa fa-edit"></ion-icon>
-                {{'crud.edit' | trans }}
-              </button>
-              <br>
-              <br>
-              <button ion-button (click)="visitModal(person)" color="favorite" small clear icon-left [disabled]="!canSave() || loading">
-                {{'literals.configure' | trans }} {{'literals.visit' | trans }}
-              </button>
-            </div>
+          </ion-list>
+
+
+          <!-- Visitor Actions -->
+          <div text-right *ngIf="type === 'visitor'">
+            <button [disabled]="loading && person.id" ion-button outline color="primary" (click)="addVisit(person)">
+              {{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}
+            </button>
+            <button ion-button color="secondary" (click)="visitorModal(person)" icon-left [disabled]="!canSave() || loading">
+              <ion-icon class="fa fa-edit"></ion-icon>
+              {{'crud.edit' | trans }}
+            </button>
+            <br>
+            <br>
+            <button ion-button (click)="visitModal(person)" color="favorite" small clear icon-left [disabled]="!canSave() || loading">
+              {{'literals.configure' | trans }} {{'literals.visit' | trans }}
+            </button>
           </div>
-          
-          <!-- No Results -->
-          <div text-center *ngIf="no_results">
-            <img src="./assets/logo-sad.png" alt="no results" style="width:100%;max-width:300px;">
-            <h4 ion-text color="primary">
-              {{'__.No hay coincidencias exactas en el campo' | trans }} {{ 'literals.document' | trans }}
-            </h4>
-            <div text-right>
-              <button (click)="visitorModal({document:query, sex:'male'})" ion-button clear color="secondary"> {{'crud.add' | trans}} {{ 'literals.visitor' | trans}}</button>
-            </div>
+        </div>
+
+        <!-- No Results -->
+        <div text-center *ngIf="no_results">
+          <img src="./assets/logo-sad.png" alt="no results" style="width:100%;max-width:300px;">
+          <h4 ion-text color="primary">
+            {{'__.No hay coincidencias exactas en el campo' | trans }} {{ 'literals.document' | trans }}
+          </h4>
+          <div text-right>
+            <button (click)="visitorModal({document:query, sex:'male'})" ion-button clear color="secondary"> {{'crud.add' | trans}} {{ 'literals.visitor' | trans}}</button>
           </div>
+        </div>
 
       </ion-col>
 
-      <ion-col col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 *ngIf="api.visits_approved && api.visits_approved.length>0">
+      <!-- PRe Approved -->
+      <ion-col col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4>
         <ion-card>
-          <ion-card-header> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-card-header>
+          <ion-list-header> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-list-header>
           <ion-list>
             <ion-item-sliding *ngFor="let visit of api.visits_approved;let i= index">
-              <button ion-item (tap)="viewVisit(visit,i)" [ngClass]="{attention: visit.visitor?.id == person?.id }" >
+              <button ion-item (tap)="viewVisit(visit,i)" [ngClass]="{attention: visit.visitor?.id == person?.id }">
                 <ion-thumbnail *ngIf="visit.visitor?.image_url" item-left (click)="askFile(visit.visitor);$event.stopPropagation()">
                   <img [src]="visit.visitor.image_url">
                 </ion-thumbnail>
@@ -162,6 +245,7 @@
           </ion-list>
         </ion-card>
       </ion-col>
+
     </ion-row>
   </ion-grid>
 </ion-content>

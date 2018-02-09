@@ -17,7 +17,8 @@ export class VisitCreatorPage {
   loading = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public viewCtrl: ViewController, public modal: ModalController) {
     console.log(navParams.get('visitor'))
-    this.visitor = navParams.get('visitor');
+    if (navParams.get('visitor'))
+      this.visitor = navParams.get('visitor');
   }
 
   ionViewDidLoad() {

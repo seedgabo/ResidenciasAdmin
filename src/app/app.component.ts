@@ -30,9 +30,9 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'literals.lobby', component: "LobbyPage", icon: "people" },
-      { title: 'literals.visitors', component: 'HomePage', icon: "contacts" },
-      { title: 'literals.visits', component: 'ListPage', icon: "list" },
+      { title: 'literals.lobby', component: "LobbyPage", icon: "ios-key" },
+      // { title: 'literals.visitors', component: 'HomePage', icon: "contacts" },
+      // { title: 'literals.visits', component: 'ListPage', icon: "list" },
       { title: 'literals.residences', component: "ResidencesPage", icon: "home" },
     ];
 
