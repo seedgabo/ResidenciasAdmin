@@ -18,13 +18,15 @@ export class LobbyPage {
   person
   visitors = [];
   type
-  /** 
+  visits = { data: [], total: null };
+  _visits = { data: [], total: null };
+  /**
    * TODO:
    * Fingerprint integration
    * Register entries for worker and users
   **/
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api:Api, public modal:ModalController, public toast:ToastController, public actionsheet:ActionSheetController) {
-    this.api.ready.then(()=>{
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public modal: ModalController, public toast: ToastController, public actionsheet: ActionSheetController) {
+    this.api.ready.then(() => {
       var promises = [
         this.api.load("users"),
         this.api.load("visitors"),
@@ -35,15 +37,18 @@ export class LobbyPage {
   }
 
   ionViewDidLoad() {
-    
+
   }
 
-  ionViewDidEnter(){
-    if(this.ready)
+  ionViewDidEnter() {
+    if (this.ready) {
       this.searchPerson()
+      this.getVisits()
+      this.getVisitors()
+    }
   }
 
-  searchPerson(){
+  searchPerson() {
     this.loading = true
     this.person = null;
     this.type = null
@@ -55,9 +60,9 @@ export class LobbyPage {
 
     var query = this.query.toLowerCase()
     this.searchVisitor(query)
-    if(!this.person)
+    if (!this.person)
       this.searchUser(query)
-    if(!this.person)
+    if (!this.person)
       this.searchWorker(query)
 
     this.person ? this.no_results = false : this.no_results = true;
@@ -67,18 +72,18 @@ export class LobbyPage {
   searchVisitor(query) {
     for (var i = 0; i < this.api.objects.visitors.length; i++) {
       var item = this.api.objects.visitors[i];
-      if(item.document && query == item.document.toLowerCase()){
+      if (item.document && query == item.document.toLowerCase()) {
         this.person = item
         break;
       }
     }
-    (this.person)? this.type = "visitor" : null;
+    (this.person) ? this.type = "visitor" : null;
   }
 
   searchUser(query) {
     for (var i = 0; i < this.api.objects.users.length; i++) {
       var item = this.api.objects.users[i];
-      if(item.document && query == item.document.toLowerCase()){
+      if (item.document && query == item.document.toLowerCase()) {
         this.person = item
         break;
       }
@@ -91,12 +96,12 @@ export class LobbyPage {
     this.person = null;
     for (var i = 0; i < this.api.objects.workers.length; i++) {
       var item = this.api.objects.workers[i];
-      if(item.document && query == item.document.toLowerCase()){
+      if (item.document && query == item.document.toLowerCase()) {
         this.person = item
         break;
       }
     }
-    this.person? this.type = "user" : null;
+    this.person ? this.type = "user" : null;
 
   }
 
@@ -114,10 +119,63 @@ export class LobbyPage {
       }
     });
   }
-  
-  clear (){
+
+  clear() {
     this.person = null
     this.no_results = false
+  }
+
+
+  getVisits() {
+    this.api.get('visits?with[]=residence&with[]=user&with[]=vehicle&with[]=visitor&withCount[]=visitors' + this.append()).then((data: any) => {
+      console.log(data);
+      this.visits = this._visits = data;
+      this.filter()
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
+
+  getVisitors() {
+    if (this.query == "")
+      return this.visitors = this.api.objects.visitors.slice(0, 100);
+
+    return this.visitors = this.api.objects.visitors.filter((visitor) => {
+      if (visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1
+        || visitor.document.toLowerCase().indexOf(this.query.toLowerCase()) > -1)
+        return true;
+      if (this.api.residences_collection[visitor.residence_id] && this.api.residences_collection[visitor.residence_id].name.toLowerCase().indexOf(this.query.toLowerCase()) > -1)
+        return true;
+      return false;
+    }).slice(0, 100);
+  }
+
+  filter() {
+    if (this.query == "") {
+      return this.visits = this._visits;
+    }
+    var array = [];
+    for (var index = 0; index < this._visits.data.length; index++) {
+      var element = this._visits.data[index];
+      if (
+        (element.visitor && element.visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
+        (element.guest && element.guest.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
+        (element.residence && element.residence.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) ||
+        (element.user && element.user.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1)
+      )
+        array[array.length] = element;
+
+      if (array.length == 200) {
+        break;
+      }
+    }
+    console.log(array);
+    return this.visits.data = array;
+  }
+
+  append() {
+    var append = "&append[]=guest&order[id]=desc&paginate=500";
+    return append;
   }
 
 
@@ -140,10 +198,10 @@ export class LobbyPage {
 
   findPerson() {
     var modal = this.modal.create('PersonFinderPage', {
-        users: true,
-        visitors: true,
-        workers: true
-      })
+      users: true,
+      visitors: true,
+      workers: true
+    })
     modal.present();
     modal.onDidDismiss((data) => {
       if (!data || !data.person) {
@@ -157,11 +215,11 @@ export class LobbyPage {
 
   }
 
-  canSave(){
+  canSave() {
     return this.person.name && this.person.name.length > 3 && this.person.document && this.person.residence_id;
   }
 
-  private done(){
+  private done() {
     this.toast.create({
       message: this.api.trans("literals.done"),
       duration: 3000
@@ -170,7 +228,7 @@ export class LobbyPage {
     this.type = null;
   }
 
-  more(v){
+  more(v) {
     var buttons = [
       {
         text: this.api.trans('crud.add') + " " + this.api.trans('literals.person'),
@@ -190,12 +248,12 @@ export class LobbyPage {
         }
       }
     ];
-    if(this.person){
+    if (this.person) {
       buttons.push({
         text: this.api.trans('literals.configure') + " " + this.api.trans('literals.visit'),
         icon: 'more',
         cssClass: 'icon-secondary',
-        handler: () => { this.visitModal(this.person)}
+        handler: () => { this.visitModal(this.person) }
       })
     }
     this.actionsheet.create({
@@ -220,7 +278,7 @@ export class LobbyPage {
     })
   }
 
-  visitModal(visitor = null) {
+  visitModal(visitor = undefined) {
     this.modal.create(VisitCreatorPage, { visitor: visitor }, { showBackdrop: true, enableBackdropDismiss: true }).present();
 
   }
@@ -272,6 +330,14 @@ export class LobbyPage {
       })
       .catch(console.error)
   }
-  
 
+
+
+
+  gotoVisits() {
+    this.navCtrl.push('ListPage');
+  }
+  gotoVisitors() {
+    this.navCtrl.push('HomePage');
+  }
 }
