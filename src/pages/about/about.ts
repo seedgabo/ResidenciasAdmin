@@ -36,7 +36,6 @@ export class AboutPage {
   }
 
   sync(refresher = null) {
-    if (refresher) refresher.complete()
     var sync = () => {
       this.codepush.sync({ updateDialog: false, ignoreFailedUpdates: false, }).subscribe(
         (status) => {
@@ -57,7 +56,14 @@ export class AboutPage {
         });
 
     }
-    sync();
+
+    if (refresher) refresher.complete()
+    this.codepush.getCurrentPackage()
+      .then((data) => {
+        sync();
+      });
+    
+
   }
 
 }
