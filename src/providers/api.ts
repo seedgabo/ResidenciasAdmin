@@ -315,267 +315,81 @@ export class Api {
 
       this.Echo.private('Application')
 
-        // user Events
+        // User Events
         .listen('UserCreated', (data) => {
           console.log("created user:", data);
-          if (this.objects.users) {
-            this.zone.run(() => {
-              var user = this.objects.users[this.objects.users.length] = data.user;
-              this.objects.users.collection[data.user.id] = user
-              if (data.image)
-                user.image = data.image;
-              if (data.residence)
-                user.residence = data.residence;
-            })
-          }
+          this.UserChanged(data)
         })
         .listen('UserUpdated', (data) => {
           console.log("updated user:", data);
-          var user_index = this.objects.users.findIndex((user) => {
-            return user.id === data.user.id;
-          });
-          if (this.objects.users) {
-            this.zone.run(() => {
-              var user;
-              if (user_index > -1) {
-                user = this.objects.users[user_index];
-              }
-
-              else {
-                user = this.objects.users[this.objects.users.length] = data.user;
-              }
-              if (data.residence)
-                user.residence = data.residence;
-              if (data.image)
-                user.image = data.image;
-            });
-          }
+          this.UserChanged(data)
         })
         .listen('UserDeleted', (data) => {
           console.log("deleted user:", data);
-          var user = this.objects.users.findIndex((user) => {
-            return user.id === data.user.id;
-          });
-          if (this.objects.user)
-            this.zone.run(() => {
-              if (user >= 0) {
-                this.objects.users.splice(user, 1);
-                delete (this.objects.user[data.user.id])
-              }
-            })
+          this.resourceDeleted(data, 'users', 'user');
         })
 
         // Parking Events
         .listen('ParkingCreated', (data) => {
           console.log("created parking:", data);
-          if (this.objects.parkings) {
-            this.zone.run(() => {
-              var parking = this.objects.parkings[this.objects.parkings.length] = data.parking;
-              this.objects.parkings.collection[data.parking.id] = parking
-              if (data.image)
-                parking.image = data.image;
-              if (data.residence)
-                parking.residence = data.residence;
-            })
-          }
+            this.ParkingChanged(data);
         })
         .listen('ParkingUpdated', (data) => {
           console.log("updated parking:", data);
-          var parking_index = this.objects.parkings.findIndex((parking) => {
-            return parking.id === data.parking.id;
-          });
-          if (this.objects.parkings) {
-            this.zone.run(() => {
-              var parking;
-              if (parking_index > -1)
-                parking = this.objects.parkings[parking_index] = data.parking;
-              else {
-                parking = this.objects.parkings[this.objects.parkings.length] = data.parking;
-              }
-              if (data.image)
-                parking.image = data.image;
-              if (data.residence)
-                parking.residence = data.residence;
-            });
-          }
+          this.ParkingChanged(data);
         })
         .listen('ParkingDeleted', (data) => {
           console.log("deleted parking:", data);
-          var parking = this.objects.parkings.findIndex((parking) => {
-            return parking.id === data.parking.id;
-          });
-          if (this.objects.parking)
-            this.zone.run(() => {
-              if (parking >= 0) {
-                this.objects.parkings.splice(parking, 1);
-                delete (this.objects.parking[data.parking.id])
-              }
-            })
+          this.resourceDeleted(data,'parkings','parking')
         })
 
         // Visitor Events
         .listen('VisitorCreated', (data) => {
           console.log("created visitor:", data);
-          if (this.objects.visitors) {
-            this.zone.run(() => {
-              var visitor = this.objects.visitors[this.objects.visitors.length] = data.visitor;
-              this.objects.visitors.collection[data.visitor.id] = visitor
-              if (data.image)
-                visitor.image = data.image;
-              if (data.residence)
-                visitor.residence = data.residence;
-            })
-          }
+          this.VisitorChanged(data)
         })
         .listen('VisitorUpdated', (data) => {
           console.log("updated visitor:", data);
-          var visitor_index = this.objects.visitors.findIndex((visitor) => {
-            return visitor.id === data.visitor.id;
-          });
-          if (this.objects.visitors) {
-            this.zone.run(() => {
-              var visitor;
-              if (visitor_index > -1)
-                visitor = this.objects.visitors[visitor_index] = data.visitor;
-              else {
-                visitor = this.objects.visitors[this.objects.visitors.length] = data.visitor;
-              }
-              if (data.image)
-                visitor.image = data.image;
-              if (data.residence)
-                visitor.residence = data.residence;
-            });
-          }
+          this.VisitorChanged(data)
         })
         .listen('VisitorDeleted', (data) => {
-          console.log("deleted visitor:", data);
-          var visitor = this.objects.visitors.findIndex((visitor) => {
-            return visitor.id === data.visitor.id;
-          });
-          if (this.objects.visitor)
-            this.zone.run(() => {
-              if (visitor >= 0) {
-                this.objects.visitors.splice(visitor, 1);
-                delete (this.objects.visitor[data.visitor.id])
-              }
-            })
+          this.resourceDeleted(data, 'visitors', 'visitor')
         })
 
 
         // Vehicle Events
         .listen('VehicleCreated', (data) => {
           console.log("created vehicle:", data);
-          if (this.objects.vehicles) {
-            this.zone.run(() => {
-              var vehicle = this.objects.vehicles[this.objects.vehicles.length] = data.vehicle;
-              this.objects.vehicles.collection[data.vehicle.id] = vehicle
-              if (data.image)
-                vehicle.image = data.image;
-              if (data.residence)
-                vehicle.residence = data.residence;
-              if (data.owner)
-                vehicle.owner = data.owner;
-              if (data.visitor)
-                vehicle.visitor = data.visitor;
-            })
-          }
+          this.VehicleChanged(data);
         })
         .listen('VehicleUpdated', (data) => {
           console.log("updated vehicle:", data);
-          var vehicle_index = this.objects.vehicles.findIndex((vehicle) => {
-            return vehicle.id === data.vehicle.id;
-          });
-          if (this.objects.vehicles) {
-            this.zone.run(() => {
-              var vehicle;
-              if (vehicle_index > -1) {
-                vehicle = this.objects.vehicles[vehicle_index];
-              }
-
-              else {
-                vehicle = this.objects.vehicles[this.objects.vehicles.length] = data.vehicle;
-              }
-              if (data.residence)
-                vehicle.residence = data.residence;
-              if (data.owner)
-                vehicle.owner = data.owner;
-              if (data.visitor)
-                vehicle.visitor = data.visitor;
-              if (data.image)
-                vehicle.image = data.image;
-            });
-          }
+          this.VehicleChanged(data);
         })
         .listen('VehicleDeleted', (data) => {
           console.log("deleted vehicle:", data);
-          var vehicle = this.objects.vehicles.findIndex((vehicle) => {
-            return vehicle.id === data.vehicle.id;
-          });
-          if (this.objects.vehicle)
-            this.zone.run(() => {
-              if (vehicle >= 0) {
-                this.objects.vehicles.splice(vehicle, 1);
-                delete (this.objects.vehicle[data.vehicle.id])
-              }
-            })
+          this.resourceDeleted(data, 'vehicles', 'vehicle')
         })
 
 
         // Worker Events
         .listen('WorkerCreated', (data) => {
           console.log("created worker:", data);
-          if (this.objects.workers) {
-            this.zone.run(() => {
-              var worker = this.objects.workers[this.objects.workers.length] = data.worker;
-              this.objects.workers.collection[data.worker.id] = worker
-              if (data.image)
-                worker.image = data.image;
-              if (data.residence)
-                worker.residence = data.residence;
-
-            })
-          }
+          this.WorkerChanged(data)
         })
         .listen('WorkerUpdated', (data) => {
           console.log("updated worker", data.worker)
-          var worker_index = this.objects.workers.findIndex((worker) => {
-            return worker.id === data.worker.id;
-          });
-          if (this.objects.workers) {
-            this.zone.run(() => {
-              var worker;
-              if (worker_index > -1)
-                worker = this.objects.workers[worker_index] = data.worker;
-              else {
-                worker = this.objects.workers[this.objects.workers.length] = data.worker;
-              }
-              if (data.image)
-                worker.image = data.image;
-              if (data.residence)
-                worker.residence = data.residence;
-            });
-          }
+          this.WorkerChanged(data)
         })
         .listen('WorkerDeleted', (data) => {
           console.log("deleted worker:", data);
-          var worker = this.objects.workers.findIndex((worker) => {
-            return worker.id === data.worker.id;
-          });
-          if (this.objects.worker)
-            this.zone.run(() => {
-              if (worker >= 0) {
-                this.objects.workers.splice(worker, 1);
-                delete (this.objects.worker[data.worker.id])
-              }
-            })
+          this.resourceDeleted(data, 'workers', 'worker')
         })
 
         // Correspondence Events
         .listen('CorrespondenceCreated', (data) => {
           console.log("correspondence created:", data);
           this.events.publish("CorrespondenceCreated", data);
-          this.zone.run(() => {
-          })
         })
 
 
@@ -583,44 +397,12 @@ export class Api {
         .listen('VisitCreated', (data) => {
           this.events.publish('VisitCreated', data)
           console.log("visit created:", data);
-          this.visits.unshift(data.visit);
-          this.zone.run(() => {
-            var visit = this.visits[0];
-            if (data.visitor) {
-              visit.visitor = data.visitor;
-              visit.guest = data.guest;
-              visit.visitors = data.visitors;
-              if (this.objects.residences)
-                visit.residence = this.objects.residences.collection[visit.residence_id];
-            }
-
-            if (visit.status == 'approved') {
-              this.visitPreApproved(visit);
-            }
-          })
+          this.VisitChanged(data)
         })
         .listen('VisitUpdated', (data) => {
-          this.events.publish('VisitUpdated', data)
           console.log("visit updated:", data);
-          var visit_index = this.visits.findIndex((visit) => {
-            return visit.id === data.visit.id;
-          });
-          this.zone.run(() => {
-            var visit;
-            if (visit_index > -1)
-              visit = this.visits[visit_index] = data.visit;
-            else {
-              this.visits.unshift(data.visit);
-              visit = this.visits[0];
-            }
-            if (data.visitor) {
-              visit.visitor = data.visitor;
-              visit.visitors = data.visitors;
-              visit.guest = data.guest;
-              if (this.objects.residences)
-                visit.residence = this.objects.residences.collection[visit.residence_id];
-            }
-          });
+          this.events.publish('VisitUpdated', data)
+          this.VisitChanged(data)
         })
         .listen('VisitDeleted', (data) => {
           this.events.publish('VisitDeleted', data)
@@ -873,6 +655,155 @@ export class Api {
       navigator.vibrate([300, 200, 300, 200, 300, 200, 300, 300, 200, 300, 200, 300, 200, 300, 200]);
     }
     return this.sound;
+  }
+
+  public UserChanged(data) {
+    if (this.objects.users) {
+      var user_index = this.objects.users.findIndex((user) => {
+        return user.id === data.user.id;
+      });
+      this.zone.run(() => {
+        var user;
+        if (user_index > -1) {
+          user = Object.assign(this.objects.users[user_index], data.user)
+          this.objects.visitors.collection[user.id] = data.user;
+        }
+
+        else {
+          user = this.objects.users[this.objects.users.length] = data.user;
+        }
+        if (data.residence)
+          user.residence = data.residence;
+        if (data.image)
+          user.image = data.image;
+      });
+    }
+  }
+  public VisitorChanged(data) {
+    if (this.objects.visitors) {
+      var visitor_index = this.objects.visitors.findIndex((visitor) => {
+        return visitor.id === data.visitor.id;
+      });
+      this.zone.run(() => {
+        var visitor;
+        if (visitor_index > -1) {
+          visitor = Object.assign(this.objects.visitors[visitor_index], data.visitor)
+          this.objects.visitors.collection[visitor.id] = data.visitor;
+        }
+        else {
+          visitor = this.objects.visitors[this.objects.visitors.length] = data.visitor;
+        }
+
+        if (data.image)
+          visitor.image = data.image;
+        if (data.residence)
+          visitor.residence = data.residence;
+      });
+
+    }
+  }
+  public VehicleChanged(data) {
+    if (this.objects.vehicles) {
+      var vehicle_index = this.objects.vehicles.findIndex((vehicle) => {
+        return vehicle.id === data.vehicle.id;
+      });
+      this.zone.run(() => {
+        var vehicle;
+        if (vehicle_index > -1) {
+          vehicle = Object.assign(this.objects.vehicles[vehicle_index], data.vehicle)
+          this.objects.visitors.collection[vehicle.id] = data.vehicle;
+        }
+        else {
+          vehicle = this.objects.vehicles[this.objects.vehicles.length] = data.vehicle;
+        }
+        if (data.residence)
+          vehicle.residence = data.residence;
+        if (data.owner)
+          vehicle.owner = data.owner;
+        if (data.visitor)
+          vehicle.visitor = data.visitor;
+        if (data.image)
+          vehicle.image = data.image;
+      });
+    }
+  }
+  public ParkingChanged(data) {
+    if (this.objects.parkings) {
+      var parking_index = this.objects.parkings.findIndex((parking) => {
+        return parking.id === data.parking.id;
+      });
+      this.zone.run(() => {
+        var parking;
+        if (parking_index > -1) {
+          parking = Object.assign(this.objects.parkings[parking_index], data.parking)
+          this.objects.visitors.collection[parking.id] = data.parking;          
+        }
+        else {
+          parking = this.objects.parkings[this.objects.parkings.length] = data.parking;
+        }
+        if (data.image)
+          parking.image = data.image;
+        if (data.residence)
+          parking.residence = data.residence;
+      });
+    }
+  }
+  public WorkerChanged(data) {
+    if (this.objects.workers) {
+      var worker_index = this.objects.workers.findIndex((worker) => {
+        return worker.id === data.worker.id;
+      });
+      this.zone.run(() => {
+        var worker;
+        if (worker_index > -1) {
+          worker = Object.assign(this.objects.workers[worker_index], data.worker)
+          this.objects.visitors.collection[worker.id] = data.worker;          
+        }
+        else {
+          worker = this.objects.workers[this.objects.workers.length] = data.worker;
+        }
+        if (data.image)
+          worker.image = data.image;
+        if (data.residence)
+          worker.residence = data.residence;
+      });
+    }
+  }
+  public VisitChanged(data) {
+    var visit_index = this.visits.findIndex((visit) => {
+      return visit.id === data.visit.id;
+    });
+    this.zone.run(() => {
+      var visit;
+      if (visit_index > -1) {
+        visit = this.visits[visit_index] = data.visit;
+      }
+      else {
+        this.visits.unshift(data.visit);
+        visit = this.visits[0];
+      }
+      if (data.visitor) {
+        visit.visitor = data.visitor;
+        visit.visitors = data.visitors;
+        visit.guest = data.guest;
+        if (this.objects.residences)
+          visit.residence = this.objects.residences.collection[visit.residence_id];
+      }
+    });
+  }
+
+
+  public resourceDeleted(data, resource, item) {
+    var item_index = this.objects[resource].findIndex((i) => {
+      return i.id === data[item].id;
+    });
+    if (this.objects[resource])
+      this.zone.run(() => {
+        if (item_index >= 0) {
+          this.objects[resource].splice(item_index, 1);
+          delete (this.objects[resource][data[item].id])
+        }
+      })
   }
 
 }

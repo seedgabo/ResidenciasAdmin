@@ -50,7 +50,7 @@ export class HomePage {
     }).slice(0, 100);
   }
 
-  actions(visitor) {
+  actions(visitor,index) {
     this.actionsheet.create({
       title: this.api.trans('literals.actions') + " | " + visitor.name,
       buttons: [
@@ -77,7 +77,7 @@ export class HomePage {
           icon: 'trash',
           role: 'destructive',
           cssClass: 'icon-danger',
-          handler: () => { this.delete(visitor) }
+          handler: () => { this.delete(visitor,index) }
         }
 
       ]
@@ -112,12 +112,15 @@ export class HomePage {
 
 
   visitorModal(visitor = null) {
-    this.modal.create(VisitorPage, { visitor: visitor }, { showBackdrop: true, enableBackdropDismiss: true }).present();
+    this.modal.create(VisitorPage, { visitor: visitor },
+      { showBackdrop: true, enableBackdropDismiss: true })
+      .present();
   }
 
-  delete(visitor) {
+  delete(visitor,i) {
     this.api.delete('visitors/' + visitor.id).then((data) => {
       console.log(data);
+      this.visitors.splice(i,1)
     }).catch((err) => {
       console.log(err);
     });

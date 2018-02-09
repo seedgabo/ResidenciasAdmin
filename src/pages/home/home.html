@@ -75,7 +75,7 @@
         <ion-card>
           <ion-card-header>{{ api.trans('literals.visitors') }}</ion-card-header>
           <ion-list>
-            <button ion-item *ngFor="let visitor of visitors" (click)="actions(visitor)">
+            <button ion-item *ngFor="let visitor of visitors; let i = index" (click)="actions(visitor,i)">
               <ion-thumbnail item-left>
                 <img [src]="visitor.image_url" onerror="this.style.display = 'none'">
               </ion-thumbnail>
