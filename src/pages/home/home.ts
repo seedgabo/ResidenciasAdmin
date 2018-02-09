@@ -17,7 +17,9 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    this.loadVisitors();
+    this.api.ready.then(() => {
+      this.loadVisitors();
+    })
   }
 
   loadVisitors(refresher = null) {

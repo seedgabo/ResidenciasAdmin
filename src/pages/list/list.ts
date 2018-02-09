@@ -76,7 +76,7 @@ export class ListPage {
   }
 
   append() {
-    var append = "&append[]=guest&order[id]=desc&limit=1000";
+    var append = "&append[]=guest&order[id]=desc&limit=500";
     if (this.filters.residence) {
       append += `&where[residence_id]=` + this.filters.residence.id
     }
