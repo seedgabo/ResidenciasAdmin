@@ -129,7 +129,7 @@ export class VehicleFinderPage {
     vehicle.residence_id = this.navParams.get('residence_id');
     this.api.post('vehicles', vehicle)
       .then((resp) => {
-        this.vehicles.data = [resp];
+        this.vehicles = [resp];
       })
       .catch(console.error)
   }
