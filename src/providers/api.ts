@@ -665,7 +665,8 @@ export class Api {
       this.zone.run(() => {
         var user;
         if (user_index > -1) {
-          user = this.objects.users[user_index];
+          user = Object.assign(this.objects.users[user_index], data.user)
+          this.objects.visitors.collection[user.id] = data.user;
         }
 
         else {
@@ -685,11 +686,14 @@ export class Api {
       });
       this.zone.run(() => {
         var visitor;
-        if (visitor_index > -1)
-          visitor = this.objects.visitors[visitor_index] = data.visitor;
+        if (visitor_index > -1) {
+          visitor = Object.assign(this.objects.visitors[visitor_index], data.visitor)
+          this.objects.visitors.collection[visitor.id] = data.visitor;
+        }
         else {
           visitor = this.objects.visitors[this.objects.visitors.length] = data.visitor;
         }
+
         if (data.image)
           visitor.image = data.image;
         if (data.residence)
@@ -706,7 +710,8 @@ export class Api {
       this.zone.run(() => {
         var vehicle;
         if (vehicle_index > -1) {
-          vehicle = this.objects.vehicles[vehicle_index];
+          vehicle = Object.assign(this.objects.vehicles[vehicle_index], data.vehicle)
+          this.objects.visitors.collection[vehicle.id] = data.vehicle;
         }
         else {
           vehicle = this.objects.vehicles[this.objects.vehicles.length] = data.vehicle;
@@ -729,8 +734,10 @@ export class Api {
       });
       this.zone.run(() => {
         var parking;
-        if (parking_index > -1)
-          parking = this.objects.parkings[parking_index] = data.parking;
+        if (parking_index > -1) {
+          parking = Object.assign(this.objects.parkings[parking_index], data.parking)
+          this.objects.visitors.collection[parking.id] = data.parking;          
+        }
         else {
           parking = this.objects.parkings[this.objects.parkings.length] = data.parking;
         }
@@ -748,8 +755,10 @@ export class Api {
       });
       this.zone.run(() => {
         var worker;
-        if (worker_index > -1)
-          worker = this.objects.workers[worker_index] = data.worker;
+        if (worker_index > -1) {
+          worker = Object.assign(this.objects.workers[worker_index], data.worker)
+          this.objects.visitors.collection[worker.id] = data.worker;          
+        }
         else {
           worker = this.objects.workers[this.objects.workers.length] = data.worker;
         }
@@ -766,8 +775,9 @@ export class Api {
     });
     this.zone.run(() => {
       var visit;
-      if (visit_index > -1)
+      if (visit_index > -1) {
         visit = this.visits[visit_index] = data.visit;
+      }
       else {
         this.visits.unshift(data.visit);
         visit = this.visits[0];
