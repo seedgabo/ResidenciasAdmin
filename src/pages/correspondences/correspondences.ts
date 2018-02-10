@@ -196,7 +196,7 @@ export class CorrespondencesPage {
       title: this.api.trans("literals.correspondences"),
       buttons: [
         {
-          text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.all') + 's',
+          text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.all'),
           icon: 'checkmark-circle-outline',
           handler: () => {
             this.filter_status = "";
