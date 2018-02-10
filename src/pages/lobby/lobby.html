@@ -61,7 +61,7 @@
       </ion-col>
 
       <!-- Visits -->
-      <ion-col col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 *ngIf="!person">
+      <ion-col col-12 col-sm-4 col-md-4 col-lg-5 col-xl-5 *ngIf="!person">
         <ion-card>
           <ion-list-header>
             <ion-icon name="list" item-left></ion-icon>
@@ -84,14 +84,14 @@
                   {{ 'literals.'+ visit.status | trans }}
                 </span>
               </span>
-              <p item-right text-right>
+              <p item-right text-right class="hidden-xs hidde-sm">
                 <b>{{'literals.arrive' | trans }}:</b>
-                {{ visit.created_at | amDateFormat:'D MMMM YYYY, h:mm:ss a' }}
+                {{ visit.created_at | amDateFormat:'D MMM Y, h:mm:ss a' }}
                 <br>
                 <span *ngIf="visit.departured_at">
                   <b>{{'literals.departured' | trans }}:</b>
                   <span>
-                    {{visit.departured_at | amDateFormat:'D MMMM YYYY, h:mm:ss a' }}
+                    {{visit.departured_at | amDateFormat:'D MMM Y, h:mm:ss a' }}
                   </span>
                 </span>
               </p>
@@ -107,7 +107,7 @@
       </ion-col>
 
       <!-- Person -->
-      <ion-col col-12 col-sm8 col-md-8 col-lg-8 col-xl-8 *ngIf="person">
+      <ion-col col-12 col-sm8 col-md-8 col-lg-9 col-xl-9 *ngIf="person">
 
 
         <div *ngIf="person">
@@ -191,7 +191,7 @@
       </ion-col>
 
       <!-- PRe Approved -->
-      <ion-col col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4>
+      <ion-col col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3>
         <ion-card>
           <ion-list-header text-capitalize> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-list-header>
           <ion-list>

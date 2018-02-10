@@ -69,12 +69,12 @@
       </span>
       <p item-right text-right>
         <b>{{'literals.arrive' | trans }}:</b>
-        {{ visit.created_at | amDateFormat:'D MMMM YYYY, h:mm:ss a' }}
+        {{ visit.created_at | amDateFormat:'D MMM Y, h:mm:ss a' }}
         <br>
         <span *ngIf="visit.departured_at">
           <b>{{'literals.departured' | trans }}:</b>
           <span>
-            {{visit.departured_at | amDateFormat:'D MMMM YYYY, h:mm:ss a' }}
+            {{visit.departured_at | amDateFormat:'D MMM Y, h:mm:ss a' }}
           </span>
         </span>
       </p>

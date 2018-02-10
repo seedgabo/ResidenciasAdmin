@@ -267,3 +267,16 @@
     transform: scale(1);
   }
 }
+
+@media screen and (min-width: 0px) and (max-width: 400px) {
+  .hidden-xs {
+    display: none;
+  }
+  /* show it on small screens */
+}
+
+@media screen and (min-width: 401px) and (max-width: 768px) {
+  .hidden-sm {
+    display: none;
+  }
+}
