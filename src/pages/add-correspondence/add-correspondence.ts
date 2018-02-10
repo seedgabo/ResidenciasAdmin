@@ -77,6 +77,9 @@ export class AddCorrespondencePage {
 
 
   save() {
+    if (this.multiple) {
+      return this.saveMultiple()
+    }
     this.loading = true;
     if (!this.correspondence.receptor_id) {
       this.correspondence.receptor_id = this.api.user.id;
