@@ -398,6 +398,9 @@ export class Api {
           this.events.publish('VisitCreated', data)
           console.log("visit created:", data);
           this.VisitChanged(data)
+          if (data.visit.status == 'approved') {
+            this.visitPreApproved(data.visit);
+          }
         })
         .listen('VisitUpdated', (data) => {
           console.log("visit updated:", data);
