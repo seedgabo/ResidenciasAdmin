@@ -52,7 +52,7 @@
       <ion-col>
         <span ion-text [color]="total == totalized()?'secondary':'danger'">
           {{'__.El Total debe ser' | trans }}: {{total}}
-          <small>({{totalized()}})</small>
+          <small>({{total - totalized()}})</small>
         </span>
       </ion-col>
     </ion-row>

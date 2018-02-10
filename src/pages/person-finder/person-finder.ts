@@ -28,6 +28,8 @@ export class PersonFinderPage {
     visitors: null,
     workers: null,
   }
+  multiple = false
+  selecteds = []
   ready = false;
   local = true
   loading = false
@@ -39,24 +41,28 @@ export class PersonFinderPage {
     if (navParams.get('workers') !== undefined)
       this.findFor.workers = navParams.get('workers')
 
+    if (navParams.get('multiple') !== undefined)
+      this.multiple = navParams.get('multiple')
 
-    this.api.storage.get('recent_users').then((value) => {
-      if (value) {
-        this.results.users = value
-      }
-    })
+    if (!this.multiple) {
+      this.api.storage.get('recent_users').then((value) => {
+        if (value) {
+          this.results.users = value
+        }
+      })
 
-    this.api.storage.get('recent_visitors').then((value) => {
-      if (value) {
-        this.results.visitors = value
-      }
-    })
+      this.api.storage.get('recent_visitors').then((value) => {
+        if (value) {
+          this.results.visitors = value
+        }
+      })
 
-    this.api.storage.get('recent_visitors').then((value) => {
-      if (value) {
-        this.results.visitors = value
-      }
-    })
+      this.api.storage.get('recent_visitors').then((value) => {
+        if (value) {
+          this.results.visitors = value
+        }
+      })
+    }
 
     var promises = [];
     if (this.local) {
@@ -71,11 +77,11 @@ export class PersonFinderPage {
     }
     Promise.all(promises).then(() => {
       this.ready = true
+      if (this.multiple) this.search()
     })
   }
 
   ionViewDidLoad() {
-
   }
 
   search() {
@@ -131,6 +137,11 @@ export class PersonFinderPage {
 
   findUsers(filter, limit) {
     if (this.findFor.users) {
+      if (filter == "" && this.multiple) {
+        this.results.users = { data: this.api.objects.users }
+        return
+      }
+
       this.results.users = { data: [] };
       var results = [];
       for (var i = 0; i < this.api.objects.users.length; i++) {
@@ -204,10 +215,10 @@ export class PersonFinderPage {
 
   visitorModal(visitor = null) {
     var residence
-    if(visitor){
+    if (visitor) {
       residence = visitor.residence
     }
-    var modal = this.modal.create(VisitorPage, { visitor: visitor, residence:residence, show_visits_button: false})
+    var modal = this.modal.create(VisitorPage, { visitor: visitor, residence: residence, show_visits_button: false })
     modal.present();
     modal.onDidDismiss((data) => {
       if (data) {
@@ -219,8 +230,41 @@ export class PersonFinderPage {
     })
   }
 
+  selectAll(type = "user") {
+    this.selecteds = []
+    this.api.objects[type + "s"].forEach(person => {
+      person._selected = true
+      this.selecteds[this.selecteds.length] = { type: type, person: person }
+    });
+  }
+
+  deselectAll(type = "user") {
+    this.selecteds = []
+    this.api.objects[type + "s"].forEach(person => {
+      person._selected = false
+    });
+  }
+
+  save() {
+    this.viewctrl.dismiss({ selecteds: this.selecteds })
+    this.clear()
+  }
+
+  clear() {
+    this.selecteds.forEach((element) => {
+      this.api.objects[element.type + 's']._selected = undefined;
+    })
+  }
+
   select(person, type = 'user') {
-    this.viewctrl.dismiss({ person: person, type: type });
+    if (this.multiple) {
+      person._selected ? person._selected = false : person._selected = true
+      this.selecteds[this.selecteds.length] = { type: type, person: person }
+      console.log(person)
+    }
+    else {
+      this.viewctrl.dismiss({ person: person, type: type });
+    }
   }
 
 }

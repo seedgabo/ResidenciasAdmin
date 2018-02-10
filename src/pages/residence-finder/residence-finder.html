@@ -15,7 +15,7 @@
   <div text-center>
     <ion-spinner *ngIf="loading || !ready"></ion-spinner>
   </div>
-  <ion-list inset no-lines>
+  <ion-list inset no-lines *ngIf="!multiple">
     <button ion-item (click)="select(residence)" *ngFor="let residence of residences">
       <!-- <ion-thumbnail item-left>
         <img [src]="residence.image_url" *ngIf="residence.image_url">
@@ -23,9 +23,34 @@
       <h2>{{residence.name}}</h2>
       <h3>{{residence.owner?.name}}</h3>
       <h4>{{'literals.'+ residence.type | trans }}</h4>
-      <p *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])" [ngClass]="residence.status">{{'literals.'+residence.status | trans }}
+      <p *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])"
+        [ngClass]="residence.status">{{'literals.'+residence.status | trans }}
         <span *ngIf="residence.is_disabled">{{'literals.disabled' | trans }}</span>
       </p>
     </button>
   </ion-list>
+
+  <ion-list inset no-lines *ngIf="multiple">
+    <ion-list-header ion-text color="primary">
+      {{'literals.residences' | trans}}
+      <button ion-button icon-only small item-right clear (click)="selectAll('user')">
+        <ion-icon name="checkbox-outline"></ion-icon>
+      </button>
+      <button ion-button icon-only small item-right clear (click)="deselectAll('user')">
+        <ion-icon name="square-outline"></ion-icon>
+      </button>
+    </ion-list-header>
+    <button ion-item (click)="select(residence)" *ngFor="let residence of residences">
+      <ion-checkbox [checked]="residence._selected"></ion-checkbox>
+      <ion-label>
+        {{residence.name}} - {{residence.owner?.name}}
+        <small>({{'literals.'+ residence.type | trans }})</small>
+      </ion-label>
+    </button>
+  </ion-list>
+  <ion-fab bottom right *ngIf="multiple">
+    <button ion-fab (click)="save()">
+      <ion-icon class="fa fa-save"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>
