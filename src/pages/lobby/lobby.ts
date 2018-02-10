@@ -255,7 +255,7 @@ export class LobbyPage {
 
   filter() {
     if (this.query == "") {
-      return this.visits = this._visits.data;
+      return this.visits = this._visits.data.slice(0, 50);
     }
     var array = [];
     for (var index = 0; index < this._visits.data.length; index++) {
@@ -446,7 +446,7 @@ export class LobbyPage {
   // Visitors
   getVisitors() {
     if (this.query == "")
-      return this.visitors = this.api.objects.visitors.slice(0, 100);
+      return this.visitors = this.api.objects.visitors.slice(0, 50);
 
     return this.visitors = this.api.objects.visitors.filter((visitor) => {
       if (visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1

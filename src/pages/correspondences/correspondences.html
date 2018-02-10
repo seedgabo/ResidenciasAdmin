@@ -6,7 +6,7 @@
     <ion-title>{{'literals.correspondences' | trans}}</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="changeOrder()">
-        <ion-icon [name]="order_by == 'date' ? 'calendar' : 'list'"></ion-icon>
+        <ion-icon [name]="order_by != 'date' ? 'calendar' : 'list'"></ion-icon>
       </button>
 
       <button ion-button icon-only (click)="filterActions()">
@@ -25,10 +25,11 @@
   <div *ngIf="filtered && order_by == 'status'">
     <ion-list>
       <button ion-item *ngFor="let corres of filtered" (click)="actions(corres)">
-        <h2 text-center>
+        <h2 text-left>
           {{corres.item}}
           <span *ngIf="corres.quantity > 1"> ({{corres.quantity}})</span>
         </h2>
+
         <h3>
           <b>{{'literals.status' | trans }}</b>
           <span ion-text [color]="corres.status == 'delivered' ? 'secondary' :''">{{'literals.'+ corres.status | trans }}</span>
@@ -47,6 +48,7 @@
           <b>{{'literals.receptor' | trans }}</b>
           {{corres.receptor.name}}
         </p>
+
         <p text-right *ngIf="corres.delivered_at">
           <b>{{'literals.delivered at' | trans }}</b>
           {{ corres.delivered_at | amCalendar }}
@@ -74,19 +76,20 @@
               </h2>
               <h3 *ngIf="corres.user">
                 {{ corres.user.name}}
-                <span *ngIf="corres.user.residence"> - {{ corres.user.residence.name }} </span>
+                <span *ngIf="corres.residence"> - {{ corres.residence.name }} </span>
               </h3>
               <p *ngIf="corres.receptor">
-                <b>{{'literals.receptor' | trans }}</b>
+                <b>{{'literals.receptor' | trans }}:</b>
                 {{corres.receptor.name}}
               </p>
-              <ion-note>
+              <small>
                 {{ corres.created_at | amDateFormat:'LLL' }}
-              </ion-note>
-              <ion-note text-left text-wrap *ngIf="corres.delivered_at">
+              </small>
+              <small text-left text-wrap *ngIf="corres.delivered_at">
+                <br>
                 <b>{{'literals.delivered at' | trans }}</b>
                 {{ corres.delivered_at | amCalendar }}
-              </ion-note>
+              </small>
               <ion-badge item-right [ngClass]="corres.status">
                 {{ 'literals.'+ corres.status | trans }}
               </ion-badge>
@@ -97,9 +100,24 @@
     </div>
   </div>
 
-  <ion-fab bottom right>
-    <button ion-fab (click)="addCorrespondece()">
-      <ion-icon name="add-circle"></ion-icon>
+  <ion-fab bottom right #fab>
+    <button ion-fab>
+      <ion-icon name="add"></ion-icon>
     </button>
+    <ion-fab-list side="top">
+      <div class="fab-label-button">
+        <button ion-fab color="secondary" (click)="addCorrespondece(); fab.close()">
+          <ion-icon name="mail"></ion-icon>
+        </button>
+        <div class="label">{{'crud.add' | trans }} {{'literals.correspondence' | trans }}</div>
+      </div>
+
+      <div class="fab-label-button">
+        <button ion-fab color="favorite" (click)="addCorrespondece();fab.close()">
+          <ion-icon name="ios-archive"></ion-icon>
+        </button>
+        <div class="label">{{'crud.add' | trans }} {{'literals.correspondences' | trans }}</div>
+      </div>
+    </ion-fab-list>
   </ion-fab>
 </ion-content>

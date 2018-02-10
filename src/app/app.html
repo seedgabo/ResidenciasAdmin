@@ -28,7 +28,7 @@
       </div>
 
       <button [color]="rootPage == 'ParkingsPage' ?'primary':''" *ngIf="api.permissions.parkings" menuClose ion-item (click)="openPage({component:'ParkingsPage'})">
-        <ion-icon item-left color="neutral" name="ios-car"></ion-icon>
+        <ion-icon item-left color="neutral" style="font-family:Georgia, 'Times New Roman', Times, serif; font-weight:800">P</ion-icon>
         {{ api.trans('literals.parkings') }}
       </button>
 
@@ -45,7 +45,7 @@
 
 
       <button [color]="rootPage == 'TicketsPage' ?'primary':''" *ngIf="api.permissions.tickets" menuClose ion-item (click)="openPage({component:'TicketsPage'})">
-        <ion-icon item-left color="neutral" name="easel"></ion-icon>
+        <ion-icon item-left color="neutral" class="fa fa-ticket"></ion-icon>
         {{ api.trans('literals.tickets') }}
       </button>
 

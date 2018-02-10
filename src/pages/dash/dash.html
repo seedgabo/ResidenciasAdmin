@@ -2,7 +2,7 @@
 
   <ion-navbar color="primary">
     <button ion-button icon-only menuToggle>
-      <ion-icon name="ios-keypad"></ion-icon>
+      <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
       Dashboard
@@ -66,7 +66,9 @@
 
       <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.parkings">
         <div tappable class="dash-card" padding no-margin (click)="openPage('ParkingsPage')">
-          <ion-icon class="dash-icon" large color="primary" name="md-car"></ion-icon>
+          <ion-icon class="dash-icon" large color="primary" style="font-family:Georgia, 'Times New Roman', Times, serif; font-weight:800">
+            P
+          </ion-icon>
           <h1 class="dash-title">{{api.trans('literals.parkings')}}</h1>
         </div>
       </ion-col>
@@ -95,7 +97,7 @@
 
       <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.tickets">
         <div tappable class="dash-card" padding no-margin (click)="openPage('TicketsPage')">
-          <ion-icon class="dash-icon" large color="primary" name="easel"></ion-icon>
+          <ion-icon class="dash-icon fa fa-ticket" large color="primary"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.tickets')}}</h1>
         </div>
       </ion-col>

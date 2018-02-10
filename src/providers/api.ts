@@ -666,7 +666,7 @@ export class Api {
         var user;
         if (user_index > -1) {
           user = Object.assign(this.objects.users[user_index], data.user)
-          this.objects.visitors.collection[user.id] = data.user;
+          this.objects.users.collection[user.id] = data.user;
         }
 
         else {
@@ -711,7 +711,7 @@ export class Api {
         var vehicle;
         if (vehicle_index > -1) {
           vehicle = Object.assign(this.objects.vehicles[vehicle_index], data.vehicle)
-          this.objects.visitors.collection[vehicle.id] = data.vehicle;
+          this.objects.vehicles.collection[vehicle.id] = data.vehicle;
         }
         else {
           vehicle = this.objects.vehicles[this.objects.vehicles.length] = data.vehicle;
@@ -736,7 +736,7 @@ export class Api {
         var parking;
         if (parking_index > -1) {
           parking = Object.assign(this.objects.parkings[parking_index], data.parking)
-          this.objects.visitors.collection[parking.id] = data.parking;
+          this.objects.parkings.collection[parking.id] = data.parking;
         }
         else {
           parking = this.objects.parkings[this.objects.parkings.length] = data.parking;
@@ -757,7 +757,7 @@ export class Api {
         var worker;
         if (worker_index > -1) {
           worker = Object.assign(this.objects.workers[worker_index], data.worker)
-          this.objects.visitors.collection[worker.id] = data.worker;
+          this.objects.workers.collection[worker.id] = data.worker;
         }
         else {
           worker = this.objects.workers[this.objects.workers.length] = data.worker;

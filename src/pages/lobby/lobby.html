@@ -192,7 +192,7 @@
       <!-- PRe Approved -->
       <ion-col col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4>
         <ion-card>
-          <ion-list-header> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-list-header>
+          <ion-list-header text-capitalize> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-list-header>
           <ion-list>
             <ion-item-sliding *ngFor="let visit of api.visits_approved;let i= index">
               <button ion-item (tap)="viewVisit(visit,i)" [ngClass]="{attention: visit.visitor?.id == person?.id }">

@@ -46,10 +46,10 @@ export class CorrespondencesPage {
 
   getCorrespondences(refresher = null) {
     this.api.ready.then(() => {
-      this.api.get('correspondences?order[status]=desc&order[id]=desc&with[]=user&with[]=residence&with[]=receptor&limit=500')
+      this.api.get('correspondences?order[status]=desc&order[id]=desc&with[]=user&with[]=residence&with[]=receptor&paginate=500')
         .then((data: any) => {
           console.log(data);
-          this.correspondences = data;
+          this.correspondences = data.data;
           this.filter();
           if (refresher) {
             refresher.complete();
@@ -232,4 +232,6 @@ export class CorrespondencesPage {
 
     actions.present();
   }
+
+
 }

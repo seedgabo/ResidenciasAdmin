@@ -18,7 +18,7 @@
     <ion-row>
       <ion-col col-12 col-md *ngIf="api.visits_approved && api.visits_approved.length>0">
         <ion-card>
-          <ion-card-header> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-card-header>
+          <ion-card-header text-capitalize> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-card-header>
           <ion-list>
             <ion-item-sliding *ngFor="let visit of api.visits_approved;let i= index">
               <button ion-item (tap)="viewVisit(visit,i)">
