@@ -269,7 +269,7 @@ export class LobbyPage {
       )
         array[array.length] = element;
 
-      if (array.length == 200) {
+      if (array.length == 25) {
         break;
       }
     }
@@ -455,7 +455,7 @@ export class LobbyPage {
       if (this.api.residences_collection[visitor.residence_id] && this.api.residences_collection[visitor.residence_id].name.toLowerCase().indexOf(this.query.toLowerCase()) > -1)
         return true;
       return false;
-    }).slice(0, 100);
+    }).reverse().slice(0, 25);
   }
 
   actions_visitor(visitor) {

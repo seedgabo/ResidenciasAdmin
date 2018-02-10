@@ -41,7 +41,7 @@
             </button>
           </ion-list-header>
           <ion-list>
-            <button ion-item *ngFor="let visitor of visitors?.reverse().slice(0,10)" (click)="actions_visitor(visitor)">
+            <button ion-item *ngFor="let visitor of visitors" (click)="actions_visitor(visitor)">
 
               <ion-avatar item-left>
                 <img [src]="visitor.image_url" alt="">
@@ -72,7 +72,7 @@
             </button>
           </ion-list-header>
           <ion-list>
-            <button ion-item *ngFor="let visit of visits.slice(0,10)" (click)="actions_visit(visit)">
+            <button ion-item *ngFor="let visit of visits" (click)="actions_visit(visit)">
               <ion-avatar item-left>
                 <img [src]="visit.visitor?.image_url" alt="">
               </ion-avatar>
