@@ -39,7 +39,8 @@ export class CorrespondencesPage {
     this.events.subscribe("CorrespondenceCreated", this.handler);
   }
 
-  ionViewDidLeave() {
+  ionViewWillUnload() {
+    console.log("leaving")
     this.events.unsubscribe("CorrespondenceCreated", this.handler);
   }
 

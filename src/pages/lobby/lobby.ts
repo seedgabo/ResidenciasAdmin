@@ -37,7 +37,7 @@ export class LobbyPage {
     this.events.subscribe("VisitDeleted", this.handler);
   }
 
-  ionViewDidLeave() {
+  ionViewWillUnload() {
     this.events.unsubscribe("VisitCreated", this.handler);
     this.events.unsubscribe("VisitUpdated", this.handler);
     this.events.unsubscribe("VisitDeleted", this.handler);

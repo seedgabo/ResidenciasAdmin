@@ -332,7 +332,7 @@ export class Api {
         // Parking Events
         .listen('ParkingCreated', (data) => {
           console.log("created parking:", data);
-            this.ParkingChanged(data);
+          this.ParkingChanged(data);
         })
         .listen('ParkingUpdated', (data) => {
           console.log("updated parking:", data);
@@ -340,7 +340,7 @@ export class Api {
         })
         .listen('ParkingDeleted', (data) => {
           console.log("deleted parking:", data);
-          this.resourceDeleted(data,'parkings','parking')
+          this.resourceDeleted(data, 'parkings', 'parking')
         })
 
         // Visitor Events
@@ -736,7 +736,7 @@ export class Api {
         var parking;
         if (parking_index > -1) {
           parking = Object.assign(this.objects.parkings[parking_index], data.parking)
-          this.objects.visitors.collection[parking.id] = data.parking;          
+          this.objects.visitors.collection[parking.id] = data.parking;
         }
         else {
           parking = this.objects.parkings[this.objects.parkings.length] = data.parking;
@@ -757,7 +757,7 @@ export class Api {
         var worker;
         if (worker_index > -1) {
           worker = Object.assign(this.objects.workers[worker_index], data.worker)
-          this.objects.visitors.collection[worker.id] = data.worker;          
+          this.objects.visitors.collection[worker.id] = data.worker;
         }
         else {
           worker = this.objects.workers[this.objects.workers.length] = data.worker;
