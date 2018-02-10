@@ -29,7 +29,13 @@ export class AddCorrespondencePage {
   }
 
   canSave() {
-    return this.correspondence.user_id && this.correspondence.residence_id &&
+    var condition = false;
+    if (this.multiple) {
+      condition = (this.residences.length > 0)
+    } else {
+      condition = (this.correspondence.user_id && this.correspondence.residence_id)
+    }
+    return condition &&
       this.correspondence.item.length > 2 && this.correspondence.quantity > 0
       && this.correspondence.status.length > 0;
   }
