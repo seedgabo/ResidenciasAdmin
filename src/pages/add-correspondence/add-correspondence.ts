@@ -101,7 +101,7 @@ export class AddCorrespondencePage {
     var data = {
       receptor_id: this.correspondence.receptor_id,
       item: this.correspondence.item,
-      quantity: this.correspondence.item,
+      quantity: this.correspondence.quantity,
       status: 'arrival',
       residences_ids: []
     }
