@@ -69,9 +69,13 @@ export class PanicLogsPage {
         text: 'OK',
         handler: (data) => {
           if (data && data.note) {
+            this.api.setting.panic = false
             this.api.put('panics/' + panic.id, { note: data.note })
-              .then((resp) => {
-                panic.note = data.note
+            .then((resp) => {
+              panic.note = data.note
+              setTimeout(() => {
+                this.api.setting.panic = true
+                }, 5000);
               })
               .catch((err) => {
                 this.api.Error(err)
