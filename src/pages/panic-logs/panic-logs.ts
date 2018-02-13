@@ -1,3 +1,4 @@
+import { Events } from 'ionic-angular';
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
 import { NavController, NavParams, Platform, IonicPage, ActionSheetController, AlertController } from 'ionic-angular';
@@ -10,11 +11,19 @@ import { NavController, NavParams, Platform, IonicPage, ActionSheetController, A
 export class PanicLogsPage {
   panics: any = { data: [] };
   loading = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public platform: Platform, public actionsheet: ActionSheetController, public alert: AlertController) {
+  handler = () => {
+    this.getPanics()
+  }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public platform: Platform, public actionsheet: ActionSheetController, public alert: AlertController, public events:Events) {
   }
 
   ionViewDidLoad() {
-    this.getPanics();
+    this.events.subscribe('panic', this.handler)
+    this.getPanics()
+  }
+
+  ionViewWillUnload(){
+    this.events.unsubscribe('panic',this.handler)
   }
 
   getPanics() {
