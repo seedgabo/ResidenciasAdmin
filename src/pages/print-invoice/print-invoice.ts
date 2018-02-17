@@ -42,7 +42,7 @@ export class PrintInvoicePage {
   ionViewDidLoad() {
 
     if (this.navParams.get('print') === undefined || this.navParams.get('print')) {
-      // this.print(this.invoice);
+      this.print(this.invoice);
     }
   }
 
