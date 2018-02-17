@@ -271,4 +271,140 @@
       </div>
     </div>
   </div>
+
+
+  <div *ngIf="setting.print_type === 'horizontal'" class="printable" id="toPrintMini">
+    <!-- Header -->
+    <ion-grid>
+      <ion-row>
+        <ion-col col-2>
+          <img [src]="api.url + 'img/logo.png'" style="max-height:100px;">
+        </ion-col>
+        <ion-col col-7>
+          <h1 text-center>
+            {{api.settings.name}}
+            <br> {{api.settings.document}}
+          </h1>
+        </ion-col>
+        <ion-col col-3 text-right>
+          <span>{{invoice.created_at | amDateFormat:'DD/MM/Y HH:mm'}}</span>
+          <h2 text-center>
+            {{'literals.invoice' | trans}}
+            <br> {{ invoice.id }}
+          </h2>
+          <h3 text-center>
+            {{'__.Fecha de Venta' | trans }}
+          </h3>
+          <h4 text-center>{{invoice.created_at | amDateFormat:'DD/MM/Y HH:mm'}}</h4>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- User and Seller Information -->
+    <table class="info-table">
+      <tr>
+        <th>{{'literals.seller' | trans }}</th>
+        <td>{{api.user.name}}</td>
+        <td>
+          <b>
+            {{'__.Caja / Portería' | trans }}
+          </b>
+          {{api.residence.name}}
+        </td>
+      </tr>
+      <tr>
+        <th> {{'literals.user' | trans }} </th>
+        <td>{{invoice.person.name}}</td>
+        <td>
+          <b>
+            {{'literals.residence' | trans}}
+          </b>
+          {{invoice.person.residence.name}}
+        </td>
+      </tr>
+    </table>
+
+    <!-- Items Table -->
+    <table class="items-table">
+      <tr class="heading">
+        <td>
+          {{'literals.concept' | trans }}
+        </td>
+
+        <td>
+          {{'literals.price' | trans }}
+        </td>
+
+        <td>
+          {{'literals.quantity' | trans }}
+        </td>
+
+        <td>
+          {{'literals.subtotal' | trans }}
+        </td>
+      </tr>
+
+      <tr class="item last" *ngFor="let item of invoice.items">
+        <td>
+          {{item.concept}}
+        </td>
+
+        <td>
+          {{item.amount | currency:'USD':'symbol-narrow':'4.0-0' }}
+        </td>
+
+        <td>
+          {{item.quantity}}
+        </td>
+
+
+        <td>
+          {{(item.quantity * item.amount) | currency:'USD':'symbol-narrow':'4.0-0' }}
+        </td>
+      </tr>
+    </table>
+
+    <!-- Total -->
+    <ion-grid>
+      <ion-row>
+        <ion-col col-8 text-left>
+          <b>{{'literals.observations' | trans }}</b>
+          <div class="note-box"></div>
+        </ion-col>
+        <ion-col>
+          <table class="total-table">
+            <tr text-right>
+              <th>{{'literals.total' | trans}}</th>
+              <td>{{ total(invoice) | currency:'USD':'symbol-narrow':'1.0-0' }}</td>
+            </tr>
+          </table>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-6>
+          <table class="payment-table">
+            <tr>
+              <th>{{'literals.method' | trans }} {{'literals.payment' | trans }} </th>
+              <td>{{'literals.' + invoice.payment | trans }}</td>
+            </tr>
+          </table>
+        </ion-col>
+        <ion-col col-6 text-center>
+          <br>
+          <br>
+          <br>
+          <div *ngIf="setting.show_signature" class="signature"></div>
+          <span *ngIf="setting.show_signature">
+            {{'literals.signature' | trans }} {{'literals.seller' | trans }}
+          </span>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+
+  </div>
+
+
 </ion-content>
