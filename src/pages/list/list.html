@@ -34,33 +34,50 @@
       </ion-avatar>
       <h2 *ngIf=" visit.visitor ">
         {{visit.visitor.name }}
+        <small>({{visit.visitor.document}})</small>
         <br>
         <span *ngIf="visit.visitors_count> 1">
           {{ '__.and others' | trans }} {{visit.visitors_count - 1}}
         </span>
         <span *ngIf="visit.residence">{{visit.residence.name}}</span>
         <br>
-        <small>{{visit.visitor.document}}</small>
+
       </h2>
       <h2 *ngIf="visit.guest">
         {{visit.guest.name }}
+        <small> ({{visit.guest.document}})</small>
         <br>
         <span *ngIf="visit.residence">{{visit.residence.name}}</span>
         <p *ngIf="visit.guest.reason">
           <b>{{'literals.reason' | trans }}</b>
           <span>{{visit.guest.reason}}</span>
         </p>
-        <small>{{visit.guest.document}}</small>
       </h2>
       <p *ngIf="visit.vehicle" text-wrap>
         {{ visit.vehicle.name }} - {{visit.vehicle.plate}}
       </p>
-      <span ion-text [color]="visit.status == 'approved' ? 'secondary' : visit.status == 'rejected' ? 'danger' : ''">
-        {{ 'literals.'+ visit.status | trans }}
+      <span>
+        <b>{{'literals.status' | trans }}:</b>
+        <span ion-text [color]="visit.status == 'approved' ? 'secondary' : visit.status == 'rejected' ? 'danger' : ''">
+          {{ 'literals.'+ visit.status | trans }}
+        </span>
       </span>
-      <ion-note item-right>
-        {{ visit.created_at |amCalendar }}
-      </ion-note>
+      <span *ngIf="visit.note">
+        <br>
+        <b>{{'literals.note' | trans }}:</b>
+        {{visit.note}}
+      </span>
+      <p item-right text-right>
+        <b>{{'literals.arrive' | trans }}:</b>
+        {{ visit.created_at | amDateFormat:'D MMM Y, h:mm:ss a' }}
+        <br>
+        <span *ngIf="visit.departured_at">
+          <b>{{'literals.departured' | trans }}:</b>
+          <span>
+            {{visit.departured_at | amDateFormat:'D MMM Y, h:mm:ss a' }}
+          </span>
+        </span>
+      </p>
     </button>
   </ion-list>
 </ion-content>

@@ -22,6 +22,13 @@
       <h3>
         {{vehicle.name}}
       </h3>
+      <h4>
+        <b>
+          {{'literals.plate' | trans }}:
+        </b>
+        {{vehicle.plate}}
+
+      </h4>
       <h4 *ngIf="vehicle.residence">
         <b>{{'literals.residence' | trans }}:</b> {{vehicle.residence.name}}
       </h4>
@@ -33,9 +40,9 @@
       </h4>
     </ion-item>
   </ion-list>
-    <ion-fab bottom right>
-      <button ion-fab color="primary" (click)="addQuickVehicle()">
-        <ion-icon name="add"></ion-icon>
-      </button>
-    </ion-fab>
+  <ion-fab bottom right>
+    <button ion-fab color="primary" (click)="addQuickVehicle()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>

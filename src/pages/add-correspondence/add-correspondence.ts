@@ -16,8 +16,12 @@ export class AddCorrespondencePage {
     status: 'arrival'
   }
   person = null;
+  residences = []
   loading = false;
+  multiple = true
   constructor(public navCtrl: NavController, public navParams: NavParams, public modal: ModalController, public api: Api) {
+    if (navParams.get('multiple') !== undefined)
+      this.multiple = navParams.get('multiple')
   }
 
   ionViewDidLoad() {
@@ -25,7 +29,13 @@ export class AddCorrespondencePage {
   }
 
   canSave() {
-    return this.correspondence.user_id && this.correspondence.residence_id &&
+    var condition = false;
+    if (this.multiple) {
+      condition = (this.residences.length > 0)
+    } else {
+      condition = (this.correspondence.user_id && this.correspondence.residence_id)
+    }
+    return condition &&
       this.correspondence.item.length > 2 && this.correspondence.quantity > 0
       && this.correspondence.status.length > 0;
   }
@@ -35,6 +45,7 @@ export class AddCorrespondencePage {
       users: true,
       visitors: false,
       workers: false,
+      multiple: this.multiple
     })
     modal.present();
     modal.onDidDismiss((data) => {
@@ -51,13 +62,57 @@ export class AddCorrespondencePage {
     })
   }
 
+  selectResidences() {
+    var modal = this.modal.create('ResidenceFinderPage', {
+      multiple: this.multiple,
+      selecteds: this.residences
+    })
+    modal.present();
+    modal.onDidDismiss((data) => {
+      if (data && data.selecteds) {
+        this.residences = data.selecteds;
+      }
+    })
+  }
+
 
   save() {
+    if (this.multiple) {
+      return this.saveMultiple()
+    }
     this.loading = true;
     if (!this.correspondence.receptor_id) {
       this.correspondence.receptor_id = this.api.user.id;
     }
     this.api.post('correspondences', this.correspondence)
+      .then((data) => {
+        this.close()
+        this.loading = false;
+      })
+      .catch((err) => {
+        this.loading = false;
+        this.api.Error(err);
+        console.error(err)
+      })
+  }
+
+  saveMultiple() {
+    this.loading = true;
+    var data = {
+      receptor_id: this.correspondence.receptor_id,
+      item: this.correspondence.item,
+      quantity: this.correspondence.quantity,
+      status: 'arrival',
+      residences_ids: []
+    }
+    this.residences.forEach((res) => {
+      data.residences_ids[data.residences_ids.length] = res.id
+    })
+    if (!data.receptor_id) {
+      data.receptor_id = this.api.user.id;
+    }
+
+    this.api.post('correspondences/multiple', data)
       .then((data) => {
         this.close()
         this.loading = false;

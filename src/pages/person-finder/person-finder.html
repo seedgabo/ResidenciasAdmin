@@ -18,67 +18,100 @@
 
   <ion-searchbar debounce="700" (ionInput)="search($event)" [(ngModel)]="query"></ion-searchbar>
 
-  <ion-list *ngIf="findFor.users && results.users && results.users.data">
+  <div *ngIf="!multiple">
+    <ion-list *ngIf="findFor.users && results.users && results.users.data">
 
 
-    <ion-list-header>{{'literals.users'|trans}}</ion-list-header>
-    <button ion-item (click)="select(person,'user')" *ngFor="let person of results.users.data">
-      <ion-avatar item-left *ngIf="person.image_url">
-        <img [src]="person.image_url" alt="image person" onerror="this.style.display = 'none'">
-      </ion-avatar>
-      <h2>
-        {{person.name}}
-        <span>({{'literals.'+ person.relationship | trans}})</span>
-      </h2>
-      <p>{{person.document}}</p>
-      <p *ngIf="person.residence">{{person.residence.name}}
-        <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
-        <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
-      </p>
-    </button>
-  </ion-list>
-
-  <ion-list *ngIf="findFor.visitors && results.visitors && results.visitors.data">
-    <ion-list-header>{{'literals.visitors'|trans}}</ion-list-header>
-    <button ion-item (click)="select(person,'visitor')" *ngFor="let person of results.visitors.data">
-      <ion-avatar item-left *ngIf="person.image_url">
-        <img [src]="person.image_url" alt="image person" onerror="this.style.display = 'none'">
-      </ion-avatar>
-      <h2>
-        {{person.name}}
-      </h2>
-      <p>{{person.document}}</p>
-      <p *ngIf="person.residence">{{person.residence.name}}
-        <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
-        <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
-      </p>
-        <button ion-button icon-only clear color="primary" (click)="visitorModal(person);$event.stopPropagation()" item-right>
-        <ion-icon name="create"></ion-icon>
+      <ion-list-header>{{'literals.users'|trans}}</ion-list-header>
+      <button ion-item (click)="select(person,'user')" *ngFor="let person of results.users.data">
+        <ion-avatar item-left>
+          <img [src]="person.image_url" alt="image person" onerror="this.style.display = 'none'">
+        </ion-avatar>
+        <h2>
+          {{person.name}}
+          <span>({{'literals.'+ person.relationship | trans}})</span>
+        </h2>
+        <p>{{person.document}}</p>
+        <p *ngIf="person.residence">{{person.residence.name}}
+          <span *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
+            <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
+            <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
+          </span>
+        </p>
       </button>
-    </button>
-  </ion-list>
+    </ion-list>
 
-  <ion-list *ngIf="findFor.workers && results.workers && results.workers.data">
+    <ion-list *ngIf="findFor.visitors && results.visitors && results.visitors.data">
+      <ion-list-header>{{'literals.visitors'|trans}}</ion-list-header>
+      <button ion-item (click)="select(person,'visitor')" *ngFor="let person of results.visitors.data">
+        <ion-avatar item-left *ngIf="person.image_url">
+          <img [src]="person.image_url" alt="image person" onerror="this.style.display = 'none'">
+        </ion-avatar>
+        <h2>
+          {{person.name}}
+        </h2>
+        <p>{{person.document}}</p>
+        <p *ngIf="person.residence">{{person.residence.name}}
+          <span *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
+            <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
+            <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
+          </span>
+        </p>
+        <button ion-button icon-only clear color="primary" (click)="visitorModal(person);$event.stopPropagation()" item-right>
+          <ion-icon name="create"></ion-icon>
+        </button>
+      </button>
+    </ion-list>
 
-    <ion-list-header>{{'literals.workers'|trans}}</ion-list-header>
-    <button ion-item (click)="select(person,'worker')" *ngFor="let person of results.workers.data">
-      <ion-avatar item-left *ngIf="person.image_url">
-        <img [src]="person.image_url" alt="image person" onerror="this.style.display = 'none'">
-      </ion-avatar>
-      <h2>
-        {{person.name}}
-      </h2>
-      <p>{{person.document}}</p>
-      <p *ngIf="person.residence">{{person.residence.name}}
-        <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
-        <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
-      </p>
-    </button>
+    <ion-list *ngIf="findFor.workers && results.workers && results.workers.data">
+
+      <ion-list-header>{{'literals.workers'|trans}}</ion-list-header>
+      <button ion-item (click)="select(person,'worker')" *ngFor="let person of results.workers.data">
+        <ion-avatar item-left *ngIf="person.image_url">
+          <img [src]="person.image_url" alt="image person" onerror="this.style.display = 'none'">
+        </ion-avatar>
+        <h2>
+          {{person.name}}
+        </h2>
+        <p>{{person.document}}</p>
+        <p *ngIf="person.residence">{{person.residence.name}}
+          <span *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
+            <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
+            <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
+          </span>
+        </p>
+      </button>
 
 
-  </ion-list>
+    </ion-list>
+  </div>
 
-  <ion-fab bottom right #fab>
+  <div *ngIf="multiple">
+    <ion-list *ngIf="findFor.users && results.users && results.users.data">
+      <ion-list-header>
+        {{'literals.users'|trans}}
+        <button ion-button icon-only small item-right clear (click)="selectAll('user')">
+          <ion-icon name="checkbox-outline"></ion-icon>
+        </button>
+        <button ion-button icon-only small item-right clear (click)="deselectAll('user')">
+          <ion-icon name="square-outline"></ion-icon>
+        </button>
+
+      </ion-list-header>
+      <button ion-item (click)="select(person,'user')" *ngFor="let person of results.users.data">
+        <ion-checkbox *ngIf="multiple" [checked]="person._selected"></ion-checkbox>
+        <ion-avatar item-left>
+          <img [src]="person.image_url" alt="image person" onerror="this.style.display = 'none'">
+        </ion-avatar>
+        <ion-label>
+          {{person.name}} {{person.residence?.name}}
+        </ion-label>
+      </button>
+    </ion-list>
+  </div>
+
+
+  <ion-fab bottom right #fab *ngIf="findFor.visitors && !multiple">
     <button ion-fab>
       <ion-icon name="add"></ion-icon>
     </button>
@@ -88,6 +121,12 @@
         {{'crud.add' | trans }} {{ 'literals.visitor' | trans }}
       </button>
     </ion-fab-list>
+  </ion-fab>
+
+  <ion-fab bottom right *ngIf="multiple">
+    <button ion-fab (click)="save()">
+      <ion-icon class="fa fa-save"></ion-icon>
+    </button>
   </ion-fab>
 
 </ion-content>

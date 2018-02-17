@@ -15,22 +15,24 @@ export class VisitorPage {
   parking = null;
   parkings = [];
   loading = false;
-  dirty= false
+  dirty = false
   show_visits_button = true
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public viewCtrl: ViewController, public modal: ModalController) {
     var visitor = navParams.get('visitor')
     var residence = navParams.get('residence')
-    
+
     if (visitor)
-    this.visitor = visitor
-    
-    if(this.visitor.id)
-    this.action = 'update'
-    
-    if (residence) 
+      this.visitor = visitor
+
+    if (this.visitor.id)
+      this.action = 'update'
+
+    if (residence)
       this.residence = residence
-    else if(this.api.objects.residences)
+    else if (this.api.objects.residences)
       this.residence = this.api.objects.residence[visitor.residence_id]
+    else
+      this.residence = this.visitor.residence
     if (navParams.get('show_visits_button') !== undefined)
       this.show_visits_button = navParams.get('show_visits_button')
 
@@ -87,14 +89,13 @@ export class VisitorPage {
       document: this.visitor.document,
       residence_id: this.visitor.residence_id,
       sex: this.visitor.sex,
-      relationship: this.visitor.relationship
+      relationship: this.visitor.relationship,
+      notes: this.visitor.notes
     };
     if (this.action == 'create') {
       this.api.post('visitors?with[]=residence', data).then((response) => {
         console.log(response);
-        if (this.api.objects.visitors) {
-          this.api.objects.visitors.push(response)
-        }
+        this.api.VisitorChanged({visitor: response})
         this.viewCtrl.dismiss(response);
         this.loading = false;
       }).catch((err) => {
@@ -105,13 +106,7 @@ export class VisitorPage {
     if (this.action == 'update') {
       this.api.put('visitors/' + this.visitor.id + "?with[]=residence", data).then((response) => {
         console.log(response);
-        if (this.api.objects.visitors) {
-          this.api.objects.visitors.forEach((v) => {
-            if (v.id == this.visitor.id) {
-              v = response;
-            }
-          })
-        }
+        this.api.VisitorChanged({visitor: response})
         this.loading = false;
         this.viewCtrl.dismiss(response);
       }).catch((err) => {
@@ -137,7 +132,9 @@ export class VisitorPage {
       name: this.visitor.name,
       document: this.visitor.document,
       residence_id: this.visitor.residence_id,
-      sex: this.visitor.sex
+      sex: this.visitor.sex,
+      relationship: this.visitor.relationship,
+      notes: this.visitor.notes
     };
     if (this.action == 'create') {
       this.api.post('visitors', data).then((response) => {
@@ -176,7 +173,7 @@ export class VisitorPage {
     }
     this.api.post(`visitors/${visitor.id}/visit`, visit).then((response) => {
       console.log(response);
-      this.viewCtrl.dismiss({visitor: visitor, visit: response, residence: this.residence});
+      this.viewCtrl.dismiss({ visitor: visitor, visit: response, residence: this.residence });
       this.loading = false;
     }).catch((err) => {
       this.api.Error(err)

@@ -13,10 +13,21 @@ export class ResidenceFinderPage {
   query = "";
   ready = false;
   loading = true;
+  multiple = false
+  selecteds = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewctrl: ViewController, public api: Api) {
+    if (this.navParams.get('multiple') !== undefined) {
+      this.multiple = this.navParams.get('multiple')
+    }
+    if (this.navParams.get('selecteds')) {
+      this.navParams.get('selecteds').forEach(element => {
+        this.select(element)
+      });
+    }
+
     this.api.storage.get('recent_residences')
       .then((recent_residences) => {
-        if (recent_residences) {
+        if (!this.multiple && recent_residences) {
           this.residences = recent_residences;
         }
       });
@@ -30,6 +41,9 @@ export class ResidenceFinderPage {
   }
 
   search() {
+    if (this.multiple && this.query == '') {
+      this.residences = this.api.objects.residences
+    }
     this.loading = true;
     var limit = 100;
     var filter = this.query.toLowerCase()
@@ -52,10 +66,47 @@ export class ResidenceFinderPage {
   }
 
   cancel() {
+    if (this.multiple) {
+      this.viewctrl.dismiss({ selecteds: this.selecteds })
+      this.clear()
+      return
+    }
     this.viewctrl.dismiss(null, "cancel");
   }
 
+  selectAll() {
+    this.selecteds = []
+    this.api.objects.residences.forEach(residence => {
+      residence._selected = true
+      this.selecteds[this.selecteds.length] = residence
+    });
+  }
+
+  deselectAll() {
+    this.selecteds = []
+    this.api.objects.residences.forEach(residence => {
+      residence._selected = false
+    });
+  }
+
+  save() {
+    this.viewctrl.dismiss({ selecteds: this.selecteds })
+    this.clear()
+  }
+
+  clear() {
+    this.selecteds.forEach((element) => {
+      this.api.objects.residences._selected = undefined;
+    })
+  }
+
   select(residence) {
-    this.viewctrl.dismiss(residence, "accept");
+    if (this.multiple) {
+      residence._selected ? residence._selected = false : residence._selected = true
+      this.selecteds[this.selecteds.length] = residence
+
+    } else {
+      this.viewctrl.dismiss(residence, "accept");
+    }
   }
 }

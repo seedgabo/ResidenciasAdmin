@@ -47,6 +47,10 @@
       <ion-input (ionChange)="dirty=true" type="text" [(ngModel)]="visitor.relationship"></ion-input>
     </ion-item>
     <ion-item>
+      <ion-label floating>{{'literals.notes' | trans }}</ion-label>
+      <ion-textarea (ionChange)="dirty=true" [(ngModel)]="visitor.notes"></ion-textarea>
+    </ion-item>
+    <ion-item>
       <button ion-button full (click)="selectVehicle()">
         {{ vehicle ? vehicle.plate+ '-' +vehicle.name : ('literals.vehicle' | trans) }}
       </button>

@@ -39,16 +39,17 @@ export class CorrespondencesPage {
     this.events.subscribe("CorrespondenceCreated", this.handler);
   }
 
-  ionViewDidLeave() {
+  ionViewWillUnload() {
+    console.log("leaving")
     this.events.unsubscribe("CorrespondenceCreated", this.handler);
   }
 
   getCorrespondences(refresher = null) {
     this.api.ready.then(() => {
-      this.api.get('correspondences?order[status]=desc&order[id]=desc&with[]=user&with[]=residence&with[]=receptor&limit=500')
+      this.api.get('correspondences?order[status]=desc&order[id]=desc&with[]=user&with[]=residence&with[]=receptor&paginate=500')
         .then((data: any) => {
           console.log(data);
-          this.correspondences = data;
+          this.correspondences = data.data;
           this.filter();
           if (refresher) {
             refresher.complete();
@@ -195,7 +196,7 @@ export class CorrespondencesPage {
       title: this.api.trans("literals.correspondences"),
       buttons: [
         {
-          text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.all') + 's',
+          text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.all'),
           icon: 'checkmark-circle-outline',
           handler: () => {
             this.filter_status = "";
@@ -231,4 +232,6 @@ export class CorrespondencesPage {
 
     actions.present();
   }
+
+
 }

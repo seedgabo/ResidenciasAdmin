@@ -18,7 +18,7 @@
     <ion-row>
       <ion-col col-12 col-md *ngIf="api.visits_approved && api.visits_approved.length>0">
         <ion-card>
-          <ion-card-header> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-card-header>
+          <ion-card-header text-capitalize> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-card-header>
           <ion-list>
             <ion-item-sliding *ngFor="let visit of api.visits_approved;let i= index">
               <button ion-item (tap)="viewVisit(visit,i)">
@@ -75,22 +75,22 @@
         <ion-card>
           <ion-card-header>{{ api.trans('literals.visitors') }}</ion-card-header>
           <ion-list>
-            <button ion-item *ngFor="let visitor of visitors" (click)="actions(visitor)">
+            <button ion-item *ngFor="let visitor of visitors; let i = index" (click)="actions(visitor,i)">
               <ion-thumbnail item-left>
                 <img [src]="visitor.image_url" onerror="this.style.display = 'none'">
               </ion-thumbnail>
               <h2>
                 {{visitor.name}}
               </h2>
-              <h4 *ngIf="visitor.residence">
+              <h4 *ngIf="visitor.residence" item-right>
                 {{visitor.residence.name}}
               </h4>
               <p>
                 {{ visitor.document }}
               </p>
-              <p *ngIf="api.residences_collection[visitor.residence_id]" text-right>
-                {{api.residences_collection[visitor.residence_id].name}}
-              </p>
+              <span *ngIf="visitor.notes">
+                {{visitor.notes}}
+              </span>
             </button>
           </ion-list>
         </ion-card>

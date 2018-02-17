@@ -20,7 +20,9 @@ export class MyApp {
 
   pages: Array<{ title: string, component: any, icon: string }>;
   constructor(public platform: Platform, public statusBar: StatusBar, public menuCtrl: MenuController, public splashScreen: SplashScreen, public storage: Storage, public api: Api, public codepush: CodePush, public backgroundmode: BackgroundMode, public minimize: AppMinimize, public events: Events) {
-    this.initializeApp();
+    this.platform.ready().then(() => {
+      this.initializeApp();
+    })
 
     this.events.subscribe('login', () => {
       this.api.SeedPermissions()
@@ -28,10 +30,9 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'literals.lobby', component: "LobbyPage", icon: "people" },
-      { title: 'literals.visitors', component: 'HomePage', icon: "contacts" },
-      { title: 'literals.visits', component: 'ListPage', icon: "list" },
-      { title: 'literals.parkings', component: 'ParkingsPage', icon: "car" },
+      { title: 'literals.lobby', component: "LobbyPage", icon: "ios-key" },
+      // { title: 'literals.visitors', component: 'HomePage', icon: "contacts" },
+      // { title: 'literals.visits', component: 'ListPage', icon: "list" },
       { title: 'literals.residences', component: "ResidencesPage", icon: "home" },
     ];
 
@@ -45,10 +46,12 @@ export class MyApp {
           if (status == 8)
             this.splashScreen.show();
         }
-        , (err) => { console.warn(err) });
+        , (err) => {
+          console.warn(err)
+          this.splashScreen.hide();
+        });
 
     }
-    sync()
     setTimeout(sync, 1000 * 60 * 60 * 6)
 
     this.api.ready.then(() => {
@@ -107,7 +110,7 @@ export class MyApp {
       this.api.url = null
     this.nav.setRoot('Login');
   }
-  
+
   openLiveSupportChat() {
     // var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
     // (function () {
