@@ -282,7 +282,7 @@
           <img [src]="api.url + 'img/logo.png'" style="max-height:100px;">
         </ion-col>
         <ion-col col-7>
-          <h1>
+          <h1 text-center>
             {{api.settings.name}}
             <br> {{api.settings.document}}
           </h1>
@@ -395,8 +395,8 @@
           <br>
           <br>
           <br>
-          <div class="signature"></div>
-          <span>
+          <div *ngIf="setting.show_signature" class="signature"></div>
+          <span *ngIf="setting.show_signature">
             {{'literals.signature' | trans }} {{'literals.seller' | trans }}
           </span>
         </ion-col>
