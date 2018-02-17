@@ -1,6 +1,6 @@
 <ion-content>
 
-  <div class="printable" *ngIf="setting.print_type !== 'pos'" id="toPrint">
+  <div class="printable" *ngIf="setting.print_type === 'normal'" id="toPrint">
     <div class="invoice-box" style="max-width: 800px;margin: auto;padding: 30px;border: 1px solid #eee;box-shadow: 0 0 10px rgba(0, 0, 0, .15);font-size: 16px;line-height: 24px;font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;color: #555;">
       <table cellpadding="0" cellspacing="0" style="width: 100%;line-height: inherit;text-align: left;">
 
@@ -110,11 +110,11 @@
           </td>
 
           <td style="padding: 4px;vertical-align: top;text-align: center;border-bottom: none;">
-            {{item.amount | currency:'USD':'symbol-narrow':'4.2-2' }}
+            {{item.amount | currency:'USD':'symbol-narrow':'4.0-0' }}
           </td>
 
           <td style="padding: 4px;vertical-align: top;text-align: center;border-bottom: none;">
-            {{(item.quantity * item.amount) | currency:'USD':'symbol-narrow':'4.2-2' }}
+            {{(item.quantity * item.amount) | currency:'USD':'symbol-narrow':'4.0-0' }}
           </td>
         </tr>
 
@@ -126,7 +126,7 @@
             Total:
           </td>
           <td style="padding: 4px;vertical-align: top; text-align: center;border-top: 2px solid #eee;font-weight: bold;">
-            {{ total(invoice) | currency:'USD':'symbol-narrow':'4.2-2' }}
+            {{ total(invoice) | currency:'USD':'symbol-narrow':'4.0-0' }}
           </td>
         </tr>
       </table>
@@ -270,5 +270,147 @@
         </span>
       </div>
     </div>
+  </div>
+
+
+
+  <div *ngIf="setting.print_type === 'horizontal'" class="printable" id="toPrintMini">
+    <!-- Header -->
+    <ion-grid>
+      <ion-row>
+        <ion-col col-2>
+          <img [src]="api.url + 'img/logo.png'" style="max-height:100px;">
+        </ion-col>
+        <ion-col col-7>
+          <h1>
+            {{api.settings.name}}
+            <br> {{api.settings.document}}
+          </h1>
+        </ion-col>
+        <ion-col col-3 text-right>
+          <span>{{invoice.created_at | amDateFormat:'DD/MM/Y HH:mm'}}</span>
+          <h2 text-center>
+            {{'literals.invoice' | trans}}
+            <br> {{ invoice.id }}
+          </h2>
+          <h3 text-center>
+            {{'__.Fecha de Venta' | trans }}
+          </h3>
+          <h4 text-center>{{invoice.created_at | amDateFormat:'DD/MM/Y HH:mm'}}</h4>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- User and Seller Information -->
+    <table class="info-table">
+      <tr>
+        <th>{{'literals.seller' | trans }}</th>
+        <td>{{api.user.name}}</td>
+        <td>
+          <b>
+            {{'__.Caja / Portería' | trans }}
+          </b>
+          {{api.residence.name}}
+        </td>
+      </tr>
+      <tr>
+        <th> {{'literals.user' | trans }} </th>
+        <td>{{invoice.person.name}}</td>
+        <td>
+          <b>
+            {{'literals.residence' | trans}}
+          </b>
+          {{invoice.person.residence.name}}
+        </td>
+      </tr>
+    </table>
+
+    <!-- Items Table -->
+    <table class="items-table">
+      <tr class="heading">
+        <td>
+          {{'literals.concept' | trans }}
+        </td>
+
+        <td>
+          {{'literals.price' | trans }}
+        </td>
+
+        <td>
+          {{'literals.quantity' | trans }}
+        </td>
+
+        <td>
+          {{'literals.subtotal' | trans }}
+        </td>
+      </tr>
+
+      <tr class="item last" *ngFor="let item of invoice.items">
+        <td>
+          {{item.concept}}
+        </td>
+
+        <td>
+          {{item.amount | currency:'USD':'symbol-narrow':'4.0-0' }}
+        </td>
+
+        <td>
+          {{item.quantity}}
+        </td>
+
+
+        <td>
+          {{(item.quantity * item.amount) | currency:'USD':'symbol-narrow':'4.0-0' }}
+        </td>
+      </tr>
+    </table>
+
+    <!-- Total -->
+    <ion-grid>
+      <ion-row>
+        <ion-col col-8 text-left>
+          <b>{{'literals.observations' | trans }}</b>
+          <div class="note-box"></div>
+        </ion-col>
+        <ion-col>
+          <table class="total-table">
+            <tr text-right>
+              <th>{{'literals.total' | trans}}</th>
+              <td>{{ total(invoice) | currency:'USD':'symbol-narrow':'1.0-0' }}</td>
+            </tr>
+          </table>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-6>
+          <table class="payment-table">
+            <tr>
+              <th>{{'literals.method' | trans }} {{'literals.payment' | trans }} </th>
+              <td>{{'literals.' + invoice.payment | trans }}</td>
+            </tr>
+          </table>
+        </ion-col>
+        <ion-col col-6 text-center>
+          <br>
+          <br>
+          <br>
+          <div class="signature"></div>
+          <span>
+            {{'literals.signature' | trans }} {{'literals.seller' | trans }}
+          </span>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+
+  </div>
+
+
+
+
+  <div *ngIf="setting.print_type === 'vehiculo'" class="printable punto" id="toPrintMini">
+    <!-- TODO -->
   </div>
 </ion-content>

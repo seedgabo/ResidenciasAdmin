@@ -1,3 +1,42 @@
 page-print-invoice {
   font-size: small;
+  .info-table {
+    width: 100%;
+    font-size: 14px;
+    td,
+    th {
+      border: 1px solid black;
+    }
+    tr td:nth-child(3) {
+      width: 300px;
+    }
+  }
+  .items-table {
+    margin-top: 10px;
+    width: 100%;
+    td {
+      padding: 6px;
+      border: 1px solid black;
+    }
+  }
+  .total-table {
+    width: 100%;
+    th {
+      text-align: center;
+    }
+    td {
+      border: 1px solid black;
+    }
+  }
+  .payment-table {
+    th {
+      text-transform: uppercase;
+    }
+    width: 80%;
+  }
+  .note-box {
+    height: 70px;
+    width: 100%;
+    border: 1px solid black;
+  }
 }
