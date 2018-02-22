@@ -1,4 +1,4 @@
-import { PopoverMenu } from './../../providers/popover-menu/popover-menu';
+import { PopoverMenu } from './../popover/popover-menu';
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
@@ -13,7 +13,7 @@ import { IonicPage } from 'ionic-angular/navigation/ionic-page';
 export class DashPage {
   loading = false;
   sliders = [];
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public popover:PopoverMenu) {
   }
 
   ionViewDidLoad() {
@@ -30,5 +30,17 @@ export class DashPage {
   
   openPage(page) {
     this.navCtrl.push(page);
+  }
+
+  actions(ev) {
+    var data = {
+      title: "Menu",
+      buttons: [{
+        text: "Vehicles",
+        icon: "car",
+        handler: () => { this.openPage("VehiclesPage") }
+      }]
+    }
+    this.popover.create(data).present({ev: ev})
   }
 }

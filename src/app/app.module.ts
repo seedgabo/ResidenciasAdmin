@@ -23,7 +23,7 @@ import { VisitPage } from "../pages/visit/visit";
 import { ProductSearchPage } from '../pages/product-search/product-search';
 import { SettingProvider } from '../providers/setting/setting';
 import { NewtonProvider } from '../providers/newton/newton';
-import { PopoverMenu } from '../providers/popover-menu/popover-menu';
+import { PopoverMenu } from './../pages/popover/popover-menu';
 @NgModule({
   declarations: [
     MyApp,

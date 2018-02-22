@@ -6,11 +6,9 @@ export class PopoverMenu {
   constructor(public popover:PopoverController) {
   }
 
-  create(buttons = [], ev = null) {
+  create(data, opts = {}) {
     var popover = this.popover.create(
-      "PopoverPage", {buttons:buttons}
-    )
-    popover.present({ ev: ev })
+      "PopoverPage", data, opts)
     return popover
   }
 

@@ -6,10 +6,13 @@ import { IonicPage, NavParams, ViewController } from 'ionic-angular';
   templateUrl: 'popover.html',
 })
 export class PopoverPage {
-  buttons =[]
+  buttons = []
+  title
   constructor(public viewCtrl: ViewController, public navParams: NavParams) {
     if (this.navParams.get('buttons'))
       this.buttons = this.navParams.get('buttons')  
+    if (this.navParams.get('title'))
+      this.title = this.navParams.get('title')  
   }
 
   ionViewDidLoad() {
