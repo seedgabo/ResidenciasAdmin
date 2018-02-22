@@ -23,6 +23,7 @@ import { VisitPage } from "../pages/visit/visit";
 import { ProductSearchPage } from '../pages/product-search/product-search';
 import { SettingProvider } from '../providers/setting/setting';
 import { NewtonProvider } from '../providers/newton/newton';
+import { PopoverMenu } from '../providers/popover-menu/popover-menu';
 @NgModule({
   declarations: [
     MyApp,
@@ -61,7 +62,8 @@ import { NewtonProvider } from '../providers/newton/newton';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Api,
     SettingProvider,
-    NewtonProvider
+    NewtonProvider,
+    PopoverMenu
   ]
 })
 export class AppModule { }

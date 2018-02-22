@@ -1,0 +1,6 @@
+<ion-list no-margin>
+  <button ion-item *ngFor="let btn of buttons" (click)="exec(btn)">
+    <ion-icon item-left [name]="btn.icon" *ngIf="btn.icon" [color]="btn.color? btn.color:'dark'"></ion-icon>
+     {{ btn.text }}
+  </button>
+</ion-list>

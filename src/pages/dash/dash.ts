@@ -1,3 +1,4 @@
+import { PopoverMenu } from './../../providers/popover-menu/popover-menu';
 import { Api } from './../../providers/api';
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
@@ -30,7 +31,4 @@ export class DashPage {
   openPage(page) {
     this.navCtrl.push(page);
   }
-
-
-
 }
