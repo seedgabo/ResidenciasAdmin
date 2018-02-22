@@ -448,14 +448,13 @@ export class Api {
         .leaving((data) => {
           console.log("leaving", data);
         })
-
-      // console.log(this.Echo);
     })
   }
 
   stopEcho() {
     this.Echo.leave('Application');
     this.Echo.leave('App.User.' + this.user.id);
+    this.Echo.leave('App.Mobile');
     this.Echo = undefined;
   }
 
