@@ -13,7 +13,7 @@
     "release-android": "ionic cordova build android --prod && code-push release-cordova residencias-admin android -d Android --mandatory",
     "release-ios": "ionic cordova build ios --prod && code-push release-cordova residencias-admin ios -d Ios --mandatory",
     "release-web": "ionic cordova build browser --prod",
-    "build-android": "cordova build android --release --password=gab23gab --keystore='./residenciasAdmin.jks' --storePassword=gab23gab --alias=residenciasAdmin"
+    "build-android": "cordova build android --release -- --password=gab23gab --keystore='./residenciasAdmin.jks' --storePassword=gab23gab --alias=residenciasAdmin"
   },
   "dependencies": {
     "@angular/common": "5.0.3",
