@@ -110,11 +110,11 @@
           </td>
 
           <td style="padding: 4px;vertical-align: top;text-align: center;border-bottom: none;">
-            {{item.amount | currency:'USD':'symbol-narrow':'4.2-2' }}
+            {{item.amount | currency:'USD':'symbol-narrow':'4.0-0' }}
           </td>
 
           <td style="padding: 4px;vertical-align: top;text-align: center;border-bottom: none;">
-            {{(item.quantity * item.amount) | currency:'USD':'symbol-narrow':'4.2-2' }}
+            {{(item.quantity * item.amount) | currency:'USD':'symbol-narrow':'4.0-0' }}
           </td>
         </tr>
 
@@ -126,7 +126,7 @@
             Total:
           </td>
           <td style="padding: 4px;vertical-align: top; text-align: center;border-top: 2px solid #eee;font-weight: bold;">
-            {{ total(invoice) | currency:'USD':'symbol-narrow':'4.2-2' }}
+            {{ total(invoice) | currency:'USD':'symbol-narrow':'4.0-0' }}
           </td>
         </tr>
       </table>
@@ -405,6 +405,5 @@
 
 
   </div>
-
 
 </ion-content>

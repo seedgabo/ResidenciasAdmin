@@ -1,0 +1,65 @@
+<ion-content padding>
+  <table class="external-table">
+    <table class="inner-table">
+
+      <tr class="header-row">
+        <td>
+          <h2>{{'literals.residence' | trans}}</h2>
+          <h2>{{ person.residence.id }}</h2>
+        </td>
+        <td>
+          <h2>
+            {{'literals.plate' | trans }}
+          </h2>
+          <h1 style="background:#CCC">
+            {{vehicle.plate}}
+          </h1>
+        </td>
+        <td>
+          <img class="person-image-big" [src]="person.image_url" alt="">
+        </td>
+      </tr>
+
+
+      <tr>
+        <td>
+          {{'literals.receipt' | trans }} {{ receipt.id }}
+        </td>
+        <td>
+          {{ 'literals.register' | trans }}
+        </td>
+        <td>
+          {{'literals.expiration' | trans }}
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <span>{{'literals.user' | trans}}</span>
+          <b>{{'person.name'}}</b>
+        </td>
+      </tr>
+
+      <table>
+        <td rowspan="2">
+          <img [src]="api.url + '/img/logo.png'" alt="" class="logo-img">
+        </td>
+        <tr>
+          <td>{{'literals.created_at' | trans }} {{receipt.created_at | amDateFormat:'DD/MM/Y'}}</td>
+        </tr>
+        <tr>
+          <td>
+            {{'literals.notes' | trans }}
+            <br> {{ receipt.observations }}
+          </td>
+          <td>
+            <div class="signature"></div>
+
+          </td>
+        </tr>
+      </table>
+
+    </table>
+
+  </table>
+</ion-content>
