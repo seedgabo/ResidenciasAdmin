@@ -1,0 +1,25 @@
+<ion-list no-margin>
+  <ion-item>
+    <ion-label floating>{{'date.from' | trans }}</ion-label>
+    <ion-datetime [(ngModel)]="filters.start"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>{{'date.to' | trans }}</ion-label>
+    <ion-datetime [(ngModel)]="filters.end"></ion-datetime>
+  </ion-item>
+  <button ion-item (click)="selectPerson()">
+    <h2 *ngIf="!person">
+      {{'literals.select' | trans }} {{ 'literals.person' | trans }}
+    </h2>
+    <ion-avatar item-left *ngIf="person">
+      <img [src]="person.image_url" alt="" *ngIf="person && person.image_url">
+    </ion-avatar>
+    <span *ngIf="person">
+      <span>{{person.name}}</span>
+    </span>
+    <ion-icon item-end name="arrow-dropdown"></ion-icon>
+  </button>
+  <button ion-button block color="secondary" (click)="close()">
+    {{ 'crud.save' | trans }}
+  </button>
+</ion-list>

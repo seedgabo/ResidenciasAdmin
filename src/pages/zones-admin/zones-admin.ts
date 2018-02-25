@@ -1,13 +1,19 @@
-import { AlertController, LoadingController, IonicPage } from 'ionic-angular';
+import { AlertController, LoadingController, IonicPage, PopoverController } from 'ionic-angular';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController, ActionSheetController } from 'ionic-angular';
 import { Api } from '../../providers/api';
+import moment from 'moment';
 @IonicPage()
 @Component({ selector: 'page-zones-admin', templateUrl: 'zones-admin.html' })
 export class ZonesAdminPage {
   zones = [];
   zone = null;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public toast: ToastController, public actionsheet: ActionSheetController, public alert: AlertController, public loadingctrl: LoadingController, public api: Api) { }
+  filters = {
+    user_id: null,
+    start: new Date(),
+    end: new Date(),
+  }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public toast: ToastController, public actionsheet: ActionSheetController, public alert: AlertController, public loadingctrl: LoadingController, public api: Api, public popover: PopoverController) { }
 
   ionViewDidLoad() {
     this.getZones();
@@ -38,10 +44,12 @@ export class ZonesAdminPage {
       .catch(console.error)
   }
 
-  getReservations(zone, date = null) {
-    if (!date)
-      date = new Date();
-    this.api.get('reservations?with[]=zone&with[]=user&with[]=user.residence&where[zone_id]=' + zone.id + '&whereDateGte[start]=today&paginate=150&order[start]=asc')
+  getReservations(zone) {
+    this.filter
+    var filter = `&where[zone_id]=${zone.id}&whereDateGte[start]=${moment(this.filters.start).startOf('day').format('YYYY-MM-DD HH:mm:ss')}&whereDatelwe[end]=${moment(this.filters.end).startOf('day').add(1, 'day').format('YYYY-MM-DD HH:mm:ss')}&paginate=150&order[start]=asc`
+    if (this.filters.user_id)
+      filter += `&where[user_id]=${this.filters.user_id}`
+    this.api.get('reservations?with[]=zone&with[]=user&with[]=user.residence' + filter)
       .then((data) => {
         console.log(data);
         zone.reservations = data;
@@ -49,6 +57,22 @@ export class ZonesAdminPage {
       .catch((err) => {
         this.api.Error(err)
       })
+  }
+  filter(ev) {
+    var popover = this.popover.create("ReservationFilterPage", this.filter)
+    popover.present({ ev: ev })
+    popover.onWillDismiss((data) => {
+      if (data) {
+        this.filters = data
+        if (!data.start) {
+          data.start = new Date()
+        }
+        if (!data.end) {
+          data.end = new Date()
+        }
+        this.getReservations(this.zone);
+      }
+    })
   }
 
   selectZone(zone) {
