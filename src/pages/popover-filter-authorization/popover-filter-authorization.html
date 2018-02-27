@@ -1,0 +1,17 @@
+<ion-list no-margin>
+  <ion-item>
+    <ion-label>{{'literals.actives' | trans}}</ion-label>
+    <ion-checkbox [(ngModel)]="filters.active"></ion-checkbox>
+  </ion-item>
+  <ion-item>
+    <ion-label>{{'literals.start' | trans}}</ion-label>
+    <ion-datetime [(ngModel)]="filters.start"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label>{{'literals.end' | trans}}</ion-label>
+    <ion-datetime [(ngModel)]="filters.end"></ion-datetime>
+  </ion-item>
+  <button ion-button block color="secondary" (click)="close()">
+    {{'crud.search' | trans }}
+  </button>
+</ion-list>

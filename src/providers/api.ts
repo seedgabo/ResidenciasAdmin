@@ -49,6 +49,7 @@ export class Api {
     parkings: false,
     vehicles: false,
     correspondences: false,
+    authorizations: false,
   }
   storage = {
     ready: () => { return this._storage.ready() },
@@ -470,6 +471,7 @@ export class Api {
           parkings: this.modules.parkings,
           vehicles: this.modules.vehicles,
           correspondences: this.modules.correspondences,
+          authorizations: this.modules.authorizations,
         }
         return
       }
@@ -500,6 +502,9 @@ export class Api {
       }
       if (this.roles.collection['Manage correspondences']) {
         this.permissions.correspondences = this.modules.correspondences
+      }
+      if (this.roles.collection['Manage authorizations']) {
+        this.permissions.authorizations = this.modules.authorizations
 
       }
     }

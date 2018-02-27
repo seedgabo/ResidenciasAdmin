@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>{{'literals.authorizations' | trans }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only clear (click)="filter($event)">
+        <ion-icon name="funnel"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar #q [(ngModel)]="query" (ionInput)="search(q.value)" [debounce]="1000"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher (ionRefresh)="getAuthorizations($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <button ion-item *ngFor="let auth of authorizations.data" (click)="actions(auth)">
+      <h2 text-center> # {{ auth.reference }}</h2>
+      <h3 *ngIf="auth.vehicle">
+        {{ 'literals.vehicle' | trans }}: {{ auth.vehicle.plate }}
+      </h3>
+      <h3 *ngIf="auth.pet">
+        {{ 'literals.pet' | trans }}: {{ auth.pet.name }} {{ auth.pet.document }}
+      </h3>
+      <h3 *ngIf="auth.visitor">
+        {{ 'literals.visitor' | trans }}: {{ auth.visitor.name }} {{ auth.visitor.document }}
+      </h3>
+      <h3 *ngIf="auth.worker">
+        {{ 'literals.worker' | trans }}: {{ auth.worker.name }} {{ auth.worker.document }}
+      </h3>
+      <h3 *ngIf="auth.user">
+        {{ 'literals.user' | trans }}: {{ auth.user.name }} {{ auth.user.document }}
+      </h3>
+      <h4> {{ 'literals.creator' | trans }}: {{ auth.creator?.name }} </h4>
+
+      <p text-wrap text-right>
+        {{'__.date start' | trans }}: {{ auth.start_at | amCalendar}}
+      </p>
+      <p text-wrap text-right>
+        {{'__.date end' | trans }}: {{ auth.end_at | amCalendar}}
+      </p>
+    </button>
+  </ion-list>
+</ion-content>
