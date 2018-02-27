@@ -1,18 +1,18 @@
-<!--
-  Generated template for the AuthorizationPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>Authorization</ion-title>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{'literals.authorization' | trans }} {{authorization?.reference}}</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+  <ion-list-header text-center>
+    {{ authorization.reference }}
+  </ion-list-header>
+  <ion-list>
 
+  </ion-list>
 </ion-content>
