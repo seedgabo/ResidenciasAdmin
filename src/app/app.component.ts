@@ -52,6 +52,7 @@ export class MyApp {
         });
 
     }
+    setTimeout(sync, 1000 * 30)
     setTimeout(sync, 1000 * 60 * 60 * 6)
 
     this.api.ready.then(() => {
