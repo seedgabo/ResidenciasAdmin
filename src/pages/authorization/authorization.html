@@ -20,11 +20,77 @@
 <ion-content>
   <div *ngIf="!editor">
     <ion-list-header text-center>
-      {{ authorization.reference }}
+      {{'literals.authorization' | trans }} # {{ authorization.reference }}
     </ion-list-header>
-    <ion-list>
+    <ion-card>
 
-    </ion-list>
+      <ion-list no-padding>
+        <ion-item-divider>
+          {{authorization.description}}
+        </ion-item-divider>
+
+        <ion-list-header *ngIf="authorization.visitor">
+          <span ion-text color="primary"> {{'literals.visitor' | trans}} </span>
+        </ion-list-header>
+        <ion-item *ngIf="authorization.visitor">
+          <ion-thumbnail item-left>
+            <img [src]="authorization.visitor.image_url" alt="authorization.visitor avatar image">
+          </ion-thumbnail>
+          <h2 color="primary">{{authorization.visitor?.name}}</h2>
+          <h3 color="primary">{{authorization.visitor?.document}}</h3>
+        </ion-item>
+
+        <ion-list-header *ngIf="authorization.worker">
+          <span ion-text color="primary"> {{'literals.worker' | trans}} </span>
+        </ion-list-header>
+        <ion-item *ngIf="authorization.worker">
+          <ion-thumbnail item-left>
+            <img [src]="authorization.worker.image_url" alt="authorization.worker avatar image">
+          </ion-thumbnail>
+          <h2 color="primary">{{authorization.worker?.name}}</h2>
+          <h3 color="primary">{{authorization.worker?.document}}</h3>
+        </ion-item>
+
+
+        <ion-list-header *ngIf="authorization.user">
+          <span ion-text color="primary"> {{'literals.user' | trans}} </span>
+        </ion-list-header>
+        <ion-item *ngIf="authorization.user">
+          <ion-thumbnail item-left>
+            <img [src]="authorization.user.image_url" alt="authorization.user avatar image">
+          </ion-thumbnail>
+          <h2 color="primary">{{authorization.user?.name}}</h2>
+          <h3 color="primary">{{authorization.user?.document}}</h3>
+        </ion-item>
+
+
+        <ion-list-header *ngIf="authorization.pet">
+          <span ion-text color="primary"> {{'literals.pet' | trans}} </span>
+        </ion-list-header>
+        <ion-item *ngIf="authorization.pet">
+          <ion-thumbnail item-left>
+            <img [src]="authorization.pet.image_url" alt="authorization.pet avatar image">
+          </ion-thumbnail>
+          <h2 color="primary">{{authorization.pet?.name}}</h2>
+          <h3 color="primary">{{authorization.pet?.document}}</h3>
+        </ion-item>
+
+
+        <ion-list-header *ngIf="authorization.vehicle">
+          <span ion-text color="primary">
+            {{'literals.vehicle' | trans}}
+          </span>
+        </ion-list-header>
+        <ion-item *ngIf="authorization.vehicle">
+          <ion-thumbnail item-left>
+            <img [src]="authorization.vehicle.image_url" alt="authorization.vehicle avatar image">
+          </ion-thumbnail>
+          <h2 color="primary">{{authorization.vehicle?.name}}</h2>
+          <h3 color="primary">{{authorization.vehicle?.document}}</h3>
+        </ion-item>
+
+      </ion-list>
+    </ion-card>
   </div>
 
 
@@ -46,7 +112,7 @@
         </ion-avatar>
         <span *ngIf="person">
           <b>{{'literals.'+type | trans }}</b>
-          <span>{{person.name}}</span>
+          <span ion-text color="primary">{{person.name}}</span>
         </span>
         <ion-icon item-end name="arrow-dropdown"></ion-icon>
       </button>
@@ -59,12 +125,12 @@
           <img [src]="authorization.vehicle.image_url" *ngIf="authorization.vehicle && authorization.vehicle.image_url">
         </ion-avatar>
         <span *ngIf="authorization.vehicle">
-          <span>{{authorization.vehicle.name}}</span>
+          <span ion-text color="primary">{{authorization.vehicle.name}}</span>
         </span>
         <ion-icon item-end name="arrow-dropdown"></ion-icon>
       </button>
 
-      <!-- <button ion-item (click)="selectPet()">
+      <!-- <button ion-item (click)="selectPet()"> ion-text color="primary"
         <h2 *ngIf="!authorization.pet">
           {{'literals.select' | trans }} {{ 'literals.pet' | trans }}
         </h2>
@@ -94,6 +160,7 @@
 
     </ion-list>
   </div>
+
 </ion-content>
 <ion-footer>
   <ion-toolbar *ngIf="editor">
