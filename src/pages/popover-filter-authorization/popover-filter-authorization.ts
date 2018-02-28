@@ -9,8 +9,8 @@ import moment from 'moment';
 export class PopoverFilterAuthorizationPage {
   filters = {
     active: true,
-    start: moment().startOf('day').subtract(1, 'day').format('YYYY-MM-DD'),
-    end: moment().startOf('day').add(1, 'day').format('YYYY-MM-DD'),
+    start: moment().startOf('week').format('YYYY-MM-DD'),
+    end: moment().endOf('week').format('YYYY-MM-DD'),
   }
   constructor(public viewCtrl: ViewController, public navParams: NavParams) {
   }

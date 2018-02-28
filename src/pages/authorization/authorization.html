@@ -4,15 +4,101 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>{{'literals.authorization' | trans }} {{authorization?.reference}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="editor = !editor" *ngIf="authorization.id">
+        <ion-icon [name]="editor ? 'remove' : 'create'"></ion-icon>
+      </button>
+
+      <button ion-button icon-only (click)="print()" *ngIf="authorization.id">
+        <ion-icon name="print"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content>
-  <ion-list-header text-center>
-    {{ authorization.reference }}
-  </ion-list-header>
-  <ion-list>
+  <div *ngIf="!editor">
+    <ion-list-header text-center>
+      {{ authorization.reference }}
+    </ion-list-header>
+    <ion-list>
 
-  </ion-list>
+    </ion-list>
+  </div>
+
+
+
+  <div *ngIf="editor">
+    <ion-list>
+
+      <ion-item>
+        <ion-label stacked>{{'literals.reference' | trans }}</ion-label>
+        <ion-input [(ngModel)]="authorization.reference" [placeholder]="'__.dejar vacia para automatico' | trans "></ion-input>
+      </ion-item>
+
+      <button ion-item (click)="selectPerson()">
+        <h2 *ngIf="!person">
+          {{'literals.select' | trans }} {{ 'literals.person' | trans }}
+        </h2>
+        <ion-avatar item-left *ngIf="person">
+          <img [src]="person.image_url" alt="" *ngIf="person && person.image_url">
+        </ion-avatar>
+        <span *ngIf="person">
+          <b>{{'literals.'+type | trans }}</b>
+          <span>{{person.name}}</span>
+        </span>
+        <ion-icon item-end name="arrow-dropdown"></ion-icon>
+      </button>
+
+      <button ion-item (click)="selectVehicle()">
+        <h2 *ngIf="!authorization.vehicle">
+          {{'literals.select' | trans }} {{ 'literals.vehicle' | trans }}
+        </h2>
+        <ion-avatar item-left *ngIf="authorization.vehicle">
+          <img [src]="authorization.vehicle.image_url" *ngIf="authorization.vehicle && authorization.vehicle.image_url">
+        </ion-avatar>
+        <span *ngIf="authorization.vehicle">
+          <span>{{authorization.vehicle.name}}</span>
+        </span>
+        <ion-icon item-end name="arrow-dropdown"></ion-icon>
+      </button>
+
+      <!-- <button ion-item (click)="selectPet()">
+        <h2 *ngIf="!authorization.pet">
+          {{'literals.select' | trans }} {{ 'literals.pet' | trans }}
+        </h2>
+        <ion-avatar item-left>
+          <img [src]="authorization.pet.image_url" *ngIf="authorization.pet && authorization.pet.image_url">
+        </ion-avatar>
+        <span *ngIf="authorization.pet">
+          <span>{{authorization.pet.name}}</span>
+        </span>
+        <ion-icon item-end name="arrow-dropdown"></ion-icon>
+      </button> -->
+
+      <ion-item>
+        <ion-label stacked>{{'literals.start_date' | trans }}</ion-label>
+        <ion-datetime pickerFormat="YYYY MMM DD hh mm a" displayFormat="MMM D, YYYY h:mm a" [(ngModel)]="authorization._start" (ionChange)="calculateDate('start')"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>{{'literals.end_date' | trans }}</ion-label>
+        <ion-datetime pickerFormat="YYYY MMM DD hh mm a" displayFormat="MMM D, YYYY h:mm a" [(ngModel)]="authorization._end" (ionChange)="calculateDate('end')"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>{{'literals.description' | trans }}</ion-label>
+        <ion-textarea [(ngModel)]="authorization.description" rows="5"></ion-textarea>
+      </ion-item>
+
+    </ion-list>
+  </div>
 </ion-content>
+<ion-footer>
+  <ion-toolbar *ngIf="editor">
+    <button ion-button block (click)="save()" [disabled]="loading || !canSave()">
+      {{'crud.save' | trans }}
+    </button>
+  </ion-toolbar>
+</ion-footer>

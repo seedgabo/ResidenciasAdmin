@@ -30,6 +30,22 @@ export class AuthorizationsPage {
   }
 
   search(val) {
+    if (val != "") {
+      this.filters = {
+        start: null,
+        end: null,
+        active: false,
+      }
+
+    }
+    else {
+      this.filters = {
+        start: null,
+        end: null,
+        active: true,
+      }
+
+    }
     this.refresher._top = "50px"
     this.refresher.state = "refreshing"
     this.refresher._beginRefresh()
@@ -95,14 +111,14 @@ export class AuthorizationsPage {
   }
 
   view(auth) {
-    this.modal.create("AuthorizationPage", { print: false }).present();
+    this.navCtrl.push("AuthorizationPage", { print: false, authorization: auth });
   }
 
   authCreator(auth = null) {
-    this.modal.create("AuthorizationCreatorPage", { authorization: auth }).present();
+    this.navCtrl.push("AuthorizationPage", { editor: true, authorization: auth });
   }
 
   print(auth) {
-    this.modal.create("AuthorizationPage", { print: true }).present();
+    this.navCtrl.push("AuthorizationPage", { print: true, authorization: auth });
   }
 }
