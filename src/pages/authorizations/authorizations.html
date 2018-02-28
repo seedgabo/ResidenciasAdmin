@@ -21,7 +21,7 @@
   </ion-refresher>
   <ion-list>
     <button ion-item *ngFor="let auth of authorizations.data" (click)="actions(auth)">
-      <ion-icon item-left name="ios-timer" [color]="auth.is_active?'secondary':'danger'"></ion-icon>
+      <ion-icon item-left name="ios-timer" [color]="auth.isActive?'secondary':'danger'"></ion-icon>
       <h2 text-center> # {{ auth.reference }}</h2>
       <h3 *ngIf="auth.vehicle">
         {{ 'literals.vehicle' | trans }}: {{ auth.vehicle.plate }}

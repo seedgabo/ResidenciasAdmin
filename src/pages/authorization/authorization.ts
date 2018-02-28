@@ -80,6 +80,7 @@ export class AuthorizationPage {
   canSave() {
     return this.authorization.start_at &&
       this.authorization.end_at &&
+      this.authorization.end_at > this.authorization.start_at &&
       this.authorization.description.length > 3
       && (
         this.authorization.visitor ||
@@ -165,8 +166,8 @@ export class AuthorizationPage {
     var data = {
       id: this.authorization.id,
       reference: this.authorization.reference,
-      start_at: this.authorization.start_at.format("YYYY-MM-DD HH:mm:ss"),
-      end_at: this.authorization.end_at.format("YYYY-MM-DD HH:mm:ss"),
+      start_at: this.authorization.start_at.local().format("YYYY-MM-DD HH:mm:ss"),
+      end_at: this.authorization.end_at.local().format("YYYY-MM-DD HH:mm:ss"),
       vehicle_id: this.authorization.vehicle_id,
       pet_id: this.authorization.pet_id,
       visitor_id: this.authorization.visitor_id,

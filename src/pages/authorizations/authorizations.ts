@@ -53,7 +53,7 @@ export class AuthorizationsPage {
 
   getAuthorizations(refresher = null) {
     this.loading = true
-    var filter = "?paginate=150&append[]=isActive&append[]=entity&with[]=creator&with[]=user&with[]=visitor&with[]=vehicle&with[]=pet&with[]=worker&"
+    var filter = "?paginate=150&append[]=isActive&append[]=entity&with[]=creator&with[]=user&with[]=visitor&with[]=vehicle&with[]=pet&with[]=worker&order[start_at]=desc&"
     if (this.filters.start)
       filter += `whereDategte[start_at]=${moment(this.filters.start).format('YYYY-MM-DD HH:mm:ss')}&`
     if (this.filters.end)
