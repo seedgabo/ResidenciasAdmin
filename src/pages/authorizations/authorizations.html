@@ -21,8 +21,11 @@
   </ion-refresher>
   <ion-list>
     <button ion-item *ngFor="let auth of authorizations.data" (click)="actions(auth)">
-      <ion-icon item-left name="ios-timer" [color]="auth.isActive?'secondary':'danger'"></ion-icon>
-      <h2 text-center> # {{ auth.reference }}</h2>
+      <h2 text-center> # {{ auth.reference }}
+        <small ion-text [color]="auth.isActive ? 'secondary':'danger'" float-right>
+          {{ (auth.isActive ? 'literals.active':'literals.inactive' ) | trans }}
+        </small>
+      </h2>
       <h3 *ngIf="auth.vehicle">
         {{ 'literals.vehicle' | trans }}: {{ auth.vehicle.plate }}
       </h3>
@@ -41,10 +44,14 @@
       <h4> {{ 'literals.creator' | trans }}: {{ auth.creator?.name }} </h4>
 
       <p text-wrap text-right>
-        {{'__.date start' | trans }}: {{ auth.start_at | amCalendar}}
+        <small>
+          {{'__.date start' | trans }}: {{ auth.start_at | amLocale:'es-us' | amCalendar}}
+        </small>
       </p>
       <p text-wrap text-right>
-        {{'__.date end' | trans }}: {{ auth.end_at | amCalendar}}
+        <small>
+          {{'__.date end' | trans }}: {{ auth.end_at | amLocale:'es-us' | amCalendar}}
+        </small>
       </p>
     </button>
   </ion-list>

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Refresher, ActionSheetController, PopoverController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Refresher, ActionSheetController, PopoverController, ModalController, Content, AlertController } from 'ionic-angular';
 import { Api } from '../../providers/api';
 import moment from 'moment';
 moment.locale('es-us')
@@ -10,6 +10,7 @@ moment.locale('es-us')
 })
 export class AuthorizationsPage {
   @ViewChild(Refresher) refresher: Refresher;
+  @ViewChild(Content) content: Content;
 
   authorizations = { data: [] };
   filters = {
@@ -19,10 +20,11 @@ export class AuthorizationsPage {
   }
   query = "";
   loading = false
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public actionsheet: ActionSheetController, public popover: PopoverController, public modal: ModalController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public actionsheet: ActionSheetController, public popover: PopoverController, public modal: ModalController, public alert: AlertController) {
   }
 
   ionViewDidEnter() {
+    this.content.resize()
     this.refresher._top = "50px"
     this.refresher.state = "refreshing"
     this.refresher._beginRefresh()
@@ -46,9 +48,7 @@ export class AuthorizationsPage {
       }
 
     }
-    this.refresher._top = "50px"
-    this.refresher.state = "refreshing"
-    this.refresher._beginRefresh()
+    this.getAuthorizations()
   }
 
   getAuthorizations(refresher = null) {
@@ -92,20 +92,30 @@ export class AuthorizationsPage {
   actions(auth) {
     var buttons = [
       {
-        text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.authorization'),
-        handler: () => { this.view(auth) }
+        text: this.api.trans('literals.view_resource'),
+        handler: () => { this.view(auth) },
+        icon: 'eye'
       },
       {
-        text: this.api.trans('crud.edit') + " " + this.api.trans('literals.authorization'),
-        handler: () => { this.authCreator(auth) }
+        text: this.api.trans('crud.edit'),
+        handler: () => { this.authCreator(auth) },
+        icon: 'create'
       },
       {
-        text: this.api.trans('literals.print') + " " + this.api.trans('literals.authorization'),
-        handler: () => { this.print(auth) }
+        text: this.api.trans('literals.print'),
+        handler: () => { this.print(auth) },
+        icon: 'print'
       },
+      {
+        text: this.api.trans('crud.delete'),
+        handler: () => { this.delete(auth) },
+        cssClass: 'icon-danger',
+        role: 'destructive',
+        icon: 'trash'
+      }
     ]
     this.actionsheet.create({
-      title: this.api.trans('literals.authorization') + " " + auth.reference,
+      title: this.api.trans('literals.authorization') + "  #" + auth.reference,
       buttons: buttons
     }).present()
   }
@@ -116,6 +126,27 @@ export class AuthorizationsPage {
 
   authCreator(auth = null) {
     this.navCtrl.push("AuthorizationPage", { editor: true, authorization: auth });
+  }
+
+  delete(auth) {
+    this.alert.create({
+      title: this.api.trans('__.are you sure'),
+      buttons: [{
+        text: this.api.trans("crud.delete"),
+        handler: () => {
+          this.loading = true
+          this.api.delete('authorizations/' + auth.id)
+            .then((resp) => {
+              this.getAuthorizations()
+              this.loading = false
+            })
+            .catch((error) => {
+              this.api.Error(error)
+              this.loading = false
+            })
+        }
+      }, this.api.trans('crud.cancel')]
+    }).present()
   }
 
   print(auth) {

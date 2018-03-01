@@ -1,9 +1,10 @@
 import { Printer } from '@ionic-native/printer';
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, ViewController, ModalController, ToastController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, Platform, ViewController, ModalController, ToastController, Content } from 'ionic-angular';
 import { Api } from '../../providers/api';
 import { VehicleFinderPage } from '../vehicle-finder/vehicle-finder';
 import moment from 'moment'
+import { SettingProvider } from '../../providers/setting/setting';
 moment.locale('es');
 @IonicPage()
 @Component({
@@ -11,6 +12,7 @@ moment.locale('es');
   templateUrl: 'authorization.html',
 })
 export class AuthorizationPage {
+  @ViewChild(Content) content: Content;
   authorization: any = {
     description: "",
     _start: moment().add(1, 'day').startOf('day').format("YYYY-MM-DDTHH:mm"),
@@ -23,7 +25,7 @@ export class AuthorizationPage {
   loading = false;
   person = null;
   type = null;
-  constructor(public navCtrl: NavController, public viewCtrl: ViewController, public navParams: NavParams, public modal: ModalController, public api: Api, public printer: Printer, public platform: Platform, public toast: ToastController) {
+  constructor(public navCtrl: NavController, public viewCtrl: ViewController, public navParams: NavParams, public modal: ModalController, public setting: SettingProvider, public api: Api, public printer: Printer, public platform: Platform, public toast: ToastController) {
     if (this.navParams.get('authorization')) {
       this.authorization = this.navParams.get('authorization')
       this.authorization.start_at = moment(this.authorization.start_at)
@@ -59,18 +61,29 @@ export class AuthorizationPage {
       this.editor = true;
   }
 
+  ionViewDidLoad() {
+    if (this.printing) {
+      this.print()
+    }
+  }
 
   print() {
+    this.printing = true
+    this.content.resize()
     setTimeout(() => {
       if (!this.platform.is('mobile')) {
         return this.toPrintCallback();
       };
       this.printer.print(document.getElementById('toPrint'))
+      this.printing = false
+      this.content.resize()
     }, 1200);
   }
 
   toPrintCallback() {
     window.print();
+    this.printing = false
+    this.content.resize()
   }
 
   close() {
@@ -95,7 +108,7 @@ export class AuthorizationPage {
   calculateDate(key = "start") {
     this.authorization[key + "_at"] = moment(this.authorization["_" + key])
     if (key == 'start' && this.authorization.end == null) {
-      this.authorization._end = this.authorization[key + "_at"].clone().add(1, 'day').format("YYYY-MM-DDTHH:mm")
+      this.authorization._end = this.authorization[key + "_at"].clone().add(1, 'day').local().format("YYYY-MM-DDTHH:mm")
     }
   }
 

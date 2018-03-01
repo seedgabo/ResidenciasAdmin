@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header *ngIf="!printing">
   <ion-navbar color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
@@ -18,7 +18,8 @@
 
 
 <ion-content>
-  <div *ngIf="!editor">
+
+  <div *ngIf="!printing && !editor">
     <ion-list-header text-center>
       {{'literals.authorization' | trans }} # {{ authorization.reference }}
     </ion-list-header>
@@ -93,9 +94,7 @@
     </ion-card>
   </div>
 
-
-
-  <div *ngIf="editor">
+  <div *ngIf="!printing && editor">
     <ion-list>
 
       <ion-item>
@@ -161,9 +160,123 @@
     </ion-list>
   </div>
 
+  <div *ngIf="printing" class="printable" id="toPrint">
+
+    <!-- Header -->
+    <ion-grid>
+      <ion-row>
+        <ion-col col-4>
+          <img [src]="api.url + 'img/logo.png'" style="max-height:100px;">
+        </ion-col>
+        <ion-col col-4>
+          <h2 text-center>
+            {{api.settings.name}}
+            <br> {{api.settings.document}}
+          </h2>
+        </ion-col>
+        <ion-col col-4 text-right>
+          <h4>
+            {{'literals.authorization' | trans}} # {{ authorization.reference }}
+          </h4>
+          <h6>
+            {{'__.created_at' | trans}} {{authorization.created_at | amDateFormat:'DD/MM/Y hh:mm a'}}
+          </h6>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- Information Table -->
+    <table class="info-table">
+
+      <tr text-center>
+        <td text-center class="description">{{authorization.description}}</td>
+      </tr>
+
+      <tr *ngIf="authorization.vehicle">
+        <td>
+          <b>
+            {{'literals.vehicle' | trans }}
+          </b>
+          <span>
+            {{authorization.vehicle.name}}
+          </span>
+          <span>{{authorization.vehicle.plate}}</span>
+        </td>
+      </tr>
+
+      <tr *ngIf="authorization.visitor">
+        <td>
+          <b>
+            {{'literals.visitor' | trans }}
+          </b>
+          <span>
+            {{authorization.visitor.name}}
+          </span>
+          <span>{{authorization.visitor.document}}</span>
+        </td>
+      </tr>
+
+      <tr *ngIf="authorization.worker">
+        <td>
+          <b>
+            {{'literals.worker' | trans }}
+          </b>
+          <span>
+            {{authorization.worker.name}}
+          </span>
+          <span>{{authorization.worker.document}}</span>
+        </td>
+      </tr>
+
+      <tr *ngIf="authorization.user">
+        <td>
+          <b>
+            {{'literals.user' | trans }}
+          </b>
+          <span>
+            {{authorization.user.name}}
+          </span>
+          <span>{{authorization.user.document}}</span>
+        </td>
+      </tr>
+
+      <tr *ngIf="authorization.pet">
+        <td>
+          <b>
+            {{'literals.pet' | trans }}
+          </b>
+          <span>
+            {{authorization.pet.name}}
+          </span>
+          <span>{{authorization.pet.document}}</span>
+        </td>
+      </tr>
+
+    </table>
+
+    <!-- footer -->
+    <ion-grid>
+      <ion-row>
+        <ion-col col-8 text-left>
+          <b>{{'literals.observations' | trans }}</b>
+          <div class="note-box"></div>
+        </ion-col>
+        <ion-col col-4 text-center align-self-end>
+          <div *ngIf="setting.show_signature" class="signature"></div>
+          <span *ngIf="setting.show_signature">
+            {{'literals.signature' | trans }}
+          </span>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+
+  </div>
 </ion-content>
-<ion-footer>
-  <ion-toolbar *ngIf="editor">
+
+<ion-footer *ngIf="!printing && editor">
+  <ion-toolbar>
     <button ion-button block (click)="save()" [disabled]="loading || !canSave()">
       {{'crud.save' | trans }}
     </button>
