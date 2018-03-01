@@ -46,9 +46,9 @@ export class SellerReportsPage {
     }
 
     this.invoices.forEach((inv) => {
-        if (inv.status !== 'cancelled')
-          total += Number(inv.total);
-      })
+      if (inv.status !== 'cancelled')
+        total += Number(inv.total);
+    })
 
     this.total = total;
   }
@@ -129,45 +129,45 @@ export class SellerReportsPage {
   }
 
   cancelInvoice(invoice) {
-    this .api .alert .create({
-        title: this .api .trans("__.nota de cancelacion"),
-        inputs: [
-          {
-            label: this .api .trans('literals.note'),
-            placeholder: this
-              .api
-              .trans('literals.note'),
-            name: "note",
-            type: "text"
-          }
-        ],
-        buttons: [
-          {
-            text: this
-              .api
-              .trans("literals.proccess"),
-            handler: (data) => {
-              if (data.note) {
-                this
-                  .api
-                  .put(`invoices/${invoice.id}`, {
-                    status: "cancelled",
-                    note: data.note
-                  })
-                  .then((resp) => {
-                    invoice.status = "cancelled"
-                    invoice.note = data.note
-                  })
-                  .catch((err) => {
-                    this
-                      .api
-                      .Error(err);
-                  })
-              }
+    this.api.alert.create({
+      title: this.api.trans("__.nota de cancelacion"),
+      inputs: [
+        {
+          label: this.api.trans('literals.note'),
+          placeholder: this
+            .api
+            .trans('literals.note'),
+          name: "note",
+          type: "text"
+        }
+      ],
+      buttons: [
+        {
+          text: this
+            .api
+            .trans("literals.proccess"),
+          handler: (data) => {
+            if (data.note) {
+              this
+                .api
+                .put(`invoices/${invoice.id}`, {
+                  status: "cancelled",
+                  note: data.note
+                })
+                .then((resp) => {
+                  invoice.status = "cancelled"
+                  invoice.note = data.note
+                })
+                .catch((err) => {
+                  this
+                    .api
+                    .Error(err);
+                })
             }
           }
-        ]
-      })
+        }
+      ]
+    })
       .present()
   }
 
@@ -197,41 +197,41 @@ export class SellerReportsPage {
       .present()
   }
 
-  sync_invoices_with_server (date = null){
-    if(date == null){
+  sync_invoices_with_server(date = null) {
+    if (date == null) {
       date = moment()
-    }else{
+    } else {
       date = moment(date)
     }
-    this.api.get(`invoices?where[created_by]=${this.api.user.id}&whereDategte[created_at]=${date.format("YYYY-MM-DD")}&whereDatelew[created_at]=${date.clone().add(1,'day').format("YYYY-MM-DD")}&with[]=user.residence&with[]=worker.residence&with[]=visitor.residence&with[]=items&with[]=receipts&append[]=person`)
-    .then((resp:any)=>{
+    this.api.get(`invoices?where[created_by]=${this.api.user.id}&whereDategte[created_at]=${date.format("YYYY-MM-DD")}&whereDatelew[created_at]=${date.clone().add(1, 'day').format("YYYY-MM-DD")}&with[]=user.residence&with[]=worker.residence&with[]=visitor.residence&with[]=items&with[]=receipts&append[]=person`)
+      .then((resp: any) => {
         var toSave = []
-        var data  =  resp.map((d)=>{
+        var data = resp.map((d) => {
           var item = d
           var itemTosave = {
-            invoice:d,
+            invoice: d,
             user: d.person,
             receipt: null
           }
-          if(item.receipts.length > 0) {
-            item.receipt =  item.receipts[0]
+          if (item.receipts.length > 0) {
+            item.receipt = item.receipts[0]
             itemTosave.receipt = item.receipts[0]
           }
           toSave[toSave.length] = itemTosave
           return item
         })
-        console.log("syncing invoices:",data)
+        console.log("syncing invoices:", data)
         this.invoices = data;
         this.api.storage.set('invoices_history', toSave);
-        this.navCtrl.pop().then(()=>{
-          this.navCtrl.push("SellerReportsPage", { invoices: data})
+        this.navCtrl.pop().then(() => {
+          this.navCtrl.push("SellerReportsPage", { invoices: data })
         })
       })
-      .catch((err)=>{
+      .catch((err) => {
         this.api.Error(err)
         this.loading = false;
       })
-  } 
+  }
 
   more() {
     var sheet = this.actionsheet.create({
@@ -263,7 +263,7 @@ export class SellerReportsPage {
     }
 
     sheet.addButton({
-      text: this.api.trans('crud.clear') + " " + this.api.trans('literals.invoices') + (this.api.modules.receipts ? " & " + this.api.trans('literals.receipts'): ""),
+      text: this.api.trans('crud.clear') + " " + this.api.trans('literals.invoices') + (this.api.modules.receipts ? " & " + this.api.trans('literals.receipts') : ""),
       icon: "remove-circle",
       role: 'destructive',
       cssClass: "icon-danger",
@@ -273,11 +273,11 @@ export class SellerReportsPage {
     })
 
     sheet.addButton({
-      text: this.api.trans('literals.sync') + " " + this.api.trans('literals.invoices') + " " + this.api.trans('literals.with') + " " +  this.api.trans('literals.server'),
+      text: this.api.trans('literals.sync') + " " + this.api.trans('literals.invoices') + " " + this.api.trans('literals.with') + " " + this.api.trans('literals.server'),
       icon: "sync",
       role: 'sync',
       cssClass: "icon-secondary",
-      handler: ()=>{
+      handler: () => {
         this.sync_invoices_with_server()
       }
     })
@@ -293,7 +293,7 @@ export class SellerReportsPage {
   findByDate(date, to = null, only_user = true) {
     this.loading = true;
     var start = moment(date).format("YYYY-MM-DD")
-    var end = (to ? moment(to).add(1, 'day').format('YYYY-MM-DD') : moment(date).add(1, 'day').format("YYYY-MM-DD"))
+    var end = (to ? moment(to).add(1, 'day').local().format('YYYY-MM-DD') : moment(date).add(1, 'day').local().format("YYYY-MM-DD"))
     this.api.get(`invoices?where[created_by]=${this.api.user.id}&&whereDategte[created_at]=${start}&whereDatelwe[created_at]=${end}&with[]=user&with[]=visitor&with[]=worker&with[]=items`)
       .then((data: any) => {
         console.log(data);

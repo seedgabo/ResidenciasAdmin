@@ -46,7 +46,7 @@ export class ZonesAdminPage {
 
   getReservations(zone) {
     this.filter
-    var filter = `&where[zone_id]=${zone.id}&whereDateGte[start]=${moment(this.filters.start).startOf('day').format('YYYY-MM-DD HH:mm:ss')}&whereDatelwe[end]=${moment(this.filters.end).startOf('day').add(1, 'day').format('YYYY-MM-DD HH:mm:ss')}&paginate=150&order[start]=asc`
+    var filter = `&where[zone_id]=${zone.id}&whereDateGte[start]=${moment(this.filters.start).startOf('day').local().format('YYYY-MM-DD HH:mm:ss')}&whereDatelwe[end]=${moment(this.filters.end).startOf('day').add(1, 'day').local().format('YYYY-MM-DD HH:mm:ss')}&paginate=150&order[start]=asc`
     if (this.filters.user_id)
       filter += `&where[user_id]=${this.filters.user_id}`
     this.api.get('reservations?with[]=zone&with[]=user&with[]=user.residence' + filter)

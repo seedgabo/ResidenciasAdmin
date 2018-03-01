@@ -177,8 +177,8 @@ export class ReceiptsReportPage {
 
   findByDate(date, to = null, only_user = true) {
     this.loading = true;
-    var start = moment(date).format("YYYY-MM-DD")
-    var end = (to ? moment(to).add(1, 'day').format('YYYY-MM-DD') : moment(date).add(1, 'day').format("YYYY-MM-DD"))
+    var start = moment(date).local().format("YYYY-MM-DD")
+    var end = (to ? moment(to).add(1, 'day').local().format('YYYY-MM-DD') : moment(date).add(1, 'day').local().format("YYYY-MM-DD"))
     this.api.get(`receipts?where[created_by]=${this.api.user.id}&&whereDategte[created_at]=${start}&whereDatelwe[created_at]=${end}&attr[person_assoc]=person`)
       .then((data: any) => {
         console.log(data);
