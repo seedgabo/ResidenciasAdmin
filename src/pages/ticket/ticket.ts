@@ -47,8 +47,8 @@ export class TicketPage {
       })
   }
 
-  downloadFile(file=null) {
-    if(!file){
+  downloadFile(file = null) {
+    if (!file) {
       file = this.ticket.file
     }
     var element = document.createElement('a');
@@ -74,7 +74,7 @@ export class TicketPage {
         this.loading = false;
         this.new_comment.text = "";
         this.adding = false;
-        if(this.file){
+        if (this.file) {
           this.uploadFile(data.id)
         }
       })
@@ -147,17 +147,25 @@ export class TicketPage {
     xhr.open('POST', this.api.url + "api/files/upload/comment/" + id, true);
     formData.append('file', this.file, this.file_name);
 
+    var toast = this.api.toast.create({
+      message: this.api.trans("__.uploading file"),
+      position: 'top',
+    })
+    toast.present()
     xhr.onload = () => {
       if (xhr.status === 200) {
-        this.api.toast.create({
-          message: this.api.trans("literals.file") + " " + this.api.trans("crud.updated"),
-          duration: 1500,
-          showCloseButton: true,
-        }).present();
+        toast.dismiss().then(() => {
+          this.api.toast.create({
+            message: this.api.trans("literals.file") + " " + this.api.trans("crud.updated"),
+            duration: 1500,
+            showCloseButton: true,
+          }).present();
+        });
         this.file = null
         this.file_name = null
         this.getTicket()
       } else {
+        toast.dismiss()
         this.api.Error({ status: xhr.status })
       }
     };
