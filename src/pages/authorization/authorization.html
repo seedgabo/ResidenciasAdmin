@@ -257,11 +257,11 @@
     <!-- footer -->
     <ion-grid>
       <ion-row>
-        <ion-col col-8 text-left>
+        <ion-col col-8 col-offset-2 text-left>
           <b>{{'literals.observations' | trans }}</b>
           <div class="note-box"></div>
         </ion-col>
-        <ion-col col-4 text-center align-self-end>
+        <ion-col col-12 text-center align-self-end>
           <div *ngIf="setting.show_signature" class="signature"></div>
           <span *ngIf="setting.show_signature">
             {{'literals.signature' | trans }}
