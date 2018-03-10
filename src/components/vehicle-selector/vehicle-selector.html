@@ -1,0 +1,13 @@
+<button ion-item (click)="selectVehicle()" padding-vertical>
+  <ion-spinner item-left *ngIf="!ready"></ion-spinner>
+  <h2 *ngIf="!vehicle">
+    {{'literals.select' | trans }} {{'literals.vehicle' | trans }}
+  </h2>
+  <ion-avatar item-left *ngIf="vehicle && vehicle.image_url">
+    <img [src]="vehicle.image_url" alt="">
+  </ion-avatar>
+  <span *ngIf="vehicle">
+    <span>{{vehicle.name}}</span>
+  </span>
+  <ion-icon item-end name="arrow-dropdown"></ion-icon>
+</button>

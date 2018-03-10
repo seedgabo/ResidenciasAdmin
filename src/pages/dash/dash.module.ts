@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { DashPage } from './dash';
 import { IonicPage } from 'ionic-angular/navigation/ionic-page';
+import { ComponentsModule } from '../../components/components.module';
 @IonicPage()
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { IonicPage } from 'ionic-angular/navigation/ionic-page';
   ],
   imports: [
     IonicPageModule.forChild(DashPage),
-    PipesModule
+    PipesModule,
+    ComponentsModule
   ],
 })
 export class DashPageModule { }
