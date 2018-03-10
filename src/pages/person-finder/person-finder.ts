@@ -245,6 +245,8 @@ export class PersonFinderPage {
     });
   }
 
+
+
   save() {
     this.viewctrl.dismiss({ selecteds: this.selecteds })
     this.clear()
@@ -252,7 +254,7 @@ export class PersonFinderPage {
 
   clear() {
     this.selecteds.forEach((element) => {
-      this.api.objects[element.type + 's']._selected = undefined;
+      delete (element.person._selected)
     })
   }
 
@@ -260,7 +262,6 @@ export class PersonFinderPage {
     if (this.multiple) {
       person._selected ? person._selected = false : person._selected = true
       this.selecteds[this.selecteds.length] = { type: type, person: person }
-      console.log(person)
     }
     else {
       this.viewctrl.dismiss({ person: person, type: type });

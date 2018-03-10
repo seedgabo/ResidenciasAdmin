@@ -99,7 +99,30 @@
 
       </ion-list-header>
       <button ion-item (click)="select(person,'user')" *ngFor="let person of results.users.data">
-        <ion-checkbox *ngIf="multiple" [checked]="person._selected"></ion-checkbox>
+        <ion-avatar item-left>
+          <img [src]="person.image_url" alt="image person" onerror="this.style.display = 'none'">
+        </ion-avatar>
+        <ion-label>
+          {{person.name}} {{person.residence?.name}}
+        </ion-label>
+        <ion-icon item-right *ngIf="multiple" [name]="person._selected ? 'checkbox-outline' : 'square-outline'"></ion-icon>
+
+      </button>
+    </ion-list>
+
+    <ion-list *ngIf="findFor.visitors && results.visitors && results.visitors.data">
+      <ion-list-header>
+        {{'literals.visitors'|trans}}
+        <button ion-button icon-only small item-right clear (click)="selectAll('visitor')">
+          <ion-icon name="checkbox-outline"></ion-icon>
+        </button>
+        <button ion-button icon-only small item-right clear (click)="deselectAll('visitor')">
+          <ion-icon name="square-outline"></ion-icon>
+        </button>
+      </ion-list-header>
+
+      <button ion-item (click)="select(person,'visitor')" *ngFor="let person of results.visitors.data">
+        <ion-icon small color="primary" item-left *ngIf="multiple" [name]="person._selected ? 'checkbox-outline' : 'square-outline'"></ion-icon>
         <ion-avatar item-left>
           <img [src]="person.image_url" alt="image person" onerror="this.style.display = 'none'">
         </ion-avatar>

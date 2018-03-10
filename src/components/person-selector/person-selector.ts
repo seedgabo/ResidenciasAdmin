@@ -1,4 +1,4 @@
-import { Component, forwardRef, EventEmitter, Output, Input, SimpleChanges, OnChanges, SimpleChange } from '@angular/core';
+import { Component, forwardRef, EventEmitter, Output, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { ModalController } from 'ionic-angular';
 import { Api } from '../../providers/api';
@@ -16,6 +16,7 @@ export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
 })
 export class PersonSelectorComponent implements ControlValueAccessor, OnChanges {
   public person;
+  public selecteds = [];
   public ready = false
   @Output() type: string;
   @Input() multiple: boolean;
@@ -33,9 +34,17 @@ export class PersonSelectorComponent implements ControlValueAccessor, OnChanges 
       visitors: (this.visitors == '' || this.visitors ? true : false),
       users: (this.users == '' || this.users ? true : false),
       workers: (this.workers == '' || this.workers ? true : false),
+      multiple: this.multiple,
     });
     modal.present()
     modal.onDidDismiss((data) => {
+      if (this.multiple) {
+        this.selecteds = data.selecteds
+        this.onChange.emit(data.selecteds)
+        this.onChangeCallback(data.selecteds);
+        return
+      }
+
       if (data && data.person && data.type) {
         this.person = data.person;
         this.type = data.type
@@ -52,13 +61,13 @@ export class PersonSelectorComponent implements ControlValueAccessor, OnChanges 
   ngOnChanges(changes: SimpleChanges) {
     var promises: Array<any> = []
     this.api.ready.then(() => {
-      if (changes.users.currentValue == '' || changes.users.currentValue) {
+      if (changes.users && (changes.users.currentValue == '' || changes.users.currentValue)) {
         promises.push(this.api.load('users'))
       }
-      if (changes.visitors.currentValue == '' || changes.visitors.currentValue) {
+      if (changes.visitors && (changes.visitors.currentValue == '' || changes.visitors.currentValue)) {
         promises.push(this.api.load('visitors'))
       }
-      if (changes.workers.currentValue == '' || changes.workers.currentValue) {
+      if (changes.workers && (changes.workers.currentValue == '' || changes.workers.currentValue)) {
         promises.push(this.api.load('workers'))
       }
       this.ready = false
@@ -76,20 +85,32 @@ export class PersonSelectorComponent implements ControlValueAccessor, OnChanges 
 
   //get accessor
   get value(): any {
+    if (this.multiple) {
+      return this.selecteds
+    }
     return this.person;
   };
 
   //set accessor including call the onchange callback
   set value(v: any) {
-    if (v !== this.person) {
-      this.person = v;
+    if (!this.multiple) {
+      if (v !== this.person) {
+        this.person = v;
+        this.onChangeCallback(v);
+      }
+    } else if (v && v.length) {
+      this.selecteds = v
       this.onChangeCallback(v);
     }
   }
 
   //From ControlValueAccessor interface
   writeValue(value: any) {
-    this.person = value;
+    if (this.multiple) {
+      this.person = value;
+    } else if (value && value.length) {
+      this.selecteds = value;
+    }
   }
   //From ControlValueAccessor interface
   registerOnChange(fn: any) {
