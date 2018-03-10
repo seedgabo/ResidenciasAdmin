@@ -1,4 +1,3 @@
-import { VehicleFinderPage } from './../vehicle-finder/vehicle-finder';
 import { ModalController } from 'ionic-angular';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
