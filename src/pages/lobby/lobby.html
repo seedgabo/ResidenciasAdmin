@@ -8,9 +8,6 @@
       <button ion-button icon-only clear (click)="findPerson()">
         <ion-icon name="search"></ion-icon>
       </button>
-      <button ion-button clear icon-only (click)="more($event)">
-        <ion-icon name="more"></ion-icon>
-      </button>
     </ion-buttons>
   </ion-navbar>
 
@@ -36,8 +33,8 @@
             <ion-icon name="people" item-left></ion-icon>
             {{'literals.visitors' | trans }}
             <ion-note color="favorite">{{ api.objects.visitors?.length}}</ion-note>
-            <button ion-fab mini item-right color="primary" (click)="visitorModal()">
-              <ion-icon name="add"></ion-icon>
+            <button ion-button clear icon-only item-right color="primary" (click)="gotoVisitors()">
+              <ion-icon name="search"></ion-icon>
             </button>
           </ion-list-header>
           <ion-list>
@@ -72,13 +69,19 @@
             </button>
           </ion-list-header>
           <ion-list>
+
             <button ion-item *ngFor="let visit of visits" (click)="actions_visit(visit)">
               <ion-avatar item-left>
                 <img [src]="visit.visitor?.image_url" alt="">
               </ion-avatar>
-              <h2>{{visit.visitor?.name}}</h2>
+              <h2 text-wrap>{{visit.visitor?.name}}
+                <span *ngIf="visit.visitors_count> 1">
+                  {{ '__.and others' | trans }} {{visit.visitors_count - 1}}
+                </span>
+              </h2>
               <p>{{visit.visitor?.document}}</p>
               <span>{{visit.visitor?.residence?.name}}</span>
+
               <span>
                 <span ion-text [color]="visit.status == 'approved' ? 'secondary' : visit.status == 'rejected' ? 'danger' : visit.status == 'waiting for confirmation' ? 'warning' : visit.status == 'departured' ? 'neutral' : ''">
                   {{ 'literals.'+ visit.status | trans }}
@@ -190,7 +193,7 @@
 
       </ion-col>
 
-      <!-- PRe Approved -->
+      <!-- Pre Approved -->
       <ion-col col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3>
         <ion-card>
           <ion-list-header text-capitalize> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-list-header>
@@ -249,4 +252,32 @@
 
     </ion-row>
   </ion-grid>
+
+  <ion-fab bottom right #fab>
+    <button ion-fab>
+      <ion-icon name="add"></ion-icon>
+    </button>
+    <ion-fab-list side="top">
+      <div class="fab-label-button">
+        <button ion-fab color="secondary" (click)="visitorModal(); fab.close()">
+          <ion-icon name="person"></ion-icon>
+        </button>
+        <div class="label">{{'crud.add' | trans }} {{'literals.person' | trans }}</div>
+      </div>
+
+      <div class="fab-label-button">
+        <button ion-fab color="primary" (click)="visitModal(); fab.close()">
+          <ion-icon name="contacts"></ion-icon>
+        </button>
+        <div class="label">{{'crud.add' | trans }} {{'literals.visit' | trans }}</div>
+      </div>
+
+      <div class="fab-label-button">
+        <button ion-fab color="favorite" (click)="addDelivery(); fab.close()">
+          <ion-icon class="fa fa-truck"></ion-icon>
+        </button>
+        <div class="label">{{'crud.add' | trans }} {{'literals.delivery' | trans }}</div>
+      </div>
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>

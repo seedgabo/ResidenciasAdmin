@@ -165,38 +165,11 @@ export class LobbyPage {
     this.navCtrl.push('HomePage');
   }
 
-  more(v) {
-    var buttons = [
-      {
-        text: this.api.trans('crud.add') + " " + this.api.trans('literals.person'),
-        icon: 'person-add',
-        cssClass: 'icon-primary',
-        handler: () => { this.visitorModal() }
-      },
-      {
-        text: this.api.trans('crud.add') + " " + this.api.trans('literals.delivery'),
-        icon: 'basket',
-        cssClass: 'icon-favorite',
-        handler: () => {
-          var modal = this.modal.create("CreateVisitGuestPage", {})
-          modal.present();
-          modal.onWillDismiss(() => {
-          })
-        }
-      }
-    ];
-    if (this.person) {
-      buttons.push({
-        text: this.api.trans('literals.configure') + " " + this.api.trans('literals.visit'),
-        icon: 'more',
-        cssClass: 'icon-secondary',
-        handler: () => { this.visitModal(this.person) }
-      })
-    }
-    this.actionsheet.create({
-      title: this.api.trans('literals.actions'),
-      buttons: buttons
-    }).present();
+  addDelivery() {
+    var modal = this.modal.create("CreateVisitGuestPage", {})
+    modal.present();
+    modal.onWillDismiss(() => {
+    })
   }
 
   private done() {
@@ -299,7 +272,7 @@ export class LobbyPage {
     });
   }
 
-  actions_visit(visit) {
+  actions_visit(visit, i) {
     var buttons: any = [{
       text: this.api.trans('crud.add') + " " + this.api.trans('literals.note'),
       icon: 'create',
@@ -326,7 +299,7 @@ export class LobbyPage {
       text: this.api.trans('literals.view_resource') + " " + this.api.trans('literals.visit'),
       icon: 'eye',
       // cssClass: 'icon-danger',
-      handler: () => { this.viewVisit(visit) }
+      handler: () => { this.viewVisit(visit, i) }
     });
     if (visit.visitor)
       buttons.push({
@@ -417,16 +390,18 @@ export class LobbyPage {
 
   }
 
-  viewVisit(visit) {
+  viewVisit(visit, index = null) {
     this.navCtrl.push(VisitPage, {
       visit: visit,
       done: () => {
         this.api.put("visits/" + visit.id, { status: "departured" })
           .then(() => {
             visit.status = "departured";
-
           })
           .catch(console.error)
+        if (index != null)
+          this.dismissPreApproved(visit, index)
+
       }
     });
   }

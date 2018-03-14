@@ -32,7 +32,7 @@
       <ion-avatar item-left>
         <img *ngIf="visit.visitor && visit.visitor.image_url" [src]="visit.visitor.image_url" onerror="this.style.display = 'none'">
       </ion-avatar>
-      <h2 *ngIf=" visit.visitor ">
+      <h2 *ngIf="visit.visitor">
         {{visit.visitor.name }}
         <small>({{visit.visitor.document}})</small>
         <br>

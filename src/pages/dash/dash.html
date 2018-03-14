@@ -18,6 +18,7 @@
 
 
 <ion-content no-margin no-padding>
+
   <div *ngIf="sliders && sliders.length > 0">
     <ion-slides style="height:200px" pager paginationType="bullets" autoplay="3000" loop="true">
       <ion-slide *ngFor="let slider of sliders">
@@ -29,6 +30,7 @@
       </ion-slide>
     </ion-slides>
   </div>
+
   <ion-grid no-margin>
     <ion-row align-items-center justify-content-center>
 
@@ -139,4 +141,5 @@
 
     </ion-row>
   </ion-grid>
+
 </ion-content>

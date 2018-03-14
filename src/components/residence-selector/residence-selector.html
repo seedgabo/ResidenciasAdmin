@@ -1,0 +1,13 @@
+<button ion-item (click)="selectResidence()" padding-vertical>
+  <ion-spinner item-left *ngIf="!ready"></ion-spinner>
+  <h2 *ngIf="!residence">
+    {{'literals.select' | trans }} {{'literals.residence' | trans }}
+  </h2>
+  <ion-avatar item-left *ngIf="residence && residence.image_url">
+    <img [src]="residence.image_url" alt="">
+  </ion-avatar>
+  <span *ngIf="residence">
+    <span>{{residence.name}}</span>
+  </span>
+  <ion-icon item-end name="arrow-dropdown"></ion-icon>
+</button>

@@ -13,7 +13,8 @@ import { IonicPage } from 'ionic-angular/navigation/ionic-page';
 export class DashPage {
   loading = false;
   sliders = [];
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public popover:PopoverMenu) {
+  residence;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public popover: PopoverMenu) {
   }
 
   ionViewDidLoad() {
@@ -27,7 +28,7 @@ export class DashPage {
         .catch(console.error)
     });
   }
-  
+
   openPage(page) {
     this.navCtrl.push(page);
   }
@@ -41,6 +42,6 @@ export class DashPage {
         handler: () => { this.openPage("VehiclesPage") }
       }]
     }
-    this.popover.create(data).present({ev: ev})
+    this.popover.create(data).present({ ev: ev })
   }
 }

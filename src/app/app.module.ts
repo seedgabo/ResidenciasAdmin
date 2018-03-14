@@ -24,6 +24,7 @@ import { ProductSearchPage } from '../pages/product-search/product-search';
 import { SettingProvider } from '../providers/setting/setting';
 import { NewtonProvider } from '../providers/newton/newton';
 import { PopoverMenu } from './../pages/popover/popover-menu';
+import { ComponentsModule } from '../components/components.module';
 @NgModule({
   declarations: [
     MyApp,
@@ -39,7 +40,8 @@ import { PopoverMenu } from './../pages/popover/popover-menu';
     HttpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    PipesModule
+    PipesModule,
+    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
