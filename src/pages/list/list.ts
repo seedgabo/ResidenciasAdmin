@@ -188,7 +188,7 @@ export class ListPage {
 
 
   approve(visit) {
-    this.api.put('visits/' + visit.id, { status: 'approved', departured_at: moment.utc().toString() })
+    this.api.put('visits/' + visit.id, { status: 'approved', departured_at: moment().local().toString() })
       .then((data) => {
         console.log(data);
         visit.status = 'approved';
@@ -199,7 +199,7 @@ export class ListPage {
   }
 
   departure(visit) {
-    this.api.put('visits/' + visit.id, { status: 'departured', departured_at: moment.utc().toString() })
+    this.api.put('visits/' + visit.id, { status: 'departured', departured_at: moment().local().toString() })
       .then((data) => {
         console.log(data);
         visit.status = 'departured';
