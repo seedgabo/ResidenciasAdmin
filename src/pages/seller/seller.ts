@@ -123,8 +123,9 @@ export class SellerPage {
     modal.onDidDismiss((data, role) => {
       if (role !== 'cancel') {
         console.log(data, role);
-        this._addItem({ 
-          concept: data.name, amount: data.price, quantity: 1, category_id: data.category_id })
+        this._addItem({
+          concept: data.name, amount: data.price, quantity: 1, category_id: data.category_id
+        })
       }
     });
   }
@@ -285,15 +286,11 @@ export class SellerPage {
       .then((data: any) => {
         receipt.id = data.id
         this.saveReceipt(receipt);
-        this
-          .navCtrl
-          .push("PrintReceiptPage", { receipt: receipt });
+        this .navCtrl .push("PrintReceiptPage", { receipt: receipt });
         this.clear();
       })
       .catch((err) => {
-        this
-          .api
-          .Error(err)
+        this .api .Error(err)
       })
   }
 
@@ -321,65 +318,47 @@ export class SellerPage {
           inputs: [
             {
               type: 'radio',
-              label: this
-                .api
-                .trans('literals.cash'),
+              label: this.api.trans('literals.cash'),
               value: 'cash',
               checked: true
             }, {
               type: 'radio',
-              label: this
-                .api
-                .trans('literals.debit_card'),
+              label: this.api.trans('literals.debit_card'),
               value: 'debit card'
             }, {
               type: 'radio',
-              label: this
-                .api
-                .trans('literals.credit_card'),
+              label: this.api.trans('literals.credit_card'),
               value: 'credit card'
             }, {
               type: 'radio',
-              label: this
-                .api
-                .trans('literals.transfer'),
+              label: this.api.trans('literals.transfer'),
               value: 'transfer'
             }, {
               type: 'radio',
-              label: this
-                .api
-                .trans('literals.deposit'),
+              label: this.api.trans('literals.deposit'),
               value: 'deposit'
             }, {
               type: 'radio',
-              label: this
-                .api
-                .trans('literals.detailed'),
+              label: this.api.trans('literals.detailed'),
               value: 'detailed'
             }
           ],
           buttons: [
             {
               role: 'destructive',
-              text: this
-                .api
-                .trans('crud.cancel'),
+              text: this.api.trans('crud.cancel'),
               handler: (data) => {
                 reject();
               }
             }, {
               role: 'accept',
-              text: this
-                .api
-                .trans('crud.add'),
+              text: this.api.trans('crud.add'),
               handler: (data) => {
                 console.log("transaction", data);
                 if (data == 'detailed') {
-                  var modal = this
-                    .modal
-                    .create("PaymentsPage", {
-                      total: this.total()
-                    })
+                  var modal = this.modal.create("PaymentsPage", {
+                    total: this.total()
+                  })
                   modal.present()
                   modal.onDidDismiss((data, role) => {
                     if (role == 'accept') {
@@ -405,37 +384,25 @@ export class SellerPage {
       this
         .alert
         .create({
-          title: this
-            .api
-            .trans('crud.add') + " " + this
-              .api
-              .trans('literals.note'),
+          title: this.api.trans('crud.add') + " " + this.api.trans('literals.note'),
           inputs: [
             {
               type: 'text',
-              label: this
-                .api
-                .trans('literals.note'),
-              value: note
-                ? note
-                : '',
+              label: this.api.trans('literals.note'),
+              value: note ? note : '',
               name: 'note'
             }
           ],
           buttons: [
             {
               role: 'destructive',
-              text: this
-                .api
-                .trans('crud.cancel'),
+              text: this.api.trans('crud.cancel'),
               handler: (data) => {
                 reject();
               }
             }, {
               role: 'accept',
-              text: this
-                .api
-                .trans('crud.add'),
+              text: this.api.trans('crud.add'),
               handler: (data) => {
                 console.log("note", data.note);
                 resolve(data.note);
@@ -463,9 +430,7 @@ export class SellerPage {
   sendPush(message, user_id = this.charge.user_id) {
     if (!user_id)
       return;
-    this
-      .api
-      .post('push/' + user_id + '/notification', { message: message })
+    this .api .post('push/' + user_id + '/notification', { message: message })
       .then(() => { })
       .catch((error) => {
         console.error(error);
@@ -512,10 +477,10 @@ export class SellerPage {
       }
     })
 
-    this .actionsheet .create({
-        title: this.api.trans('__.¿Que desea hacer?'),
-        buttons: buttons
-      })
+    this.actionsheet.create({
+      title: this.api.trans('__.¿Que desea hacer?'),
+      buttons: buttons
+    })
       .present();
   }
 
@@ -535,19 +500,19 @@ export class SellerPage {
     })
   }
 
-  gotoCashDesks(){
+  gotoCashDesks() {
     this.navCtrl.push("CashDesksPage")
   }
 
   gotoReports(ev) {
-    this .navCtrl .push("SellerReportsPage", {
-        invoices: this.invoices_history .map((data) => {
-            var invoice = Object.assign({}, data.invoice)
-            invoice.receipt = data.receipt
-            invoice.person = data.user
-            return invoice
-          })
+    this.navCtrl.push("SellerReportsPage", {
+      invoices: this.invoices_history.map((data) => {
+        var invoice = Object.assign({}, data.invoice)
+        invoice.receipt = data.receipt
+        invoice.person = data.user
+        return invoice
       })
+    })
   }
 
   gotoReceipts(ev) {
