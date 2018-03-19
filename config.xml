@@ -85,6 +85,9 @@
         <preference name="CodePushDeploymentKey" value="FlsEbm-qIxMj1Z5Q9q37IcGeUsI7c0e4a0a6-2be5-4604-bcc1-c0b2c1387dd2" />
     </platform>
     <allow-navigation href="http://192.168.1.109:8100" />
+    <engine name="android" spec="6.4.0" />
+    <engine name="ios" spec="^4.4.0" />
+    <engine name="browser" spec="5.0.3" />
     <plugin name="cordova-plugin-console" spec="^1.1.0" />
     <plugin name="cordova-plugin-device" spec="^1.1.7" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.1.0" />
@@ -104,7 +107,4 @@
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-zip" spec="^3.1.0" />
     <plugin name="cordova-plugin-file" spec="^5.0.0" />
-    <engine name="android" spec="6.4.0" />
-    <engine name="ios" spec="^4.4.0" />
-    <engine name="browser" spec="5.0.3" />
 </widget>
