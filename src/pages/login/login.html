@@ -1,43 +1,114 @@
 <ion-content padding class="container">
-  <div text-center>
-    <img *ngIf="!api.url" src="./assets/logo-completo.png" style="height:85px">
-    <img *ngIf="api.url" [src]="api.url+ 'img/logo.png'" style="height:85px">
-  </div>
-  <div *ngIf="!api.url">
-    <input class="code" type="text" [(ngModel)]="code" placeholder="CODIGO" (input)="verifyCode()">
-  </div>
+  <ion-card padding>
+    <div text-left *ngIf="!select">
+      <img src="./assets/logo-completo.png" style="height:80px; width:auto;" *ngIf="!api.url">
+      <img [src]="api.url + 'img/logo.png'" style="height:80px; width:auto;" *ngIf="api.url">
+    </div>
 
-  <ion-list *ngIf="api.url">
-    <!-- <ion-item>
-            <ion-label floating>Url</ion-label>
-            <ion-input type="url" [(ngModel)]="api.url"></ion-input>
-        </ion-item> -->
-    <ion-item>
-      <ion-label floating>Email</ion-label>
-      <ion-input type="email" [(ngModel)]="api.username"> </ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Contraseña</ion-label>
-      <ion-input type="password" [(ngModel)]="api.password"></ion-input>
-    </ion-item>
+    <div *ngIf="!api.url">
+      <div *ngIf="logins.length === 0">
+        <!-- <input (keydown)="keyDownFunction($event)" class="code" type="email" [(ngModel)]="api.username" placeholder="Email" (blur)="getLogins()"> -->
+        <ion-item>
+          <ion-label floating>
+            <ion-icon name="person" item-left></ion-icon>
+            Email
+          </ion-label>
+          <ion-input (keydown)="keyDownFunction($event)" type="email" [(ngModel)]="api.username" (blur)="getLogins()"></ion-input>
+        </ion-item>
+        <button color="primary" ion-button class="pull-right">{{'__.siguiente' | trans }}</button>
 
-    <button style="margin-top:15px" full large ion-button color="secondary" icon-right (click)="login()">
-      Iniciar Sesion
-      <ion-icon name="log-in"></ion-icon>
-    </button>
-    <button *ngIf="!preconfigured" ion-button clear full large color="primary" (click)="goBack()">
-      Volver
-    </button>
+        <ion-grid>
+          <ion-row responsive-sm>
+            <ion-col>
+              <button hideWhen="android,ios" class="facebook-button" block ion-button icon-left (click)="loginWithFacebook()">
+                <ion-icon name="logo-facebook"></ion-icon>
+                {{api.trans('literals.login_with_Facebook')}}
+              </button>
+            </ion-col>
+            <ion-col>
+              <button hideWhen="android,ios" class="google-button" block ion-button icon-left (click)="loginWithGoogle()">
+                <ion-icon name="logo-googleplus"></ion-icon>
+                {{api.trans('literals.login_with_Google')}}
+              </button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
 
-    <!--<button style="margin-top:15px" full ion-button icon-left (click)="loginWithFacebook()">
-      <ion-icon name="logo-facebook"></ion-icon>
-      Iniciar sesion con Facebook
-  </button>
+      </div>
+    </div>
+    <ion-list *ngIf="api.url && !smarter">
+      <div *ngIf="!forgot">
 
-    <button style="margin-top:15px" full ion-button color="danger" icon-left (click)="loginWithGoogle()">
-    <ion-icon name="logo-googleplus"></ion-icon>
-    Iniciar sesion con Google
-  </button>-->
+        <ion-item>
+          <ion-label floating>Email</ion-label>
+          <ion-input type="email" [(ngModel)]="api.username"> </ion-input>
+        </ion-item>
 
-  </ion-list>
+        <ion-item>
+          <ion-label floating>Contraseña</ion-label>
+          <ion-input type="password" [(ngModel)]="api.password"></ion-input>
+        </ion-item>
+
+        <button class="login-button" block large ion-button color="secondary" icon-right (click)="login()">
+          Iniciar Sesion
+          <ion-icon name="log-in"></ion-icon>
+        </button>
+
+        <ion-grid *ngIf="!smarter">
+          <ion-row responsive-sm>
+            <ion-col>
+              <button hideWhen="android,ios" class="facebook-button" block ion-button icon-left (click)="loginWithFacebook(false)">
+                <ion-icon name="logo-facebook"></ion-icon>
+                {{api.trans('literals.login_with_Facebook')}}
+              </button>
+            </ion-col>
+            <ion-col>
+              <button hideWhen="android,ios" class="google-button" block ion-button icon-left (click)="loginWithGoogle(false)">
+                <ion-icon name="logo-googleplus"></ion-icon>
+                {{api.trans('literals.login_with_Google')}}
+              </button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+
+
+        <button block clear ion-button color="dark" (click)="forgot=true">
+          Olvido su contraseña
+        </button>
+
+        <button block clear ion-button color="danger" (click)="goBack()" *ngIf="!preconfigured">
+          Volver
+        </button>
+      </div>
+      <div *ngIf="forgot">
+        <ion-item>
+          <ion-label floating>Email</ion-label>
+          <ion-input type="email" [(ngModel)]="api.username"> </ion-input>
+        </ion-item>
+        <button style="margin-top:15px" block large ion-button color="secondary" (click)="recover(api.username)">
+          Recuperar
+        </button>
+        <button ion-button clear block color="dark" (click)="forgot=false">
+          Volver al login
+        </button>
+
+      </div>
+    </ion-list>
+  </ion-card>
+
+  <ion-card *ngIf="select">
+    <ion-list [@list]="logins.length">
+      <ion-item-divider class="item" @item (click)="selectServer(user)" *ngFor="let user of logins">
+        <ion-thumbnail item-left>
+          <img [src]="user.url + 'img/icon.png'" onerror="this.style.display == 'none'">
+        </ion-thumbnail>
+        <h2>{{user.site}}</h2>
+        <h3>{{user.name}}</h3>
+        <!-- <ion-note>{{user.name}}</ion-note> -->
+        <ion-icon item-right large color="primary" name="log-in"></ion-icon>
+      </ion-item-divider>
+    </ion-list>
+  </ion-card>
 </ion-content>
+

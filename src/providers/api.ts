@@ -83,8 +83,10 @@ export class Api {
               this.storage.get('residence').then(residence => {
                 this.residence = residence
                 this.storage.get('langs').then(langs => {
+                  if(langs)
                   this.langs = langs;
                   this.storage.get('user').then(user => {
+                    console.log(user)
                     this.user = user
                     this.resolve(user);
                   });
@@ -511,7 +513,9 @@ export class Api {
   }
 
   trans(value, args = null) {
-    if (!this.langs) return value;
+    if (!this.langs) return value
+                       .replace("__.", "")
+                       .replace("literals.", "");
     var base, trans;
     var splits = value.split('.');
     if (splits.length == 2) {

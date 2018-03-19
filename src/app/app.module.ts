@@ -17,14 +17,40 @@ import { Printer } from '@ionic-native/printer';
 import { Vibration } from '@ionic-native/vibration';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { AppMinimize } from '@ionic-native/app-minimize';
-
+import { Facebook } from "@ionic-native/facebook";
+import { GooglePlus } from "@ionic-native/google-plus";
 
 import { VisitPage } from "../pages/visit/visit";
 import { ProductSearchPage } from '../pages/product-search/product-search';
 import { SettingProvider } from '../providers/setting/setting';
 import { NewtonProvider } from '../providers/newton/newton';
 import { PopoverMenu } from './../pages/popover/popover-menu';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+
+import {
+  SocialLoginModule,
+  AuthServiceConfig,
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from "angular5-social-login";
 import { ComponentsModule } from '../components/components.module';
+// Configs
+export function getAuthServiceConfigs() {
+  let config = new AuthServiceConfig([
+    {
+      id: FacebookLoginProvider.PROVIDER_ID,
+      provider: new FacebookLoginProvider("796212907168839")
+    },
+    {
+      id: GoogleLoginProvider.PROVIDER_ID,
+      provider: new GoogleLoginProvider(
+        "425679220353-u39prig4hkrjg592lnppmnbfj6lvi4qk.apps.googleusercontent.com"
+      )
+    }
+  ]);
+  return config;
+}
+
 @NgModule({
   declarations: [
     MyApp,
@@ -33,15 +59,17 @@ import { ComponentsModule } from '../components/components.module';
     VisitCreatorPage,
     PanicPage,
     ProductSearchPage,
-    VehicleFinderPage,
+    VehicleFinderPage
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     PipesModule,
-    ComponentsModule
+    ComponentsModule,
+    SocialLoginModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -51,7 +79,7 @@ import { ComponentsModule } from '../components/components.module';
     VisitCreatorPage,
     PanicPage,
     ProductSearchPage,
-    VehicleFinderPage,
+    VehicleFinderPage
   ],
   providers: [
     StatusBar,
@@ -61,11 +89,14 @@ import { ComponentsModule } from '../components/components.module';
     Vibration,
     BackgroundMode,
     AppMinimize,
+    Facebook,
+    GooglePlus,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
+    { provide: AuthServiceConfig, useFactory: getAuthServiceConfigs },
     Api,
     SettingProvider,
     NewtonProvider,
     PopoverMenu
   ]
 })
-export class AppModule { }
+export class AppModule {}
