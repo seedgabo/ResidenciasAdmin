@@ -3,23 +3,38 @@ page-login {
     background-image: url(../assets/background.jpg);
     background-size: cover;
   }
-  ion-item {
-    background-color: transparent !important;
-  }
-  ion-input,
-  ion-label {
-    // color: white;
-  }
-  input.code {
-    display: block;
-    margin: 2em auto;
-    padding: 0.5em 0.25em;
-    border: none;
-    border-radius: 0.2em;
-    font-size: 1.5em;
-    text-align: center;
-    box-shadow: 0 0 1em 0.25em rgba(0, 0, 0, 0.2);
-  }
+ion-item {
+  background-color: transparent !important;
+}
+
+.login-button {
+  margin-top: 10px;
+}
+
+.facebook-button {
+  margin-top: 10px;
+  background-color: #3b5998;
+  color: white;
+}
+
+.google-button {
+  margin-top: 10px;
+  background-color: #d62d20;
+  color: white;
+}
+
+input.code {
+  width: 100%;
+  display: block;
+  margin: 2em auto;
+  padding: 0.5em 0.25em;
+  border: none;
+  border-radius: 0.2em;
+  font-size: 1.5em;
+  text-align: center;
+  box-shadow: 0 0 0.25em 0.25em rgba(0, 0, 0, 0.1);
+}
+
 }
 
 @keyframes flash {

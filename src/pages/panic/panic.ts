@@ -12,17 +12,17 @@ export class PanicPage {
   user: any = {};
   residence: any = {};
   location = null;
-  datetime = moment.utc();
+  datetime = moment().local();
   prepareData = (data) => {
     console.log(data);
     this.user = data.user;
     this.residence = data.residence;
     this.location = data.location;
     if (data.datetime)
-      this.datetime = moment.utc(data.date);
+      this.datetime = moment(data.date).local();
 
     if (!this.datetime.isValid())
-      this.datetime = moment.utc();
+      this.datetime = moment().local();
   }
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewctrl: ViewController, public events: Events) {
@@ -34,10 +34,10 @@ export class PanicPage {
       this.location = this.navParams.get('location');
 
     if (this.navParams.get('datetime'))
-      this.datetime = moment.utc(this.navParams.get('datetime').date);
+      this.datetime = moment().local(this.navParams.get('datetime').date);
 
     if (!this.datetime.isValid())
-      this.datetime = moment.utc();
+      this.datetime = moment().local();
 
 
   }

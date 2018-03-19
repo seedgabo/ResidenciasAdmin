@@ -12,6 +12,16 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+@media (min-width: 600px) {
+  .container {
+    .scroll-content {
+      text-align: center;
+      padding-left: 15% !important;
+      padding-right: 15% !important;
+    }
+  }
+}
+
 .visit-approved {
   .alert-title,
   .alert-button {
