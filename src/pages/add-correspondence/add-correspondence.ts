@@ -1,10 +1,15 @@
-import { Api } from './../../providers/api';
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { Api } from "./../../providers/api";
+import { Component } from "@angular/core";
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  ModalController
+} from "ionic-angular";
 @IonicPage()
 @Component({
-  selector: 'page-add-correspondence',
-  templateUrl: 'add-correspondence.html',
+  selector: "page-add-correspondence",
+  templateUrl: "add-correspondence.html"
 })
 export class AddCorrespondencePage {
   correspondence = {
@@ -13,42 +18,49 @@ export class AddCorrespondencePage {
     receptor_id: null,
     item: "",
     quantity: 1,
-    status: 'arrival'
-  }
+    status: "arrival"
+  };
   person = null;
-  residences = []
+  residences = [];
   loading = false;
-  multiple = true
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modal: ModalController, public api: Api) {
-    if (navParams.get('multiple') !== undefined)
-      this.multiple = navParams.get('multiple')
+  multiple = true;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public modal: ModalController,
+    public api: Api
+  ) {
+    if (navParams.get("multiple") !== undefined)
+      this.multiple = navParams.get("multiple");
   }
 
-  ionViewDidLoad() {
-
-  }
+  ionViewDidLoad() {}
 
   canSave() {
     var condition = false;
     if (this.multiple) {
-      condition = (this.residences.length > 0)
+      condition = this.residences.length > 0;
     } else {
-      condition = (this.correspondence.user_id && this.correspondence.residence_id)
+      condition =
+        this.correspondence.user_id && this.correspondence.residence_id;
     }
-    return condition &&
-      this.correspondence.item.length > 2 && this.correspondence.quantity > 0
-      && this.correspondence.status.length > 0;
+    return (
+      condition &&
+      this.correspondence.item.length > 2 &&
+      this.correspondence.quantity > 0 &&
+      this.correspondence.status.length > 0
+    );
   }
 
   selectPerson() {
-    var modal = this.modal.create('PersonFinderPage', {
+    var modal = this.modal.create("PersonFinderPage", {
       users: true,
       visitors: false,
       workers: false,
       multiple: this.multiple
-    })
+    });
     modal.present();
-    modal.onDidDismiss((data) => {
+    modal.onDidDismiss(data => {
       if (!data) {
         this.person = null;
         this.correspondence.user_id = null;
@@ -59,41 +71,41 @@ export class AddCorrespondencePage {
       this.correspondence.user_id = data.person.id;
       this.correspondence.residence_id = data.person.residence_id;
       this.person = data.person;
-    })
+    });
   }
 
   selectResidences() {
-    var modal = this.modal.create('ResidenceFinderPage', {
+    var modal = this.modal.create("ResidenceFinderPage", {
       multiple: this.multiple,
       selecteds: this.residences
-    })
+    });
     modal.present();
-    modal.onDidDismiss((data) => {
+    modal.onDidDismiss(data => {
       if (data && data.selecteds) {
         this.residences = data.selecteds;
       }
-    })
+    });
   }
-
 
   save() {
     if (this.multiple) {
-      return this.saveMultiple()
+      return this.saveMultiple();
     }
     this.loading = true;
     if (!this.correspondence.receptor_id) {
       this.correspondence.receptor_id = this.api.user.id;
     }
-    this.api.post('correspondences', this.correspondence)
-      .then((data) => {
-        this.close()
+    this.api
+      .post("correspondences", this.correspondence)
+      .then(data => {
+        this.close();
         this.loading = false;
       })
-      .catch((err) => {
+      .catch(err => {
         this.loading = false;
         this.api.Error(err);
-        console.error(err)
-      })
+        console.error(err);
+      });
   }
 
   saveMultiple() {
@@ -102,30 +114,30 @@ export class AddCorrespondencePage {
       receptor_id: this.correspondence.receptor_id,
       item: this.correspondence.item,
       quantity: this.correspondence.quantity,
-      status: 'arrival',
+      status: "arrival",
       residences_ids: []
-    }
-    this.residences.forEach((res) => {
-      data.residences_ids[data.residences_ids.length] = res.id
-    })
+    };
+    this.residences.forEach(res => {
+      data.residences_ids[data.residences_ids.length] = res.id;
+    });
     if (!data.receptor_id) {
       data.receptor_id = this.api.user.id;
     }
 
-    this.api.post('correspondences/multiple', data)
-      .then((data) => {
-        this.close()
+    this.api
+      .post("correspondences/multiple", data)
+      .then(data => {
+        this.close();
         this.loading = false;
       })
-      .catch((err) => {
+      .catch(err => {
         this.loading = false;
         this.api.Error(err);
-        console.error(err)
-      })
+        console.error(err);
+      });
   }
 
   close() {
     this.navCtrl.pop();
   }
-
 }
