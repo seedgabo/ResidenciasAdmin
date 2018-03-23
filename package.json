@@ -10,10 +10,13 @@
     "lint": "ionic-app-scripts lint",
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve",
-    "release-android": "ionic cordova build android --prod && code-push release-cordova residencias-admin android -d Android --mandatory",
-    "release-ios": "ionic cordova build ios --prod && code-push release-cordova residencias-admin ios -d Ios --mandatory",
+    "release-android":
+      "ionic cordova build android --prod && code-push release-cordova residencias-admin android -d Android --mandatory",
+    "release-ios":
+      "ionic cordova build ios --prod && code-push release-cordova residencias-admin ios -d Ios --mandatory",
     "release-web": "ionic cordova build browser --prod",
-    "build-android": "cordova build android --release -- --password=gab23gab --keystore='./residenciasAdmin.jks' --storePassword=gab23gab --alias=residenciasAdmin"
+    "build-android":
+      "cordova build android --release -- --password=gab23gab --keystore='./residenciasAdmin.jks' --storePassword=gab23gab --alias=residenciasAdmin"
   },
   "dependencies": {
     "@angular/animations": "^5.2.9",
@@ -90,8 +93,10 @@
       "cordova-plugin-vibration": {},
       "cordova-plugin-nativeaudio": {},
       "cordova-plugin-camera": {
-        "CAMERA_USAGE_DESCRIPTION": "Residentes online quiere usar tu camara para compartir tus fotos de  activos",
-        "PHOTOLIBRARY_USAGE_DESCRIPTION": "Residentes online quiere usar tu camara para compartir tus fotos de  activos"
+        "CAMERA_USAGE_DESCRIPTION":
+          "Residentes online quiere usar tu camara para compartir tus fotos de  activos",
+        "PHOTOLIBRARY_USAGE_DESCRIPTION":
+          "Residentes online quiere usar tu camara para compartir tus fotos de  activos"
       },
       "cordova-plugin-background-mode": {},
       "cordova-plugin-appminimize": {},
@@ -166,20 +171,14 @@
         "cordova-plugin-vibration": {},
         "cordova-plugin-nativeaudio": {},
         "cordova-plugin-camera": {
-          "CAMERA_USAGE_DESCRIPTION": "Residentes online quiere usar tu camara para compartir tus fotos de  activos",
-          "PHOTOLIBRARY_USAGE_DESCRIPTION": "Residentes online quiere usar tu camara para compartir tus fotos de  activos"
+          "CAMERA_USAGE_DESCRIPTION":
+            "Residentes online quiere usar tu camara para compartir tus fotos de  activos",
+          "PHOTOLIBRARY_USAGE_DESCRIPTION":
+            "Residentes online quiere usar tu camara para compartir tus fotos de  activos"
         }
       },
-      "platforms": [
-        "android",
-        "browser",
-        "ios"
-      ]
+      "platforms": ["android", "browser", "ios"]
     },
-    "platforms": [
-      "android",
-      "ios",
-      "browser"
-    ]
+    "platforms": ["android", "ios", "browser"]
   }
 }
