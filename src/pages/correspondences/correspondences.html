@@ -17,7 +17,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="container">
   <ion-searchbar [(ngModel)]="query" (ionInput)="filter()" [debounce]="750"></ion-searchbar>
   <ion-refresher (ionRefresh)="getCorrespondences($event)">
     <ion-refresher-content></ion-refresher-content>

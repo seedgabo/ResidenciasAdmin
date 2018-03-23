@@ -1,3 +1,10 @@
 page-correspondences {
-
+  ion-badge {
+    &.delivered {
+      background-color: color($colors, "secondary") !important;
+    }
+    &.arrival {
+      background-color: color($colors, "primary") !important;
+    }
+  }
 }
