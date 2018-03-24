@@ -19,42 +19,39 @@
       <ion-label floating>{{'literals.name' | trans}}</ion-label>
       <ion-input (ionChange)="dirty=true" type="text" [(ngModel)]="visitor.name"></ion-input>
     </ion-item>
-    <button ion-item (click)="selectResidence()" padding-vertical>
-      <h2 *ngIf="!residence">
-        {{'literals.select' | trans }} {{'literals.residence' | trans }}
-      </h2>
-      <ion-avatar item-left *ngIf="residence && residence.image_url">
-        <img [src]="residence.image_url" alt="">
-      </ion-avatar>
-      <span *ngIf="residence">
-        <span>{{residence.name}}</span>
-      </span>
-      <ion-icon item-end name="arrow-dropdown"></ion-icon>
-    </button>
+
+    <residence-selector (onChange)="selectResidence(residence)" [(ngModel)]="residence"></residence-selector>
+
+
     <ion-item>
       <ion-label floating>{{'literals.document' | trans }}</ion-label>
       <ion-input (ionChange)="dirty=true" type="number" [(ngModel)]="visitor.document"></ion-input>
     </ion-item>
+
     <ion-item>
-      <ion-label  floating>{{'literals.sex' | trans}}</ion-label>
+      <ion-label floating>{{'literals.sex' | trans}}</ion-label>
       <ion-select (ionChange)="dirty=true" [(ngModel)]="visitor.sex">
         <ion-option value="male">{{'literals.male' | trans}}</ion-option>
         <ion-option value="female">{{'literals.female' | trans}}</ion-option>
       </ion-select>
     </ion-item>
+
     <ion-item>
       <ion-label floating>{{'literals.relationship' | trans }}</ion-label>
       <ion-input (ionChange)="dirty=true" type="text" [(ngModel)]="visitor.relationship"></ion-input>
     </ion-item>
+
     <ion-item>
       <ion-label floating>{{'literals.notes' | trans }}</ion-label>
       <ion-textarea (ionChange)="dirty=true" [(ngModel)]="visitor.notes"></ion-textarea>
     </ion-item>
+
     <ion-item>
       <button ion-button full (click)="selectVehicle()">
         {{ vehicle ? vehicle.plate+ '-' +vehicle.name : ('literals.vehicle' | trans) }}
       </button>
     </ion-item>
+
     <ion-item *ngIf="vehicle">
       <ion-label floating> {{'literals.parking' | trans }} </ion-label>
       <ion-select (ionChange)="dirty=true" [(ngModel)]="parking">
@@ -68,8 +65,8 @@
   <ion-grid>
     <ion-row>
       <ion-col col-12 *ngIf="show_visits_button">
-        <button  [disabled]="!canSave() || loading" ion-button color="secondary" block (click)="saveWithVisit()">{{'crud.save' | trans }} & {{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}</button>
-        <button  *ngIf="!dirty && visitor.id" [disabled]="loading" ion-button color="primary" block (click)="addVisit(visitor)">{{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}</button>
+        <button [disabled]="!canSave() || loading" ion-button color="secondary" block (click)="saveWithVisit()">{{'crud.save' | trans }} & {{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}</button>
+        <button *ngIf="!dirty && visitor.id" [disabled]="loading" ion-button color="primary" block (click)="addVisit(visitor)">{{ 'crud.add' | trans }} {{ 'literals.visit' | trans }}</button>
       </ion-col>
 
       <ion-col>
