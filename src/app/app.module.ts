@@ -26,6 +26,7 @@ import { SettingProvider } from "../providers/setting/setting";
 import { NewtonProvider } from "../providers/newton/newton";
 import { PopoverMenu } from "./../pages/popover/popover-menu";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+declare var window: any;
 
 import {
   SocialLoginModule,
@@ -34,7 +35,6 @@ import {
   FacebookLoginProvider
 } from "angular5-social-login";
 import { ComponentsModule } from "../components/components.module";
-// Configs
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig([
     {
@@ -63,6 +63,11 @@ export class SentryErrorHandler extends IonicErrorHandler {
 
     try {
       if (ENV.mode == "Production") {
+        if (window.user)
+          Raven.setUserContext({
+            email: window.user.email,
+            id: window.user.id
+          });
         Raven.captureException(error.originalError || error);
       }
     } catch (e) {
