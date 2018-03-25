@@ -15,6 +15,9 @@
     "release-web": "ionic cordova build browser --prod",
     "build-android": "cordova build android --release -- --password=gab23gab --keystore='./residenciasAdmin.jks' --storePassword=gab23gab --alias=residenciasAdmin"
   },
+  "config": {
+    "ionic_webpack": "./config/webpack.config.js"
+  },
   "dependencies": {
     "@angular/animations": "^5.2.9",
     "@angular/common": "5.0.3",
