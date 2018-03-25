@@ -62,8 +62,9 @@ export class SentryErrorHandler extends IonicErrorHandler {
     super.handleError(error);
 
     try {
-      if (ENV.mode == "Production")
+      if (ENV.mode == "Production") {
         Raven.captureException(error.originalError || error);
+      }
     } catch (e) {
       console.error(e);
     }
