@@ -54,7 +54,8 @@ export class Api {
     parkings: false,
     vehicles: false,
     correspondences: false,
-    authorizations: false
+    authorizations: false,
+    meetings: false
   };
   storage = {
     ready: () => {
@@ -515,7 +516,8 @@ export class Api {
           parkings: this.modules.parkings,
           vehicles: this.modules.vehicles,
           correspondences: this.modules.correspondences,
-          authorizations: this.modules.authorizations
+          authorizations: this.modules.authorizations,
+          meetings: this.modules.meetings
         };
         return;
       }
@@ -546,6 +548,9 @@ export class Api {
       }
       if (this.roles.collection["Manage authorizations"]) {
         this.permissions.authorizations = this.modules.authorizations;
+      }
+      if (this.roles.collection["Manage meetings"]) {
+        this.permissions.meetings = this.modules.meetings;
       }
     }
   }

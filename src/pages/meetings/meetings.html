@@ -1,0 +1,110 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle icon-only>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{'literals.meetings' | trans }}</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="query" (ionInput)="filter()" [debounce]="300">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="container">
+  <ion-refresher (ionRefresh)="getMeetings($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-card>
+    <ion-list *ngIf="groups.today.length> 0">
+      <ion-list-header>
+        <span color="primary" ion-text>
+          {{'date.today' | trans }}
+        </span>
+      </ion-list-header>
+      <button ion-item (click)="selectMeeting(meeting)" *ngFor="let meeting of groups.today">
+        <h2>{{meeting.subject}}</h2>
+        <h3>{{meeting.start | amCalendar }}</h3>
+        <p text-wrap> {{ meeting.description }} </p>
+        <button ion-button small icon-only clear item-right (click)="$event.stopPropagation();editMeeting(meeting)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+      </button>
+    </ion-list>
+
+    <ion-list *ngIf="groups.tomorrow.length > 0">
+      <ion-list-header>
+        <span color="primary" ion-text>
+          {{'date.tomorrow' | trans }}
+        </span>
+      </ion-list-header>
+      <button ion-item (click)="selectMeeting(meeting)" *ngFor="let meeting of groups.tomorrow">
+        <h2>{{meeting.subject}}</h2>
+        <h3>{{meeting.start | amCalendar }}</h3>
+        <p text-wrap> {{ meeting.description }} </p>
+        <button ion-button small icon-only clear item-right (click)="$event.stopPropagation();editMeeting(meeting)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+      </button>
+    </ion-list>
+
+    <ion-list *ngIf="groups.week.length > 0">
+
+      <ion-list-header>
+        <span color="primary" ion-text>
+          {{'date.this_week' | trans }}
+        </span>
+      </ion-list-header>
+      <button ion-item (click)="selectMeeting(meeting)" *ngFor="let meeting of groups.week">
+        <h2>{{meeting.subject}}</h2>
+        <h3>{{meeting.start | amCalendar }}</h3>
+        <p text-wrap> {{ meeting.description }} </p>
+        <button ion-button small icon-only clear item-right (click)="$event.stopPropagation();editMeeting(meeting)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+      </button>
+    </ion-list>
+
+    <ion-list *ngIf="groups.nextWeek.length > 0">
+
+      <ion-list-header>
+        <span color="primary" ion-text>
+          {{'date.next_week' | trans }}
+        </span>
+      </ion-list-header>
+      <button ion-item (click)="selectMeeting(meeting)" *ngFor="let meeting of groups.nextWeek">
+        <h2>{{meeting.subject}}</h2>
+        <h3>{{meeting.start | amCalendar }}</h3>
+        <p text-wrap> {{ meeting.description }} </p>
+        <button ion-button small icon-only clear item-right (click)="$event.stopPropagation();editMeeting(meeting)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+      </button>
+    </ion-list>
+
+    <ion-list *ngIf="groups.incoming.length > 0">
+
+      <ion-list-header>
+        <span color="primary" ion-text>
+          {{'date.incoming' | trans }}
+        </span>
+      </ion-list-header>
+      <button ion-item (click)="selectMeeting(meeting)" *ngFor="let meeting of groups.incoming">
+        <h2>{{meeting.subject}}</h2>
+        <h3>{{meeting.start | amCalendar }} </h3>
+        <p text-wrap> {{ meeting.description }} </p>
+        <button ion-button small icon-only clear item-right (click)="$event.stopPropagation();editMeeting(meeting)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+      </button>
+
+    </ion-list>
+
+  </ion-card>
+
+  <ion-fab bottom right (click)="createMeeting()">
+    <button ion-fab>
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>

@@ -67,6 +67,12 @@
         {{ api.trans('literals.zones') }}
       </button>
 
+      <button [color]="rootPage == 'MeetingsPage' ?'primary':''" *ngIf="api.permissions.meetings" menuClose ion-item (click)="openPage({component:'MeetingsPage'})">
+        <ion-icon item-left color="neutral" name="people"></ion-icon>
+        {{ api.trans('literals.meetings') }}
+        <ion-badge color="favorite">beta</ion-badge>
+      </button>
+
       <ion-item-divider color="light">
         {{ api.trans('literals.settings') }}
       </ion-item-divider>
