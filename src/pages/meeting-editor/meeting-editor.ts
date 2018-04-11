@@ -11,6 +11,9 @@ export class MeetingEditorPage {
   meeting: any = {
     subject: "",
     start: moment().format("YYYY-MM-DDTHH:mm"),
+    end: moment()
+      .add(2, "hours")
+      .format("YYYY-MM-DDTHH:mm"),
     description: ""
   };
   loading = false;
@@ -21,6 +24,11 @@ export class MeetingEditorPage {
   ) {
     if (this.navParams.get("meeting")) {
       this.meeting = this.navParams.get("meeting");
+      this.meeting.start = moment(this.meeting.start).format(
+        "YYYY-MM-DDTHH:mm"
+      );
+      if (this.meeting.end)
+        this.meeting.end = moment(this.meeting.end).format("YYYY-MM-DDTHH:mm");
     }
   }
 
@@ -44,6 +52,7 @@ export class MeetingEditorPage {
     var data = {
       subject: this.meeting.subject,
       start: this.meeting.start,
+      end: this.meeting.end,
       description: this.meeting.description
     };
 
