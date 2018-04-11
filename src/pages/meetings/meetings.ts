@@ -88,7 +88,7 @@ export class MeetingsPage {
   }
 
   selectMeeting(meeting) {
-    this.navCtrl.push("MeetingPage", { meeting: meeting });
+    this.navCtrl.push("MeetingPage", { meeting: meeting, id: meeting.id });
   }
 
   createMeeting() {

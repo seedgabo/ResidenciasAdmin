@@ -1,18 +1,83 @@
-<!--
-  Generated template for the MeetingPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>Meeting</ion-title>
+  <ion-navbar color="primary">
+    <ion-title>{{'literals.meeting' | trans }} #{{ meeting.id}}</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
-<ion-content padding>
+<ion-content class="container">
+  <ion-grid no-padding no-margin>
+    <ion-row wrap>
+      <ion-col col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-12>
+        <ion-card>
+          <ion-list-header text-center>
+            <h2 ion-text color="primary"> {{ meeting.subject }} </h2>
+          </ion-list-header>
+          <ion-card-content>
+            <p text-justify *ngIf="meeting.description">{{meeting.description}}</p>
+            <h3 text-right>
+              <b>{{'literals.start' | trans}}:</b>
+              {{ meeting.start | amTimeAgo }}
+            </h3>
+            <h3 text-right *ngIf="meeting.end">
+              <b>{{'literals.end' | trans}}"</b>
+              {{meeting.end | amTimeAgo }}
+            </h3>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
 
+      <ion-col col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-12>
+        <ion-card>
+          <ion-list-header>
+            {{'literals.attenders' | trans }}
+            <ion-badge color="favorite">{{ attenders.length }}</ion-badge>
+          </ion-list-header>
+          <ion-list>
+            <ion-item *ngFor="let att of attenders">
+              <h2>{{att.person?.name}}</h2>
+              <h3>{{ att.residence?.name }}</h3>
+              <ion-note>{{ att.person?.document }}</ion-note>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-fab bottom right edge>
+    <button ion-fab color="favorite">
+      <ion-icon name="person-add"></ion-icon>
+    </button>
+
+    <ion-fab-list #fab side="top">
+
+      <div class="fab-label-button">
+        <button ion-fab mini small (click)="fab.close()">
+          <ion-icon name="ios-person"></ion-icon>
+        </button>
+        <div class="label">{{'crud.add' | trans }} {{'literals.guest' | trans }}</div>
+      </div>
+
+      <div class="fab-label-button">
+        <button ion-fab mini small (click)="fab.close()">
+          <ion-icon name="md-peson"></ion-icon>
+        </button>
+        <div class="label">{{'crud.add' | trans }} {{'literals.person' | trans }}</div>
+      </div>
+
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar text-right>
+    <b>
+      {{'literals.quorum' | trans }}:
+    </b>
+    <ion-badge [color]="quorum()?'secondary':'light'">
+      {{ 'literals.' + ( quorum() ?'yes':'no') | trans }}
+    </ion-badge>
+  </ion-toolbar>
+</ion-footer>
