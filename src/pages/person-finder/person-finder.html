@@ -29,16 +29,16 @@
         </ion-avatar>
         <h2>
           {{person.name}}
-          <span>({{'literals.'+ person.relationship | trans}})</span>
+          <ion-badge color="primary" *ngIf="person.residence && person.residence.owner_id == person.id">
+            {{ 'literals.owner' | trans}}
+          </ion-badge>
+          <small>({{'literals.'+ person.relationship | trans}})</small>
         </h2>
         <p>{{person.document}}</p>
         <p *ngIf="person.residence">{{person.residence.name}}
-          <span color="primary" *ngIf="person.residence.owner_id == person.id">
-            &nbsp;({{ 'literals.owner' | trans}})
-          </span>
 
           <span *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
-            <small ion-text [color]=")person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
+            <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
             <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
           </span>
         </p>
@@ -109,12 +109,12 @@
         </ion-avatar>
         <ion-label>
           {{person.name}}
-          <span *ngIf="person.residence">
+          <ion-badge color="primary" *ngIf="person.residence && person.residence.owner_id == person.id">
+            {{ 'literals.owner' | trans}}
+          </ion-badge>
+          <p *ngIf="person.residence">
             {{person.residence.name}}
-            <span color="primary" *ngIf="person.residence.owner_id == person.id">
-              &nbsp;({{ 'literals.owner' | trans}})
-            </span>
-          </span>
+          </p>
         </ion-label>
         <ion-icon item-right *ngIf="multiple" [name]="person._selected ? 'checkbox-outline' : 'square-outline'"></ion-icon>
 
