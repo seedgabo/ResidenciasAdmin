@@ -50,6 +50,7 @@ export class MeetingsPage {
     this.refresher._beginRefresh();
   }
 
+  
   filter() {
     var s = this.query.toLowerCase();
     this.groups = {
@@ -100,21 +101,24 @@ export class MeetingsPage {
   }
 
   getMeetings(refresher = null) {
-    this.api
-      .get(
-        `meetings?whereDategte[start]=${moment
-          .utc()
-          .startOf("day")
-          .format("YY-MM-DD HH:mm:ss")}&limit=50`
-      )
-      .then((data: any) => {
-        this.meetings = data;
-        this.filter();
-        if (refresher) refresher.complete();
-      })
-      .catch(err => {
-        this.api.Error(err);
-        if (refresher) refresher.complete();
-      });
+    this.api.ready.then(()=>{
+      this.api
+        .get(
+          `meetings?whereDategte[start]=${moment
+            .utc()
+            .subtract(1,'day')
+            .startOf("day")
+            .format("YY-MM-DD")}&limit=50`
+        )
+        .then((data: any) => {
+          this.meetings = data;
+          this.filter();
+          if (refresher) refresher.complete();
+        })
+        .catch(err => {
+          this.api.Error(err);
+          if (refresher) refresher.complete();
+        });
+    })
   }
 }

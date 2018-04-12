@@ -5,11 +5,15 @@
 </ion-header>
 
 
-<ion-content class="container">
+<ion-content>
   <ion-grid no-padding no-margin>
     <ion-row wrap>
-      <ion-col col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-12>
+      <ion-col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 col-12>
         <ion-card>
+          <div text-center class="logo-meeting">
+            <img [src]="api.url + '/img/icon.png'">
+          </div>
+
           <ion-list-header text-center>
             <h2 ion-text color="primary"> {{ meeting.subject }} </h2>
           </ion-list-header>
@@ -27,44 +31,50 @@
         </ion-card>
       </ion-col>
 
-      <ion-col col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-12>
+      <ion-col col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 col-12>
         <ion-card>
-          <ion-list-header>
-            {{'literals.attenders' | trans }}
-            <ion-badge color="favorite">{{ attenders.length }}</ion-badge>
+          <ion-list-header color="light">
+            <span color="primary" ion-text text-capitalize>
+              {{'literals.attenders' | trans }}
+            </span>
+            <ion-badge item-right color="favorite">{{ attenders.length }}</ion-badge>
           </ion-list-header>
           <ion-list>
             <ion-item *ngFor="let att of attenders">
               <h2>{{att.person?.name}}</h2>
               <h3>{{ att.residence?.name }}</h3>
               <ion-note>{{ att.person?.document }}</ion-note>
+              <ion-avatar item-right>
+                <img [src]="att.person.image_url" alt="">
+              </ion-avatar>
             </ion-item>
           </ion-list>
         </ion-card>
 
       </ion-col>
+
     </ion-row>
   </ion-grid>
 
-  <ion-fab bottom right edge>
+  <ion-fab bottom right #fab>
     <button ion-fab color="favorite">
       <ion-icon name="person-add"></ion-icon>
     </button>
 
-    <ion-fab-list #fab side="top">
+    <ion-fab-list side="top">
 
       <div class="fab-label-button">
-        <button ion-fab mini small (click)="fab.close()">
+        <button ion-fab mini small (click)="selectPerson();fab.close()">
           <ion-icon name="ios-person"></ion-icon>
         </button>
-        <div class="label">{{'crud.add' | trans }} {{'literals.guest' | trans }}</div>
+        <div class="label">{{'crud.add' | trans }} {{'literals.person' | trans }}</div>
       </div>
 
       <div class="fab-label-button">
-        <button ion-fab mini small (click)="fab.close()">
-          <ion-icon name="md-peson"></ion-icon>
+        <button ion-fab mini small (click)="addGuest();fab.close()">
+          <ion-icon name="md-person"></ion-icon>
         </button>
-        <div class="label">{{'crud.add' | trans }} {{'literals.person' | trans }}</div>
+        <div class="label">{{'crud.add' | trans }} {{'literals.guest' | trans }}</div>
       </div>
 
     </ion-fab-list>
@@ -72,12 +82,19 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar text-right>
-    <b>
-      {{'literals.quorum' | trans }}:
-    </b>
-    <ion-badge [color]="quorum()?'secondary':'light'">
-      {{ 'literals.' + ( quorum() ?'yes':'no') | trans }}
-    </ion-badge>
+  <ion-toolbar [color]="quorum()? 'secondary' :'light'">
+    <ion-grid>
+      <ion-row>
+        <ion-col text-capitalize text-left justify-content-center>
+          <b>
+            {{'literals.quorum' | trans }}:
+          </b>
+          <ion-icon pull-right style="font-size:1.6rem" [color]="quorum() ? 'secondary' : 'danger' " [name]="quorum() ?  'checkmark-circle-outline' : 'remove-circle' "></ion-icon>
+        </ion-col>
+        <ion-col text-right>
+          {{ this.attenders.length }} / {{ this.api.objects.residences?.length }}
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-toolbar>
 </ion-footer>
