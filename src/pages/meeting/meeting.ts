@@ -29,20 +29,22 @@ export class MeetingPage {
   }
 
   ionViewDidLoad() {
-    this.api
-      .load("residences")
-      .then(() => {
-        this.residences = this.api.objects.residences.filter((res) => {
-          return res.type !== "administration";
-        });
-        this.getMeeting()
-          .then(() => {
-            this.subscribeMeeting();
-            this.quorum();
-          })
-          .catch(console.warn);
-      })
-      .catch(console.warn);
+    this.api.ready.then(() => {
+      this.api
+        .load("residences")
+        .then(() => {
+          this.residences = this.api.objects.residences.filter((res) => {
+            return res.type !== "administration";
+          });
+          this.getMeeting()
+            .then(() => {
+              this.subscribeMeeting();
+              this.quorum();
+            })
+            .catch(console.warn);
+        })
+        .catch(console.warn);
+    });
   }
 
   ionViewWillUnload() {
@@ -152,63 +154,59 @@ export class MeetingPage {
 
   getMeeting() {
     return new Promise((resolve, reject) => {
-      this.api.ready.then(() => {
-        this.api
-          .get(`meetings/${this.meeting.id}?with[]=attenders.residence`)
-          .then((data: any) => {
-            this.meeting = data;
-            this.attenders = data.attenders;
-            resolve(data);
-          })
-          .catch((error) => {
-            this.api.Error(error);
-            reject(error);
-          });
-      });
+      this.api
+        .get(`meetings/${this.meeting.id}?with[]=attenders.residence`)
+        .then((data: any) => {
+          this.meeting = data;
+          this.attenders = data.attenders;
+          resolve(data);
+        })
+        .catch((error) => {
+          this.api.Error(error);
+          reject(error);
+        });
     });
   }
 
   subscribeMeeting(live = false) {
-    this.api.ready.then(() => {
-      this.api.Echo.private("App.Meeting." + this.meeting.id)
-        .listen("MeetingUpdated", (data) => {
-          console.log("MeetingUpdatedEvent", data);
-          this.getMeeting().then(() => {
-            this.quorum();
-          });
-        })
-        .listen("AttenderCreated", (data) => {
-          console.log("AttenderCreatedEvent", data);
-          var attender = data.attender;
-          attender.meeting = data.meeting;
-          attender.residence = data.residence;
-          this.attenderChanged(attender);
-        })
-        .listen("AttenderUpdated", (data) => {
-          console.log("AttenderUpdatedEvent", data);
-          var attender = data.attender;
-          attender.meeting = data.meeting;
-          attender.residence = data.residence;
-          this.attenderChanged(attender);
-        })
-        .listen("AttenderDeleted", (data) => {
-          console.log("AttenderDeletedEvent", data);
-          this.attenderRemoved(data.attender);
+    this.api.Echo.private("App.Meeting." + this.meeting.id)
+      .listen("MeetingUpdated", (data) => {
+        console.log("MeetingUpdatedEvent", data);
+        this.getMeeting().then(() => {
+          this.quorum();
         });
+      })
+      .listen("AttenderCreated", (data) => {
+        console.log("AttenderCreatedEvent", data);
+        var attender = data.attender;
+        attender.meeting = data.meeting;
+        attender.residence = data.residence;
+        this.attenderChanged(attender);
+      })
+      .listen("AttenderUpdated", (data) => {
+        console.log("AttenderUpdatedEvent", data);
+        var attender = data.attender;
+        attender.meeting = data.meeting;
+        attender.residence = data.residence;
+        this.attenderChanged(attender);
+      })
+      .listen("AttenderDeleted", (data) => {
+        console.log("AttenderDeletedEvent", data);
+        this.attenderRemoved(data.attender);
+      });
 
-      if (live) {
-        this.api.Echo.join("App.Meeting." + this.meeting.id + ".Presence")
-          .here((data) => {
-            console.log("here:", data);
-          })
-          .joining((data) => {
-            console.log("joining", data);
-          })
-          .leaving((data) => {
-            console.log("leaving", data);
-          });
-      }
-    });
+    if (live) {
+      this.api.Echo.join("App.Meeting." + this.meeting.id + ".Presence")
+        .here((data) => {
+          console.log("here:", data);
+        })
+        .joining((data) => {
+          console.log("joining", data);
+        })
+        .leaving((data) => {
+          console.log("leaving", data);
+        });
+    }
   }
 
   unsubscribeMeeting() {
