@@ -172,23 +172,27 @@ export class MeetingPage {
     this.api.ready.then(() => {
       this.api.Echo.private("App.Meeting." + this.meeting.id)
         .listen("MeetingUpdated", (data) => {
+          console.log("MeetingUpdatedEvent", data);
           this.getMeeting().then(() => {
             this.quorum();
           });
         })
         .listen("AttenderCreated", (data) => {
+          console.log("AttenderCreatedEvent", data);
           var attender = data.attender;
           attender.meeting = data.meeting;
           attender.residence = data.residence;
           this.attenderChanged(attender);
         })
         .listen("AttenderUpdated", (data) => {
+          console.log("AttenderUpdatedEvent", data);
           var attender = data.attender;
           attender.meeting = data.meeting;
           attender.residence = data.residence;
           this.attenderChanged(attender);
         })
         .listen("AttenderDeleted", (data) => {
+          console.log("AttenderDeletedEvent", data);
           this.attenderRemoved(data.attender);
         });
 
