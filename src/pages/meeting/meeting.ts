@@ -128,6 +128,7 @@ export class MeetingPage {
       .delete(`meetings/${this.meeting.id}/remove/attender/${attender.id}`)
       .then((resp) => {
         this.attenders.splice(index, 1);
+        this.quorum();
       })
       .catch((error) => {
         this.api.Error(error);
@@ -171,17 +172,26 @@ export class MeetingPage {
     this.api.ready.then(() => {
       this.api.Echo.private("App.Meeting." + this.meeting.id)
         .listen("MeetingUpdated", (data) => {
-          var attender = data.attender;
-          attender.meeting = data.meeting;
-          attender.residence = data.residence;
-          this.attenderChanged(attender);
+          this.getMeeting().then(() => {
+            this.quorum();
+          });
         })
         .listen("AttenderCreated", (data) => {
           var attender = data.attender;
           attender.meeting = data.meeting;
           attender.residence = data.residence;
           this.attenderChanged(attender);
+        })
+        .listen("AttenderUpdated", (data) => {
+          var attender = data.attender;
+          attender.meeting = data.meeting;
+          attender.residence = data.residence;
+          this.attenderChanged(attender);
+        })
+        .listen("AttenderDeleted", (data) => {
+          this.attenderRemoved(data.attender);
         });
+
       if (live) {
         this.api.Echo.join("App.Meeting." + this.meeting.id + ".Presence")
           .here((data) => {
@@ -206,11 +216,22 @@ export class MeetingPage {
     var add = true;
     this.attenders.forEach((att) => {
       if (att.type != "guest" && att.type == attender.type && att[attender.type + "_id"] == attender[attender.type + "_id"]) {
+        att = attender;
         add = false;
       }
     });
     if (add) {
       this.attenders.push(attender);
+    }
+    this.quorum();
+  }
+
+  attenderRemoved(attender) {
+    let find = this.attenders.findIndex((att) => {
+      return att.id == attender.id;
+    });
+    if (find > -1) {
+      this.attenders.splice(find, 1);
     }
     this.quorum();
   }
