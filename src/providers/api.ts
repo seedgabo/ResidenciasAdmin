@@ -9,12 +9,7 @@ import moment from "moment";
 import Echo from "laravel-echo";
 declare var window: any;
 import Pusher from "pusher-js";
-import {
-  AlertController,
-  ToastController,
-  ModalController,
-  Events
-} from "ionic-angular";
+import { AlertController, ToastController, ModalController, Events } from "ionic-angular";
 window.Pusher = Pusher;
 import { Vibration } from "@ionic-native/vibration";
 import { SettingProvider } from "./setting/setting";
@@ -42,7 +37,7 @@ export class Api {
   visits = [];
   visits_approved = [];
   resolve;
-  ready: Promise<any> = new Promise(resolve => {
+  ready: Promise<any> = new Promise((resolve) => {
     this.resolve = resolve;
   });
   permissions = {
@@ -61,13 +56,13 @@ export class Api {
     ready: () => {
       return this._storage.ready();
     },
-    get: key => {
+    get: (key) => {
       return this._storage.get(this.url + key);
     },
     set: (key, value) => {
       return this._storage.set(this.url + key, value);
     },
-    remove: key => {
+    remove: (key) => {
       return this._storage.remove(this.url + key);
     },
     clear: () => {
@@ -87,20 +82,20 @@ export class Api {
     public setting: SettingProvider
   ) {
     this.storage.ready().then(() => {
-      this._storage.get("url").then(url_data => {
+      this._storage.get("url").then((url_data) => {
         if (url_data) this.url = url_data;
         else if (window.url) this.url = window.url;
-        this.storage.get("modules").then(modules => {
+        this.storage.get("modules").then((modules) => {
           this.modules = modules;
-          this.storage.get("settings").then(settings => {
+          this.storage.get("settings").then((settings) => {
             this.settings = settings;
-            this.storage.get("roles").then(roles => {
+            this.storage.get("roles").then((roles) => {
               this.roles = roles;
-              this.storage.get("residence").then(residence => {
+              this.storage.get("residence").then((residence) => {
                 this.residence = residence;
-                this.storage.get("langs").then(langs => {
+                this.storage.get("langs").then((langs) => {
                   if (langs) this.langs = langs;
-                  this.storage.get("user").then(user => {
+                  this.storage.get("user").then((user) => {
                     console.log(user);
                     this.user = window.user = user;
                     this.resolve(user);
@@ -112,9 +107,9 @@ export class Api {
         });
       });
 
-      this.storage.get("visits_approved").then(visits_approved => {
+      this.storage.get("visits_approved").then((visits_approved) => {
         if (!visits_approved) return;
-        this.visits_approved = visits_approved.filter(v => {
+        this.visits_approved = visits_approved.filter((v) => {
           return moment().isSame(moment(v.created_at), "day");
         });
       });
@@ -126,9 +121,9 @@ export class Api {
     return new Promise((resolve, reject) => {
       this.http
         .get(this.url + "api/login", { headers: this.setHeaders() })
-        .map(res => res.json())
+        .map((res) => res.json())
         .subscribe(
-          data => {
+          (data) => {
             resolve(data);
             this.user = data.user;
             this.residence = data.residence;
@@ -143,7 +138,7 @@ export class Api {
             this.storage.set("settings", this.settings);
             this.getLang();
           },
-          error => {
+          (error) => {
             return reject(error);
           }
         );
@@ -152,12 +147,12 @@ export class Api {
 
   getLang() {
     this.get("lang")
-      .then(langs => {
+      .then((langs) => {
         console.log(langs);
         this.storage.set("langs", langs);
         this.langs = langs;
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("error trying to download translations", err);
       });
   }
@@ -167,26 +162,21 @@ export class Api {
     return new Promise((resolve, reject) => {
       if (this.objects[resource]) {
         this.objects[resource].promise
-          .then(resp => {
+          .then((resp) => {
             resolve(resp);
             console.timeEnd("load " + resource);
           })
           .catch(reject);
         return;
       }
-      this.storage.get(resource + "_resource").then(data => {
+      this.storage.get(resource + "_resource").then((data) => {
         this.objects[resource] = [];
         if (data) {
           this.objects[resource] = data;
         }
         var promise,
           query = "";
-        if (
-          resource == "users" ||
-          resource == "workers" ||
-          resource == "visitors" ||
-          resource == "pets"
-        ) {
+        if (resource == "users" || resource == "workers" || resource == "visitors" || resource == "pets") {
           query = "?with[]=residence";
         }
         if (resource == "vehicles") {
@@ -203,7 +193,7 @@ export class Api {
         }
         this.objects[resource].promise = promise = this.get(resource + query);
         this.objects[resource].promise
-          .then(resp => {
+          .then((resp) => {
             this.objects[resource] = resp;
             this.objects[resource].promise = promise;
             this.objects[resource].collection = this.mapToCollection(resp);
@@ -211,7 +201,7 @@ export class Api {
             console.timeEnd("load " + resource);
             return resolve(this.objects[resource]);
           })
-          .catch(err => {
+          .catch((err) => {
             reject(err);
             this.Error(err);
           });
@@ -223,12 +213,12 @@ export class Api {
     return new Promise((resolve, reject) => {
       this.http
         .get(this.url + "api/" + uri, { headers: this.setHeaders() })
-        .map(res => res.json())
+        .map((res) => res.json())
         .subscribe(
-          data => {
+          (data) => {
             resolve(data);
           },
-          error => {
+          (error) => {
             return reject(error);
           }
         );
@@ -239,12 +229,12 @@ export class Api {
     return new Promise((resolve, reject) => {
       this.http
         .post(this.url + "api/" + uri, data, { headers: this.setHeaders() })
-        .map(res => res.json())
+        .map((res) => res.json())
         .subscribe(
-          data => {
+          (data) => {
             resolve(data);
           },
-          error => {
+          (error) => {
             return reject(error);
           }
         );
@@ -255,12 +245,12 @@ export class Api {
     return new Promise((resolve, reject) => {
       this.http
         .put(this.url + "api/" + uri, data, { headers: this.setHeaders() })
-        .map(res => res.json())
+        .map((res) => res.json())
         .subscribe(
-          data => {
+          (data) => {
             resolve(data);
           },
-          error => {
+          (error) => {
             return reject(error);
           }
         );
@@ -271,12 +261,12 @@ export class Api {
     return new Promise((resolve, reject) => {
       this.http
         .delete(this.url + "api/" + uri, { headers: this.setHeaders() })
-        .map(res => res.json())
+        .map((res) => res.json())
         .subscribe(
-          data => {
+          (data) => {
             resolve(data);
           },
-          error => {
+          (error) => {
             return reject(error);
           }
         );
@@ -287,9 +277,9 @@ export class Api {
     return new Promise((resolve, reject) => {
       this.http
         .get(this.url + "api/getData", { headers: this.setHeaders() })
-        .map(res => res.json())
+        .map((res) => res.json())
         .subscribe(
-          data => {
+          (data) => {
             resolve(data);
 
             this.user = data.user;
@@ -308,12 +298,12 @@ export class Api {
 
             this.get("residences?with[]=users").then((data: any) => {
               this.residences = data;
-              data.forEach(res => {
+              data.forEach((res) => {
                 this.residences_collection[res.id] = res;
               });
             });
           },
-          error => {
+          (error) => {
             return reject(error);
           }
         );
@@ -334,12 +324,12 @@ export class Api {
     return new Promise((resolve, reject) => {
       this.http
         .post(this.url + "api/login/oauth", userData, {})
-        .map(res => res.json())
+        .map((res) => res.json())
         .subscribe(
-          data => {
+          (data) => {
             resolve(data);
           },
-          error => {
+          (error) => {
             return reject(error);
           }
         );
@@ -364,82 +354,82 @@ export class Api {
       this.Echo.private("Application")
 
         // User Events
-        .listen("UserCreated", data => {
+        .listen("UserCreated", (data) => {
           console.log("created user:", data);
           this.UserChanged(data);
         })
-        .listen("UserUpdated", data => {
+        .listen("UserUpdated", (data) => {
           console.log("updated user:", data);
           this.UserChanged(data);
         })
-        .listen("UserDeleted", data => {
+        .listen("UserDeleted", (data) => {
           console.log("deleted user:", data);
           this.resourceDeleted(data, "users", "user");
         })
 
         // Parking Events
-        .listen("ParkingCreated", data => {
+        .listen("ParkingCreated", (data) => {
           console.log("created parking:", data);
           this.ParkingChanged(data);
         })
-        .listen("ParkingUpdated", data => {
+        .listen("ParkingUpdated", (data) => {
           console.log("updated parking:", data);
           this.ParkingChanged(data);
         })
-        .listen("ParkingDeleted", data => {
+        .listen("ParkingDeleted", (data) => {
           console.log("deleted parking:", data);
           this.resourceDeleted(data, "parkings", "parking");
         })
 
         // Visitor Events
-        .listen("VisitorCreated", data => {
+        .listen("VisitorCreated", (data) => {
           console.log("created visitor:", data);
           this.VisitorChanged(data);
         })
-        .listen("VisitorUpdated", data => {
+        .listen("VisitorUpdated", (data) => {
           console.log("updated visitor:", data);
           this.VisitorChanged(data);
         })
-        .listen("VisitorDeleted", data => {
+        .listen("VisitorDeleted", (data) => {
           this.resourceDeleted(data, "visitors", "visitor");
         })
 
         // Vehicle Events
-        .listen("VehicleCreated", data => {
+        .listen("VehicleCreated", (data) => {
           console.log("created vehicle:", data);
           this.VehicleChanged(data);
         })
-        .listen("VehicleUpdated", data => {
+        .listen("VehicleUpdated", (data) => {
           console.log("updated vehicle:", data);
           this.VehicleChanged(data);
         })
-        .listen("VehicleDeleted", data => {
+        .listen("VehicleDeleted", (data) => {
           console.log("deleted vehicle:", data);
           this.resourceDeleted(data, "vehicles", "vehicle");
         })
 
         // Worker Events
-        .listen("WorkerCreated", data => {
+        .listen("WorkerCreated", (data) => {
           console.log("created worker:", data);
           this.WorkerChanged(data);
         })
-        .listen("WorkerUpdated", data => {
+        .listen("WorkerUpdated", (data) => {
           console.log("updated worker", data.worker);
           this.WorkerChanged(data);
         })
-        .listen("WorkerDeleted", data => {
+        .listen("WorkerDeleted", (data) => {
           console.log("deleted worker:", data);
           this.resourceDeleted(data, "workers", "worker");
         })
 
         // Correspondence Events
-        .listen("CorrespondenceCreated", data => {
+        .listen("CorrespondenceCreated", (data) => {
           console.log("correspondence created:", data);
           this.events.publish("CorrespondenceCreated", data);
         })
 
         // Visit Events
-        .listen("VisitCreated", data => {
+        .listen("VisitCreated", (data) => {
           this.events.publish("VisitCreated", data);
           console.log("visit created:", data);
           this.VisitChanged(data);
@@ -447,15 +437,15 @@ export class Api {
             this.visitPreApproved(data.visit);
           }
         })
-        .listen("VisitUpdated", data => {
+        .listen("VisitUpdated", (data) => {
           console.log("visit updated:", data);
           this.events.publish("VisitUpdated", data);
           this.VisitChanged(data);
         })
-        .listen("VisitDeleted", data => {
+        .listen("VisitDeleted", (data) => {
           this.events.publish("VisitDeleted", data);
           console.log("visit deleted:", data);
-          var visit = this.visits.findIndex(visit => {
+          var visit = this.visits.findIndex((visit) => {
             return visit.id === data.visit.id;
           });
           this.zone.run(() => {
@@ -464,34 +454,32 @@ export class Api {
             }
           });
         })
-        .listen("VisitConfirmed", data => {
+        .listen("VisitConfirmed", (data) => {
           this.VisitConfirmed(data);
         })
 
         // Panic Events
-        .listen("Panic", data => {
+        .listen("Panic", (data) => {
           console.log("panic", data);
           this.handlePanic(data);
         })
-        .listen("PanicUpdate", data => {
+        .listen("PanicUpdate", (data) => {
           console.log("panic", data);
           this.handlePanic(data, false);
         });
 
-      this.Echo.private("App.User." + this.user.id).notification(
-        notification => {
-          console.log(notification);
-        }
-      );
+      this.Echo.private("App.User." + this.user.id).notification((notification) => {
+        console.log(notification);
+      });
 
       this.Echo.join("App.Mobile")
-        .here(data => {
+        .here((data) => {
           console.log("here:", data);
         })
-        .joining(data => {
+        .joining((data) => {
           console.log("joining", data);
         })
-        .leaving(data => {
+        .leaving((data) => {
           console.log("leaving", data);
         });
     });
@@ -587,31 +575,19 @@ export class Api {
   visitPreApproved(visit) {
     this.playSoundBeep();
     var alert = this.alert.create({
-      title:
-        this.trans("literals.visit") +
-        " Pre " +
-        this.trans("literals.approved_f"),
-      subTitle:
-        this.trans("literals.visitor") +
-        ": " +
-        (visit.visitor
-          ? visit.visitor.name
-          : visit.guest ? visit.guest.name : ""),
+      title: this.trans("literals.visit") + " Pre " + this.trans("literals.approved_f"),
+      subTitle: this.trans("literals.visitor") + ": " + (visit.visitor ? visit.visitor.name : visit.guest ? visit.guest.name : ""),
       message: visit.note,
       buttons: ["OK"]
     });
     alert.present();
-    this.get(
-      "visits/" +
-        visit.id +
-        "?with[]=visitor&with[]=visitors&with[]=vehicle&with[]=parking&with[]=user&with[]=residence"
-    )
+    this.get("visits/" + visit.id + "?with[]=visitor&with[]=visitors&with[]=vehicle&with[]=parking&with[]=user&with[]=residence")
       .then((data: any) => {
         this.visits_approved[this.visits_approved.length] = data;
         this.storage.set("visits_approved", this.visits_approved);
         if (data.visitors.length > 1) {
           var text = this.trans("literals.visitors") + ": ";
-          data.visitors.forEach(person => {
+          data.visitors.forEach((person) => {
             text += `${person.name}, `;
           });
           alert.setSubTitle(text);
@@ -628,16 +604,8 @@ export class Api {
     this.alert
       .create({
         cssClass: "visit-" + visit.status,
-        title:
-          this.trans("literals.visit") +
-          " " +
-          this.trans("literals." + visit.status),
-        subTitle:
-          this.trans("literals.visitor") +
-          ": " +
-          (visit.visitor
-            ? visit.visitor.name
-            : visit.guest ? visit.guest.name : ""),
+        title: this.trans("literals.visit") + " " + this.trans("literals." + visit.status),
+        subTitle: this.trans("literals.visitor") + ": " + (visit.visitor ? visit.visitor.name : visit.guest ? visit.guest.name : ""),
         message: visit.note,
         buttons: ["OK"]
       })
@@ -679,19 +647,14 @@ export class Api {
 
   private setHeaders() {
     let headers = new Headers();
-    if (this.user && this.user.token)
-      headers.append("Auth-Token", this.user.token);
-    else
-      headers.append(
-        "Authorization",
-        "Basic " + btoa(this.username + ":" + this.password)
-      );
+    if (this.user && this.user.token) headers.append("Auth-Token", this.user.token);
+    else headers.append("Authorization", "Basic " + btoa(this.username + ":" + this.password));
     return headers;
   }
 
   private mapToCollection(array, key = "id") {
     var collection = {};
-    array.forEach(element => {
+    array.forEach((element) => {
       collection[element[key]] = element;
     });
     return collection;
@@ -723,48 +686,16 @@ export class Api {
     this.sound = new Audio("assets/sounds/sos.mp3");
     this.sound.play();
     try {
-      this.vibration.vibrate([
-        300,
-        200,
-        300,
-        200,
-        300,
-        200,
-        300,
-        300,
-        200,
-        300,
-        200,
-        300,
-        200,
-        300,
-        200
-      ]);
+      this.vibration.vibrate([300, 200, 300, 200, 300, 200, 300, 300, 200, 300, 200, 300, 200, 300, 200]);
     } catch (error) {
-      navigator.vibrate([
-        300,
-        200,
-        300,
-        200,
-        300,
-        200,
-        300,
-        300,
-        200,
-        300,
-        200,
-        300,
-        200,
-        300,
-        200
-      ]);
+      navigator.vibrate([300, 200, 300, 200, 300, 200, 300, 300, 200, 300, 200, 300, 200, 300, 200]);
     }
     return this.sound;
   }
 
   public UserChanged(data) {
     if (this.objects.users) {
-      var user_index = this.objects.users.findIndex(user => {
+      var user_index = this.objects.users.findIndex((user) => {
         return user.id === data.user.id;
       });
       this.zone.run(() => {
@@ -782,20 +713,16 @@ export class Api {
   }
   public VisitorChanged(data) {
     if (this.objects.visitors) {
-      var visitor_index = this.objects.visitors.findIndex(visitor => {
+      var visitor_index = this.objects.visitors.findIndex((visitor) => {
         return visitor.id === data.visitor.id;
       });
       this.zone.run(() => {
         var visitor;
         if (visitor_index > -1) {
-          visitor = Object.assign(
-            this.objects.visitors[visitor_index],
-            data.visitor
-          );
+          visitor = Object.assign(this.objects.visitors[visitor_index], data.visitor);
           this.objects.visitors.collection[visitor.id] = data.visitor;
         } else {
-          visitor = this.objects.visitors[this.objects.visitors.length] =
-            data.visitor;
+          visitor = this.objects.visitors[this.objects.visitors.length] = data.visitor;
         }
 
         if (data.image) visitor.image = data.image;
@@ -805,20 +732,16 @@ export class Api {
   }
   public VehicleChanged(data) {
     if (this.objects.vehicles) {
-      var vehicle_index = this.objects.vehicles.findIndex(vehicle => {
+      var vehicle_index = this.objects.vehicles.findIndex((vehicle) => {
         return vehicle.id === data.vehicle.id;
       });
       this.zone.run(() => {
         var vehicle;
         if (vehicle_index > -1) {
-          vehicle = Object.assign(
-            this.objects.vehicles[vehicle_index],
-            data.vehicle
-          );
+          vehicle = Object.assign(this.objects.vehicles[vehicle_index], data.vehicle);
           this.objects.vehicles.collection[vehicle.id] = data.vehicle;
         } else {
-          vehicle = this.objects.vehicles[this.objects.vehicles.length] =
-            data.vehicle;
+          vehicle = this.objects.vehicles[this.objects.vehicles.length] = data.vehicle;
         }
         if (data.residence) vehicle.residence = data.residence;
         if (data.owner) vehicle.owner = data.owner;
@@ -829,20 +752,16 @@ export class Api {
   }
   public ParkingChanged(data) {
     if (this.objects.parkings) {
-      var parking_index = this.objects.parkings.findIndex(parking => {
+      var parking_index = this.objects.parkings.findIndex((parking) => {
         return parking.id === data.parking.id;
       });
       this.zone.run(() => {
         var parking;
         if (parking_index > -1) {
-          parking = Object.assign(
-            this.objects.parkings[parking_index],
-            data.parking
-          );
+          parking = Object.assign(this.objects.parkings[parking_index], data.parking);
           this.objects.parkings.collection[parking.id] = data.parking;
         } else {
-          parking = this.objects.parkings[this.objects.parkings.length] =
-            data.parking;
+          parking = this.objects.parkings[this.objects.parkings.length] = data.parking;
         }
         if (data.image) parking.image = data.image;
         if (data.residence) parking.residence = data.residence;
@@ -851,20 +770,16 @@ export class Api {
   }
   public WorkerChanged(data) {
     if (this.objects.workers) {
-      var worker_index = this.objects.workers.findIndex(worker => {
+      var worker_index = this.objects.workers.findIndex((worker) => {
         return worker.id === data.worker.id;
       });
       this.zone.run(() => {
         var worker;
         if (worker_index > -1) {
-          worker = Object.assign(
-            this.objects.workers[worker_index],
-            data.worker
-          );
+          worker = Object.assign(this.objects.workers[worker_index], data.worker);
           this.objects.workers.collection[worker.id] = data.worker;
         } else {
-          worker = this.objects.workers[this.objects.workers.length] =
-            data.worker;
+          worker = this.objects.workers[this.objects.workers.length] = data.worker;
         }
         if (data.image) worker.image = data.image;
         if (data.residence) worker.residence = data.residence;
@@ -872,7 +787,7 @@ export class Api {
     }
   }
   public VisitChanged(data) {
-    var visit_index = this.visits.findIndex(visit => {
+    var visit_index = this.visits.findIndex((visit) => {
       return visit.id === data.visit.id;
     });
     this.zone.run(() => {
@@ -887,16 +802,13 @@ export class Api {
         visit.visitor = data.visitor;
         visit.visitors = data.visitors;
         visit.guest = data.guest;
-        if (this.objects.residences)
-          visit.residence = this.objects.residences.collection[
-            visit.residence_id
-          ];
+        if (this.objects.residences) visit.residence = this.objects.residences.collection[visit.residence_id];
       }
     });
   }
 
   public resourceDeleted(data, resource, item) {
-    var item_index = this.objects[resource].findIndex(i => {
+    var item_index = this.objects[resource].findIndex((i) => {
       return i.id === data[item].id;
     });
     if (this.objects[resource])

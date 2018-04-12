@@ -19,12 +19,12 @@
           </ion-list-header>
           <ion-card-content>
             <p text-justify *ngIf="meeting.description">{{meeting.description}}</p>
-            <h3 text-right>
+            <h3 text-right text-capitalize>
               <b>{{'literals.start' | trans}}:</b>
               {{ meeting.start | amTimeAgo }}
             </h3>
-            <h3 text-right *ngIf="meeting.end">
-              <b>{{'literals.end' | trans}}"</b>
+            <h3 text-right text-capitalize *ngIf="meeting.end">
+              <b>{{'literals.end' | trans}}:</b>
               {{meeting.end | amTimeAgo }}
             </h3>
           </ion-card-content>
@@ -40,14 +40,22 @@
             <ion-badge item-right color="favorite">{{ attenders.length }}</ion-badge>
           </ion-list-header>
           <ion-list>
-            <ion-item *ngFor="let att of attenders">
-              <h2>{{att.person?.name}}</h2>
-              <h3>{{ att.residence?.name }}</h3>
-              <ion-note>{{ att.person?.document }}</ion-note>
-              <ion-avatar item-right>
-                <img [src]="att.person.image_url" alt="">
-              </ion-avatar>
-            </ion-item>
+            <ion-item-sliding *ngFor="let att of attenders; let i = index">
+              <ion-item>
+                <h2>{{att.person?.name}}</h2>
+                <h3>{{ att.residence?.name }}</h3>
+                <ion-note>{{ att.person?.document }}</ion-note>
+                <ion-avatar item-right>
+                  <img [src]="att.person.image_url" alt="">
+                </ion-avatar>
+              </ion-item>
+              <ion-item-options side="right">
+                <button ion-button (click)="removeAttender(att,i)" color="danger">
+                  <ion-icon name="trash"></ion-icon>
+                  {{'crud.delete' | trans }}
+                </button>
+              </ion-item-options>
+            </ion-item-sliding>
           </ion-list>
         </ion-card>
 
@@ -82,17 +90,17 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar [color]="quorum()? 'secondary' :'light'">
+  <ion-toolbar [color]="hasQuorum? 'secondary' :'light'">
     <ion-grid>
       <ion-row>
         <ion-col text-capitalize text-left justify-content-center>
           <b>
             {{'literals.quorum' | trans }}:
           </b>
-          <ion-icon pull-right style="font-size:1.6rem" [color]="quorum() ? 'secondary' : 'danger' " [name]="quorum() ?  'checkmark-circle-outline' : 'remove-circle' "></ion-icon>
+          <ion-icon pull-right style="font-size:1.6rem" [color]="hasQuorum ? 'secondary' : 'danger' " [name]="hasQuorum ?  'checkmark-circle-outline' : 'remove-circle' "></ion-icon>
         </ion-col>
         <ion-col text-right>
-          {{ this.attenders.length }} / {{ this.api.objects.residences?.length }}
+          {{ this.inMeeting }} / {{ this.residences?.length }}
         </ion-col>
       </ion-row>
     </ion-grid>

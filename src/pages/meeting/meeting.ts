@@ -1,11 +1,5 @@
 import { Component } from "@angular/core";
-import {
-  IonicPage,
-  NavController,
-  NavParams,
-  ModalController,
-  AlertController
-} from "ionic-angular";
+import { IonicPage, NavController, NavParams, ModalController, AlertController } from "ionic-angular";
 import { Api } from "../../providers/api";
 @IonicPage({
   segment: "meeting/:id"
@@ -16,7 +10,10 @@ import { Api } from "../../providers/api";
 })
 export class MeetingPage {
   meeting: any = {};
+  inMeeting = 0;
   attenders = [];
+  hasQuorum = false;
+  residences = [];
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -31,6 +28,27 @@ export class MeetingPage {
     }
   }
 
+  ionViewDidLoad() {
+    this.api
+      .load("residences")
+      .then(() => {
+        this.residences = this.api.objects.residences.filter((res) => {
+          return res.type !== "administration";
+        });
+        this.getMeeting()
+          .then(() => {
+            this.subscribeMeeting();
+            this.quorum();
+          })
+          .catch(console.warn);
+      })
+      .catch(console.warn);
+  }
+
+  ionViewWillUnload() {
+    this.unsubscribeMeeting();
+  }
+
   selectPerson() {
     var modal = this.modal.create("PersonFinderPage", {
       users: true,
@@ -38,7 +56,7 @@ export class MeetingPage {
       workers: false
     });
     modal.present();
-    modal.onDidDismiss(data => {
+    modal.onDidDismiss((data) => {
       if (!data) {
         return;
       }
@@ -49,12 +67,12 @@ export class MeetingPage {
   selectResidence(person) {
     var modal = this.modal.create("ResidenceFinderPage");
     modal.present();
-    modal.onDidDismiss(data => {
+    modal.onDidDismiss((data) => {
       if (!data) {
         return;
       }
-      person.residence_id = data.residence.id;
-      person.residence = data.residence;
+      person.residence_id = data.id;
+      person.residence = data;
       this.addAttender(person, "guest");
     });
   }
@@ -62,8 +80,7 @@ export class MeetingPage {
   addGuest() {
     this.alert
       .create({
-        title:
-          this.api.trans("crud.add") + " " + this.api.trans("literals.guest"),
+        title: this.api.trans("crud.add") + " " + this.api.trans("literals.guest"),
         inputs: [
           {
             name: "name",
@@ -80,7 +97,7 @@ export class MeetingPage {
           this.api.trans("crud.cancel"),
           {
             text: this.api.trans("__.ok"),
-            handler: data => {
+            handler: (data) => {
               if (data.name.length > 0) {
                 this.selectResidence(data);
               }
@@ -101,79 +118,100 @@ export class MeetingPage {
         console.log("attender added", data);
         this.attenderChanged(data.attender);
       })
-      .catch(error => {
+      .catch((error) => {
         this.api.Error(error);
       });
   }
 
-  ionViewDidLoad() {
-    this.api.load("residences");
-    this.getMeeting();
-    this.subscribeMeeting();
-  }
-
-  ionViewWillUnload() {
-    this.unsubscribeMeeting();
+  removeAttender(attender, index) {
+    this.api
+      .delete(`meetings/${this.meeting.id}/remove/attender/${attender.id}`)
+      .then((resp) => {
+        this.attenders.splice(index, 1);
+      })
+      .catch((error) => {
+        this.api.Error(error);
+      });
   }
 
   quorum() {
-    if (this.api.objects.residences)
-      return this.attenders.length > this.api.objects.residences.length / 2;
+    if (!this.api.objects.residences) return;
+    let minQuorum = this.api.objects.residences.length / 2;
+    let residences = {};
+    this.attenders.forEach((att) => {
+      if (!residences[att.residence_id]) {
+        residences[att.residence_id] = true;
+      }
+    });
+
+    this.inMeeting = Object.keys(residences).length;
+    if (this.inMeeting > minQuorum) this.hasQuorum = true;
+    else this.hasQuorum = false;
   }
 
   getMeeting() {
-    this.api.ready.then(() => {
-      this.api
-        .get(
-          "meetings/" +
-            this.meeting.id +
-            "?with[]=attenders&with[]=attenders.residence"
-        )
-        .then((data: any) => {
-          this.meeting = data;
-          this.attenders = data.attenders;
-        })
-        .catch(error => {
-          this.api.Error(error);
-        });
+    return new Promise((resolve, reject) => {
+      this.api.ready.then(() => {
+        this.api
+          .get(`meetings/${this.meeting.id}?with[]=attenders.residence`)
+          .then((data: any) => {
+            this.meeting = data;
+            this.attenders = data.attenders;
+            resolve(data);
+          })
+          .catch((error) => {
+            this.api.Error(error);
+            reject(error);
+          });
+      });
     });
   }
 
-  subscribeMeeting() {
+  subscribeMeeting(live = false) {
     this.api.ready.then(() => {
-      this.api.Echo.join("App.Meeting." + this.meeting.id)
-        .listen("MeetingUpdated", data => {
-          console.log("MeetingUpdate", data);
+      this.api.Echo.private("App.Meeting." + this.meeting.id)
+        .listen("MeetingUpdated", (data) => {
+          var attender = data.attender;
+          attender.meeting = data.meeting;
+          attender.residence = data.residence;
+          this.attenderChanged(attender);
         })
-        .here(data => {
-          console.log("here:", data);
-        })
-        .joining(data => {
-          console.log("joining", data);
-        })
-        .leaving(data => {
-          console.log("leaving", data);
+        .listen("AttenderCreated", (data) => {
+          var attender = data.attender;
+          attender.meeting = data.meeting;
+          attender.residence = data.residence;
+          this.attenderChanged(attender);
         });
+      if (live) {
+        this.api.Echo.join("App.Meeting." + this.meeting.id + ".Presence")
+          .here((data) => {
+            console.log("here:", data);
+          })
+          .joining((data) => {
+            console.log("joining", data);
+          })
+          .leaving((data) => {
+            console.log("leaving", data);
+          });
+      }
     });
   }
 
   unsubscribeMeeting() {
     this.api.Echo.leave("App.Meeting." + this.meeting.id);
+    this.api.Echo.leave("App.Meeting." + this.meeting.id + ".Presence");
   }
 
   attenderChanged(attender) {
     var add = true;
-    this.attenders.forEach(att => {
-      if (
-        att.type != "guest" &&
-        att.type == attender.type &&
-        att[attender.type + "_id"] == attender[attender.type + "_id"]
-      ) {
+    this.attenders.forEach((att) => {
+      if (att.type != "guest" && att.type == attender.type && att[attender.type + "_id"] == attender[attender.type + "_id"]) {
         add = false;
       }
     });
     if (add) {
       this.attenders.push(attender);
     }
+    this.quorum();
   }
 }
