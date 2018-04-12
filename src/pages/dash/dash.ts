@@ -3,7 +3,7 @@ import { Api } from "./../../providers/api";
 import { Component } from "@angular/core";
 import { NavController, NavParams } from "ionic-angular";
 import { IonicPage } from "ionic-angular/navigation/ionic-page";
-import { ENV } from "@app/env";
+// import { ENV } from "@app/env";
 
 @IonicPage({
   priority: "high"

@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar color="light">
+    <ion-title>{{ 'crud.' + (meeting.id ? 'edit' : 'add') | trans }} {{'literals.meeting' | trans }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content container>
+  <ion-list>
+    <ion-item>
+      <ion-label floating>{{'literals.subject' | trans}}
+        <span color="danger" ion-text>*</span>
+      </ion-label>
+      <ion-input [(ngModel)]="meeting.subject"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>{{'literals.start_date' | trans}}
+        <span color="danger" ion-text>*</span>
+      </ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY HH:mm" pickerFormat="YYYY MMM DD HH:mm" [(ngModel)]="meeting.start"></ion-datetime>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label floating>{{'literals.description' | trans}}</ion-label>
+      <ion-textarea [(ngModel)]="meeting.description"></ion-textarea>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <button large ion-button block color="secondary" [disabled]="loading || !canSave()" (click)="save()">
+      {{'crud.save' | trans }}
+    </button>
+  </ion-toolbar>
+</ion-footer>
