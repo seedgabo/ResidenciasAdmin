@@ -17,11 +17,7 @@
       <ion-icon item-end name="arrow-dropdown"></ion-icon>
     </button>
 
-    <button ion-item (click)="selectResidences()" *ngIf="multiple">
-      <span *ngIf="residences.length > 0">{{residences.length}} {{'literals.selecteds' | trans }}</span>
-      <span *ngIf="residences.length == 0">{{'literals.select' | trans }} {{'literals.residences' | trans }}</span>
-      <ion-icon item-end name="arrow-dropdown"></ion-icon>
-    </button>
+    <residence-selector *ngIf="multiple" [(ngModel)]="residences" [multiple]="multiple"></residence-selector>
 
     <ion-item>
       <ion-label floating>

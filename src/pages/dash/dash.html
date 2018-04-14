@@ -21,10 +21,10 @@
 
   <div *ngIf="sliders && sliders.length > 0">
     <ion-slides style="height:200px" pager paginationType="bullets" autoplay="3000" loop="true">
-      <ion-slide *ngFor="let slider of sliders">
-        <img [src]="slider.image.url" [alt]="slider.name" style="height:100%; width:100%">
+      <ion-slide *ngFor="let slider of sliders" style="align-items:flex-start">
+        <img [src]="slider.image.url" [alt]="slider.name" style="height:100%; width:100%;vertical">
 
-        <h2 style="position:absolute; top:20%; left:12%;" [style.color]="slider.color? slider.color : 'white'">{{slider.name}}</h2>
+        <h2 style="position:absolute;top:20%;left:12%;" [style.color]="slider.color? slider.color : 'white'">{{slider.name}}</h2>
         <p style="position:absolute; top:35%; left:12%;" [style.color]="slider.color? slider.color : 'white'">{{slider.text}}</p>
 
       </ion-slide>
@@ -131,6 +131,13 @@
         </div>
       </ion-col>
 
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.meetings">
+        <div tappable class="dash-card" padding no-margin (click)="openPage('MeetingsPage')">
+          <ion-icon class="dash-icon" large color="primary" name="people"></ion-icon>
+          <h1 class="dash-title"> {{ api.trans('literals.meetings') }}</h1>
+        </div>
+      </ion-col>
+
 
       <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.accounter">
         <div tappable class="dash-card" padding no-margin (click)="openPage('SettingsPage')">
@@ -138,6 +145,8 @@
           <h1 class="dash-title"> {{ api.trans('literals.settings') }}</h1>
         </div>
       </ion-col>
+
+
 
     </ion-row>
   </ion-grid>

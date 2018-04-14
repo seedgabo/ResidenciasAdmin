@@ -29,10 +29,14 @@
         </ion-avatar>
         <h2>
           {{person.name}}
-          <span>({{'literals.'+ person.relationship | trans}})</span>
+          <ion-badge color="primary" *ngIf="person.residence && person.residence.owner_id == person.id">
+            {{ 'literals.owner' | trans}}
+          </ion-badge>
+          <small>({{'literals.'+ person.relationship | trans}})</small>
         </h2>
         <p>{{person.document}}</p>
         <p *ngIf="person.residence">{{person.residence.name}}
+
           <span *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
             <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
             <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
@@ -51,7 +55,8 @@
           {{person.name}}
         </h2>
         <p>{{person.document}}</p>
-        <p *ngIf="person.residence">{{person.residence.name}}
+        <p *ngIf="person.residence">
+          {{person.residence.name}}
           <span *ngIf="(api.roles?.collection['SuperAdmin'] || api.roles?.collection['Manage invoices'] || api.roles?.collection['Accounter'])">
             <small ion-text [color]="person.residence.status == 'solvent'? 'secondary': 'danger'">({{ 'literals.' + person.residence.status | trans }})</small>
             <small color="danger" *ngIf="person.residence.is_disabled">- {{ 'literals.disabled' | trans }}</small>
@@ -103,7 +108,13 @@
           <img [src]="person.image_url" alt="image person" onerror="this.style.display = 'none'">
         </ion-avatar>
         <ion-label>
-          {{person.name}} {{person.residence?.name}}
+          {{person.name}}
+          <ion-badge color="primary" *ngIf="person.residence && person.residence.owner_id == person.id">
+            {{ 'literals.owner' | trans}}
+          </ion-badge>
+          <p *ngIf="person.residence">
+            {{person.residence.name}}
+          </p>
         </ion-label>
         <ion-icon item-right *ngIf="multiple" [name]="person._selected ? 'checkbox-outline' : 'square-outline'"></ion-icon>
 
@@ -131,6 +142,7 @@
         </ion-label>
       </button>
     </ion-list>
+
   </div>
 
 

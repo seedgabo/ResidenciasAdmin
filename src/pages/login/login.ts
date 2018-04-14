@@ -109,9 +109,9 @@ export class Login {
     this.api
       .doLogin()
       .then((data: any) => {
-          loading.dismiss();
-          this.goTo(data);
-          console.log(data);
+        loading.dismiss();
+        this.goTo(data);
+        console.log(data);
       })
 
       .catch(err => {
@@ -313,7 +313,7 @@ export class Login {
   }
 
   getLogins(loading = null) {
-    if (this.api.username.length == 0) {
+    if (!this.api.username || this.api.username.length == 0) {
       return;
     }
     if (!loading) {
@@ -380,7 +380,7 @@ export class Login {
 
   goTo(data) {
     this.api.user = data.user;
-    this.api.storage.set("user", data.user)
+    this.api.storage.set("user", data.user);
     this.api.saveData(data);
     this.api.getData();
     this.api.startEcho();
