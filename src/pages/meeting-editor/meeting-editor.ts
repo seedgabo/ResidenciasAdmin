@@ -17,18 +17,11 @@ export class MeetingEditorPage {
     description: ""
   };
   loading = false;
-  constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public api: Api
-  ) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api) {
     if (this.navParams.get("meeting")) {
       this.meeting = this.navParams.get("meeting");
-      this.meeting.start = moment(this.meeting.start).format(
-        "YYYY-MM-DDTHH:mm"
-      );
-      if (this.meeting.end)
-        this.meeting.end = moment(this.meeting.end).format("YYYY-MM-DDTHH:mm");
+      this.meeting.start = moment(this.meeting.start).format("YYYY-MM-DDTHH:mm");
+      if (this.meeting.end) this.meeting.end = moment(this.meeting.end).format("YYYY-MM-DDTHH:mm");
     }
   }
 
@@ -36,11 +29,11 @@ export class MeetingEditorPage {
     this.loading = true;
     this.api
       .delete("meetings/" + this.meeting.id)
-      .then(data => {
+      .then((data) => {
         this.loading = false;
         this.navCtrl.pop();
       })
-      .catch(e => {
+      .catch((e) => {
         this.api.Error(e);
         this.loading = false;
       });
@@ -62,12 +55,12 @@ export class MeetingEditorPage {
       promise = this.api.post("meetings", data);
     }
     promise
-      .then(data => {
+      .then((data) => {
         this.loading = false;
         this.navCtrl.pop();
-        this.navCtrl.push("MeetingPage", { meeting: data });
+        this.navCtrl.push("MeetingPage", { meeting: data, id: data.id });
       })
-      .catch(err => {
+      .catch((err) => {
         this.loading = false;
       });
   }
