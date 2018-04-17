@@ -35,6 +35,12 @@
       </ion-select>
     </ion-item>
 
+
+    <ion-item>
+      <ion-label floating>{{ 'literals.note' | trans }}</ion-label>
+      <ion-textarea [(ngModel)]="visit.note"></ion-textarea>
+    </ion-item>
+
   </ion-list>
 </ion-content>
 

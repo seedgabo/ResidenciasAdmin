@@ -143,16 +143,10 @@
               <span item-right>{{person.document}}</span>
             </ion-item>
 
-            <ion-item *ngIf="type != 'worker';else workerWorkField">
-              <b item-left>{{'literals.relationship' | trans }}</b>
-              <span item-right>{{'literals.' + person.relationship}}</span>
+            <ion-item *ngIf="type == 'worker'">
+              <b item-left>{{'literals.work' | trans }}</b>
+              <span item-right>{{person.work}}</span>
             </ion-item>
-            <ng-template #workerWorkField>
-              <ion-item>
-                <b item-left>{{'literals.work' | trans }}</b>
-                <span item-right>{{person.work}}</span>
-              </ion-item>
-            </ng-template>
 
             <ion-item>
               <b item-left>{{'literals.residence' | trans }}</b>

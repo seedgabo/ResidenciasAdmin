@@ -106,14 +106,14 @@
     </button>
     <ion-fab-list side="top">
       <div class="fab-label-button">
-        <button ion-fab color="secondary" (click)="addCorrespondece(); fab.close()">
+        <button ion-fab color="secondary" (click)="addCorrespondece(false); fab.close()">
           <ion-icon name="ios-archive"></ion-icon>
         </button>
         <div class="label">{{'crud.add' | trans }} {{'literals.correspondence' | trans }}</div>
       </div>
 
       <div class="fab-label-button">
-        <button ion-fab color="favorite" (click)="addCorrespondece();fab.close()">
+        <button ion-fab color="favorite" (click)="addCorrespondece(true);fab.close()">
           <ion-icon class="fa fa-truck"></ion-icon>
         </button>
         <div class="label">{{'crud.add' | trans }} {{'literals.correspondences' | trans }}</div>
