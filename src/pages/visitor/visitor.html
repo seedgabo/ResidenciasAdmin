@@ -36,14 +36,9 @@
       </ion-select>
     </ion-item>
 
-    <ion-item>
-      <ion-label floating>{{'literals.relationship' | trans }}</ion-label>
-      <ion-input (ionChange)="dirty=true" type="text" [(ngModel)]="visitor.relationship"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label floating>{{'literals.notes' | trans }}</ion-label>
-      <ion-textarea (ionChange)="dirty=true" [(ngModel)]="visitor.notes"></ion-textarea>
+    <ion-item *ngFor="let field of visitor.extra">
+      <ion-label floating>{{'literals.' + field.name | trans }}</ion-label>
+      <ion-input (ionChange)="dirty=true" [(ngModel)]="field.value"></ion-input>
     </ion-item>
 
     <ion-item>
