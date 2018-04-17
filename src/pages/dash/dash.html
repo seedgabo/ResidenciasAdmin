@@ -20,13 +20,11 @@
 <ion-content no-margin no-padding>
 
   <div *ngIf="sliders && sliders.length > 0">
-    <ion-slides style="height:200px" pager paginationType="bullets" autoplay="3000" loop="true">
-      <ion-slide *ngFor="let slider of sliders" style="align-items:flex-start">
-        <img [src]="slider.image.url" [alt]="slider.name" style="height:100%; width:100%;vertical">
-
-        <h2 style="position:absolute;top:20%;left:12%;" [style.color]="slider.color? slider.color : 'white'">{{slider.name}}</h2>
+    <ion-slides parallax="true" autoplay="3000" pager loop="true" zoom="true">
+      <ion-slide *ngFor="let slider of sliders" class="custom-slide">
+        <img [src]="slider.image.url" [alt]="slider.name" style="height:100%; width:100%">
+        <h2 style="position:absolute; top:20%; left:12%;" [style.color]="slider.color? slider.color : 'white'">{{slider.name}}</h2>
         <p style="position:absolute; top:35%; left:12%;" [style.color]="slider.color? slider.color : 'white'">{{slider.text}}</p>
-
       </ion-slide>
     </ion-slides>
   </div>
