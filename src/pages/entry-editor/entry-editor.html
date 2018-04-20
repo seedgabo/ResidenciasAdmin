@@ -23,6 +23,7 @@
     <vehicle-selector [(ngModel)]="entry.vehicle"></vehicle-selector>
     <person-selector (onChange)="changePerson($event)" [users]="true" [visitors]="true" [workers]="true" [(ngModel)]="entry.person"></person-selector>
     <residence-selector [(ngModel)]="entry.residence"></residence-selector>
+    <signature color="light" [(ngModel)]="entry.signature"></signature>
 
     <ion-item>
       <ion-label floating>{{'literals.note' | trans}}</ion-label>

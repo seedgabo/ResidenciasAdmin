@@ -273,6 +273,11 @@ export class Api {
     });
   }
 
+  uploadImage(resource, id, dataUrl) {
+    var promise = this.post(`images/upload/${resource}/${id}`, { image: dataUrl });
+    return promise;
+  }
+
   getData() {
     return new Promise((resolve, reject) => {
       this.http

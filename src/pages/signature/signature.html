@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-title>{{'literals.signature' | trans }}</ion-title>
+    <ion-buttons end>
+      <button [disabled]="isEmpty" right ion-button icon-left clear (click)="clear()">
+        <ion-icon name="trash"></ion-icon>
+        {{'crud.clear' | trans }}
+      </button>
+      <button ion-button icon-only clear (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <canvas id="canvas-signature" style="width:90%;height:90%;"></canvas>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <button [disabled]="isEmpty" block ion-button color="primary" (click)="save()">
+      {{ 'crud.save' | trans }}
+    </button>
+  </ion-toolbar>
+</ion-footer>
