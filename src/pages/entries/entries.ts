@@ -68,7 +68,7 @@ export class EntriesPage {
   viewSignature(entry) {
     this.api
       .get(`images/${entry.signature_id}`)
-      .then((sign) => {
+      .then((sign: any) => {
         window.open(sign.url, "_blank");
       })
       .catch((err) => {
