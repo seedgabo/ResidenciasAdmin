@@ -40,7 +40,14 @@
 <ion-footer>
   <ion-toolbar>
     <button ion-button block color="primary" (click)="save()" [disabled]="!canSave() || loading">
-      {{'crud.save' | trans}}
+      <span *ngIf="loading !== 'uploading signature';else uploadingSignature">
+        {{'crud.save' | trans}}
+      </span>
+      <ng-template #uploadingSignature>
+        <span>
+          {{ '__.uploading signature' | trans }}
+        </span>
+      </ng-template>
     </button>
   </ion-toolbar>
 </ion-footer>

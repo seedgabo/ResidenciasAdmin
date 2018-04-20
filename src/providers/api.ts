@@ -277,6 +277,10 @@ export class Api {
     var promise = this.post(`images/upload/${resource}/${id}`, { image: dataUrl });
     return promise;
   }
+  uploadSignature(resource, id, dataUrl) {
+    var promise = this.post(`signatures/upload/${resource}/${id}`, { image: dataUrl });
+    return promise;
+  }
 
   getData() {
     return new Promise((resolve, reject) => {
@@ -630,7 +634,6 @@ export class Api {
 
   Error(error) {
     var message = "";
-    console.log(error);
     if (error.status == 500) {
       message = this.trans("__.Internal Server Error");
     }
@@ -643,7 +646,7 @@ export class Api {
     this.alert
       .create({
         title: this.trans("__.Network Error"),
-        subTitle: error.error,
+        subTitle: error.message || error.error,
         message: message + ":" + error.statusText,
         buttons: ["OK"]
       })

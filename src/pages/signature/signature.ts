@@ -51,6 +51,6 @@ export class SignaturePage {
   }
 
   save() {
-    this.viewCtrl.dismiss(signaturePad.toDataURL("image/svg+xml"));
+    this.viewCtrl.dismiss(signaturePad.toDataURL("image/jpg"));
   }
 }

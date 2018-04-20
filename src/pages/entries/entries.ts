@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams, ModalController } from "ionic-angular";
+import { Component, ViewChild } from "@angular/core";
+import { IonicPage, NavController, NavParams, ModalController, Refresher } from "ionic-angular";
 import { Api } from "../../providers/api";
 
 import moment from "moment";
@@ -10,6 +10,8 @@ moment.locale("es-US");
   templateUrl: "entries.html"
 })
 export class EntriesPage {
+  @ViewChild(Refresher) refresher: Refresher;
+
   _entries: any = { data: [] };
   entries = [];
   entry = {};
@@ -19,20 +21,24 @@ export class EntriesPage {
 
   ionViewDidLoad() {
     this.api.ready.then(() => {
-      this.getEntries();
+      this.refresher._top = "50px";
+      this.refresher.state = "refreshing";
+      this.refresher._beginRefresh();
     });
   }
 
-  getEntries() {
+  getEntries(refresher = null) {
     this.api
       .get("entry_logs?include=worker,visitor,residence,vehicle&order[time]=desc&paginate=150")
       .then((data) => {
         this._entries = data;
         this.filter();
+        if (refresher) refresher.complete();
       })
       .catch((err) => {
         this.api.Error(err);
         console.error(err);
+        if (refresher) refresher.complete();
       });
   }
 
@@ -59,6 +65,18 @@ export class EntriesPage {
     modal.present();
   }
 
+  viewSignature(entry) {
+    this.api
+      .get(`images/${entry.signature_id}`)
+      .then((sign) => {
+        window.open(sign.url, "_blank");
+      })
+      .catch((err) => {
+        this.api.Error(err);
+        console.error(err);
+      });
+  }
+
   addEntry() {
     var modal = this.modal.create("EntryEditorPage");
     modal.present();
@@ -66,11 +84,24 @@ export class EntriesPage {
       this.getEntries();
     });
   }
+
   editEntry(entry) {
     var modal = this.modal.create("EntryEditorPage", { entry: entry, id: entry.id });
     modal.present();
     modal.onWillDismiss(() => {
       this.getEntries();
+    });
+  }
+
+  removeEntry(entry, index) {
+    this.api.delete(`entry_logs/${entry.id}`).then((response) => {
+      var finder = this._entries.data.findIndex((e) => {
+        return e.id == entry.id;
+      });
+      if (finder > -1) {
+        this._entries.data.splice(finder, 1);
+      }
+      this.filter();
     });
   }
 }

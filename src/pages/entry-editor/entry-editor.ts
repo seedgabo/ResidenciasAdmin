@@ -17,7 +17,7 @@ export class EntryEditorPage {
     time: moment().format("YYYY-MM-DDTHH:mm"),
     note: ""
   };
-  loading = false;
+  loading: any = false;
   constructor(public viewCtrl: ViewController, public navParams: NavParams, public api: Api) {
     if (this.navParams.get("entry")) {
       this.entry = Object.assign({}, this.navParams.get("entry"));
@@ -62,8 +62,24 @@ export class EntryEditorPage {
     }
     promise
       .then((data) => {
-        this.loading = false;
-        this.viewCtrl.dismiss(data);
+        if (this.entry.signature) {
+          this.loading = "uploading signature";
+          this.api
+            .uploadSignature("EntryLog", data.id, this.entry.signature)
+            .then((response: any) => {
+              console.log("signature response:", response);
+              this.loading = false;
+              data.signature_id = response.signature.id;
+              this.viewCtrl.dismiss(data);
+            })
+            .catch((err) => {
+              this.loading = false;
+              this.api.Error(err);
+            });
+        } else {
+          this.loading = false;
+          this.viewCtrl.dismiss(data);
+        }
       })
       .catch((err) => {
         this.loading = false;
