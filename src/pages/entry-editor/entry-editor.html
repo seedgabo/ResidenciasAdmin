@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ 'literals.entry log' | trans }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only clear (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label floating>{{'literals.type' | trans }}</ion-label>
+      <ion-select [(ngModel)]="entry.type">
+        <ion-option value="entry">{{'literals.entry' | trans}}</ion-option>
+        <ion-option value="exit">{{'literals.exit' | trans}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <vehicle-selector [(ngModel)]="entry.vehicle"></vehicle-selector>
+    <person-selector (onChange)="changePerson($event)" [users]="true" [visitors]="true" [workers]="true" [(ngModel)]="entry.person"></person-selector>
+    <residence-selector [(ngModel)]="entry.residence"></residence-selector>
+
+    <ion-item>
+      <ion-label floating>{{'literals.note' | trans}}</ion-label>
+      <ion-textarea [(ngModel)]="entry.note"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>{{'literals.time' | trans }}</ion-label>
+      <ion-datetime pickerFormat="MM/DD/YYYY HH:mm" displayFormat="MM/DD/YYYY HH:mm" [(ngModel)]="entry.time"></ion-datetime>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <button ion-button block color="primary" (click)="save()" [disabled]="!canSave() || loading">
+      {{'crud.save' | trans}}
+    </button>
+  </ion-toolbar>
+</ion-footer>

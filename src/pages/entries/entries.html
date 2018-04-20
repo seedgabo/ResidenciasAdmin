@@ -1,29 +1,44 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <button ion-button icon-only menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>{{'entries' | trans }}</ion-title>
-
+  <ion-toolbar color="primary" [hidden]="searching">
+    <ion-buttons left>
+      <button ion-button icon-only navPop>
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>{{'literals.entries' | trans }}</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only>
+      <button ion-button icon-only (click)="searching = true">
         <ion-icon name="search"></ion-icon>
       </button>
     </ion-buttons>
+  </ion-toolbar>
 
-  </ion-navbar>
+  <ion-toolbar [hidden]="!searching">
+    <ion-searchbar (ionInput)="filter()" [(ngModel)]="query"></ion-searchbar>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="searching = false">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content class="container">
+<ion-content xclass="container">
   <ion-card>
     <ion-list>
-      <button ion-item *ngFor="let entry of entries?.data">
-        {{entry | json}}
+      <button ion-item *ngFor="let entry of entries" (click)="editEntry(entry)">
+        <h2>{{entry.vehicle?.name}}</h2>
+        <h3>{{entry.person?.name}} - {{ entry.residence?.name }} </h3>
+        <ion-badge [color]="entry.type == 'entry' ? 'primary' : 'secondary'">
+          {{'literals.'+ entry.type | trans }}
+        </ion-badge>
+        <span item-right>{{ entry.time | amCalendar }}</span>
       </button>
     </ion-list>
   </ion-card>
   <ion-fab bottom right>
-    <button ion-fab>
+    <button ion-fab (click)="addEntry()">
       <ion-icon name="add"></ion-icon>
     </button>
   </ion-fab>
