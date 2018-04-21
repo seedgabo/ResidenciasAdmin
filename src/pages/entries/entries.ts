@@ -69,7 +69,12 @@ export class EntriesPage {
     this.api
       .get(`images/${entry.signature_id}`)
       .then((sign: any) => {
-        window.open(sign.url, "_blank");
+        this.modal
+          .create("ImageViewerPage", {
+            url: sign.url,
+            title: entry.person ? entry.person.name : ""
+          })
+          .present();
       })
       .catch((err) => {
         this.api.Error(err);

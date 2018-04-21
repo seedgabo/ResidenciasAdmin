@@ -1,0 +1,17 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons end>
+      <button ion-button clear icon-only (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <img [src]="url" [alt]="title" style="max-height:100%; max-width:100%; min-width: 100%; margin: 0 auto;">
+</ion-content>
