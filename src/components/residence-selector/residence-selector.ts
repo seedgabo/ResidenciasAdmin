@@ -1,10 +1,4 @@
-import {
-  Component,
-  forwardRef,
-  EventEmitter,
-  Output,
-  Input
-} from "@angular/core";
+import { Component, forwardRef, EventEmitter, Output, Input } from "@angular/core";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 import { ModalController } from "ionic-angular";
 import { Api } from "../../providers/api";
@@ -41,7 +35,7 @@ export class ResidenceSelectorComponent implements ControlValueAccessor {
       multiple: this.multiple
     });
     modal.present();
-    modal.onDidDismiss(data => {
+    modal.onDidDismiss((data) => {
       if (this.multiple) {
         this.selecteds = data.selecteds;
         this.onChange.emit(data.selecteds);
@@ -87,10 +81,10 @@ export class ResidenceSelectorComponent implements ControlValueAccessor {
 
   //From ControlValueAccessor interface
   writeValue(value: any) {
-    if (this.multiple) {
-      this.residence = value;
-    } else if (value && value.length) {
+    if (value && this.multiple && value.length) {
       this.selecteds = value;
+    } else {
+      this.residence = value;
     }
   }
   //From ControlValueAccessor interface

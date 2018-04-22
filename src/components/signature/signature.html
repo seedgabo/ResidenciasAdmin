@@ -1,0 +1,4 @@
+<button ion-button (click)="OpenSignature()" [color]="!signature ? color  : 'secondary'" block [large]="large" icon-right>
+  {{ 'literals.signature' | trans }}
+  <ion-icon [name]="!!signature ? 'checkmark' : 'finger-print'" large></ion-icon>
+</button>

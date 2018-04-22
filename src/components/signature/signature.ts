@@ -1,50 +1,40 @@
-import { Component, forwardRef, EventEmitter, Output, Input } from "@angular/core";
+import { Component, forwardRef, EventEmitter, Output, Input, SimpleChanges, OnChanges } from "@angular/core";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 import { ModalController } from "ionic-angular";
 import { Api } from "../../providers/api";
-import { VehicleFinderPage } from "../../pages/vehicle-finder/vehicle-finder";
 
 export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
-  useExisting: forwardRef(() => VehicleSelectorComponent),
+  useExisting: forwardRef(() => SignatureComponent),
   multi: true
 };
-
 @Component({
-  selector: "vehicle-selector",
-  templateUrl: "vehicle-selector.html",
+  selector: "signature",
+  templateUrl: "signature.html",
   providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR]
 })
-export class VehicleSelectorComponent implements ControlValueAccessor {
-  public vehicle;
+export class SignatureComponent implements ControlValueAccessor, OnChanges {
+  public signature;
   public ready = false;
-  @Input() type: string;
-  @Input() multiple: boolean;
+  @Input() large: boolean = false;
+  @Input() color: string = "primary";
   @Output() onChange: EventEmitter<any> = new EventEmitter();
+  constructor(public modal: ModalController, public api: Api) {}
 
-  constructor(public modal: ModalController, public api: Api) {
-    this.api.ready.then(() => {
-      this.api.load("vehicles").then(() => {
-        this.ready = true;
-      });
-    });
-  }
-
-  selectVehicle() {
+  OpenSignature() {
     this.onTouchedCallback();
-    var modal = this.modal.create(VehicleFinderPage, {});
+    var modal = this.modal.create("SignaturePage", { signature: this.signature });
     modal.present();
-    modal.onDidDismiss((data) => {
-      if (data && data.id) {
-        this.vehicle = data;
-      } else {
-        this.vehicle = null;
+    modal.onWillDismiss((data) => {
+      if (data) {
+        this.signature = data;
       }
-      console.log(this.vehicle);
-      this.onChangeCallback(this.vehicle);
-      this.onChange.emit(this.vehicle);
+      this.onChangeCallback(data);
+      this.onChange.emit(data);
     });
   }
+
+  ngOnChanges(changes: SimpleChanges) {}
 
   //Placeholders for the callbacks which are later providesd
   //by the Control Value Accessor
@@ -53,20 +43,22 @@ export class VehicleSelectorComponent implements ControlValueAccessor {
 
   //get accessor
   get value(): any {
-    return this.vehicle;
+    return this.signature;
   }
 
   //set accessor including call the onchange callback
   set value(v: any) {
-    if (v !== this.vehicle) {
-      this.vehicle = v;
+    if (v !== this.signature) {
+      this.signature = v;
       this.onChangeCallback(v);
     }
   }
 
   //From ControlValueAccessor interface
   writeValue(value: any) {
-    this.vehicle = value;
+    if (value) {
+      this.signature = value;
+    }
   }
   //From ControlValueAccessor interface
   registerOnChange(fn: any) {

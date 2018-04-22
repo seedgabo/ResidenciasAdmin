@@ -8,13 +8,16 @@ import { PersonSelectorComponent } from './person-selector/person-selector';
 
 import { IonicModule } from 'ionic-angular';
 import { PipesModule } from '../pipes/pipes.module';
+import { SignatureComponent } from './signature/signature';
 @NgModule({
-  declarations: [ResidenceSelectorComponent, VehicleSelectorComponent, PersonSelectorComponent],
+  declarations: [ResidenceSelectorComponent, VehicleSelectorComponent, PersonSelectorComponent,
+    SignatureComponent],
   imports: [
     CommonModule, FormsModule,
     IonicModule,
     PipesModule
   ],
-  exports: [ResidenceSelectorComponent, VehicleSelectorComponent, PersonSelectorComponent]
+  exports: [ResidenceSelectorComponent, VehicleSelectorComponent, PersonSelectorComponent,
+    SignatureComponent]
 })
 export class ComponentsModule { }

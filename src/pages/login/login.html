@@ -7,13 +7,13 @@
 
     <div *ngIf="!api.url">
       <div *ngIf="logins.length === 0">
-        <!-- <input (keydown)="keyDownFunction($event)" class="code" type="email" [(ngModel)]="api.username" placeholder="Email" (blur)="getLogins()"> -->
+        <!-- <input (keydown)="keyDownFunction($event)" class="code" type="email" [(ngModel)]="api.username" placeholder="Email" (ionBlur)="getLogins()"> -->
         <ion-item>
           <ion-label floating>
             <ion-icon name="person" item-left></ion-icon>
             Email
           </ion-label>
-          <ion-input (keydown)="keyDownFunction($event)" type="email" [(ngModel)]="api.username" (blur)="getLogins()"></ion-input>
+          <ion-input (keydown)="keyDownFunction($event)" type="email" [(ngModel)]="api.username" (ionBlur)="getLogins()"></ion-input>
         </ion-item>
         <button color="primary" ion-button class="pull-right">{{'__.siguiente' | trans }}</button>
 
@@ -111,4 +111,3 @@
     </ion-list>
   </ion-card>
 </ion-content>
-

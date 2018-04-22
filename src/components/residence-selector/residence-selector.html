@@ -10,8 +10,8 @@
   <ion-avatar item-left *ngIf="residence && residence.image_url">
     <img [src]="residence.image_url" alt="">
   </ion-avatar>
-  <span *ngIf="!multiple && residence">
+  <h2 *ngIf="residence">
     <span>{{residence.name}}</span>
-  </span>
+  </h2>
   <ion-icon item-end name="arrow-dropdown"></ion-icon>
 </button>
