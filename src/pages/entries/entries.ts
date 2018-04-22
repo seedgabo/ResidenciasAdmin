@@ -17,6 +17,10 @@ export class EntriesPage {
   entry = {};
   searching = false;
   query = "";
+  from = moment().startOf("day");
+  to = moment()
+    .add(1, "day")
+    .startOf("day");
   constructor(public navCtrl: NavController, public navParams: NavParams, public modal: ModalController, public api: Api) {}
 
   ionViewDidLoad() {
@@ -29,7 +33,11 @@ export class EntriesPage {
 
   getEntries(refresher = null) {
     this.api
-      .get("entry_logs?include=worker,visitor,residence,vehicle&order[time]=desc&paginate=150")
+      .get(
+        `entry_logs?include=worker,visitor,residence,vehicle&order[time]=desc&whereDategte[time]=${this.from.format(
+          "Y-MM-DD"
+        )}&whereDatelwe[time]=${this.to.format("Y-MM-DD")}&where[created_by]=${this.api.user.id}`
+      )
       .then((data) => {
         this._entries = data;
         this.filter();
@@ -44,15 +52,15 @@ export class EntriesPage {
 
   filter() {
     if (this.query == "") {
-      return (this.entries = this._entries.data);
+      return (this.entries = this._entries);
     }
     var f = this.query.toLowerCase();
     var filtered = [];
-    this._entries.data.forEach((e) => {
+    this._entries.forEach((e) => {
       if (
-        (e.vehicle && e.vehicle.name && e.vehicle.name.indexOf(f) > -1) ||
-        (e.person && e.person.name && e.person.name.indexOf(f) > -1) ||
-        (e.residence && e.residence.name && e.residence.name.indexOf(f) > -1)
+        (e.vehicle && e.vehicle.name && e.vehicle.name.toLowerCase().indexOf(f) > -1) ||
+        (e.person && e.person.name && e.person.name.toLowerCase().indexOf(f) > -1) ||
+        (e.residence && e.residence.name && e.residence.name.toLowerCase().indexOf(f) > -1)
       ) {
         filtered[filtered.length] = e;
       }

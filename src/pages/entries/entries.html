@@ -28,34 +28,34 @@
   <ion-refresher (ionRefresh)="getEntries($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-card>
-    <ion-list>
-      <ion-item-sliding *ngFor="let entry of entries; let i = index">
-        <button ion-item (click)="editEntry(entry)">
-          <h2>{{entry.vehicle?.name}}</h2>
-          <h3>{{entry.person?.name}} - {{ entry.residence?.name }} </h3>
-          <ion-badge [color]="entry.type == 'entry' ? 'primary' : 'secondary'">
-            {{'literals.'+ entry.type | trans }}
-          </ion-badge>
-          <span item-right>{{ entry.time | amCalendar }}</span>
+  <!-- <ion-card> -->
+  <ion-list [virtualScroll]="entries" approxItemHeight="70px">
+    <ion-item-sliding *virtualItem="let entry; let i = index">
+      <button ion-item (click)="editEntry(entry)">
+        <h2>{{entry.vehicle?.name}}</h2>
+        <h3>{{entry.person?.name}} - {{ entry.residence?.name }} </h3>
+        <ion-badge [color]="entry.type == 'entry' ? 'primary' : 'secondary'">
+          {{'literals.'+ entry.type | trans }}
+        </ion-badge>
+        <span item-right>{{ entry.time | amCalendar }}</span>
+      </button>
+      <ion-item-options side="right">
+        <button ion-button color="light" (click)="viewSignature(entry)" *ngIf="entry.signature_id">
+          <ion-icon name="finger-print"></ion-icon>
+          {{'literals.view_resource' | trans }} {{ 'literals.signature' | trans }}
         </button>
-        <ion-item-options side="right">
-          <button ion-button color="light" (click)="viewSignature(entry)" *ngIf="entry.signature_id">
-            <ion-icon name="finger-print"></ion-icon>
-            {{'literals.view_resource' | trans }} {{ 'literals.signature' | trans }}
-          </button>
-          <button ion-button color="primary" (click)="editEntry(entry)">
-            <ion-icon name="create"></ion-icon>
-            {{'crud.edit' | trans }}
-          </button>
-          <button ion-button color="danger" (click)="removeEntry(entry,i)">
-            <ion-icon name="trash"></ion-icon>
-            {{'crud.remove' | trans }}
-          </button>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
-  </ion-card>
+        <button ion-button color="primary" (click)="editEntry(entry)">
+          <ion-icon name="create"></ion-icon>
+          {{'crud.edit' | trans }}
+        </button>
+        <button ion-button color="danger" (click)="removeEntry(entry,i)">
+          <ion-icon name="trash"></ion-icon>
+          {{'crud.remove' | trans }}
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <!-- </ion-card> -->
   <ion-fab bottom right>
     <button ion-fab (click)="addEntry()">
       <ion-icon name="add"></ion-icon>

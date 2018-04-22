@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
 import { IonicPage, ViewController, NavParams } from "ionic-angular";
 import SignaturePad from "signature_pad";
+var canvas;
+var signaturePad;
 
 @IonicPage()
 @Component({
@@ -10,8 +12,6 @@ import SignaturePad from "signature_pad";
 export class SignaturePage {
   isEmpty = true;
   uuid = "canvas-signature" + Math.floor(100000 * Math.random());
-  canvas;
-  signaturePad;
   constructor(public viewCtrl: ViewController, public navParams: NavParams) {}
 
   resizeCanvas() {
@@ -20,24 +20,24 @@ export class SignaturePage {
     canvas.width = canvas.offsetWidth * ratio;
     canvas.height = canvas.offsetHeight * ratio;
     canvas.getContext("2d").scale(ratio, ratio);
-    this.signaturePad.clear(); // otherwise isEmpty() might return incorrect value
+    signaturePad.clear(); // otherwise isEmpty() might return incorrect value
   }
 
   ionViewDidLoad() {
     setTimeout(() => {
-      this.canvas = document.querySelector(`#${this.uuid}`);
-      this.signaturePad = new SignaturePad(this.canvas, {
+      var canvas = document.querySelector(`#${this.uuid}`);
+      var signaturePad = new SignaturePad(canvas, {
         onEnd: () => {
-          this.isEmpty = this.signaturePad.isEmpty();
+          this.isEmpty = signaturePad.isEmpty();
         }
       });
-      window.addEventListener("resize", this.resizeCanvas.bind(this));
+      window.addEventListener("resize", this.resizeCanvas);
       this.resizeCanvas();
     }, 375);
   }
 
   ionViewWillLeave() {
-    window.removeEventListener("resize", this.resizeCanvas.bind(this));
+    window.removeEventListener("resize", this.resizeCanvas);
   }
 
   dismiss() {
@@ -46,11 +46,11 @@ export class SignaturePage {
 
   clear() {
     this.ionViewDidLoad();
-    this.signaturePad.clear();
+    signaturePad.clear();
     this.isEmpty = true;
   }
 
   save() {
-    this.viewCtrl.dismiss(this.signaturePad.toDataURL("image/jpg"));
+    this.viewCtrl.dismiss(signaturePad.toDataURL("image/jpg"));
   }
 }
