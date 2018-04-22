@@ -1,8 +1,6 @@
 import { Component } from "@angular/core";
 import { IonicPage, ViewController, NavParams } from "ionic-angular";
 import SignaturePad from "signature_pad";
-var canvas;
-var signaturePad;
 
 @IonicPage()
 @Component({
@@ -11,34 +9,35 @@ var signaturePad;
 })
 export class SignaturePage {
   isEmpty = true;
+  uuid = "canvas-signature" + Math.floor(100000 * Math.random());
+  canvas;
+  signaturePad;
   constructor(public viewCtrl: ViewController, public navParams: NavParams) {}
+
   resizeCanvas() {
-    var canvas: any = document.querySelector("#canvas-signature");
+    var canvas: any = document.querySelector(`#${this.uuid}`);
     var ratio = Math.max(window.devicePixelRatio || 1, 1);
     canvas.width = canvas.offsetWidth * ratio;
     canvas.height = canvas.offsetHeight * ratio;
     canvas.getContext("2d").scale(ratio, ratio);
-    signaturePad.clear(); // otherwise isEmpty() might return incorrect value
+    this.signaturePad.clear(); // otherwise isEmpty() might return incorrect value
   }
 
   ionViewDidLoad() {
     setTimeout(() => {
-      canvas = document.querySelector("#canvas-signature");
-      signaturePad = new SignaturePad(canvas, {
+      this.canvas = document.querySelector(`#${this.uuid}`);
+      this.signaturePad = new SignaturePad(this.canvas, {
         onEnd: () => {
-          this.isEmpty = signaturePad.isEmpty();
+          this.isEmpty = this.signaturePad.isEmpty();
         }
       });
-      window.addEventListener("resize", this.resizeCanvas);
+      window.addEventListener("resize", this.resizeCanvas.bind(this));
       this.resizeCanvas();
-      if (this.navParams.get("signature")) {
-        signaturePad.fromData(this.navParams.get("signature"));
-      }
     }, 375);
   }
+
   ionViewWillLeave() {
-    signaturePad.off();
-    window.removeEventListener("resize", this.resizeCanvas);
+    window.removeEventListener("resize", this.resizeCanvas.bind(this));
   }
 
   dismiss() {
@@ -46,11 +45,12 @@ export class SignaturePage {
   }
 
   clear() {
-    signaturePad.clear();
+    this.ionViewDidLoad();
+    this.signaturePad.clear();
     this.isEmpty = true;
   }
 
   save() {
-    this.viewCtrl.dismiss(signaturePad.toDataURL("image/jpg"));
+    this.viewCtrl.dismiss(this.signaturePad.toDataURL("image/jpg"));
   }
 }
