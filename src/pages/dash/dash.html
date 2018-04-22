@@ -21,7 +21,7 @@
 
   <div *ngIf="sliders && sliders.length > 0">
     <ion-slides parallax="true" autoplay="3000" pager loop="true" zoom="true">
-      <ion-slide *ngFor="let slider of sliders" class="custom-slide">
+      <ion-slide *ngFor="let slider of sliders" class="custom-slide" style="max-height:450px">
         <img [src]="slider.image.url" [alt]="slider.name" style="height:100%; width:100%">
         <h2 style="position:absolute; top:20%; left:12%;" [style.color]="slider.color? slider.color : 'white'">{{slider.name}}</h2>
         <p style="position:absolute; top:35%; left:12%;" [style.color]="slider.color? slider.color : 'white'">{{slider.text}}</p>
@@ -36,6 +36,14 @@
         <div tappable class="dash-card" padding no-margin (click)="openPage('LobbyPage')">
           <ion-icon class="dash-icon" large color="primary" name="ios-key"></ion-icon>
           <h1 class="dash-title">{{api.trans('literals.lobby')}}</h1>
+        </div>
+      </ion-col>
+
+
+      <ion-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngIf="api.permissions.visitors">
+        <div tappable class="dash-card" padding no-margin (click)="openPage('EntriesPage')">
+          <ion-icon class="dash-icon" large color="primary" name="ios-key"></ion-icon>
+          <h1 class="dash-title">{{api.trans('literals.entry logs')}}</h1>
         </div>
       </ion-col>
 
