@@ -9,7 +9,19 @@ import { Api } from "../../providers/api";
 })
 export class VisitorPage {
   action: string = "create";
-  visitor: any = { sex: "male", extra: [{ name: "EPS", value: "" }, { name: "ARL", value: "" }, { name: "RH", value: "" }] };
+  visitor: any = {
+    sex: "male",
+    extra: [
+      { name: "Empresa", value: "" },
+      { name: "EPS", value: "" },
+      { name: "ARL", value: "" },
+      { name: "RH", value: "" },
+      { name: "Alergico", value: "" },
+      { name: "Conoce las Politicas", value: "" },
+      { name: "Contacto de Emergencia (nombre)", value: "" },
+      { name: "Contacto de Emergencia (telefono)", value: "" }
+    ]
+  };
   vehicle = null;
   residence = null;
   parking = null;
@@ -32,7 +44,16 @@ export class VisitorPage {
     if (this.visitor.id) this.action = "update";
 
     if (!this.visitor.extra) {
-      this.visitor.extra = [{ name: "EPS", value: "" }, { name: "ARL", value: "" }, { name: "RH", value: "" }];
+      this.visitor.extra = [
+        { name: "Empresa", value: "" },
+        { name: "EPS", value: "" },
+        { name: "ARL", value: "" },
+        { name: "RH", value: "" },
+        { name: "Alergico", value: "" },
+        { name: "Conoce las Politicas", value: "" },
+        { name: "Contacto de Emergencia (nombre)", value: "" },
+        { name: "Contacto de Emergencia (telefono)", value: "" }
+      ];
     }
 
     if (residence) this.residence = residence;
