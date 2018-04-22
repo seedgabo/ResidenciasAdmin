@@ -25,8 +25,8 @@ export class SignaturePage {
 
   ionViewDidLoad() {
     setTimeout(() => {
-      var canvas = document.querySelector(`#${this.uuid}`);
-      var signaturePad = new SignaturePad(canvas, {
+      canvas = document.querySelector(`#${this.uuid}`);
+      signaturePad = new SignaturePad(canvas, {
         onEnd: () => {
           this.isEmpty = signaturePad.isEmpty();
         }
