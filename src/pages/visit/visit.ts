@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams, ModalController } from "ionic-angular";
+import { NavController, NavParams, ModalController, ToastController } from "ionic-angular";
 import { Api } from "../../providers/api";
 
 @Component({
@@ -8,7 +8,13 @@ import { Api } from "../../providers/api";
 })
 export class VisitPage {
   visit: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modal: ModalController, public api: Api) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public modal: ModalController,
+    public toast: ToastController,
+    public api: Api
+  ) {
     this.visit = navParams.data.visit;
     console.log(this.visit);
   }
@@ -32,7 +38,29 @@ export class VisitPage {
     this.navCtrl.pop();
   }
 
-  list() {}
+  update() {
+    var data = {
+      status: this.visit.status,
+      note: this.visit.note,
+      visitor_id: this.visit.visitor_id,
+      parking_id: this.visit.parking_id,
+      vehicle_id: this.visit.vehicle_id
+    };
+    this.api
+      .put(`visits/${this.visit.id}?include=visitor,visitors,residence,parking,vehicle,creator`, data)
+      .then((data) => {
+        this.visit = data;
+        this.toast
+          .create({
+            duration: 1500,
+            message: this.api.trans("literals.visit") + " " + this.api.trans("__.updated_successfully")
+          })
+          .present();
+      })
+      .catch((error) => {
+        this.api.Error(error);
+      });
+  }
 
   viewSignature() {
     this.api
