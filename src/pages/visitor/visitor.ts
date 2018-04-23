@@ -33,12 +33,9 @@ export class VisitorPage {
 
     if (residence) this.residence = residence;
     else if (this.api.objects.residences && this.visitor.residence_id)
-      this.residence = this.api.objects.residence.collection[
-        this.visitor.residence_id
-      ];
+      this.residence = this.api.objects.residences.collection[this.visitor.residence_id];
     else this.residence = this.visitor.residence;
-    if (navParams.get("show_visits_button") !== undefined)
-      this.show_visits_button = navParams.get("show_visits_button");
+    if (navParams.get("show_visits_button") !== undefined) this.show_visits_button = navParams.get("show_visits_button");
   }
 
   ionViewDidLoad() {}
@@ -48,7 +45,7 @@ export class VisitorPage {
       residence_id: this.visitor.residence_id
     });
     modal.present();
-    modal.onDidDismiss(data => {
+    modal.onDidDismiss((data) => {
       if (data && data.id) {
         this.vehicle = data;
         this.loadParkings();
@@ -74,12 +71,7 @@ export class VisitorPage {
   }
 
   canSave() {
-    return (
-      this.visitor.name &&
-      this.visitor.name.length > 3 &&
-      this.visitor.document &&
-      this.visitor.residence_id
-    );
+    return this.visitor.name && this.visitor.name.length > 3 && this.visitor.document && this.visitor.residence_id;
   }
 
   save() {
@@ -95,13 +87,13 @@ export class VisitorPage {
     if (this.action == "create") {
       this.api
         .post("visitors?with[]=residence", data)
-        .then(response => {
+        .then((response) => {
           console.log(response);
           this.api.VisitorChanged({ visitor: response });
           this.viewCtrl.dismiss(response);
           this.loading = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false;
           this.api.Error(err);
         });
@@ -109,13 +101,13 @@ export class VisitorPage {
     if (this.action == "update") {
       this.api
         .put("visitors/" + this.visitor.id + "?with[]=residence", data)
-        .then(response => {
+        .then((response) => {
           console.log(response);
           this.api.VisitorChanged({ visitor: response });
           this.loading = false;
           this.viewCtrl.dismiss(response);
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false;
           this.api.Error(err);
         });
@@ -128,7 +120,7 @@ export class VisitorPage {
       .then((parkings: any) => {
         this.parkings = parkings;
       })
-      .catch(err => {
+      .catch((err) => {
         this.api.Error(err);
       });
   }
@@ -146,11 +138,11 @@ export class VisitorPage {
     if (this.action == "create") {
       this.api
         .post("visitors", data)
-        .then(response => {
+        .then((response) => {
           console.log(response);
           this.addVisit(response);
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false;
           this.api.Error(err);
         });
@@ -158,11 +150,11 @@ export class VisitorPage {
     if (this.action == "update") {
       this.api
         .put("visitors/" + this.visitor.id, data)
-        .then(response => {
+        .then((response) => {
           console.log(response);
           this.addVisit(response);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           this.loading = false;
           this.api.Error(err);
@@ -185,7 +177,7 @@ export class VisitorPage {
     }
     this.api
       .post(`visitors/${visitor.id}/visit`, visit)
-      .then(response => {
+      .then((response) => {
         console.log(response);
         this.viewCtrl.dismiss({
           visitor: visitor,
@@ -194,7 +186,7 @@ export class VisitorPage {
         });
         this.loading = false;
       })
-      .catch(err => {
+      .catch((err) => {
         this.api.Error(err);
         this.loading = false;
       });
