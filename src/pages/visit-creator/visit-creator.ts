@@ -2,6 +2,7 @@ import { ModalController } from "ionic-angular";
 import { Component } from "@angular/core";
 import { NavController, NavParams, ViewController } from "ionic-angular";
 import { Api } from "../../providers/api";
+import moment from "moment";
 @Component({
   selector: "page-visit-creator",
   templateUrl: "visit-creator.html"
@@ -47,6 +48,11 @@ export class VisitCreatorPage {
   }
 
   create() {
+    if (this.visit.status == "departured") {
+      this.visit.departured_at = moment()
+        .local()
+        .toString();
+    }
     if (this.multiple) {
       return this.createMultiple();
     }
