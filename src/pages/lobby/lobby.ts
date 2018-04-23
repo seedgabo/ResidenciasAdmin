@@ -290,6 +290,14 @@ export class LobbyPage {
   actions_visit(visit, i) {
     var buttons: any = [
       {
+        text: this.api.trans("literals.view_resource") + " " + this.api.trans("literals.visit"),
+        icon: "eye",
+        // cssClass: 'icon-danger',
+        handler: () => {
+          this.viewVisit(visit, i);
+        }
+      },
+      {
         text: this.api.trans("crud.add") + " " + this.api.trans("literals.note"),
         icon: "create",
         handler: () => {
@@ -297,6 +305,7 @@ export class LobbyPage {
         }
       }
     ];
+
     if (visit.status == "waiting for confirmation") {
       buttons.push({
         text: this.api.trans("__.approve"),
@@ -318,14 +327,6 @@ export class LobbyPage {
       });
     }
 
-    buttons.push({
-      text: this.api.trans("literals.view_resource") + " " + this.api.trans("literals.visit"),
-      icon: "eye",
-      // cssClass: 'icon-danger',
-      handler: () => {
-        this.viewVisit(visit, i);
-      }
-    });
     if (visit.visitor)
       buttons.push({
         text: this.api.trans("crud.edit") + " " + this.api.trans("literals.visitor"),

@@ -9,13 +9,14 @@ import { Api } from "../../providers/api";
 export class VisitCreatorPage {
   visitor: any;
   multiple = false;
+  signature;
   visit: any = {
     status: "waiting for confirmation",
     note: ""
   };
   vehicle;
   statutes = ["waiting for confirmation", "approved", "rejected", "departured"];
-  loading = false;
+  loading: any = false;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -52,10 +53,25 @@ export class VisitCreatorPage {
     this.loading = true;
     this.api
       .post(`visitors/${this.visitor.id}/visit`, this.visit)
-      .then((response) => {
-        console.log(response);
-        this.viewCtrl.dismiss();
-        this.loading = false;
+      .then((data: any) => {
+        if (this.signature) {
+          this.loading = "uploading signature";
+          this.api
+            .uploadSignature("visit", data.id, this.signature)
+            .then((response: any) => {
+              console.log("signature response:", response);
+              this.loading = false;
+              data.signature_id = response.signature.id;
+              this.viewCtrl.dismiss(data);
+            })
+            .catch((err) => {
+              this.loading = false;
+              this.api.Error(err);
+            });
+        } else {
+          this.viewCtrl.dismiss(data);
+          this.loading = false;
+        }
       })
       .catch((err) => {
         this.loading = false;
@@ -77,10 +93,25 @@ export class VisitCreatorPage {
     };
     this.api
       .post(`visits`, data)
-      .then((response) => {
-        console.log(response);
-        this.loading = false;
-        this.viewCtrl.dismiss();
+      .then((data: any) => {
+        if (this.signature) {
+          this.loading = "uploading signature";
+          this.api
+            .uploadSignature("visit", data.id, this.signature)
+            .then((response: any) => {
+              console.log("signature response:", response);
+              this.loading = false;
+              data.signature_id = response.signature.id;
+              this.viewCtrl.dismiss(data);
+            })
+            .catch((err) => {
+              this.loading = false;
+              this.api.Error(err);
+            });
+        } else {
+          this.loading = false;
+          this.viewCtrl.dismiss(data);
+        }
       })
       .catch((err) => {
         this.loading = false;

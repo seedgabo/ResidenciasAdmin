@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { IonicPage, ViewController, NavParams } from "ionic-angular";
 import SignaturePad from "signature_pad";
 var signaturePad;
-
+var canvas;
 @IonicPage()
 @Component({
   selector: "page-signature",
@@ -24,8 +24,8 @@ export class SignaturePage {
 
   ionViewDidLoad() {
     setTimeout(() => {
-      var canvas = document.querySelector(`#${this.uuid}`);
-      var signaturePad = new SignaturePad(canvas, {
+      canvas = document.querySelector(`#${this.uuid}`);
+      signaturePad = new SignaturePad(canvas, {
         onEnd: () => {
           this.isEmpty = signaturePad.isEmpty();
         }
