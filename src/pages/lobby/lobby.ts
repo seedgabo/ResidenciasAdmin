@@ -397,10 +397,7 @@ export class LobbyPage {
   approve(visit) {
     this.api
       .put("visits/" + visit.id, {
-        status: "approved",
-        departured_at: moment()
-          .local()
-          .toString()
+        status: "approved"
       })
       .then((data) => {
         console.log(data);
