@@ -37,6 +37,18 @@ export class EntryEditorPage {
       this.entry[data.type + "_id"] = data.person.id;
     }
   }
+  changeVehicle(data) {
+    this.entry.vehicle_id = null;
+    if (data) {
+      this.entry.vehicle_id = data.id;
+    }
+  }
+  changeResidence(data) {
+    this.entry.residence_id = null;
+    if (data) {
+      this.entry.residence_id = data.id;
+    }
+  }
 
   canSave() {
     return this.entry.person && this.entry.vehicle && this.entry.time;
@@ -46,11 +58,13 @@ export class EntryEditorPage {
     var promise: Promise<any>;
     this.loading = true;
     var data = {
+      type: this.entry.type,
       user_id: this.entry.user_id,
       visitor_id: this.entry.visitor_id,
-      vehicle_id: this.entry.vehicle ? this.entry.vehicle.id : this.entry.vehicle_id,
+      vehicle_id: this.entry.vehicle_id,
       worker_id: this.entry.worker_id,
-      residence_id: this.entry.residence ? this.entry.residence.id : this.entry.residence_id,
+      residence_id: this.entry.residence_id,
+      pet_id: this.entry.pet_id,
       note: this.entry.note,
       extra: this.entry.extra
     };

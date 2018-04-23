@@ -20,9 +20,10 @@
       </ion-select>
     </ion-item>
 
-    <vehicle-selector [(ngModel)]="entry.vehicle"></vehicle-selector>
+    <vehicle-selector (onChange)="changeVehicle($event)" [(ngModel)]="entry.vehicle"></vehicle-selector>
     <person-selector (onChange)="changePerson($event)" [users]="true" [visitors]="true" [workers]="true" [(ngModel)]="entry.person"></person-selector>
-    <residence-selector [(ngModel)]="entry.residence"></residence-selector>
+    <residence-selector (onChange)="changeResidence($event)" [(ngModel)]="entry.residence"></residence-selector>
+
     <signature color="light" [(ngModel)]="entry.signature"></signature>
 
     <ion-item>
