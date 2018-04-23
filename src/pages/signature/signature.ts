@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { IonicPage, ViewController, NavParams } from "ionic-angular";
 import SignaturePad from "signature_pad";
-var canvas;
 var signaturePad;
 
 @IonicPage()
