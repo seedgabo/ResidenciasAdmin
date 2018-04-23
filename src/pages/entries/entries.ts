@@ -68,9 +68,8 @@ export class EntriesPage {
     this.entries = filtered;
   }
 
-  viewEntry() {
-    var modal = this.modal.create("EntryPage");
-    modal.present();
+  viewEntry(entry) {
+    this.navCtrl.push("EntryPage", { entry: entry, id: entry.id });
   }
 
   viewSignature(entry) {

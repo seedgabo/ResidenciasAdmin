@@ -31,7 +31,7 @@
   <!-- <ion-card> -->
   <ion-list [virtualScroll]="entries" approxItemHeight="70px">
     <ion-item-sliding *virtualItem="let entry; let i = index">
-      <button ion-item (click)="editEntry(entry)">
+      <button ion-item (click)="viewEntry(entry)">
         <h2>{{entry.vehicle?.name}}</h2>
         <h3>{{entry.person?.name}} - {{ entry.residence?.name }} </h3>
         <ion-badge [color]="entry.type == 'entry' ? 'primary' : 'secondary'">
