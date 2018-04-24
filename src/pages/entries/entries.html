@@ -7,6 +7,10 @@
     </ion-buttons>
     <ion-title>{{'literals.entries' | trans }}</ion-title>
     <ion-buttons end>
+      <button ion-button icon-only (click)=gotoVehicles()>
+        <ion-icon name="car"></ion-icon>
+      </button>
+
       <button ion-button icon-only (click)="searching = true">
         <ion-icon name="search"></ion-icon>
       </button>
@@ -30,30 +34,14 @@
   </ion-refresher>
   <!-- <ion-card> -->
   <ion-list [virtualScroll]="entries" approxItemHeight="70px">
-    <ion-item-sliding *virtualItem="let entry; let i = index">
-      <button ion-item (click)="editEntry(entry)">
-        <h2>{{entry.vehicle?.name}}</h2>
-        <h3>{{entry.person?.name}} - {{ entry.residence?.name }} </h3>
-        <ion-badge [color]="entry.type == 'entry' ? 'primary' : 'secondary'">
-          {{'literals.'+ entry.type | trans }}
-        </ion-badge>
-        <span item-right>{{ entry.time | amCalendar }}</span>
-      </button>
-      <ion-item-options side="right">
-        <button ion-button color="light" (click)="viewSignature(entry)" *ngIf="entry.signature_id">
-          <ion-icon name="finger-print"></ion-icon>
-          {{'literals.view_resource' | trans }} {{ 'literals.signature' | trans }}
-        </button>
-        <button ion-button color="primary" (click)="editEntry(entry)">
-          <ion-icon name="create"></ion-icon>
-          {{'crud.edit' | trans }}
-        </button>
-        <button ion-button color="danger" (click)="removeEntry(entry,i)">
-          <ion-icon name="trash"></ion-icon>
-          {{'crud.remove' | trans }}
-        </button>
-      </ion-item-options>
-    </ion-item-sliding>
+    <button ion-item *virtualItem="let entry; let i = index" (click)="actions(entry, i)">
+      <h2>{{entry.vehicle?.name}}</h2>
+      <h3>{{entry.person?.name}} - {{ entry.residence?.name }} </h3>
+      <ion-badge [color]="entry.type == 'entry' ? 'primary' : 'secondary'">
+        {{'literals.'+ entry.type | trans }}
+      </ion-badge>
+      <span item-right>{{ entry.time | amCalendar }}</span>
+    </button>
   </ion-list>
   <!-- </ion-card> -->
   <ion-fab bottom right>

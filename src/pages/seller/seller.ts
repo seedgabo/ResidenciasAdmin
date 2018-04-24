@@ -52,14 +52,27 @@ export class SellerPage {
     });
   }
 
+  ionViewDidLoad() {
+    var iframes = document.querySelectorAll("iframe");
+    for (var i = 0; i < iframes.length; i++) {
+      iframes[i].style.display = "none";
+    }
+  }
+  ionViewWillUnload() {
+    var iframes = document.querySelectorAll("iframe");
+    for (var i = 0; i < iframes.length; i++) {
+      iframes[i].style.display = "block";
+    }
+  }
+
   ionViewDidEnter() {
     this.content.resize();
-    this.api.storage.get("invoices_history").then(history => {
+    this.api.storage.get("invoices_history").then((history) => {
       if (history) {
         this.invoices_history = history;
       }
     });
-    this.api.storage.get("receipts_history").then(history => {
+    this.api.storage.get("receipts_history").then((history) => {
       if (history) {
         this.receipts_history = history;
       }
@@ -76,7 +89,7 @@ export class SellerPage {
       workers: true
     });
     modal.present();
-    modal.onDidDismiss(data => {
+    modal.onDidDismiss((data) => {
       if (!data) {
         this.person = null;
         this.type = null;
@@ -153,13 +166,13 @@ export class SellerPage {
         invoice: this.api.trans("literals.invoice")
       })
     )
-      .then(note => {
+      .then((note) => {
         var procesing = 0;
         var loading = this.loading.create({
           content: this.api.trans("__.procesando") + procesing + "  de " + this.items.length
         });
         loading.present();
-        this.items.forEach(element => {
+        this.items.forEach((element) => {
           this.api
             .post("charges", {
               residence_id: this.charge.residence_id,
@@ -169,7 +182,7 @@ export class SellerPage {
               year: moment().year(),
               type: "unique"
             })
-            .then(data => {
+            .then((data) => {
               loading.setContent(this.api.trans("__.procesando") + ++procesing + "  de " + this.items.length);
               if (procesing == this.items.length) {
                 if (this.charge.user_id) {
@@ -179,7 +192,7 @@ export class SellerPage {
                 this.complete(this.items, note);
               }
             })
-            .catch(err => {
+            .catch((err) => {
               console.error(err);
               loading.dismiss();
               this.alert
@@ -196,9 +209,9 @@ export class SellerPage {
 
   proccessWithInvoice() {
     this.askForPayment()
-      .then(transaction => {
+      .then((transaction) => {
         this.askNote()
-          .then(note => {
+          .then((note) => {
             var loading = this.loading.create({
               content: this.api.trans("__.procesando")
             });
@@ -231,7 +244,7 @@ export class SellerPage {
                       this.goPrint(invoice, data.receipt);
                     });
                   })
-                  .catch(err => {
+                  .catch((err) => {
                     console.error(err);
                     loading.dismiss();
                     this.alert
@@ -242,7 +255,7 @@ export class SellerPage {
                       .present();
                   });
               })
-              .catch(err => {
+              .catch((err) => {
                 console.error(err);
                 loading.dismiss();
                 this.alert
@@ -282,7 +295,7 @@ export class SellerPage {
 
   complete(items, note) {
     var concept = "";
-    this.items.forEach(element => {
+    this.items.forEach((element) => {
       concept += element.concept + "(x" + element.quantity + "), ";
     });
     this.person.type = this.type;
@@ -308,7 +321,7 @@ export class SellerPage {
         this.navCtrl.push("PrintReceiptPage", { receipt: receipt });
         this.clear();
       })
-      .catch(err => {
+      .catch((err) => {
         this.api.Error(err);
       });
   }
@@ -370,14 +383,14 @@ export class SellerPage {
             {
               role: "destructive",
               text: this.api.trans("crud.cancel"),
-              handler: data => {
+              handler: (data) => {
                 reject();
               }
             },
             {
               role: "accept",
               text: this.api.trans("crud.add"),
-              handler: data => {
+              handler: (data) => {
                 console.log("transaction", data);
                 if (data == "detailed") {
                   var modal = this.modal.create("PaymentsPage", {
@@ -419,14 +432,14 @@ export class SellerPage {
             {
               role: "destructive",
               text: this.api.trans("crud.cancel"),
-              handler: data => {
+              handler: (data) => {
                 reject();
               }
             },
             {
               role: "accept",
               text: this.api.trans("crud.add"),
-              handler: data => {
+              handler: (data) => {
                 console.log("note", data.note);
                 resolve(data.note);
               }
@@ -442,7 +455,7 @@ export class SellerPage {
     if (invoice == null) items = this.items;
     else items = invoice.items;
     var total = 0;
-    items.forEach(item => {
+    items.forEach((item) => {
       total += item.amount * item.quantity;
     });
     return total;
@@ -453,7 +466,7 @@ export class SellerPage {
     this.api
       .post("push/" + user_id + "/notification", { message: message })
       .then(() => {})
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   }
@@ -519,7 +532,7 @@ export class SellerPage {
 
   gotoReports(ev) {
     this.navCtrl.push("SellerReportsPage", {
-      invoices: this.invoices_history.map(data => {
+      invoices: this.invoices_history.map((data) => {
         var invoice = Object.assign({}, data.invoice);
         invoice.receipt = data.receipt;
         invoice.person = data.user;

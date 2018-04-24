@@ -58,9 +58,8 @@ export class VisitorPage {
 
     if (residence) this.residence = residence;
     else if (this.api.objects.residences && this.visitor.residence_id)
-      this.residence = this.api.objects.residence.collection[this.visitor.residence_id];
+      this.residence = this.api.objects.residences.collection[this.visitor.residence_id];
     else this.residence = this.visitor.residence;
-
     if (navParams.get("show_visits_button") !== undefined) this.show_visits_button = navParams.get("show_visits_button");
   }
 

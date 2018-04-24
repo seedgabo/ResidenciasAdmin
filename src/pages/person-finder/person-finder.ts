@@ -1,8 +1,8 @@
-import { Api } from './../../providers/api';
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { ModalController } from 'ionic-angular/components/modal/modal-controller';
-import { VisitorPage } from '../visitor/visitor';
+import { Api } from "./../../providers/api";
+import { Component } from "@angular/core";
+import { IonicPage, NavController, NavParams, ViewController } from "ionic-angular";
+import { ModalController } from "ionic-angular/components/modal/modal-controller";
+import { VisitorPage } from "../visitor/visitor";
 /**
  * Generated class for the PersonFinderPage page.
  *
@@ -12,8 +12,8 @@ import { VisitorPage } from '../visitor/visitor';
 
 @IonicPage()
 @Component({
-  selector: 'page-person-finder',
-  templateUrl: 'person-finder.html',
+  selector: "page-person-finder",
+  templateUrl: "person-finder.html"
 })
 export class PersonFinderPage {
   findFor = {
@@ -26,63 +26,61 @@ export class PersonFinderPage {
   results = {
     users: null,
     visitors: null,
-    workers: null,
-  }
-  multiple = false
-  selecteds = []
+    workers: null
+  };
+  multiple = false;
+  selecteds = [];
   ready = false;
-  local = true
-  loading = false
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewctrl: ViewController, public modal: ModalController, public api: Api) {
-    if (navParams.get('users') !== undefined)
-      this.findFor.users = navParams.get('users');
-    if (navParams.get('visitors') !== undefined)
-      this.findFor.visitors = navParams.get('visitors')
-    if (navParams.get('workers') !== undefined)
-      this.findFor.workers = navParams.get('workers')
+  local = true;
+  loading = false;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public viewctrl: ViewController,
+    public modal: ModalController,
+    public api: Api
+  ) {
+    if (navParams.get("users") !== undefined) this.findFor.users = navParams.get("users");
+    if (navParams.get("visitors") !== undefined) this.findFor.visitors = navParams.get("visitors");
+    if (navParams.get("workers") !== undefined) this.findFor.workers = navParams.get("workers");
 
-    if (navParams.get('multiple') !== undefined)
-      this.multiple = navParams.get('multiple')
+    if (navParams.get("multiple") !== undefined) this.multiple = navParams.get("multiple");
 
     if (!this.multiple) {
-      this.api.storage.get('recent_users').then((value) => {
+      this.api.storage.get("recent_users").then((value) => {
         if (value) {
-          this.results.users = value
+          this.results.users = value;
         }
-      })
+      });
 
-      this.api.storage.get('recent_visitors').then((value) => {
+      this.api.storage.get("recent_visitors").then((value) => {
         if (value) {
-          this.results.visitors = value
+          this.results.visitors = value;
         }
-      })
+      });
 
-      this.api.storage.get('recent_visitors').then((value) => {
+      this.api.storage.get("recent_visitors").then((value) => {
         if (value) {
-          this.results.visitors = value
+          this.results.visitors = value;
         }
-      })
+      });
     }
 
     var promises = [];
     if (this.local) {
-      if (this.findFor.users)
-        promises.push(this.api.load("users"))
+      if (this.findFor.users) promises.push(this.api.load("users"));
 
-      if (this.findFor.visitors)
-        promises.push(this.api.load("visitors"))
+      if (this.findFor.visitors) promises.push(this.api.load("visitors"));
 
-      if (this.findFor.workers)
-        promises.push(this.api.load("workers"))
+      if (this.findFor.workers) promises.push(this.api.load("workers"));
     }
     Promise.all(promises).then(() => {
-      this.ready = true
-      if (this.multiple) this.search()
-    })
+      this.ready = true;
+      if (this.multiple) this.search();
+    });
   }
 
-  ionViewDidLoad() {
-  }
+  ionViewDidLoad() {}
 
   search() {
     this.loading = true;
@@ -90,38 +88,49 @@ export class PersonFinderPage {
       return this.searchLocal();
     }
 
-
     if (this.findFor.users) {
-      this.api.get(`users?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&orWhereHas[residence][whereLike][name]=${this.query}&with[]=residence&paginate=25`)
+      this.api
+        .get(
+          `users?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&orWhereHas[residence][whereLike][name]=${
+            this.query
+          }&with[]=residence&paginate=25`
+        )
         .then((data) => {
           this.results.users = data;
-          this.api.storage.set('recent_users', data);
-          this.loading = false
+          this.api.storage.set("recent_users", data);
+          this.loading = false;
         })
         .catch(console.error);
     }
-
 
     if (this.findFor.visitors) {
-      this.api.get(`visitors?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&orWhereHas[residence][whereLike][name]=${this.query}&with[]=residence&paginate=25`)
+      this.api
+        .get(
+          `visitors?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&orWhereHas[residence][whereLike][name]=${
+            this.query
+          }&with[]=residence&paginate=25`
+        )
         .then((data) => {
           this.results.visitors = data;
-          this.api.storage.set('recent_visitors', data);
-          this.loading = false
+          this.api.storage.set("recent_visitors", data);
+          this.loading = false;
         })
         .catch(console.error);
     }
 
-
     if (this.findFor.workers) {
-      this.api.get(`workers?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&orWhereHas[residence][whereLike][name]=${this.query}&with[]=residence&paginate=25`)
+      this.api
+        .get(
+          `workers?orWhereLike[name]=${this.query}&orWhereLike[document]=${this.query}&orWhereHas[residence][whereLike][name]=${
+            this.query
+          }&with[]=residence&paginate=25`
+        )
         .then((data) => {
           this.results.workers = data;
-          this.api.storage.set('recent_workers', data);
-          this.loading = false
+          this.api.storage.set("recent_workers", data);
+          this.loading = false;
         })
         .catch(console.error);
-
     }
   }
 
@@ -129,17 +138,17 @@ export class PersonFinderPage {
     this.loading = true;
     var limit = 25;
     var filter = this.query.toLowerCase();
-    this.findUsers(filter, limit)
-    this.findVisitors(filter, limit)
-    this.findWorkers(filter, limit)
+    this.findUsers(filter, limit);
+    this.findVisitors(filter, limit);
+    this.findWorkers(filter, limit);
     this.loading = false;
   }
 
   findUsers(filter, limit) {
     if (this.findFor.users) {
       if (filter == "" && this.multiple) {
-        this.results.users = { data: this.api.objects.users }
-        return
+        this.results.users = { data: this.api.objects.users };
+        return;
       }
 
       this.results.users = { data: [] };
@@ -157,10 +166,9 @@ export class PersonFinderPage {
         if (results.length == limit) {
           break;
         }
-
       }
-      this.results.users.data = results
-      this.api.storage.set('recent_users', this.results.users);
+      this.results.users.data = results;
+      this.api.storage.set("recent_users", this.results.users);
     }
   }
 
@@ -175,15 +183,13 @@ export class PersonFinderPage {
           (item.document && item.document.toLowerCase().indexOf(filter) > -1) ||
           (item.residence && item.residence.name && item.residence.name.toLowerCase().indexOf(filter) > -1)
         )
-
           results.push(item);
         if (results.length == limit) {
           break;
         }
-
       }
-      this.results.visitors.data = results
-      this.api.storage.set('recent_visitors', this.results.visitors);
+      this.results.visitors.data = results;
+      this.api.storage.set("recent_visitors", this.results.visitors);
     }
   }
 
@@ -202,70 +208,65 @@ export class PersonFinderPage {
         if (results.length == limit) {
           break;
         }
-
       }
-      this.results.workers.data = results
-      this.api.storage.set('recent_workers', this.results.workers);
+      this.results.workers.data = results;
+      this.api.storage.set("recent_workers", this.results.workers);
     }
   }
 
   cancel() {
-    this.viewctrl.dismiss(null, 'cancel');
+    this.viewctrl.dismiss(null, "cancel");
   }
 
   visitorModal(visitor = null) {
-    var residence
+    var residence;
     if (visitor) {
-      residence = visitor.residence
+      residence = visitor.residence;
     }
-    var modal = this.modal.create(VisitorPage, { visitor: visitor, residence: residence, show_visits_button: false })
+    var modal = this.modal.create(VisitorPage, { visitor: visitor, residence: residence, show_visits_button: false });
     modal.present();
     modal.onDidDismiss((data) => {
       if (data) {
         this.results.users = null;
         this.results.visitors = { data: [data] };
         this.results.workers = null;
-        this.api.storage.set('recent_visitors', { data: [data] });
+        this.api.storage.set("recent_visitors", { data: [data] });
       }
-    })
+    });
   }
 
   selectAll(type = "user") {
-    this.selecteds = []
-    this.api.objects[type + "s"].forEach(person => {
-      person._selected = true
-      this.selecteds[this.selecteds.length] = { type: type, person: person }
+    this.selecteds = [];
+    this.api.objects[type + "s"].forEach((person) => {
+      person._selected = true;
+      this.selecteds[this.selecteds.length] = { type: type, person: person };
     });
   }
 
   deselectAll(type = "user") {
-    this.selecteds = []
-    this.api.objects[type + "s"].forEach(person => {
-      person._selected = false
+    this.selecteds = [];
+    this.api.objects[type + "s"].forEach((person) => {
+      person._selected = false;
     });
   }
 
-
-
   save() {
-    this.viewctrl.dismiss({ selecteds: this.selecteds })
-    this.clear()
+    this.viewctrl.dismiss({ selecteds: this.selecteds });
+    this.clear();
   }
 
   clear() {
     this.selecteds.forEach((element) => {
-      delete (element.person._selected)
-    })
+      delete element.person._selected;
+    });
   }
 
-  select(person, type = 'user') {
+  select(person, type = "user") {
     if (this.multiple) {
-      person._selected ? person._selected = false : person._selected = true
-      this.selecteds[this.selecteds.length] = { type: type, person: person }
-    }
-    else {
+      person._selected ? (person._selected = false) : (person._selected = true);
+      this.selecteds[this.selecteds.length] = { type: type, person: person };
+    } else {
       this.viewctrl.dismiss({ person: person, type: type });
     }
   }
-
 }
