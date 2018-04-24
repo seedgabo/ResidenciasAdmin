@@ -123,14 +123,6 @@
             <img [src]="person.image_url" (click)="askFile()" tappable class="img-person">
           </ion-card-header>
 
-          <!-- Fingerprint -->
-          <ion-card-header text-center>
-            <button ion-button large round full clear icon-left [disabled]="true">
-              <ion-icon name="finger-print"></ion-icon>
-              {{ 'literals.fingerprint' | trans }}
-            </button>
-          </ion-card-header>
-
           <!-- Person Data -->
           <ion-list>
             <ion-item>
