@@ -15,13 +15,27 @@ export class EntryEditorPage {
     residence: null,
     person: null,
     time: moment().format("YYYY-MM-DDTHH:mm"),
-    note: ""
+    note: "",
+    extra: [
+      {
+        name: "Kilometraje",
+        value: ""
+      }
+    ]
   };
   loading: any = false;
   constructor(public viewCtrl: ViewController, public navParams: NavParams, public api: Api) {
     if (this.navParams.get("entry")) {
       this.entry = Object.assign({}, this.navParams.get("entry"));
       this.entry.time = moment(this.entry.time).format("YYYY-MM-DDTHH:mm");
+    }
+    if (!this.entry.extra) {
+      this.entry.extra = [
+        {
+          name: "Kilometraje",
+          value: ""
+        }
+      ];
     }
   }
 
