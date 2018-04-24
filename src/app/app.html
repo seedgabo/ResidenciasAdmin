@@ -105,7 +105,7 @@
 <ion-nav [root]="rootPage" main #content swipeBackEnabled="false"></ion-nav>
 <!-- </ion-split-pane> -->
 
-<ion-footer *ngIf="api.Echo && !api.Echo.connector.socket.connected && rootPage=='DashPage'" class="no-printable">
+<ion-footer *ngIf="api.Echo && !api.Echo.connector.socket.connected && rootPage=='DashPage'" class="no-printable delayed">
 
 
   <ion-toolbar color="danger">

@@ -20,7 +20,6 @@ import { AppMinimize } from "@ionic-native/app-minimize";
 import { Facebook } from "@ionic-native/facebook";
 import { GooglePlus } from "@ionic-native/google-plus";
 
-import { VisitPage } from "../pages/visit/visit";
 import { ProductSearchPage } from "../pages/product-search/product-search";
 import { SettingProvider } from "../providers/setting/setting";
 import { NewtonProvider } from "../providers/newton/newton";
@@ -28,12 +27,7 @@ import { PopoverMenu } from "./../pages/popover/popover-menu";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 declare var window: any;
 
-import {
-  SocialLoginModule,
-  AuthServiceConfig,
-  GoogleLoginProvider,
-  FacebookLoginProvider
-} from "angular5-social-login";
+import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from "angular5-social-login";
 import { ComponentsModule } from "../components/components.module";
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig([
@@ -43,9 +37,7 @@ export function getAuthServiceConfigs() {
     },
     {
       id: GoogleLoginProvider.PROVIDER_ID,
-      provider: new GoogleLoginProvider(
-        "425679220353-u39prig4hkrjg592lnppmnbfj6lvi4qk.apps.googleusercontent.com"
-      )
+      provider: new GoogleLoginProvider("425679220353-u39prig4hkrjg592lnppmnbfj6lvi4qk.apps.googleusercontent.com")
     }
   ]);
   return config;
@@ -53,9 +45,7 @@ export function getAuthServiceConfigs() {
 
 import Raven from "raven-js";
 import { ENV } from "@app/env";
-Raven.config(
-  "http://62637449e79f4f8482a177a69e46764c@residenciasonline.com:6010/4"
-).install();
+Raven.config("http://62637449e79f4f8482a177a69e46764c@residenciasonline.com:6010/4").install();
 
 export class SentryErrorHandler extends IonicErrorHandler {
   handleError(error) {
@@ -77,15 +67,7 @@ export class SentryErrorHandler extends IonicErrorHandler {
 }
 
 @NgModule({
-  declarations: [
-    MyApp,
-    VisitorPage,
-    VisitPage,
-    VisitCreatorPage,
-    PanicPage,
-    ProductSearchPage,
-    VehicleFinderPage
-  ],
+  declarations: [MyApp, VisitorPage, VisitCreatorPage, PanicPage, ProductSearchPage, VehicleFinderPage],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -97,15 +79,7 @@ export class SentryErrorHandler extends IonicErrorHandler {
     SocialLoginModule
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    VisitorPage,
-    VisitPage,
-    VisitCreatorPage,
-    PanicPage,
-    ProductSearchPage,
-    VehicleFinderPage
-  ],
+  entryComponents: [MyApp, VisitorPage, VisitCreatorPage, PanicPage, ProductSearchPage, VehicleFinderPage],
   providers: [
     StatusBar,
     SplashScreen,

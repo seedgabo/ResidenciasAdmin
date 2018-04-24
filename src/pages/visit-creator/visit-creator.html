@@ -28,7 +28,7 @@
     </ion-item>
 
 
-    <vehicle-selector [(ngModel)]="vehicle" (onChange)="selectVehicle()"></vehicle-selector>
+    <vehicle-selector [(ngModel)]="vehicle" (onChange)="selectVehicle($event)"></vehicle-selector>
 
 
     <ion-item *ngIf="api.objects.parkings">
@@ -49,10 +49,21 @@
 </ion-content>
 
 <ion-footer>
-  <button ion-button [disabled]="!canSave() || loading" full color="secondary" icon-left (click)="create()">
-    <ion-icon name="add"></ion-icon>
+  <button *ngIf="!visit.id" ion-button [disabled]="!canSave() || loading" full color="secondary" (click)="create()">
     <span *ngIf="loading !== 'uploading signature';else uploadingSignature">
       {{'crud.add' | trans}} {{'literals.visit' | trans }}
+    </span>
+    <ng-template #uploadingSignature>
+      <span>
+        {{ '__.uploading signature' | trans }}
+      </span>
+    </ng-template>
+  </button>
+
+  <button ion-button *ngIf="visit.id" [disabled]="!canSave() || loading" full color="secondary" (click)="update()">
+
+    <span *ngIf="loading !== 'uploading signature';else uploadingSignature">
+      {{'literals.update' | trans}} {{'literals.visit' | trans }}
     </span>
     <ng-template #uploadingSignature>
       <span>

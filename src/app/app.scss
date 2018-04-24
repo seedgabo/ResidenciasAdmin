@@ -74,31 +74,31 @@
 
 .icon-primary {
   ion-icon {
-    color: color($colors, 'primary');
+    color: color($colors, "primary");
   }
 }
 
 .icon-warning {
   ion-icon {
-    color: color($colors, 'warning');
+    color: color($colors, "warning");
   }
 }
 
 .icon-secondary {
   ion-icon {
-    color: color($colors, 'secondary');
+    color: color($colors, "secondary");
   }
 }
 
 .icon-favorite {
   ion-icon {
-    color: color($colors, 'favorite');
+    color: color($colors, "favorite");
   }
 }
 
 .icon-danger {
   ion-icon {
-    color: color($colors, 'danger');
+    color: color($colors, "danger");
   }
 }
 
@@ -108,7 +108,7 @@
 }
 
 .separator {
-  border: .4px solid black;
+  border: 0.4px solid black;
   min-width: 200pt;
   width: 200pt;
   text-align: center;
@@ -126,10 +126,10 @@
   margin: auto;
   padding: 30px;
   border: 1px solid #eee;
-  box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
   font-size: 16px;
   line-height: 24px;
-  font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   color: #555;
 }
 
@@ -208,42 +208,42 @@
     border-radius: 5px;
     right: 65px;
     white-space: nowrap;
-    animation: backwards .7s fadeIn;
+    animation: backwards 0.7s fadeIn;
   }
 }
 
 .fab-label-button:nth-child(1) {
   .label {
     bottom: 15px !important;
-    animation-delay: .0s;
+    animation-delay: 0s;
   }
 }
 
 .fab-label-button:nth-child(2) {
   .label {
     bottom: 70px !important;
-    animation-delay: .1s;
+    animation-delay: 0.1s;
   }
 }
 
 .fab-label-button:nth-child(3) {
   .label {
     bottom: 125px !important;
-    animation-delay: .2s;
+    animation-delay: 0.2s;
   }
 }
 
 .fab-label-button:nth-child(4) {
   .label {
     bottom: 180px !important;
-    animation-delay: .3s;
+    animation-delay: 0.3s;
   }
 }
 
 .fadeIn {
   opacity: 0;
   animation: fadeIn;
-  animation-delay: .2s;
+  animation-delay: 0.2s;
   animation-duration: 1s;
   animation-fill-mode: forwards;
 }
@@ -260,8 +260,8 @@
 .scale {
   opacity: 0;
   animation: scale;
-  animation-delay: .2s;
-  animation-duration: .2s;
+  animation-delay: 0.2s;
+  animation-duration: 0.2s;
   animation-fill-mode: forwards;
 }
 
@@ -269,7 +269,7 @@
   from {
     opacity: 0;
     transform: rotate(-180);
-    transform: scale(.2);
+    transform: scale(0.2);
   }
   to {
     opacity: 1;
@@ -288,5 +288,21 @@
 @media screen and (min-width: 401px) and (max-width: 768px) {
   .hidden-sm {
     display: none;
+  }
+}
+
+.delayed {
+  animation-delay: 5s;
+  opacity: 0;
+  animation-name: delayed;
+  animation-fill-mode: forwards;
+  animation-duration: 0.3s;
+}
+@keyframes delayed {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }

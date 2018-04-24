@@ -1,4 +1,3 @@
-import { VisitPage } from "./../visit/visit";
 import { Component } from "@angular/core";
 import {
   NavController,
@@ -280,8 +279,9 @@ export class ListPage {
   }
 
   viewVisit(visit) {
-    this.navCtrl.push(VisitPage, {
+    this.navCtrl.push("VisitPage", {
       visit: visit,
+      id: visit.id,
       done: () => {
         this.api
           .put("visits/" + visit.id, { status: "departured" })

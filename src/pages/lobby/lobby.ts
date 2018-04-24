@@ -1,4 +1,3 @@
-import { VisitPage } from "./../visit/visit";
 import { VisitCreatorPage } from "./../visit-creator/visit-creator";
 import { VisitorPage } from "./../visitor/visitor";
 import { Api } from "./../../providers/api";
@@ -441,8 +440,9 @@ export class LobbyPage {
   }
 
   viewVisit(visit, index = null) {
-    this.navCtrl.push(VisitPage, {
+    this.navCtrl.push("VisitPage", {
       visit: visit,
+      id: visit.id,
       done: () => {
         this.api
           .put("visits/" + visit.id, { status: "departured" })
