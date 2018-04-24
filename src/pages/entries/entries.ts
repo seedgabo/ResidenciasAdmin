@@ -152,14 +152,6 @@ export class EntriesPage {
         }
       },
       {
-        text: this.api.trans("literals.view_resource") + " " + this.api.trans("literals.signature"),
-        icon: "eye",
-        // cssClass: 'icon-danger',
-        handler: () => {
-          this.viewSignature(entry);
-        }
-      },
-      {
         text: this.api.trans("crud.edit") + " " + this.api.trans("literals.entry"),
         icon: "create",
         handler: () => {
@@ -175,6 +167,17 @@ export class EntriesPage {
         }
       }
     ];
+
+    if (entry.signature_id) {
+      buttons.splice(1, 0, {
+        text: this.api.trans("literals.view_resource") + " " + this.api.trans("literals.signature"),
+        icon: "eye",
+        // cssClass: 'icon-danger',
+        handler: () => {
+          this.viewSignature(entry);
+        }
+      });
+    }
 
     this.actionsheet
       .create({
