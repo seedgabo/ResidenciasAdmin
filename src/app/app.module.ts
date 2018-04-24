@@ -45,7 +45,8 @@ export function getAuthServiceConfigs() {
 
 import Raven from "raven-js";
 import { ENV } from "@app/env";
-Raven.config("http://62637449e79f4f8482a177a69e46764c@residenciasonline.com:6010/4").install();
+
+Raven.config("http://58e4e1d248b74f1b8d9325711329c7e4@residenciasonline.com:6010/3").install();
 
 export class SentryErrorHandler extends IonicErrorHandler {
   handleError(error) {
