@@ -19,6 +19,7 @@
 <ion-content>
   <ion-list>
     <person-selector [(ngModel)]="visitor" visitors [multiple]="multiple"></person-selector>
+
     <ion-item>
       <ion-label stacked> {{'literals.status' | trans }} </ion-label>
       <ion-select [(ngModel)]="visit.status">
@@ -26,7 +27,9 @@
       </ion-select>
     </ion-item>
 
+
     <vehicle-selector [(ngModel)]="vehicle" (onChange)="selectVehicle()"></vehicle-selector>
+
 
     <ion-item *ngIf="api.objects.parkings">
       <ion-label floating> {{'literals.parking' | trans }} </ion-label>
@@ -35,6 +38,7 @@
       </ion-select>
     </ion-item>
 
+    <signature color="light" [(ngModel)]="signature"></signature>
 
     <ion-item>
       <ion-label floating>{{ 'literals.note' | trans }}</ion-label>
@@ -47,6 +51,13 @@
 <ion-footer>
   <button ion-button [disabled]="!canSave() || loading" full color="secondary" icon-left (click)="create()">
     <ion-icon name="add"></ion-icon>
-    {{'crud.add' | trans }} {{'literals.visit' | trans }}
+    <span *ngIf="loading !== 'uploading signature';else uploadingSignature">
+      {{'crud.add' | trans}} {{'literals.visit' | trans }}
+    </span>
+    <ng-template #uploadingSignature>
+      <span>
+        {{ '__.uploading signature' | trans }}
+      </span>
+    </ng-template>
   </button>
 </ion-footer>

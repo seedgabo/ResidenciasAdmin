@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-navbar color="favorite">
+    <ion-title>{{'literals.entry log' | trans }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content class="container">
+  <ion-list-header>
+    {{'literals.entry log' | trans }} # {{ entry.id }}
+  </ion-list-header>
+  <ion-card>
+    <ion-list>
+      <ion-list>
+        <ion-item>
+          <b>{{'literals.type' | trans }}</b>
+          <span item-right>{{'literals.'+ entry.type | trans }}</span>
+        </ion-item>
+
+        <div *ngIf="entry.person">
+          <ion-list-header>
+            {{'literals.person' | trans }}
+          </ion-list-header>
+          <ion-item>
+            <ion-avatar item-left>
+              <img [src]="entry.person.image_url">
+            </ion-avatar>
+            <span>{{entry.person.name}}</span>
+          </ion-item>
+        </div>
+
+        <div *ngIf="entry.vehicle">
+          <ion-list-header>
+            {{'literals.vehicle' | trans }}
+          </ion-list-header>
+          <ion-item>
+            <ion-avatar item-left>
+              <img [src]="entry.vehicle.image_url">
+            </ion-avatar>
+            <span>{{entry.vehicle.name}}</span>
+          </ion-item>
+        </div>
+
+        <div *ngIf="entry.residence">
+          <ion-list-header>
+            {{'literals.residence' | trans }}
+          </ion-list-header>
+          <ion-item>
+            <span>{{entry.residence.name}}</span>
+          </ion-item>
+        </div>
+
+        <div *ngIf="entry.creator">
+          <ion-list-header>
+            {{'literals.authorized by' | trans }}
+          </ion-list-header>
+          <ion-item>
+            <ion-avatar item-left>
+              <img [src]="entry.creator.image_url">
+            </ion-avatar>
+            <span>{{entry.creator.name}}</span>
+          </ion-item>
+        </div>
+
+        <div *ngIf="entry.note">
+          <ion-list-header>
+            {{'literals.notes' | trans }}
+          </ion-list-header>
+          <ion-item>
+            <span>{{entry.notes}}</span>
+          </ion-item>
+        </div>
+
+        <div *ngIf="entry.parking">
+          <ion-list-header>
+            {{'literals.parking' | trans }}
+          </ion-list-header>
+          <ion-item>
+            <span>{{entry.parking.name}}</span>
+          </ion-item>
+        </div>
+
+        <div *ngIf="entry.signature">
+          <img [src]="entry.signature.url" style="margin: 0 auto;height:100px" alt="signature">
+        </div>
+      </ion-list>
+    </ion-list>
+  </ion-card>
+</ion-content>

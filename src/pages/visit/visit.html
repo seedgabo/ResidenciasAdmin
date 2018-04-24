@@ -5,137 +5,132 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content class="container">
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6>
+        <ion-card>
+          <ion-list>
 
+            <div *ngIf="!visit.guest && !(visit.visitors &&  visit.visitors.length > 1)">
+              <div text-center>
+                <img *ngIf="visit.visitor" [src]="visit.visitor.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
+              </div>
+              <ion-item>
+                <ion-icon name="person"></ion-icon>
+                <b>{{'literals.visitor' | trans }}</b>
+                <span *ngIf="visit.visitor" item-right>{{visit.visitor.name}}</span>
+                <span *ngIf="!visit.visitor" item-right>{{'literals.unkown'| trans }}</span>
+              </ion-item>
+            </div>
 
-  <ion-card>
+            <div *ngIf="visit.visitors &&  visit.visitors.length > 1">
+              <ion-list-header>{{'literals.visitors' | trans}}</ion-list-header>
+              <ion-item *ngFor="let person of visit.visitors">
+                <ion-avatar item-left>
+                  <img [src]="person.image_url" alt="">
+                </ion-avatar>
+                <ion-label>
+                  <span>{{person.name}}</span>
+                </ion-label>
 
-    <ion-card-content>
-      <ion-list>
-        <div *ngIf="!visit.guest && !(visit.visitors &&  visit.visitors.length > 1)">
-          <div text-center>
-            <img *ngIf="visit.visitor" [src]="visit.visitor.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
-          </div>
-          <ion-item>
-            <ion-icon name="person"></ion-icon>
-            <b>{{'literals.visitor' | trans }}</b>
-            <span *ngIf="visit.visitor" item-right>{{visit.visitor.name}}</span>
-            <span *ngIf="!visit.visitor" item-right>{{'literals.unkown'| trans }}</span>
-          </ion-item>
-        </div>
+                <ion-select [(ngModel)]="person.pivot.status" *ngIf="person.pivot">
+                  <ion-option [disabled]="person.pivot.status == 'approved'" value="approved">{{'literals.approved' | trans }}</ion-option>
+                  <ion-option [disabled]="person.pivot.status == 'rejected'" value="rejected">{{'literals.rejected' | trans }}</ion-option>
+                  <ion-option [disabled]="person.pivot.status == 'waiting for confirmation'" value="waiting for confirmation">{{'literals.waiting for confirmation' | trans }}</ion-option>
+                </ion-select>
+              </ion-item>
+            </div>
 
-        <div *ngIf="visit.visitors &&  visit.visitors.length > 1">
-          <ion-list-header>{{'literals.visitors' | trans}}</ion-list-header>
-          <ion-item *ngFor="let person of visit.visitors">
-            <ion-avatar item-left>
-              <img [src]="person.image_url" alt="">
-            </ion-avatar>
-            <ion-label>
-              <span>{{person.name}}</span>
-            </ion-label>
+            <div *ngIf="visit.guest">
+              <div text-center>
+                <img *ngIf="visit.guest.image_url" [src]="visit.guest.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
+              </div>
+              <ion-item>
+                <ion-icon name="person"></ion-icon>
+                <b>{{'literals.guest' | trans }}</b>
+                <span item-right>
+                  {{visit.guest.name}}
+                  <small *ngIf="visit.guest.document">({{ visit.guest.document }})</small>
+                </span>
+                <br>
+                <span *ngIf="visit.guest.reason">
+                  <b>{{'literals.reason' | trans }}</b>
+                  <span>{{visit.guest.reason}}</span>
+                </span>
+              </ion-item>
+            </div>
 
-            <ion-select [(ngModel)]="person.pivot.status" *ngIf="person.pivot">
-              <ion-option [disabled]="person.pivot.status == 'approved'" value="approved">{{'literals.approved' | trans }}</ion-option>
-              <ion-option [disabled]="person.pivot.status == 'rejected'" value="rejected">{{'literals.rejected' | trans }}</ion-option>
-              <ion-option [disabled]="person.pivot.status == 'waiting for confirmation'" value="waiting for confirmation">{{'literals.waiting for confirmation' | trans }}</ion-option>
-            </ion-select>
-          </ion-item>
-        </div>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+      <ion-col col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6>
+        <ion-card>
+          <ion-list>
 
-        <div *ngIf="visit.guest">
-          <div text-center>
-            <img *ngIf="visit.guest.image_url" [src]="visit.guest.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
-          </div>
-          <ion-item>
-            <ion-icon name="person"></ion-icon>
-            <b>{{'literals.guest' | trans }}</b>
-            <span item-right>
-              {{visit.guest.name}}
-              <small *ngIf="visit.guest.document">({{ visit.guest.document }})</small>
-            </span>
-            <br>
-            <span *ngIf="visit.guest.reason">
-              <b>{{'literals.reason' | trans }}</b>
-              <span>{{visit.guest.reason}}</span>
-            </span>
-          </ion-item>
-        </div>
+            <div *ngIf="visit.creator">
+              <ion-list-header>
+                {{'literals.authorized by' | trans }}
+              </ion-list-header>
+              <ion-item>
+                <ion-avatar item-left>
+                  <img [src]="visit.creator.image_url">
+                </ion-avatar>
+                <span>{{visit.creator.name}}</span>
+              </ion-item>
+            </div>
 
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+            <div *ngIf="visit.vehicle">
+              <ion-list-header>
+                {{'literals.vehicle' | trans }}
+              </ion-list-header>
+              <ion-item>
+                <ion-avatar item-left>
+                  <img [src]="visit.vehicle.image_url">
+                </ion-avatar>
+                <span>{{visit.vehicle.name}}</span>
+              </ion-item>
+            </div>
 
+            <div *ngIf="visit.residence">
+              <ion-list-header>
+                {{'literals.residence' | trans }}
+              </ion-list-header>
+              <ion-item>
+                <span>{{visit.residence.name}}</span>
+              </ion-item>
+            </div>
 
-  <ion-card *ngIf="visit.creator">
-    <ion-card-header>
-      <ion-card-title>{{'literals.authorized by' | trans }}</ion-card-title>
-    </ion-card-header>
+            <div *ngIf="visit.note">
+              <ion-list-header>
+                {{'literals.notes' | trans }}
+              </ion-list-header>
+              <ion-item>
+                <span>{{visit.notes}}</span>
+              </ion-item>
+            </div>
 
-    <ion-card-content>
-      <div>
-        <div text-center>
-          <img [src]="visit.creator.image_url" alt="" style="height:100px;width:100px;border-radius:50%; margin: 0 auto;">
-        </div>
-        <ion-item>
-          <ion-icon name="person"></ion-icon>
-          <span item-right>{{visit.creator.name}}</span>
-        </ion-item>
-      </div>
+            <div *ngIf="visit.parking">
+              <ion-list-header>
+                {{'literals.parking' | trans }}
+              </ion-list-header>
+              <ion-item>
+                <span>{{visit.parking.name}}</span>
+              </ion-item>
+            </div>
 
-    </ion-card-content>
-  </ion-card>
+            <div *ngIf="visit.signature_id">
+              <button ion-button block color="light" (click)="viewSignature()">
 
-  <ion-card *ngIf="api.residences_collection[visit.residence_id]">
-    <ion-card-header>
-      <ion-card-title>{{'literals.residence' | trans }}</ion-card-title>
-    </ion-card-header>
+                {{'literals.view_resource' | trans }} {{'literals.signature' | trans }}
+              </button>
+            </div>
 
-    <ion-card-content>
-      <p text-center>
-        {{ api.residences_collection[visit.residence_id].name }}
-      </p>
-
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card *ngIf="visit.note">
-    <ion-card-header>
-      <ion-card-title>{{'literals.notes' | trans }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>{{visit.note}}</p>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card *ngIf="visit.vehicle">
-    <ion-card-content>
-      <ion-list>
-        <ion-list-header>
-          {{'literals.vehicle' | trans }}
-        </ion-list-header>
-        <ion-item>
-          <ion-avatar item-left>
-            <img [src]="visit.vehicle.image_url" alt="">
-          </ion-avatar>
-          <span>{{visit.vehicle.name}}</span>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card *ngIf="visit.parking">
-    <ion-card-content>
-      <ion-list>
-        <ion-list-header>
-          {{'literals.parking' | trans }}
-        </ion-list-header>
-        <ion-item>
-          <span>{{visit.parking.name}}</span>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-
+          </ion-list>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 
 <ion-footer>

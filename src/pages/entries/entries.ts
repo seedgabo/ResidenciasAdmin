@@ -1,5 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
-import { IonicPage, NavController, NavParams, ModalController, Refresher } from "ionic-angular";
+import { IonicPage, NavController, NavParams, ModalController, Refresher, ActionSheetController } from "ionic-angular";
 import { Api } from "../../providers/api";
 
 import moment from "moment";
@@ -17,11 +17,17 @@ export class EntriesPage {
   entry = {};
   searching = false;
   query = "";
-  from = moment().startOf("day");
+  from = moment().subtract(1, "day");
   to = moment()
     .add(1, "day")
     .startOf("day");
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modal: ModalController, public api: Api) {}
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public modal: ModalController,
+    public actionsheet: ActionSheetController,
+    public api: Api
+  ) {}
 
   ionViewDidLoad() {
     this.api.ready.then(() => {
@@ -35,8 +41,8 @@ export class EntriesPage {
     this.api
       .get(
         `entry_logs?include=worker,visitor,residence,vehicle&order[time]=desc&whereDategte[time]=${this.from.format(
-          "Y-MM-DD"
-        )}&whereDatelwe[time]=${this.to.format("Y-MM-DD")}&where[created_by]=${this.api.user.id}`
+          "Y-MM-DD H:mm:ss"
+        )}&limit=500`
       )
       .then((data) => {
         this._entries = data;
@@ -68,9 +74,8 @@ export class EntriesPage {
     this.entries = filtered;
   }
 
-  viewEntry() {
-    var modal = this.modal.create("EntryPage");
-    modal.present();
+  viewEntry(entry) {
+    this.navCtrl.push("EntryPage", { entry: entry, id: entry.id });
   }
 
   viewSignature(entry) {
@@ -108,13 +113,88 @@ export class EntriesPage {
 
   removeEntry(entry, index) {
     this.api.delete(`entry_logs/${entry.id}`).then((response) => {
-      var finder = this._entries.data.findIndex((e) => {
+      var finder = this._entries.findIndex((e) => {
         return e.id == entry.id;
       });
       if (finder > -1) {
-        this._entries.data.splice(finder, 1);
+        this._entries.splice(finder, 1);
       }
       this.filter();
     });
+  }
+
+  departure(entry) {
+    var data = {
+      type: "exit",
+      user_id: entry.user_id,
+      visitor_id: entry.visitor_id,
+      vehicle_id: entry.vehicle_id,
+      worker_id: entry.worker_id,
+      residence_id: entry.residence_id,
+      pet_id: entry.pet_id,
+      note: entry.note,
+      extra: entry.extra,
+      entry_log_id: entry.id
+    };
+    this.api.post("entry_logs", data).then((resp) => {
+      this.getEntries();
+    });
+  }
+
+  actions(entry, i) {
+    var buttons = [
+      {
+        text: this.api.trans("literals.view_resource") + " " + this.api.trans("literals.entry"),
+        icon: "eye",
+        // cssClass: 'icon-danger',
+        handler: () => {
+          this.viewEntry(entry);
+        }
+      },
+      {
+        text: this.api.trans("literals.view_resource") + " " + this.api.trans("literals.signature"),
+        icon: "eye",
+        // cssClass: 'icon-danger',
+        handler: () => {
+          this.viewSignature(entry);
+        }
+      },
+      {
+        text: this.api.trans("crud.edit") + " " + this.api.trans("literals.entry"),
+        icon: "create",
+        handler: () => {
+          this.editEntry(entry);
+        }
+      },
+      {
+        text: this.api.trans("crud.delete") + " " + this.api.trans("literals.entry"),
+        icon: "trash",
+        role: "destructive",
+        handler: () => {
+          this.removeEntry(entry, i);
+        }
+      }
+    ];
+
+    if (entry.type != "exit") {
+      buttons.splice(1, 0, {
+        text: this.api.trans("__.set departure"),
+        icon: "log-out",
+        handler: () => {
+          this.departure(entry);
+        }
+      });
+    }
+
+    this.actionsheet
+      .create({
+        title: this.api.trans("literals.entry log"),
+        buttons: buttons
+      })
+      .present();
+  }
+
+  gotoVehicles() {
+    this.navCtrl.push("VehiclesPage");
   }
 }
