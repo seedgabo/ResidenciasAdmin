@@ -31,6 +31,12 @@
       <ion-textarea [(ngModel)]="entry.note"></ion-textarea>
     </ion-item>
 
+
+    <ion-item *ngFor="let field of entry.extra; let i = index ">
+      <ion-label floating>{{ field.name }}</ion-label>
+      <ion-input [(ngModel)]="entry.extra[i].value"></ion-input>
+    </ion-item>
+
     <ion-item>
       <ion-label>{{'literals.time' | trans }}</ion-label>
       <ion-datetime pickerFormat="MM/DD/YYYY HH:mm" displayFormat="MM/DD/YYYY HH:mm" [(ngModel)]="entry.time"></ion-datetime>

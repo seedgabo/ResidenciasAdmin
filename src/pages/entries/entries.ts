@@ -176,16 +176,6 @@ export class EntriesPage {
       }
     ];
 
-    if (entry.type != "exit") {
-      buttons.splice(1, 0, {
-        text: this.api.trans("__.set departure"),
-        icon: "log-out",
-        handler: () => {
-          this.departure(entry);
-        }
-      });
-    }
-
     this.actionsheet
       .create({
         title: this.api.trans("literals.entry log"),
