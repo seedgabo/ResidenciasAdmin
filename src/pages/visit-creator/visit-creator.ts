@@ -25,8 +25,19 @@ export class VisitCreatorPage {
     public viewCtrl: ViewController,
     public modal: ModalController
   ) {
-    console.log(navParams.get("visitor"));
-    if (navParams.get("visitor")) this.visitor = navParams.get("visitor");
+    if (navParams.get("visit")) {
+      this.visit = navParams.get("visit");
+      if (this.visit.visitor) {
+        this.visitor = this.visit.visitor;
+      }
+      if (this.visit.vehicle) {
+        this.vehicle = this.visit.vehicle;
+      }
+    } else {
+      if (navParams.get("visitor")) this.visitor = navParams.get("visitor");
+      if (navParams.get("vehicle")) this.vehicle = navParams.get("vehicle");
+      if (navParams.get("parking")) this.visit.parking_id = navParams.get("parking").id;
+    }
   }
 
   ionViewDidLoad() {
@@ -65,7 +76,6 @@ export class VisitCreatorPage {
           this.api
             .uploadSignature("visit", data.id, this.signature)
             .then((response: any) => {
-              console.log("signature response:", response);
               this.loading = false;
               data.signature_id = response.signature.id;
               this.viewCtrl.dismiss(data);
@@ -105,7 +115,6 @@ export class VisitCreatorPage {
           this.api
             .uploadSignature("visit", data.id, this.signature)
             .then((response: any) => {
-              console.log("signature response:", response);
               this.loading = false;
               data.signature_id = response.signature.id;
               this.viewCtrl.dismiss(data);
@@ -137,5 +146,27 @@ export class VisitCreatorPage {
       this.visit.vehicle_id = data.id;
       this.vehicle = data;
     }
+  }
+
+  update() {
+    this.loading = true;
+    var data = {
+      status: this.visit.status,
+      note: this.visit.note,
+      visitor_id: this.visit.visitor_id,
+      parking_id: this.visit.parking_id,
+      vehicle_id: this.visit.vehicle_id
+    };
+    this.api
+      .put(`visits/${this.visit.id}?include=visitor,visitors,residence,parking,vehicle,creator`, data)
+      .then((resp) => {
+        this.visit = resp;
+        this.loading = false;
+        this.viewCtrl.dismiss(resp);
+      })
+      .catch((error) => {
+        this.loading = false;
+        this.api.Error(error);
+      });
   }
 }

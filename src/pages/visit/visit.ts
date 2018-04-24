@@ -39,27 +39,11 @@ export class VisitPage {
   }
 
   update() {
-    var data = {
-      status: this.visit.status,
-      note: this.visit.note,
-      visitor_id: this.visit.visitor_id,
-      parking_id: this.visit.parking_id,
-      vehicle_id: this.visit.vehicle_id
-    };
-    this.api
-      .put(`visits/${this.visit.id}?include=visitor,visitors,residence,parking,vehicle,creator`, data)
-      .then((data) => {
-        this.visit = data;
-        this.toast
-          .create({
-            duration: 1500,
-            message: this.api.trans("literals.visit") + " " + this.api.trans("__.updated_successfully")
-          })
-          .present();
+    this.modal
+      .create("VisitCreatorPage", {
+        visit: this.visit
       })
-      .catch((error) => {
-        this.api.Error(error);
-      });
+      .present();
   }
 
   viewSignature() {

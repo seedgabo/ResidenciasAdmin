@@ -49,10 +49,23 @@
 </ion-content>
 
 <ion-footer>
-  <button ion-button [disabled]="!canSave() || loading" full color="secondary" icon-left (click)="create()">
+  <button *ngIf="!visit.id" ion-button [disabled]="!canSave() || loading" full color="secondary" icon-left (click)="create()">
     <ion-icon name="add"></ion-icon>
     <span *ngIf="loading !== 'uploading signature';else uploadingSignature">
       {{'crud.add' | trans}} {{'literals.visit' | trans }}
+    </span>
+    <ng-template #uploadingSignature>
+      <span>
+        {{ '__.uploading signature' | trans }}
+      </span>
+    </ng-template>
+  </button>
+
+  <button ion-button *ngIf="visit.id" [disabled]="!canSave() || loading" full color="secondary" icon-left (click)="update()">
+
+    <ion-icon name="add"></ion-icon>
+    <span *ngIf="loading !== 'uploading signature';else uploadingSignature">
+      {{'crud.update' | trans}} {{'literals.visit' | trans }}
     </span>
     <ng-template #uploadingSignature>
       <span>
