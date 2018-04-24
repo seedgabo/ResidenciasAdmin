@@ -27,7 +27,7 @@
     <ion-row>
 
       <!-- Visitors -->
-      <ion-col col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 *ngIf="!person">
+      <ion-col col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 *ngIf="!person">
         <ion-card>
           <ion-list-header>
             <ion-icon name="people" item-left></ion-icon>
@@ -58,7 +58,7 @@
       </ion-col>
 
       <!-- Visits -->
-      <ion-col col-12 col-sm-4 col-md-4 col-lg-5 col-xl-5 *ngIf="!person">
+      <ion-col col-12 col-sm-6 col-md-6 col-lg-5 col-xl-5 *ngIf="!person">
         <ion-card>
           <ion-list-header>
             <ion-icon name="list" item-left></ion-icon>
@@ -188,7 +188,7 @@
       </ion-col>
 
       <!-- Pre Approved -->
-      <ion-col col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3>
+      <ion-col col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3>
         <ion-card>
           <ion-list-header text-capitalize> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-list-header>
           <ion-list>

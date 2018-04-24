@@ -1,6 +1,11 @@
 <ion-header>
   <ion-navbar color="dark">
     <ion-title>{{'literals.visit' | trans }} # {{visit.id}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only clear (click)="update()">
+        <ion-icon name="create"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -143,7 +148,6 @@
       </ion-col>
       <ion-col>
         <button *ngIf="done" ion-button color="light" full (click)="dismiss()">
-
           {{'crud.cancel' | trans }}
         </button>
       </ion-col>

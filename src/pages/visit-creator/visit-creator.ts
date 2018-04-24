@@ -159,10 +159,24 @@ export class VisitCreatorPage {
     };
     this.api
       .put(`visits/${this.visit.id}?include=visitor,visitors,residence,parking,vehicle,creator`, data)
-      .then((resp) => {
-        this.visit = resp;
-        this.loading = false;
-        this.viewCtrl.dismiss(resp);
+      .then((data: any) => {
+        if (this.signature) {
+          this.loading = "uploading signature";
+          this.api
+            .uploadSignature("visit", data.id, this.signature)
+            .then((response: any) => {
+              this.loading = false;
+              data.signature_id = response.signature.id;
+              this.viewCtrl.dismiss(data);
+            })
+            .catch((err) => {
+              this.loading = false;
+              this.api.Error(err);
+            });
+        } else {
+          this.viewCtrl.dismiss(data);
+          this.loading = false;
+        }
       })
       .catch((error) => {
         this.loading = false;

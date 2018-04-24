@@ -3,7 +3,6 @@ import { NavController, ActionSheetController, ModalController, ToastController,
 import { Api } from "../../providers/api";
 import { VisitorPage } from "../visitor/visitor";
 import { VisitCreatorPage } from "../visit-creator/visit-creator";
-import { VisitPage } from "../visit/visit";
 @IonicPage()
 @Component({
   selector: "page-home",
@@ -35,7 +34,7 @@ export class HomePage {
         if (refresher) refresher.complete();
         this.getVisitors();
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         if (refresher) refresher.complete();
       });
@@ -45,8 +44,11 @@ export class HomePage {
     if (this.query == "") return (this.visitors = this.api.objects.visitors.slice(0, 100));
 
     return (this.visitors = this.api.objects.visitors
-      .filter(visitor => {
-        if (visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1 || visitor.document.toLowerCase().indexOf(this.query.toLowerCase()) > -1)
+      .filter((visitor) => {
+        if (
+          visitor.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1 ||
+          visitor.document.toLowerCase().indexOf(this.query.toLowerCase()) > -1
+        )
           return true;
         if (
           this.api.residences_collection[visitor.residence_id] &&
@@ -136,11 +138,11 @@ export class HomePage {
   delete(visitor, i) {
     this.api
       .delete("visitors/" + visitor.id)
-      .then(data => {
+      .then((data) => {
         console.log(data);
         this.visitors.splice(i, 1);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -150,8 +152,9 @@ export class HomePage {
   }
 
   viewVisit(visit, index) {
-    this.navCtrl.push(VisitPage, {
+    this.navCtrl.push("VisitPage", {
       visit: visit,
+      id: visit.id,
       done: () => {
         this.dismissPreApproved(visit, index);
       }
@@ -173,7 +176,7 @@ export class HomePage {
     try {
       var reader: any = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
-      reader.onload = result => {
+      reader.onload = (result) => {
         this.visitor_image.image_url = result.target.result;
         this.uploadImage(this.visitor_image.id);
       };
