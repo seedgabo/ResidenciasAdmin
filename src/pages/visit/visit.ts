@@ -78,7 +78,7 @@ export class VisitPage {
   }
 
   done() {
-    this.navParams.data.done();
+    if (this.navParams.data.done) this.navParams.data.done();
     this.dismiss();
   }
 }
