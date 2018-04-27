@@ -1,0 +1,12 @@
+page-new-visit {
+}
+
+.visit-alert {
+  .popover-content {
+    min-width: 300px;
+    max-width: 500px;
+  }
+  ion-content * {
+    overflow: hidden;
+  }
+}

@@ -1,0 +1,55 @@
+<ion-content text-center style="min-height:150px; overflow: hidden;">
+  <ion-toolbar no-border color="light">
+    <ion-title ion-text [color]="visit.status == 'approved'? 'secondary': 'danger' ">
+      {{'literals.visit' | trans }} {{'literals.' + visit.status | trans }}
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only clear (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <h5 ion-text [color]="visit.status == 'approved' ? 'secondary' : 'danger'">
+    {{'literals.' + visit.status | trans }}
+  </h5>
+
+  <br>
+
+  <h4>
+    {{"literals.visitor" | trans }}:
+    <span> {{ visit.visitor ? visit.visitor.name : visit.guest ? visit.guest.name : "" }} </span>
+  </h4>
+
+  <br>
+
+  <ion-list *ngIf="visit.visitors && visit.visitors.length > 1">
+    <ion-item *ngFor="let person of visit.visitors">
+      <ion-avatar item-left>
+        <img [src]="person.image_url" onerror="this.style.display = 'none'">
+      </ion-avatar>
+      <span>{{person.name}}</span>
+      <p ion-text [color]="person.pivot && person.pivot.status && person.pivot.status == 'rejected' ? 'danger' : 'secondary'" item-right>
+      {{ 'literals.' + (person.pivot && person.pivot.status && person.pivot.status == 'rejected' ? 'rejected' : 'approved')
+        | trans }}</p>
+    </ion-item>
+  </ion-list>
+
+  <h5 *ngIf="visit.message">
+    {{ visit.message }}
+  </h5>
+
+
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <button ion-button color="primary" block (click)="dismiss()">
+          {{'literals.ok' | trans }}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

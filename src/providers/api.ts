@@ -9,7 +9,7 @@ import moment from "moment";
 import Echo from "laravel-echo";
 declare var window: any;
 import Pusher from "pusher-js";
-import { AlertController, ToastController, ModalController, Events } from "ionic-angular";
+import { AlertController, ToastController, ModalController, Events, PopoverController } from "ionic-angular";
 window.Pusher = Pusher;
 import { Vibration } from "@ionic-native/vibration";
 import { SettingProvider } from "./setting/setting";
@@ -75,6 +75,7 @@ export class Api {
     public _storage: Storage,
     public zone: NgZone,
     public alert: AlertController,
+    public popover: PopoverController,
     public toast: ToastController,
     public vibration: Vibration,
     public modal: ModalController,
@@ -610,14 +611,16 @@ export class Api {
     visit.visitor = data.visitor;
     visit.guest = data.guest;
     visit.visitors = data.visitors;
-    this.alert
-      .create({
-        cssClass: "visit-alert visit-" + visit.status,
-        title: this.trans("literals.visit") + " " + this.trans("literals." + visit.status),
-        subTitle: this.trans("literals.visitor") + ": " + (visit.visitor ? visit.visitor.name : visit.guest ? visit.guest.name : ""),
-        message: visit.message + " " + (visit.note ? visit.note : ''),
-        buttons: ["OK"]
-      })
+    this.popover
+      .create(
+        "NewVisitPage",
+        { visit: visit },
+        {
+          cssClass: "visit-alert visit-" + visit.status,
+          enableBackdropDismiss: true,
+          showBackdrop: true
+        }
+      )
       .present();
   }
 
