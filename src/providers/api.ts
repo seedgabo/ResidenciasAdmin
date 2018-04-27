@@ -612,10 +612,10 @@ export class Api {
     visit.visitors = data.visitors;
     this.alert
       .create({
-        cssClass: "visit-" + visit.status,
+        cssClass: "visit-alert visit-" + visit.status,
         title: this.trans("literals.visit") + " " + this.trans("literals." + visit.status),
         subTitle: this.trans("literals.visitor") + ": " + (visit.visitor ? visit.visitor.name : visit.guest ? visit.guest.name : ""),
-        message: visit.message + " " + visit.note,
+        message: visit.message + " " + (visit.note ? visit.note : ''),
         buttons: ["OK"]
       })
       .present();
