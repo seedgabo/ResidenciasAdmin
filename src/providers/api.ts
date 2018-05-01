@@ -590,7 +590,7 @@ export class Api {
     var alert = this.alert.create({
       title: this.trans("literals.visit") + " Pre " + this.trans("literals.approved_f"),
       subTitle: this.trans("literals.visitor") + ": " + (visit.visitor ? visit.visitor.name : visit.guest ? visit.guest.name : ""),
-      message: visit.message + " " + visit.note,
+      message: (visit.message ? visit.message : "") + " " + (visit.note ? visit.note : ""),
       buttons: ["OK"]
     });
     alert.present();
