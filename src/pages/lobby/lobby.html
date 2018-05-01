@@ -15,7 +15,7 @@
     <ion-searchbar *ngIf="ready" (ionInput)="searchPerson();filter();getVisitors()" [(ngModel)]="query" debounce="700" [placeholder]="('literals.search' | trans)  + ' ' + ('literals.document' | trans)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content no-padding>
   <div text-center *ngIf="loading || !ready">
     <ion-spinner color="primary"></ion-spinner>
   </div>
@@ -23,12 +23,12 @@
 
 
 
-  <ion-grid>
+  <ion-grid no-padding>
     <ion-row>
 
       <!-- Visitors -->
       <ion-col col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 *ngIf="!person">
-        <ion-card>
+        <ion-card class="card-blue">
           <ion-list-header>
             <ion-icon name="people" item-left></ion-icon>
             {{'literals.visitors' | trans }}
@@ -59,7 +59,8 @@
 
       <!-- Visits -->
       <ion-col col-12 col-sm-6 col-md-6 col-lg-5 col-xl-5 *ngIf="!person">
-        <ion-card>
+        <ion-card class="card-green">
+
           <ion-list-header>
             <ion-icon name="list" item-left></ion-icon>
             {{'literals.visits' | trans }}
@@ -181,8 +182,14 @@
 
       <!-- Pre Approved -->
       <ion-col col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3>
-        <ion-card>
-          <ion-list-header text-capitalize> {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}</ion-list-header>
+        <ion-card class="card-yellow">
+          <ion-list-header text-capitalize>
+            {{ api.trans('literals.visits')}} pre {{ api.trans('literals.approveds_f')}}
+            <ion-note>
+              {{api.visits_approved?.length}}
+
+            </ion-note>
+          </ion-list-header>
           <ion-list>
             <ion-item-sliding *ngFor="let visit of api.visits_approved;let i= index">
               <button ion-item (tap)="viewVisit(visit,i)" [ngClass]="{attention: visit.visitor?.id == person?.id }">

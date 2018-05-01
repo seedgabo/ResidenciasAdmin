@@ -445,9 +445,17 @@ export class LobbyPage {
       id: visit.id,
       done: () => {
         this.api
-          .put("visits/" + visit.id, { status: "departured" })
+          .put("visits/" + visit.id, {
+            status: "departured",
+            departured_at: moment()
+              .local()
+              .toString()
+          })
           .then(() => {
             visit.status = "departured";
+            visit.departured_at = moment()
+              .local()
+              .toString();
           })
           .catch(console.error);
         if (index != null) this.dismissPreApproved(visit, index);
@@ -545,9 +553,9 @@ export class LobbyPage {
     );
     modal.present();
     modal.onDidDismiss((data) => {
-      if (data) {
+      if (data && data.persn) {
         this.type = "visitor";
-        this.person = data;
+        this.person = data.person;
       }
     });
   }

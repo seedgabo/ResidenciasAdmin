@@ -1,35 +1,69 @@
 page-lobby {
-    .img-person{
-        height: 90px;
-        width: 90px;
-        border-radius: 50%;
-        margin: 0 auto;
-    }
-    .attention{
-        animation-name: attention;
-        animation-duration:  1s;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
+  .img-person {
+    height: 90px;
+    width: 90px;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+  .attention {
+    animation-name: attention;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
 
+  .card-blue,
+  .card-green,
+  .card-yellow {
+    border-radius: 7px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    &:hover {
+      box-shadow: 0 7px 14px rgba(0, 0, 0, 0.25), 0 5px 5px rgba(0, 0, 0, 0.22);
     }
-
+    .list-header-md {
+      color: white !important;
+      ion-label {
+        font-size: 1.25em;
+      }
+      ion-note {
+        margin-left: 15px;
+        color: white;
+      }
+      ion-icon {
+        color: white !important;
+      }
+    }
+  }
+  .card-blue {
+    .list-header-md {
+      background-color: color($colors, "primary");
+    }
+  }
+  .card-green {
+    .list-header-md {
+      background-color: #fdd835;
+    }
+  }
+}
+.card-yellow {
+  .list-header-md {
+    background-color: color($colors, "secondary");
+  }
 }
 @keyframes attention {
   from {
-    background-color: color($colors, 'danger');
+    background-color: color($colors, "danger");
     color: white;
     p {
-        color: white;
+      color: white;
     }
-
   }
   to {
-    background-color: color($colors, 'light');
-    color: color($colors, 'danger');
+    background-color: color($colors, "light");
+    color: color($colors, "danger");
 
     p {
       color: black;
     }
-
   }
 }
