@@ -32,7 +32,7 @@
           <ion-badge color="primary" *ngIf="person.residence && person.residence.owner_id == person.id">
             {{ 'literals.owner' | trans}}
           </ion-badge>
-          <small>({{'literals.'+ person.relationship | trans}})</small>
+          <small *ngIf="person.relationship">({{'literals.'+ person.relationship | trans}})</small>
         </h2>
         <p>{{person.document}}</p>
         <p *ngIf="person.residence">{{person.residence.name}}
