@@ -138,7 +138,7 @@ export class Login {
       return this.loginWithGoogleCordova();
     }
     let loading = this.loadingCtrl.create({
-      duration: 10000,
+      duration: 1000 * 30,
       content: `
       <div>
         <img class="loading-img" src="${this.api.url + "img/logo.png"}" alt="">
