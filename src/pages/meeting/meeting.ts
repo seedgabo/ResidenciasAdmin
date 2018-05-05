@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams, ModalController, AlertController } from "ionic-angular";
 import { Api } from "../../providers/api";
+import moment from "moment";
+var timeout;
 @IonicPage({
   segment: "meeting/:id"
 })
@@ -14,6 +16,11 @@ export class MeetingPage {
   attenders = [];
   hasQuorum = false;
   residences = [];
+
+  addingItemChecklist = false;
+  addingItemPost = false;
+  text = "";
+  text_check = "";
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -45,6 +52,18 @@ export class MeetingPage {
         })
         .catch(console.warn);
     });
+  }
+
+  refresh(refresher = null) {
+    this.getMeeting()
+      .then(() => {
+        this.quorum();
+        if (refresher) refresher.complete();
+      })
+      .catch((error) => {
+        this.api.Error(error);
+        if (refresher) refresher.complete();
+      });
   }
 
   ionViewWillUnload() {
@@ -172,9 +191,11 @@ export class MeetingPage {
     this.api.Echo.private("App.Meeting." + this.meeting.id)
       .listen("MeetingUpdated", (data) => {
         console.log("MeetingUpdatedEvent", data);
-        this.getMeeting().then(() => {
-          this.quorum();
-        });
+        data.meeting.attenders_count = data.attenders_count;
+        this.meeting = Object.assign(this.meeting, data.meeting);
+        this.quorum();
+        // this.getMeeting().then(() => {
+        // });
       })
       .listen("AttenderCreated", (data) => {
         console.log("AttenderCreatedEvent", data);
@@ -236,5 +257,84 @@ export class MeetingPage {
       this.attenders.splice(find, 1);
     }
     this.quorum();
+  }
+
+  /**
+   * Post
+   */
+  addPost() {
+    this.api
+      .post(`meetings/${this.meeting.id}/add/post`, {
+        post: {
+          text: this.text,
+          date: moment.utc()
+        }
+      })
+      .then((resp) => {
+        console.log(resp);
+      })
+      .catch((err) => {
+        this.api.Error(err);
+      });
+
+    this.text = "";
+    this.addingItemPost = false;
+  }
+
+  deletePost(index) {
+    this.meeting.posts.splice(index, 1);
+    this.api
+      .put(`meetings/${this.meeting.id}`, { posts: this.meeting.posts })
+      .then((resp) => {
+        console.log("posts Changed", resp);
+      })
+      .catch((err) => {
+        this.api.Error(err);
+      });
+  }
+
+  /**
+   * CheckList
+   */
+  addCheckList() {
+    this.api
+      .post(`meetings/${this.meeting.id}/add/checklist`, {
+        post: {
+          text: this.text_check,
+          date: moment.utc()
+        }
+      })
+      .then((resp) => {
+        console.log(resp);
+      })
+      .catch((err) => {
+        this.api.Error(err);
+      });
+
+    this.text_check = "";
+    this.addingItemChecklist = false;
+  }
+
+  toggleCheck(item, index) {
+    item.checked = !item.checked;
+    this.saveCheckList();
+  }
+  deleteCheckItem(index) {
+    this.meeting.checklist.splice(index, 1);
+    this.saveCheckList();
+  }
+
+  saveCheckList() {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      this.api
+        .put(`meetings/${this.meeting.id}`, { checklist: this.meeting.checklist })
+        .then((resp) => {
+          console.log("checklist Changed", resp);
+        })
+        .catch((err) => {
+          this.api.Error(err);
+        });
+    }, 1000);
   }
 }
