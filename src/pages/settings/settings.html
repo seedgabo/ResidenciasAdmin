@@ -16,6 +16,20 @@
 <ion-content no-padding>
   <ion-list>
     <ion-item-divider color="light">
+      {{'__.user options' | trans }}
+    </ion-item-divider>
+
+    <ion-item *ngIf="api.user">
+      <ion-label>{{'literals.language' | trans }}</ion-label>
+      <ion-select [(ngModel)]="api.user.language" (ionChange)="saveProfile()">
+        <ion-option value="en">{{'English' | trans }}</ion-option>
+        <ion-option value="es">{{'Spanish' | trans }}</ion-option>
+        <ion-option value="fr">{{'French' | trans }}</ion-option>
+      </ion-select>
+    </ion-item>
+
+
+    <ion-item-divider color="light">
       {{'__.print options' | trans }}
     </ion-item-divider>
 
