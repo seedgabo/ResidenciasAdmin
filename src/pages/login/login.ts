@@ -353,4 +353,8 @@ export class Login {
     this.events.publish("login", data);
     this.navCtrl.setRoot("DashPage");
   }
+
+  gotoTerms() {
+    this.navCtrl.push("TermsPage");
+  }
 }
