@@ -57,13 +57,16 @@ export class Api {
       return this._storage.ready();
     },
     get: (key) => {
-      return this._storage.get(this.url + key);
+      var prefix = window.url ? window.url : "";
+      return this._storage.get(prefix + key);
     },
     set: (key, value) => {
-      return this._storage.set(this.url + key, value);
+      var prefix = window.url ? window.url : "";
+      return this._storage.set(prefix + key, value);
     },
     remove: (key) => {
-      return this._storage.remove(this.url + key);
+      var prefix = window.url ? window.url : "";
+      return this._storage.remove(prefix + key);
     },
     clear: () => {
       return this._storage.clear();
@@ -83,7 +86,7 @@ export class Api {
     public setting: SettingProvider
   ) {
     this.storage.ready().then(() => {
-      this._storage.get("url").then((url_data) => {
+      this.storage.get("url").then((url_data) => {
         if (url_data) this.url = url_data;
         else if (window.url) this.url = window.url;
         this.storage.get("modules").then((modules) => {
@@ -587,7 +590,7 @@ export class Api {
     var alert = this.alert.create({
       title: this.trans("literals.visit") + " Pre " + this.trans("literals.approved_f"),
       subTitle: this.trans("literals.visitor") + ": " + (visit.visitor ? visit.visitor.name : visit.guest ? visit.guest.name : ""),
-      message: visit.message + " " + visit.note,
+      message: (visit.message ? visit.message : "") + " " + (visit.note ? visit.note : ""),
       buttons: ["OK"]
     });
     alert.present();

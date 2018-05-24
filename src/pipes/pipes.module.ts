@@ -3,10 +3,12 @@ import { NgModule } from "@angular/core";
 import { MomentModule } from "angular2-moment";
 import { IonicModule } from "ionic-angular";
 import { KeysPipe } from './keys/keys';
+import { ReversePipe } from './reverse/reverse';
 @NgModule({
   declarations: [
     TransPipe,
-    KeysPipe
+    KeysPipe,
+    ReversePipe
   ],
   imports: [
     MomentModule, IonicModule
@@ -14,7 +16,8 @@ import { KeysPipe } from './keys/keys';
   exports: [
     TransPipe,
     MomentModule,
-    KeysPipe
+    KeysPipe,
+    ReversePipe
   ]
 })
 export class PipesModule { }

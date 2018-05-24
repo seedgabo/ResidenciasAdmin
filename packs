@@ -2,20 +2,36 @@
 # a Sample bash script
 cd ./platforms/browser/www
 
+folder="residencias"
+rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin"
+
+folder="residencias2"
+rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin"
+
 folder="plazueladetoscan"
-rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin" 
+rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin"
 
 folder="cretaricaurte"
-rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin" 
+rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin"
 
 folder="santoriniricaurte"
-rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin" 
+rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin"
 
 folder="bellasuiza"
-rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin" 
+rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin"
 
 folder="horizontesdelcastillo"
-rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin" 
+rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin"
+
+folder="chestnut"
+rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin"
+
+folder="aseinteg"
+rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin"
+
+folder="serrezuela"
+rsync --exclude=assets/header.js -avz --delete . "gabriel@residentesonline.com:htdocs/$folder/admin"
+
 
 echo "syncronized"
 cd ../../../

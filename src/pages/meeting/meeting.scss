@@ -11,4 +11,10 @@ page-meeting {
       background: rgba(255, 255, 255, 0.75);
     }
   }
+  .in-header-input {
+    border: none;
+    width: 100%;
+    height: 30px;
+    border-bottom: 1px solid color($colors, 'primary');
+  }
 }
