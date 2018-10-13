@@ -18,6 +18,7 @@
   <ion-card>
     <ion-card-header text-center>
       {{ticket.subject}}
+      <ion-badge text-right>{{ ticket.category }}</ion-badge>
     </ion-card-header>
     <ion-card-content>
       <div [innerHTML]="ticket.text"></div>
@@ -42,17 +43,19 @@
     <div text-right>
       <button ion-button clear icon-only (click)="askFile()">
         <ion-icon name="cloud-upload"></ion-icon>
-      </button> 
+      </button>
     </div>
     <ion-item>
       <ion-label floating>{{'literals.comment' | trans }}</ion-label>
       <ion-textarea [(ngModel)]="new_comment.text"></ion-textarea>
     </ion-item>
-    <button ion-button color="secondary" full clear (click)="addComment()" [disabled]="loading || !canAddComment()">{{'crud.save'| trans }}</button>
+    <button ion-button color="secondary" full clear (click)="addComment()" [disabled]="loading || !canAddComment()">{{'crud.save'|
+      trans }}</button>
   </div>
 
   <div text-center>
-    <button ion-button color="primary" clear small *ngIf="adding==false" (click)="adding=true" item-right>
+    <button ion-button color="primary" clear small *ngIf="adding==false" (click)="adding=true"
+            item-right>
       {{ 'crud.add' | trans }} {{ 'literals.comment' | trans }}
     </button>
   </div>

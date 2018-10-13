@@ -38,9 +38,11 @@
       </ion-card-header>
       <ion-card>
         <ion-list>
-          <button ion-item class="ticket-item" (click)="actions(ticket)" [ngClass]="ticket.status" *ngFor="let ticket of group.value">
+          <button ion-item class="ticket-item" (click)="actions(ticket)" [ngClass]="ticket.status"
+                  *ngFor="let ticket of group.value">
             <span item-left class="indicator"></span>
             <h2 text-wrap> {{ ticket.subject }} </h2>
+            <h4 text-wrap> {{ ticket.category }} </h4>
             <p *ngIf="ticket.user">
               {{ ticket.user.name}}
               <span *ngIf="ticket.user.residence"> - {{ ticket.user.residence.name }} </span>

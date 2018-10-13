@@ -17,114 +17,114 @@
 
 <ion-content>
   <ion-card>
-      <ion-list *ngIf="!edition">
+    <ion-list *ngIf="!edition">
 
-        <ion-item *ngIf="reservation.user">
-          <ion-icon small item-left name="person"></ion-icon>
-          <h2>{{ 'literals.user' | trans }}</h2>
-          <span item-right *ngIf="reservation.user">
-            {{reservation.user.name}}
-            <span *ngIf="reservation.user.residence">
-              - {{ reservation.user.residence.name }}
-            </span>
+      <ion-item *ngIf="reservation.user">
+        <ion-icon small item-left name="person"></ion-icon>
+        <h2>{{ 'literals.user' | trans }}</h2>
+        <span item-right *ngIf="reservation.user">
+          {{reservation.user.name}}
+          <span *ngIf="reservation.user.residence">
+            - {{ reservation.user.residence.name }}
           </span>
-        </ion-item>
+        </span>
+      </ion-item>
 
-        <ion-item>
-          <ion-icon small item-left name="book"></ion-icon>
-          <h2>{{ 'literals.status' | trans }}</h2>
-          <span item-right>{{'literals.' + reservation.status | trans }}</span>
-        </ion-item>
-
-
-        <ion-item>
-          <ion-icon small item-left name="pricetag"></ion-icon>
-          <h2>{{ 'literals.price' | trans }}</h2>
-          <span item-right>{{reservation.total | currency:'USD':'symbol-narrow':'1.0-0' }}</span>
-        </ion-item>
-
-        <ion-item>
-          <ion-icon small item-left name="people"></ion-icon>
-          <h2>{{ 'literals.quotas' | trans }}</h2>
-          <span item-right>{{ reservation.quotas }}</span>
-        </ion-item>
-
-        <ion-item>
-          <ion-icon small item-left name="list"></ion-icon>
-          <h2>{{ 'literals.notes' | trans }}</h2>
-          <span item-right>{{ reservation.note }}</span>
-        </ion-item>
-
-        <ion-item>
-          <ion-icon small item-left name="ios-clock"></ion-icon>
-          <h2>{{ 'literals.start' | trans }}</h2>
-          <span item-right>{{ reservation.start | amCalendar }}</span>
-        </ion-item>
-
-        <ion-item>
-          <ion-icon small item-left name="ios-clock-outline"></ion-icon>
-          <h2>{{ 'literals.end' | trans }}</h2>
-          <span item-right>{{ reservation.end | amCalendar }}</span>
-        </ion-item>
+      <ion-item>
+        <ion-icon small item-left name="book"></ion-icon>
+        <h2>{{ 'literals.status' | trans }}</h2>
+        <span item-right>{{'literals.' + reservation.status | trans }}</span>
+      </ion-item>
 
 
+      <ion-item>
+        <ion-icon small item-left name="pricetag"></ion-icon>
+        <h2>{{ 'literals.price' | trans }}</h2>
+        <span item-right>{{reservation.total | currency:'USD':'symbol-narrow':'1.0-0' }}</span>
+      </ion-item>
 
-        <ion-item *ngIf="reservation.zone">
-          <ion-icon small item-left name="basket"></ion-icon>
-          <h2>{{ 'literals.zone' | trans }}</h2>
-          <span item-right>{{reservation.zone.name}}</span>
-        </ion-item>
+      <ion-item>
+        <ion-icon small item-left name="people"></ion-icon>
+        <h2>{{ 'literals.quotas' | trans }}</h2>
+        <span item-right>{{ reservation.quotas }}</span>
+      </ion-item>
 
-        <ion-item *ngIf="reservation.event">
-          <ion-icon small item-left name="calendar"></ion-icon>
-          <h2>{{ 'literals.event' | trans }}</h2>
-          <span item-right>{{reservation.event.title}}</span>
-        </ion-item>
+      <ion-item>
+        <ion-icon small item-left name="list"></ion-icon>
+        <h2>{{ 'literals.notes' | trans }}</h2>
+        <span item-right>{{ reservation.note }}</span>
+      </ion-item>
 
-      </ion-list>
+      <ion-item>
+        <ion-icon small item-left name="ios-clock"></ion-icon>
+        <h2>{{ 'literals.start' | trans }}</h2>
+        <span item-right>{{ reservation.start | amCalendar }}</span>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon small item-left name="ios-clock-outline"></ion-icon>
+        <h2>{{ 'literals.end' | trans }}</h2>
+        <span item-right>{{ reservation.end | amCalendar }}</span>
+      </ion-item>
 
 
-      <ion-list *ngIf="edition">
 
-        <button ion-item (click)="selectPerson()">
-          <h3 *ngIf="!reservation.user">{{ 'literals.user' | trans }}</h3>
-          <h3 *ngIf="reservation.user">{{reservation.user.name}}</h3>
-          <ion-icon small item-right name="arrow-dropdown"></ion-icon>
-        </button>
+      <ion-item *ngIf="reservation.zone">
+        <ion-icon small item-left name="basket"></ion-icon>
+        <h2>{{ 'literals.zone' | trans }}</h2>
+        <span item-right>{{reservation.zone.name}}</span>
+      </ion-item>
+
+      <ion-item *ngIf="reservation.event">
+        <ion-icon small item-left name="calendar"></ion-icon>
+        <h2>{{ 'literals.event' | trans }}</h2>
+        <span item-right>{{reservation.event.title}}</span>
+      </ion-item>
+
+    </ion-list>
 
 
-        <ion-item>
-          <ion-icon small item-left name="pricetag"></ion-icon>
-          <ion-label floating>{{ 'literals.total' | trans }}</ion-label>
-          <ion-input [(ngModel)]="reservation.total" type="number"></ion-input>
-        </ion-item>
+    <ion-list *ngIf="edition">
 
-        <ion-item>
-          <ion-icon small item-left name="people"></ion-icon>
-          <ion-label floating>{{ 'literals.quotas' | trans }}</ion-label>
-          <ion-input [(ngModel)]="reservation.quotas" type="number"></ion-input>
-        </ion-item>
+      <button ion-item (click)="selectPerson()">
+        <h3 *ngIf="!reservation.user">{{ 'literals.user' | trans }}</h3>
+        <h3 *ngIf="reservation.user">{{reservation.user.name}}</h3>
+        <ion-icon small item-right name="arrow-dropdown"></ion-icon>
+      </button>
 
-        <ion-item>
-          <ion-icon small item-left name="list"></ion-icon>
-          <ion-label floating>{{ 'literals.notes' | trans }}</ion-label>
-          <ion-textarea [(ngModel)]="reservation.note" type="number"></ion-textarea>
-        </ion-item>
 
-        <ion-item>
-          <ion-icon small item-left name="ios-clock"></ion-icon>
-          <ion-label floating>{{ 'literals.start' | trans }}</ion-label>
-          <ion-datetime [monthNames]="monthNames" displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD MMMM YYYY HH mm" [(ngModel)]="start"
-            (ionChange)="changeDate('start')"></ion-datetime>
-        </ion-item>
+      <ion-item>
+        <ion-icon small item-left name="pricetag"></ion-icon>
+        <ion-label floating>{{ 'literals.total' | trans }}</ion-label>
+        <ion-input [(ngModel)]="reservation.total" type="number"></ion-input>
+      </ion-item>
 
-        <ion-item>
-          <ion-icon small item-left name="ios-clock-outline"></ion-icon>
-          <ion-label floating>{{ 'literals.end' | trans }}</ion-label>
-          <ion-datetime [monthNames]="monthNames" displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD MMMM YYYY HH mm" [(ngModel)]="end"
-            (ionChange)="changeDate('end')"></ion-datetime>
-        </ion-item>
-      </ion-list>
+      <ion-item>
+        <ion-icon small item-left name="people"></ion-icon>
+        <ion-label floating>{{ 'literals.quotas' | trans }}</ion-label>
+        <ion-input [(ngModel)]="reservation.quotas" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon small item-left name="list"></ion-icon>
+        <ion-label floating>{{ 'literals.notes' | trans }}</ion-label>
+        <ion-textarea [(ngModel)]="reservation.note" type="number"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon small item-left name="ios-clock"></ion-icon>
+        <ion-label floating>{{ 'literals.start' | trans }}</ion-label>
+        <ion-datetime [monthNames]="monthNames" displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD MMMM YYYY HH mm"
+                      [(ngModel)]="start" (ionChange)="changeDate('start')"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon small item-left name="ios-clock-outline"></ion-icon>
+        <ion-label floating>{{ 'literals.end' | trans }}</ion-label>
+        <ion-datetime [monthNames]="monthNames" displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD MMMM YYYY HH mm"
+                      [(ngModel)]="end" (ionChange)="changeDate('end')"></ion-datetime>
+      </ion-item>
+    </ion-list>
 
   </ion-card>
 

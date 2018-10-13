@@ -18,6 +18,7 @@ export class TicketPage {
   adding = false;
   file
   file_name
+  categories = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, public actionsheet: ActionSheetController, public api: Api) {
     this.ticket = navParams.get("ticket")
     this.new_comment.ticket_id = this.ticket.id;
