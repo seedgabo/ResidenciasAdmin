@@ -29,7 +29,7 @@
 
   <div *ngIf="zone">
 
-    <ion-card>
+    <ion-card *ngIf="api.permissions.zones">
       <button ion-button clear (click)="deselect()" icon-left>
         <ion-icon name="arrow-back"></ion-icon>
         {{'crud.back' | trans }}
@@ -67,26 +67,25 @@
 
           <h3>
             <b>{{'literals.status' | trans }}:</b>
-            <span ion-text [color]="reserv.status == 'approved'? 'secondary': reserv.status == 'rejected' ? 'danger': ''">
-              {{ 'literals.' + reserv.status | trans }}
-            </span>
+            <span [class]="reserv.status"> {{ 'literals.' + reserv.status | trans }} </span>
           </h3>
-          <h3>
+          <h3 *ngIf="reserv.total">
+            <b>{{'literals.total' | trans}}: </b>
             {{ reserv.total | currency:'USD':'symbol-narrow':'1.0-0' }}
           </h3>
-          <p>
+          <span>
             <b>{{'literals.quotas' | trans }}:</b>
             <span>
               {{ reserv.quotas }}
             </span>
-          </p>
+          </span>
           <p text-wrap *ngIf="reserv.note">
             <b>{{'literals.notes' | trans }}</b>
-            {{reserv.note}}
+            {{ reserv.note }}
           </p>
-          <p>
-            {{reserv.start | amCalendar }}
-          </p>
+          <span item-right>
+            {{ reserv.start | amLocale:'es' | amDateFormat:'hh:mm a' }}
+          </span>
         </button>
       </ion-list>
     </ion-card>

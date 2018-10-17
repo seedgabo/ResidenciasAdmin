@@ -45,6 +45,7 @@ export class Api {
     accounter: false,
     tickets: false,
     zones: false,
+    reservations: false,
     panics: false,
     parkings: false,
     vehicles: false,
@@ -512,7 +513,8 @@ export class Api {
           visitors: this.modules.visits,
           accounter: this.modules.finanze,
           tickets: this.modules.tickets,
-          zones: this.modules.reservations,
+          zones: this.modules.zones,
+          reservations: this.modules.reservations,
           panics: this.modules.panic,
           parkings: this.modules.parkings,
           vehicles: this.modules.vehicles,
@@ -533,6 +535,9 @@ export class Api {
       }
       if (this.roles.collection["Manage zones"]) {
         this.permissions.zones = this.modules.zones;
+      }
+      if (this.roles.collection["Manage zones"]) {
+        this.permissions.reservations = this.modules.reservations;
       }
       if (this.roles.collection["Manage panic logs"]) {
         this.permissions.panics = this.modules.panic;
