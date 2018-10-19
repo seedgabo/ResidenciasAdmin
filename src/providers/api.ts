@@ -442,6 +442,18 @@ export class Api {
           this.events.publish("CorrespondenceCreated", data);
         })
 
+        .listen("ReservationCreated", (data) => {
+          console.log("reservation created:", data);
+          this.events.publish("ReservationCreated", data);
+          this.toast
+            .create({
+              message: this.trans("literals.reservation") + " " + this.trans("crud.created"),
+              position: "top",
+              duration: 3000
+            })
+            .present();
+        })
+
         // Visit Events
         .listen("VisitCreated", (data) => {
           this.events.publish("VisitCreated", data);
