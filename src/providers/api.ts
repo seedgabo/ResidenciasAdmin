@@ -444,14 +444,16 @@ export class Api {
 
         .listen("ReservationCreated", (data) => {
           console.log("reservation created:", data);
-          this.events.publish("ReservationCreated", data);
-          this.toast
-            .create({
-              message: this.trans("literals.reservation") + " " + this.trans("crud.created"),
-              position: "top",
-              duration: 3000
-            })
-            .present();
+          if (this.roles && this.roles.collection["Manage reservations"]) {
+            this.events.publish("ReservationCreated", data);
+            this.toast
+              .create({
+                message: this.trans("literals.reservation") + " " + this.trans("crud.created"),
+                position: "top",
+                duration: 3000
+              })
+              .present();
+          }
         })
 
         // Visit Events
