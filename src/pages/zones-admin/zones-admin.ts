@@ -2,6 +2,7 @@ import { AlertController, LoadingController, IonicPage, PopoverController } from
 import { Component } from "@angular/core";
 import { NavController, NavParams, ToastController, ActionSheetController } from "ionic-angular";
 import { Api } from "../../providers/api";
+import moment from "moment";
 @IonicPage()
 @Component({ selector: "page-zones-admin", templateUrl: "zones-admin.html" })
 export class ZonesAdminPage {
@@ -9,8 +10,8 @@ export class ZonesAdminPage {
   zone = null;
   filters = {
     user_id: null,
-    start: new Date(),
-    end: new Date()
+    start: moment(),
+    end: moment().add(1, "day")
   };
   constructor(
     public navCtrl: NavController,
@@ -53,7 +54,11 @@ export class ZonesAdminPage {
 
   getReservations(zone) {
     this.filter;
-    var filter = `&where[zone_id]=${zone.id}&whereDateBetween[start]=today,tomorrow&paginate=150&order[start]=asc`;
+    var filter = `&where[zone_id]=${zone.id}&whereDateBetween[start]=${moment(this.filters.start)
+      .startOf("day")
+      .format("YYYY-MM-DD")},${moment(this.filters.end)
+      .startOf("day")
+      .format("YYYY-MM-DD")}&paginate=150&order[start]=asc`;
     if (this.filters.user_id) filter += `&where[user_id]=${this.filters.user_id}`;
     this.api
       .get("reservations?with[]=zone&with[]=user&with[]=user.residence" + filter)
@@ -65,8 +70,9 @@ export class ZonesAdminPage {
         this.api.Error(err);
       });
   }
+
   filter(ev) {
-    var popover = this.popover.create("ReservationFilterPage", this.filter);
+    var popover = this.popover.create("ReservationFilterPage", { filters: this.filters });
     popover.present({ ev: ev });
     popover.onWillDismiss((data) => {
       if (data) {
