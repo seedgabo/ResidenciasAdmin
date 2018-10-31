@@ -453,6 +453,7 @@ export class Api {
                 duration: 3000
               })
               .present();
+            this.playSoundNotfication();
           }
         })
 
