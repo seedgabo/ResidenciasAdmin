@@ -11,7 +11,7 @@ export class ZonesAdminPage {
   filters = {
     user_id: null,
     start: moment(),
-    end: moment().add(1, "day")
+    end: moment().endOf("week")
   };
   constructor(
     public navCtrl: NavController,
