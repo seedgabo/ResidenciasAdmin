@@ -1,3 +1,15 @@
 page-reservation-filter {
+  .date-input {
+    padding: 5px;
+    border: none;
+    border-bottom: 1px solid color($colors, "primary");
+    width: 100%;
+
+  }
+
+  .label-input {
+    font-size: 1.5rem;
+    color: #666;
+  }
 
 }

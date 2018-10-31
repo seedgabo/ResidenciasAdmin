@@ -1,11 +1,11 @@
 <ion-list no-margin>
   <ion-item>
-    <ion-label floating>{{'date.from' | trans }}</ion-label>
-    <ion-datetime [(ngModel)]="filters.start"></ion-datetime>
+    <label class="label-input" for="">{{'date.from' | trans}}</label>
+    <input [(ngModel)]="filters.start" type="date" [placeholder]="'date.from' | trans" class="date-input">
   </ion-item>
   <ion-item>
-    <ion-label floating>{{'date.to' | trans }}</ion-label>
-    <ion-datetime [(ngModel)]="filters.end"></ion-datetime>
+    <label class="label-input" for="">{{'date.to' | trans}}</label>
+    <input [(ngModel)]="filters.end" type="date" [placeholder]="'date.to' | trans" class="date-input">
   </ion-item>
   <button ion-item (click)="selectPerson()">
     <h2 *ngIf="!person">
