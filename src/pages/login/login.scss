@@ -3,8 +3,13 @@ page-login {
     background-image: url(../assets/background.jpg) !important;
     background-size: cover;
   }
+
   ion-item {
     background-color: transparent !important;
+  }
+
+  ion-input {
+    border-bottom: 1px solid color($colors, 'secondary');
   }
 
   .login-button {
@@ -15,6 +20,7 @@ page-login {
     margin-top: 10px;
     background-color: #3b5998 !important;
     color: white;
+
     &:hover,
     &:active {
       background-color: #3b5998 !important;
@@ -26,11 +32,14 @@ page-login {
     margin-top: 10px;
     background-color: #d62d20 !important;
     color: white;
+
     &:hover,
     &:active {
       background-color: #d62d20 !important;
       color: white;
-    } // color: white;
+    }
+
+    // color: white;
   }
 
   input.code {
@@ -50,6 +59,7 @@ page-login {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
